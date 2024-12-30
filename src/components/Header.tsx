@@ -13,7 +13,6 @@ export const Header = () => {
   const showMenuScrollPosition = useRef(0);
   const [scrollY, setScrollY] = useState<number>(0);
   const [theme, setTheme] = useState<string>("theme-blue");
-
   const [fabVisible, setFabVisible] = useState(true);
 
   const onScroll = (currentScrollPosition: number) => {
@@ -84,7 +83,7 @@ export const Header = () => {
         icon={faCommentSmile}
         id={"button-contact"}
         href={"#contact"}
-        label={"Contacter moi"}
+        label={"Contactez-nous"}
         className={classNames("!fixed bottom-8 right-8 z-50", {
           "opacity-0": !fabVisible,
         })}

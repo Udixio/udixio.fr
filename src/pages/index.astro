@@ -60,70 +60,19 @@ import {LinearGradient} from "@components/LinearGradient";
             visibility: hidden;
         }
     </style>
-    <section id="accueil" class="tab-menu pt-20 md:pt-36 xl:pt-48">
-        <div class="max-width">
-            <div class="flex">
-                <div>
-                    <Line client:idle visible isFirst icon={faCircle}/>
-                </div>
-                <div class="padding !pb-16">
-                    <Image class="rounded-xl h-16 w-16" src={portrait} height={96} width={96} alt="Joël"></Image>
-                    <h1 class="text-headline-large my-6">
-                        Joël VIGREUX
-                    </h1>
-                    <div class="flex flex-wrap gap-4">
-                        <div class="px-4 w-fit py-1.5 border border-outline-variant rounded-lg"><h2
-                                class="text-label-large text-on-surface-variant">Développeur
-                            full stack</h2>
-                        </div>
-                        <div class="px-4 w-fit py-1.5 border border-outline-variant rounded-lg"><p
-                                class="text-label-large text-on-surface-variant">3 années d'expériences</p>
-                        </div>
-                        <a href="#contact" class="group">
-                            <div class="px-4 w-fit py-1.5 items-center flex gap-2 border relative overflow-hidden border-primary-container bg-primary-container rounded-lg">
-                                <div class="group-state-on-primary-container absolute w-full h-full left-0 top-0">
+    <section id="" class=" pt-20">
+        <div class="max-width min-h-[75vh] flex items-center justify-center">
+            <div class="flex items-center flex-col">
+                <p class="text-title-medium text-on-surface-variant">Site vitrine - e-commerce - portfolio</p>
+                <h1 class="text-display-large text-center max-w-4xl mt-4">On construit des sites web <span class="text-gradient">irresistible</span> à des tarifs accessible</h1>
+                <p class="mt-8 text-body-large mx-auto max-w-xl text-center">Nous créons votre page d'accueil.<br/> Convaincu ? On continue.<br/> Sinon, c'est gratuit.</p>
+                <Button className="w-fit mt-12 scale-125" label="Démarrer sans payer"/>
+            </div>
 
-                                </div>
-                                <Icon className="h-[18px] text-on-secondary-container" icon={faMessageMiddle}></Icon>
-                                <p
-                                        class="text-label-large text-on-secondary-container">Disponible pour vos
-                                    projets</p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="flex mt-8">
-                <div>
-                    <Line client:idle icon={faAddressCard} nextTheme="purple"/>
-                </div>
-                <div class="padding">
-                    <h2 class="text-title-medium  mb-4 text-tertiary ">À propos de moi</h2>
-                    <p class="text-body-large max-w-3xl ">
-                        Bonjour, je suis Joël Vigreux - un développeur passionné.<br/> Ayant découvert un vif intérêt
-                        pour
-                        le
-                        <Link href="#back-end">back-end</Link>
-                        en
-                        débutant ma carrière, je me suis ensuite laissé porter par l'univers fascinant du
-                        <Link href="#front-end">front-end</Link>
-                        et de <span class="text-nowrap">l'<Link
-                            href="#ux">expérience&nbsp;utilisateur</Link> ,</span>
-                        tout en intégrant des pratiques
-                        écoresponsables
-                        de manière pragmatique.
-                    </p>
-                    <div class="mt-8 flex md:flex-row flex-col gap-4">
-                        <Button href="#contact" icon={faEnvelope} label="Me contacter"/>
-                        <Button href="#front-end" icon={faCircleInfo} variant="outlined"
-                                label="En savoir plus"/>
-                    </div>
-                </div>
-            </div>
         </div>
         <LinearGradient nextTheme="purple"/>
     </section>
-    <section id="front-end" class="pt-8 tab-menu theme-purple">
+    <section id="expertise" class="pt-8 tab-menu theme-purple">
         <BackgroundColor canEscape={false} count={5} radius={800} className="opacity-100" client:idle/>
         <div class="max-width ">
             <div class="flex">
@@ -296,7 +245,7 @@ import {LinearGradient} from "@components/LinearGradient";
         </div>
         <LinearGradient nextTheme="blue"/>
     </section>
-    <section id="ux" class="tab-menu theme-purple pt-8 !z-20">
+    <section id="portfolio" class="tab-menu theme-purple pt-8 !z-20">
         <div class="max-width">
             <div class="flex">
                 <div>
@@ -315,8 +264,8 @@ import {LinearGradient} from "@components/LinearGradient";
         </div>
         <LinearGradient nextTheme="green"/>
     </section>
-    <div class="overflow-hidden">
-        <div id="back-end" class="tab-menu theme-green">
+    <div  class=" overflow-hidden">
+        <div id="fonctionnement" class="tab-menu theme-green">
             <section class="pt-64 ">
                 <div class="section">
                     <h2 class="text-center text-title-medium text-tertiary">Back-end</h2>
@@ -476,7 +425,7 @@ import {LinearGradient} from "@components/LinearGradient";
                     </div>
                 </div>
             </section>
-            <section class="pt-8">
+            <section  id="qui-sommes-nous" class="tab-menu pt-8">
                 <div class="max-width">
                     <div class="flex">
                         <div>
