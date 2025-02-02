@@ -1,5 +1,5 @@
-import classNames from "classnames";
-import { Icon } from "@udixio/ui";
+
+import {classNames, Icon } from "@udixio/ui";
 import { type IconDefinition } from "@fortawesome/pro-light-svg-icons";
 import { useRef } from "react";
 

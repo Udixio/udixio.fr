@@ -1,8 +1,8 @@
 import { faCommentSmile } from "@fortawesome/pro-light-svg-icons";
-import { Fab } from "@udixio/ui";
+import {classNames, Fab} from "@udixio/ui";
 import { useEffect, useRef, useState } from "react";
 import { Menu } from "@components/Menu.tsx";
-import classNames from "classnames";
+
 import { motion } from "framer-motion";
 
 export const Header = () => {

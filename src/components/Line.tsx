@@ -1,6 +1,6 @@
-import { Icon } from "@udixio/ui";
+import {classNames, Icon } from "@udixio/ui";
 import { type IconDefinition } from "@fortawesome/pro-light-svg-icons";
-import classNames from "classnames";
+
 import { useRef, useState } from "react";
 import { useMotionValueEvent, useScroll } from "framer-motion";
 
