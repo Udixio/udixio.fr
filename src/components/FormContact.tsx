@@ -1,11 +1,11 @@
-import { Button, Snackbar } from "@udixio/ui";
+import { Button, Snackbar, TextField } from "@udixio/ui";
 import { useFormik } from "formik";
-import { TextField } from "@components/TextField.tsx";
+
 import { useCallback, useEffect, useRef, useState } from "react";
-import {
-  GoogleReCaptchaProvider,
-  useGoogleReCaptcha,
-} from "react-google-recaptcha-v3";
+// import {
+//   GoogleReCaptchaProvider,
+//   useGoogleReCaptcha,
+// } from "react-google-recaptcha-v3";
 
 function isValidEmail(email: string) {
   return email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/);
@@ -22,28 +22,28 @@ const ButtonCaptcha = ({
   tokenRecaptcha: string | null;
   setRecaptchaToken: any;
 }) => {
-  const { executeRecaptcha } = useGoogleReCaptcha();
+  // const { executeRecaptcha } = useGoogleReCaptcha();
 
-  const handleReCaptchaVerify = useCallback(async () => {
-    if (!executeRecaptcha) {
-      console.warn("Execute recaptcha not yet available");
-      return;
-    }
-
-    const token = await executeRecaptcha("yourAction");
-    setRecaptchaToken(token);
-  }, [executeRecaptcha]);
+  // const handleReCaptchaVerify = useCallback(async () => {
+  //   if (!executeRecaptcha) {
+  //     console.warn("Execute recaptcha not yet available");
+  //     return;
+  //   }
+  //
+  //   const token = await executeRecaptcha("yourAction");
+  //   setRecaptchaToken(token);
+  // }, [executeRecaptcha]);
 
   return (
     <Button
       className={className}
       loading={loading}
-      onClick={(e) => {
-        if (!tokenRecaptcha) {
-          e.preventDefault();
-          handleReCaptchaVerify();
-        }
-      }}
+      // onClick={(e) => {
+      //   if (!tokenRecaptcha) {
+      //     e.preventDefault();
+      //     handleReCaptchaVerify();
+      //   }
+      // }}
       type="submit"
       label="Envoyer le message"
     />
@@ -183,9 +183,9 @@ export const FormContact = () => {
         supportingText="Parlez-nous un peu de votre projet."
         showSupportingText
       ></TextField>
-      <GoogleReCaptchaProvider
-        reCaptchaKey={import.meta.env.PUBLIC_RECAPTCHA_KEY}
-      >
+      {/*<GoogleReCaptchaProvider*/}
+      {/*  reCaptchaKey={import.meta.env.PUBLIC_RECAPTCHA_KEY}*/}
+      {/*>*/}
         <p className={"text-body-small text-outline mt-8 mb-4"}>
           Ce site est protégé par reCAPTCHA et la{" "}
           <a
@@ -208,7 +208,7 @@ export const FormContact = () => {
           setRecaptchaToken={setRecaptchaToken}
           loading={isSubmitting}
         />
-      </GoogleReCaptchaProvider>
+      {/*</GoogleReCaptchaProvider>*/}
       {message && (
         <Snackbar
           key={message}
