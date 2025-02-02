@@ -4,7 +4,7 @@ import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
 import robotsTxt from 'astro-robots-txt';
 import compressor from "astro-compressor";
-import vercel from '@astrojs/vercel/serverless';
+import vercel from '@astrojs/vercel';
 
 import compress from "astro-compress";
 
@@ -13,7 +13,7 @@ export default defineConfig({
     site: "https://vigreux-joel.fr/",
     compressHTML: true,
     experimental: {},
-    output: 'hybrid',
+    output: 'static',
     integrations: [react(), tailwind({
         applyBaseStyles: false
     }), sitemap(), robotsTxt(), compress(), compressor(),],
