@@ -3,7 +3,7 @@ import {DislikeAnalyzer, sanitizeDegreesDouble, TonalPalette} from "@material/ma
 
 
 module.exports = defineConfig({
-    sourceColor: '#1A73E8',
+    sourceColor: '#18eeb2',
     variant: {
         ...VariantModel.tonalSpot,
         palettes: {
@@ -89,12 +89,12 @@ module.exports = defineConfig({
             responsiveBreakPoints: {
                 sm: 1.125,
             },
-            subThemes: {
-                blue: '#1A73E8',
-                green: '#4CA66B',
-                purple: "#7852A9",
-                orange: '#F5704B'
-            }
+            // subThemes: {
+            //     blue: '#1A73E8',
+            //     green: '#4CA66B',
+            //     purple: "#7852A9",
+            //     orange: '#F5704B'
+            // }
         }),
 
     ],
