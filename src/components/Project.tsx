@@ -93,14 +93,11 @@ const Project = ({projects}: any) => {
 
     }, [selectedProject, isInView]);
 
-    return <section id="projets" className=" tab-menu min-h-[50vh] flex items-center relative">
+    return <section id="projets" className=" tab-menu  pt-16 flex items-center relative">
         <BackgroundColor canEscape={false} count={5} radius={800} className="opacity-100 z-10"/>
-        <div className="max-w-screen-2xl mx-auto z-20">
+        <div className="max-w-screen-2xl w-full padding-x mx-auto z-20">
 
-            <Carousel ref={carouselRef} onChange={handleScroll} className={() => ({
-                // track: "gap-8"
-            })} height={'600px'}
-                // inputRange={[0.21, 0.65]}
+            <Carousel className="h-[auto] max-h-[600px] aspect-[16/9] " ref={carouselRef} onChange={handleScroll}
                       outputRange={[40, 1000]}
             >
                 {projects.map((project: any, index: Key | null | undefined) => (
