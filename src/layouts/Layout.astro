@@ -10,6 +10,7 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/montserrat/700.css";
 import "@fontsource/montserrat/600.css";
 import defaultImage from "@assets/images/img.png";
+import {ClientRouter} from 'astro:transitions';
 
 export interface Link extends HTMLLinkElement {
     prefetch: boolean;
@@ -136,6 +137,7 @@ const seoDefault: SEOProps = {
 
 
     <SEO {...seoDefault}/>
+    <ClientRouter/>
 </head>
 <body class="bg-surface  transition-all duration-500">
 <Header/>

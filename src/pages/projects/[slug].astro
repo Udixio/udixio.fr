@@ -1,21 +1,39 @@
 ---
-import { getCollection, render } from 'astro:content';
+import {getCollection, render} from 'astro:content';
 import Layout from "../../layouts/Layout.astro";
+import {BackgroundColor} from "../../components/BackgroundColor";
+import {Button, Card} from "@udixio/ui"
+import {getImage} from "astro:assets";
+import {UpdateTheme} from "../../components/UpdateTheme";
+import {faArrowLeft} from "@fortawesome/pro-regular-svg-icons";
 
 
 export async function getStaticPaths() {
     const projects = await getCollection('project');
     return projects.map((project) => ({
-        params: { slug: project.id },
+        params: {slug: project.id},
         props: {project},
     }));
 }
-const { project } = Astro.props;
-const { Content } = await render(project);
+const {project} = Astro.props;
+const {Content} = await render(project);
 
+const preview = await getImage({src: project.data.image.src, format: "webp", height: 1080, width: 1920})
 ---
 
 <Layout>
-    <h1>{project.data.title}</h1>
-    <Content />
+    <section id="projets" class=" tab-menu  pt-16 flex items-center relative">
+        <UpdateTheme client:only="react"
+                     theme={{isDark: project.data.theme.isDark, source: project.data.theme.source}}/>
+        <div class="max-width w-full padding-x mx-auto z-20">
+            <Button variant='filledTonal' icon={faArrowLeft} className="w-fit" label="retour aux projets" href="/"/>
+            <Card className="mt-8 !rounded-[28px]" style={{viewTransitionName: "project-" + project.id}}>
+                <img class="rounded-[28px] w-full" src={preview.src} height="1920" width="1080">
+                <h1>{project.data.title}</h1>
+                <Content/>
+            </Card>
+
+
+        </div>
+    </section>
 </Layout>

@@ -55,10 +55,11 @@ import {getCollection} from "astro:content";
 
 
 const projects = await getCollection('project');
+projects.sort((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infinity));
 ---
 <Layout seo={{
-    title: `UDIXIO - Développeur full stack - Spécialiste Astro, React & NestJS`,
-    description: "Expert en technologies modernes telles que Astro, NestJS et React ! Joël VIGREUX : Développeur full stack vous accompagne du back-end au frontend",
+    title: `Agence de conseil en stratégie digitale écoresponsable & SEO`,
+    description: "Udixio est une agence experte dans la création de sites web éco-conçus et optimisés pour le SEO. Optez pour des solutions digitales durables et performantes.",
 }}>
     <style is:global>
         .grecaptcha-badge {
@@ -103,17 +104,17 @@ const projects = await getCollection('project');
                                         headers={{
                                             body: `Bonjour,
 
-Je m'appelle [Nom], et je souhaiterais vous parler d'un projet. Voici quelques détails :
+    Je m'appelle [Nom], et je souhaiterais vous parler d'un projet. Voici quelques détails :
 
-Projet : [Brève description]
-Objectifs : [Principaux objectifs]
-Délai : [Délai souhaité]
-Budget : [Budget estimé]
-Je suis disponible pour en parler. Vous pouvez me contacter par email à [Votre Email] ou au [Votre Numéro].
+    Projet : [Brève description]
+    Objectifs : [Principaux objectifs]
+    Délai : [Délai souhaité]
+    Budget : [Budget estimé]
+    Je suis disponible pour en parler. Vous pouvez me contacter par email à [Votre Email] ou au [Votre Numéro].
 
-Cordialement,
+    Cordialement,
 
-[Nom]`,
+    [Nom]`,
                                         }}
                                 />
                             </div>
@@ -149,5 +150,9 @@ Cordialement,
             </div>
         </div>
     </section>
+    <a href="/projects/example1">
+
+
+    </a>
 
 </Layout>
