@@ -25,12 +25,24 @@ const preview = await getImage({src: project.data.image.src, format: "webp", hei
     <section id="projets" class=" tab-menu  pt-16 flex items-center relative">
         <UpdateTheme client:only="react"
                      theme={{isDark: project.data.theme.isDark, source: project.data.theme.source}}/>
-        <div class="max-width w-full padding-x mx-auto z-20">
+        <div class="max-w-screen-lg w-full px-4 mx-auto z-20">
             <Button variant='filledTonal' icon={faArrowLeft} className="w-fit" label="retour aux projets" href="/"/>
             <Card className="mt-8 !rounded-[28px]" style={{viewTransitionName: "project-" + project.id}}>
-                <img class="rounded-[28px] w-full" src={preview.src} height="1920" width="1080">
-                <h1>{project.data.title}</h1>
-                <Content/>
+                <div class="relative">
+
+                    <img class="rounded-[28px] w-full" src={preview.src} height="1920" width="1080">
+                    <div
+                            class={`w-full z-10 h-32 absolute bottom-0 bg-gradient-to-b left-0 from-transparent to-surface via-surface/[0.75]`}>
+                    </div>
+                </div>
+                <div class="padding-x py-8 ">
+
+                    <div class=" max-w-screen-md mx-auto">
+                        <h1 class="text-display-small mb-8 mt-8">{project.data.title}</h1>
+                        <Content/>
+                    </div>
+                </div>
+
             </Card>
 
 

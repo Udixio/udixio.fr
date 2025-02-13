@@ -1,6 +1,6 @@
 
 ---
-title: "Exemple MDX avec Metadata"
+title: "Portfolio de développeur"
 description: "Un exemple illustrant l'utilisation de la structure de métadonnées spécifiée."
 order: 1
 theme:
@@ -11,49 +11,16 @@ image:
     alt: "Illustration du projet avec un point principal."
 ---
 
-# Bienvenue dans MDX
+import {Button, Divider} from "@udixio/ui"
+import {faGlobe} from "@fortawesome/pro-light-svg-icons"
+import {faGithub} from "@fortawesome/free-brands-svg-icons"
 
-MDX vous permet de combiner **Markdown** et **JSX** dans un seul fichier. Voici un exemple de ce que vous pouvez faire :
+<div class="flex flex-wrap gap-4">
+    <Button target="_blank" href="https://vigreux-joel.fr/" icon={faGlobe} variant="outlined" label="Site web"/>
+    <Button target="_blank" href="https://github.com/vigreux-joel/portfolio" icon={faGithub} variant="outlined" label="Code Source"/>
+</div>
+<Divider className="my-8"/>
 
-## Section Markdown
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. In sed arcu convallis, tempor nisi sit amet, ornare dui. Suspendisse eget risus vel arcu blandit faucibus. Sed congue, sapien quis venenatis sodales, magna orci mattis arcu, sit amet cursus turpis mi a orci. Nullam vel risus et felis feugiat pharetra sed id purus. Phasellus tortor tortor, laoreet in neque id, eleifend iaculis sapien. Nam sem purus, faucibus eu quam ut, bibendum suscipit ligula. Mauris scelerisque posuere tempor. Nulla vestibulum dolor purus, vitae blandit purus tincidunt in. Sed porttitor, velit non tempor bibendum, quam erat ullamcorper lorem, eget elementum justo sem et mi. Nunc posuere odio nec blandit feugiat. Curabitur diam mi, vestibulum vel molestie at, faucibus eget urna. Nullam commodo lorem vitae eros vulputate eleifend.
 
-Vous pouvez utiliser Markdown de manière classique :
-
-- Liste d'éléments
-- Utilisation normale de Markdown
-- **Texte en gras**
-- *Texte en italique*
-
-Voici un exemple de code :
-
-```javascript
-const greet = () => {
-  console.log("Bonjour, MDX !");
-};
-```
-
-## Section avec des composants React
-
-MDX permet aussi d'insérer des composants React directement dans le contenu :
-
-
-
-## Conclusion
-
-MDX est super pratique !
-
----
-
-## Définir vos composants ici (ou ailleurs)
-
-```javascript
-export const MyComponent = ({ message }) => (
-  <div style={{ padding: "10px", backgroundColor: "#f8f8f8", borderRadius: "5px" }}>
-    <p>{message}</p>
-  </div>
-);
-```
-
----
-
-Dites-moi si vous avez besoin de plus d'exemples ou de détails ! 😊
+Sed dignissim sed nisl vitae consequat. Nullam dapibus et elit nec pulvinar. Sed massa tortor, ultricies vel efficitur eu, bibendum a nunc. Duis quis dignissim libero, vitae vulputate erat. Nulla facilisi. Morbi eleifend tincidunt sollicitudin. Nam egestas dui nulla, vel lobortis velit ullamcorper eu. Quisque et velit eget risus vestibulum molestie. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.

@@ -37,7 +37,7 @@ const Project = ({projects}: any) => {
     const [theme, setTheme] = useState<{ isDark: boolean, source: string } | null>(null)
     useEffect(() => {
         if (isInView) {
-            setTheme({isDark: selectedProject.data.theme.isDark, source: selectedProject.data.theme.source})
+            setTheme({isDark: true, source: selectedProject.data.theme.source})
         } else {
             setTheme(null)
         }
