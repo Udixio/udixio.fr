@@ -7,7 +7,6 @@ import {getImage} from "astro:assets";
 import {UpdateTheme} from "../../components/UpdateTheme";
 import {faArrowLeft} from "@fortawesome/pro-regular-svg-icons";
 
-
 export async function getStaticPaths() {
     const projects = await getCollection('project');
     return projects.map((project) => ({
@@ -17,8 +16,6 @@ export async function getStaticPaths() {
 }
 const {project} = Astro.props;
 const {Content} = await render(project);
-
-const preview = await getImage({src: project.data.image.src, format: "webp", height: 1080, width: 1920})
 ---
 
 <Layout>
@@ -26,11 +23,12 @@ const preview = await getImage({src: project.data.image.src, format: "webp", hei
         <UpdateTheme client:only="react"
                      theme={{isDark: project.data.theme.isDark, source: project.data.theme.source}}/>
         <div class="max-w-screen-lg w-full px-4 mx-auto z-20">
-            <Button variant='filledTonal' icon={faArrowLeft} className="w-fit" label="retour aux projets" href="/"/>
+            <Button variant='filledTonal' icon={faArrowLeft} className="w-fit" label="retour aux projets"
+                    href="/projects"/>
             <Card className="mt-8 !rounded-[28px]" style={{viewTransitionName: "project-" + project.id}}>
                 <div class="relative">
 
-                    <img class="rounded-[28px] w-full" src={preview.src} height="1920" width="1080">
+                    <img class="rounded-[28px] w-full" src={project.data.image.src} height="1920" width="1080">
                     <div
                             class={`w-full z-10 h-32 absolute bottom-0 bg-gradient-to-b left-0 from-transparent to-surface via-surface/[0.75]`}>
                     </div>

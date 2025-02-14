@@ -146,9 +146,12 @@ const seoDefault: SEOProps = {
 </main>
 <Footer/>
 <script>
+
     import AOS from 'aos'
 
-    AOS.init()
+    document.addEventListener('astro:page-load', () => {
+        AOS.init()
+    })
 </script>
 </body>
 </html>

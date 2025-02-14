@@ -16,17 +16,19 @@ export const Menu = ({
     fabVisible: boolean;
     setFabVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-    const [pathName, setPathName] = useState('/')
+    const [pathName, setPathName] = useState<string | null>(null)
     const getCurrentTab = () => {
         if (pathName === "/") {
             return 0;
-        } else if (pathName === "/projets") {
+        } else if (pathName === "/projects") {
+            return 1;
+        } else if (pathName?.startsWith("/projects/")) {
             return 1;
         } else {
             return null;
         }
     };
-    const [activeTab, setActiveTab] = useState<number | null>(getCurrentTab());
+    const [activeTab, setActiveTab] = useState<number | null>(null);
 
 
     useLayoutEffect(() => {
@@ -41,6 +43,11 @@ export const Menu = ({
             window.removeEventListener("popstate", handleURLChange);
         };
     }, []);
+
+    useEffect(() => {
+        const result = getCurrentTab()
+        setActiveTab(result)
+    }, [pathName]);
 
 
     const isScrolling = useRef(false);
@@ -79,9 +86,10 @@ export const Menu = ({
         featuresObserver.observe(featuresDiv);
 
         return () => featuresObserver.disconnect();
-    }, []);
+    }, [pathName]);
 
     return (
+        pathName != null &&
         <div
             className={classNames(
                 "fixed max-w-full flex transition-opacity left-1/2 duration-300 ease-in-out top-8 z-50 mx-2 backdrop-blur-lg -translate-x-1/2 overflow-hidden rounded-full border border-surface-container-highest bg-surface-container-low/80",
@@ -105,7 +113,7 @@ export const Menu = ({
                 <Tab
                     className={"bg-transparent md:h-full"}
                     selected={1 === activeTab}
-                    href={`/projets`}
+                    href={`/projects`}
                     label={"Projets"}
                 ></Tab>
 

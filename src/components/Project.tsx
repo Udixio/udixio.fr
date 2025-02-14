@@ -1,4 +1,4 @@
-import {Card, Carousel, CarouselItem} from "@udixio/ui";
+import {Button, Card, Carousel, CarouselItem} from "@udixio/ui";
 import {type Key, useEffect, useRef, useState} from "react";
 import {useInView} from "framer-motion";
 import {BackgroundColor} from "@components/BackgroundColor.tsx";
@@ -55,7 +55,7 @@ const Project = ({projects}: any) => {
                 {projects.map((project: any, index: Key | null | undefined) => (
                     <CarouselItem className={'!max-w-full'} key={index}>
                         <a href={"/projects/" + project.id}>
-                            <Card className="h-full !rounded-[28px]"
+                            <Card isInteractive className="h-full !rounded-[28px]"
                                   style={{viewTransitionName: "project-" + project.id}}>
                                 <img className={'object-cover  h-full w-full'} src={project.data.image.src}/>
                             </Card>
@@ -63,7 +63,7 @@ const Project = ({projects}: any) => {
                     </CarouselItem>
                 ))}
             </Carousel>
-            {/*<Button className="ml-auto mr-0 mt-4" variant="text" label="Voir tous les projets"/>*/}
+            <Button href={"/projects"} className="mx-auto mt-4 w-fit" variant="text" label="Voir tous les projets"/>
         </div>
 
     </section>
