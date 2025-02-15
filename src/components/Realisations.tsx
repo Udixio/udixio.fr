@@ -5,7 +5,7 @@ import {BackgroundColor} from "@components/BackgroundColor.tsx";
 import {UpdateTheme} from "@components/UpdateTheme";
 
 
-const Project = ({projects}: any) => {
+const Realisations = ({realisations}: any) => {
 
 
     const carouselRef = useRef<HTMLDivElement>(null);
@@ -29,10 +29,10 @@ const Project = ({projects}: any) => {
             },
         }
         body: string
-    }>(projects[0]);
+    }>(realisations[0]);
 
     const handleScroll = (index: number) => {
-        setSelectedProject(projects[index])
+        setSelectedProject(realisations[index])
     };
     const [theme, setTheme] = useState<{ isDark: boolean, source: string } | null>(null)
     useEffect(() => {
@@ -52,22 +52,23 @@ const Project = ({projects}: any) => {
             <Carousel className="h-[auto] max-h-[600px] aspect-[16/9] " ref={carouselRef} onChange={handleScroll}
                       outputRange={[40, 1000]}
             >
-                {projects.map((project: any, index: Key | null | undefined) => (
+                {realisations.map((project: any, index: Key | null | undefined) => (
                     <CarouselItem className={'!max-w-full'} key={index}>
-                        <a href={"/projects/" + project.id}>
+                        <a href={"/nos-realisations/" + project.id}>
                             <Card isInteractive className="h-full !rounded-[28px]"
-                                  style={{viewTransitionName: "project-" + project.id}}>
+                                  style={{viewTransitionName: "realisation-" + project.id}}>
                                 <img className={'object-cover  h-full w-full'} src={project.data.image.src}/>
                             </Card>
                         </a>
                     </CarouselItem>
                 ))}
             </Carousel>
-            <Button href={"/projects"} className="mx-auto mt-4 w-fit" variant="text" label="Voir tous les projets"/>
+            <Button href={"/nos-realisations"} className="mx-auto mt-4 w-fit" variant="text"
+                    label="Voir tous les projets"/>
         </div>
 
     </section>
 }
 
 
-export default Project
+export default Realisations

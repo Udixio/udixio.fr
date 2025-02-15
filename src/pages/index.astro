@@ -27,7 +27,7 @@ import baseLogo from "@assets/images/base-logo.svg?raw"
 import portrait from "@assets/images/portrait.jpg"
 import {FormContact} from "@components/FormContact";
 import {BackgroundColor} from "@components/BackgroundColor";
-import Project from "@components/Project";
+import Realisations from "@components/Realisations";
 import {Icon} from "@udixio/ui"
 import {Card} from "@udixio/ui"
 import {
@@ -54,8 +54,8 @@ import {LinearGradient} from "@components/LinearGradient";
 import {getCollection} from "astro:content";
 
 
-const projects = await getCollection('project');
-projects.sort((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infinity));
+const realisations = await getCollection('realisation');
+realisations.sort((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infinity));
 ---
 <Layout seo={{
     title: `Agence de conseil en stratégie digitale écoresponsable & SEO • udixio.fr`,
@@ -81,7 +81,7 @@ projects.sort((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infinity))
         <!--<LinearGradient nextTheme="purple"/>-->
     </section>
 
-    <Project projects={projects} client:load></Project>
+    <Realisations realisations={realisations} client:load></Realisations>
 
 
 </Layout>

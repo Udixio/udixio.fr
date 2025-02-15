@@ -3,8 +3,8 @@ import {getCollection} from "astro:content";
 import Layout from "@layouts/Layout.astro";
 import {Card} from "@udixio/ui";
 
-const projects = await getCollection('project');
-projects.sort((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infinity));
+const realisations = await getCollection('realisation');
+realisations.sort((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infinity));
 
 const gap = '16px'
 ---
@@ -16,23 +16,23 @@ const gap = '16px'
     <section id="" class="relative z-20 pt-20 md:pt-32">
         <div style={{gap}} class="max-width padding-x flex flex-wrap">
             {
-                projects.map((project) => (
+                realisations.map((realisation) => (
                         <a style={{
                             width: "calc(" + 1 / 2 * 100 + "% - " + gap + ")"
-                        }} href={"/projects/" + project.id}>
+                        }} href={"/nos-realisations/" + realisation.id}>
                             <Card isInteractive variant="filled"
 
                                   style={{
-                                      viewTransitionName: "project-" + project.id,
+                                      viewTransitionName: "realisation-" + realisation.id,
                                   }}>
 
 
-                                <img class="rounded-xl w-full" src={project.data.image.src} height="1920"
+                                <img class="rounded-xl w-full" src={realisation.data.image.src} height="1920"
                                      width="1080">
 
 
                                 <div class="p-4 ">
-                                    <p class="text-title-medium">{project.data.title}</p>
+                                    <p class="text-title-medium">{realisation.data.title}</p>
                                 </div>
 
                             </Card>

@@ -8,27 +8,27 @@ import {UpdateTheme} from "../../components/UpdateTheme";
 import {faArrowLeft} from "@fortawesome/pro-regular-svg-icons";
 
 export async function getStaticPaths() {
-    const projects = await getCollection('project');
-    return projects.map((project) => ({
-        params: {slug: project.id},
-        props: {project},
+    const realisations = await getCollection('realisation');
+    return realisations.map((realisation) => ({
+        params: {slug: realisation.id},
+        props: {realisation},
     }));
 }
-const {project} = Astro.props;
-const {Content} = await render(project);
+const {realisation} = Astro.props;
+const {Content} = await render(realisation);
 ---
 
 <Layout>
     <section id="projets" class=" tab-menu  pt-16 flex items-center relative">
         <UpdateTheme client:only="react"
-                     theme={{isDark: project.data.theme.isDark, source: project.data.theme.source}}/>
+                     theme={{isDark: realisation.data.theme.isDark, source: realisation.data.theme.source}}/>
         <div class="max-w-screen-lg w-full px-4 mx-auto z-20">
             <Button variant='filledTonal' icon={faArrowLeft} className="w-fit" label="retour aux projets"
-                    href="/projects"/>
-            <Card className="mt-8 !rounded-[28px]" style={{viewTransitionName: "project-" + project.id}}>
+                    href="/nos-realisations"/>
+            <Card className="mt-8 !rounded-[28px]" style={{viewTransitionName: "realisation-" + realisation.id}}>
                 <div class="relative">
 
-                    <img class="rounded-[28px] w-full" src={project.data.image.src} height="1920" width="1080">
+                    <img class="rounded-[28px] w-full" src={realisation.data.image.src} height="1920" width="1080">
                     <div
                             class={`w-full z-10 h-32 absolute bottom-0 bg-gradient-to-b left-0 from-transparent to-surface via-surface/[0.75]`}>
                     </div>
@@ -36,7 +36,7 @@ const {Content} = await render(project);
                 <div class="padding-x py-8 ">
 
                     <div class=" max-w-screen-md mx-auto">
-                        <h1 class="text-display-small mb-8 mt-8">{project.data.title}</h1>
+                        <h1 class="text-display-small mb-8 mt-8">{realisation.data.title}</h1>
                         <Content/>
                     </div>
                 </div>
