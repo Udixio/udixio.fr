@@ -1,34 +1,54 @@
 ---
 import {getCollection} from "astro:content";
 import Layout from "@layouts/Layout.astro";
-import {Card} from "@udixio/ui";
+import {Button, Card} from "@udixio/ui";
+import {BackgroundColor} from "../../components/BackgroundColor";
 
 const realisations = await getCollection('realisation');
 realisations.sort((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infinity));
 
-const gap = '16px'
+const gap = '24px'
 ---
 <Layout seo={{
     title: `Agence de conseil en stratégie digitale écoresponsable & SEO • udixio.fr`,
     description: "Udixio est une agence experte dans la création de sites web éco-conçus et optimisés pour le SEO. Optez pour des solutions digitales durables et performantes.",
 }}>
 
-    <section id="" class="relative z-20 pt-20 md:pt-32">
+    <section class="relative z-20 pt-20 bg-surface/50">
+        <div class="max-width min-h-[50vh] padding-x flex items-center justify-center">
+            <div class="flex items-center flex-col">
+                <h1 class="text-display-small md:text-display-large text-center max-w-4xl mt-4">nos réalisations</h1>
+                <p class="mt-8 text-body-large mx-auto max-w-prose text-center">Chaque réalisation de notre agence
+                    digitale
+                    Udixio est une rencontre unique entre innovation et créativité, pensée pour atteindre vos objectifs
+                    commerciaux avec succès</p>
+                <!--<Button href="#contact" className="w-fit mt-12 scale-125" label="Démarrer sans payer"/>-->
+            </div>
+
+        </div>
+    </section>
+    <section id="" class="relative pt-20 md:pt-32">
+        <BackgroundColor client:load canEscape={true} count={6} radius={600}
+                         className="opacity-100 -z-10 top-0 h-screen w-screen !fixed"/>
         <div style={{gap}} class="max-width padding-x flex flex-wrap">
             {
                 realisations.map((realisation) => (
                         <a style={{
                             width: "calc(" + 1 / 2 * 100 + "% - " + gap + ")"
                         }} href={"/nos-realisations/" + realisation.id}>
-                            <Card isInteractive variant="filled"
+                            <Card isInteractive variant="filled" className="p-2 group"
 
                                   style={{
                                       viewTransitionName: "realisation-" + realisation.id,
                                   }}>
 
 
-                                <img class="rounded-xl w-full" src={realisation.data.image.src} height="1920"
-                                     width="1080">
+                                <div class="rounded-xl overflow-hidden">
+                                    <img class="w-full group-hover:scale-[1.1] duration-300 transition-all"
+                                         src={realisation.data.image.src}
+                                         height="1920"
+                                         width="1080">
+                                </div>
 
 
                                 <div class="p-4 ">
