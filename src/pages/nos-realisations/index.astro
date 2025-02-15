@@ -30,12 +30,11 @@ const gap = '24px'
     <section id="" class="relative pt-20 md:pt-32">
         <BackgroundColor client:load canEscape={true} count={6} radius={600}
                          className="opacity-100 -z-10 top-0 h-screen w-screen !fixed"/>
-        <div style={{gap}} class="max-width padding-x flex flex-wrap">
+        <div style={{gap}} class="max-width padding-x grid grid-cols-1 sm:grid-cols-2
+">
             {
                 realisations.map((realisation) => (
-                        <a style={{
-                            width: "calc(" + 1 / 2 * 100 + "% - " + gap + ")"
-                        }} href={"/nos-realisations/" + realisation.id}>
+                        <a href={"/nos-realisations/" + realisation.id}>
                             <Card isInteractive variant="filled" className="p-2 group"
 
                                   style={{
