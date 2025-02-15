@@ -108,7 +108,7 @@ export const Menu = ({
                     className={"bg-transparent md:h-full"}
                     selected={0 === activeTab}
                     href={`/`}
-                    label={"Page d'accueil"}
+                    label={"Accueil"}
                 ></Tab>
                 <Tab
                     className={"bg-transparent md:h-full"}

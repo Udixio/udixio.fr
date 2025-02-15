@@ -12,7 +12,7 @@ import mdx from "@astrojs/mdx";
 
 // https://astro.build/config
 export default defineConfig({
-    site: "https://vigreux-joel.fr/",
+    site: "https://www.udixio.fr/",
     compressHTML: true,
     experimental: {},
     output: 'static',
