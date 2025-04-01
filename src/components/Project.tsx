@@ -1,12 +1,18 @@
 import {faCircleXmark} from "@fortawesome/pro-regular-svg-icons";
 import {Card, IconButton} from "@udixio/ui";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
+import {Canvas, useFrame} from "@react-three/fiber";
+import {PointMaterial, Points} from "@react-three/drei";
 
 type Props = {
     meta: {
         title: string
         slug: string
         siteUrl?: string
+        theme: {
+            isDark: boolean
+            source: string
+        }
     }
     content: {
         body: string
@@ -16,6 +22,42 @@ type Props = {
         image?: string
     }
 }
+
+type SpaceBackgroundProps = {
+    mode: "light" | "dark";
+    title: string;
+};
+
+// Composant pour gérer les particules (étoiles)
+const SpaceParticles = ({lightMode}: { lightMode: boolean }) => {
+    const ref = useRef(null);
+    const particlesCount = 5000;
+
+    // Génération des étoiles
+    const positions = new Float32Array(particlesCount * 3);
+    for (let i = 0; i < particlesCount * 3; i++) {
+        positions[i] = (Math.random() - 0.5) * 10; // Étendre les étoiles dans l'espace
+    }
+
+    useFrame(({mouse}) => {
+        if (ref.current) {
+            ref.current.rotation.x = -mouse.y * 0.02; // Réagir légèrement au déplacement de la souris
+            ref.current.rotation.y = mouse.x * 0.02;
+        }
+    });
+
+    return (
+        <Points ref={ref} positions={positions} stride={3} frustumCulled>
+            <PointMaterial
+                transparent
+                color={lightMode ? "#000000" : "#FFFFFF"} // Blanc pour le mode dark, noir pour le mode light
+                size={0.04}
+                sizeAttenuation
+                depthWrite={false}
+            />
+        </Points>
+    );
+};
 
 
 export const Project = ({meta}: Props) => {
@@ -41,17 +83,18 @@ export const Project = ({meta}: Props) => {
                         arialLabel="retour aux projets"
                         href={returnUrl}
             />
-            {/*<div className="relative">*/}
 
-            {/*    /!*<img className="rounded-[28px] w-full" src={realisation.data.image.src} height="1920" width="1080"/>*!/*/}
-            {/*    /!*<div*!/*/}
-            {/*    /!*    className={`w-full z-10 h-32 absolute bottom-0 bg-gradient-to-b left-0 from-transparent to-surface via-surface/[0.75]`}>*!/*/}
-            {/*    /!*</div>*!/*/}
-            {/*</div>*/}
             <div className="h-full flex justify-center  items-center">
+                <div className={"absolute top-0 left-0 w-full h-full"}>
+                    <Canvas>
+                        <SpaceParticles lightMode={!meta.theme.isDark}/>
+                    </Canvas>
+                </div>
                 <h1 className="text-display-large mb-8 mt-8">{meta.title}</h1>
-            </div>
 
+            </div>
+            <iframe className={"w-full h-full"}
+                    src={meta.siteUrl ?? "https://netsimpler.io/"}></iframe>
         </Card>
 
 
