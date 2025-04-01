@@ -77,9 +77,10 @@ export const Project = ({meta}: Props) => {
 
     return <section id="projets"
                     className=" tab-menu h-screen pt-32 flex items-center relative padding ">
-        <Card className="!rounded-[28px] max-width w-full h-full bg-surface-container-lowest"
+        <Card className="!rounded-[28px] max-width w-full !overflow-auto h-full bg-surface-container-lowest"
               style={{viewTransitionName: "realisation-" + meta.slug}}>
-            <IconButton variant='tonal' icon={faCircleXmark} className="block !absolute w-fit ml-auto right-0 m-4"
+            <IconButton variant='tonal' icon={faCircleXmark}
+                        className="block !sticky z-10 w-fit float-right ml-auto right-0 m-4 top-4"
                         arialLabel="retour aux projets"
                         href={returnUrl}
             />
