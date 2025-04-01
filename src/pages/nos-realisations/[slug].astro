@@ -2,6 +2,7 @@
 import {getCollection, render} from 'astro:content';
 import Layout from "../../layouts/Layout.astro";
 import {BackgroundColor} from "../../components/BackgroundColor";
+import {Project} from "@components/Project";
 import {Button, Card} from "@udixio/ui"
 import {getImage} from "astro:assets";
 import {UpdateTheme} from "../../components/UpdateTheme";
@@ -19,31 +20,7 @@ const {Content} = await render(realisation);
 ---
 
 <Layout>
-    <section id="projets" class=" tab-menu  mt-32 flex items-center relative">
-        <UpdateTheme client:only="react"
-                     theme={{isDark: realisation.data.theme.isDark, source: realisation.data.theme.source}}/>
-        <div class="max-w-screen-lg w-full px-4 mx-auto z-20">
-            <Button variant='filledTonal' icon={faArrowLeft} className="w-fit" label="retour aux projets"
-                    href="/nos-realisations"/>
-            <Card className="mt-8 !rounded-[28px]" style={{viewTransitionName: "realisation-" + realisation.id}}>
-                <div class="relative">
-
-                    <img class="rounded-[28px] w-full" src={realisation.data.image.src} height="1920" width="1080">
-                    <div
-                            class={`w-full z-10 h-32 absolute bottom-0 bg-gradient-to-b left-0 from-transparent to-surface via-surface/[0.75]`}>
-                    </div>
-                </div>
-                <div class="padding-x py-8 ">
-
-                    <div class=" max-w-screen-md mx-auto">
-                        <h1 class="text-display-small mb-8 mt-8">{realisation.data.title}</h1>
-                        <Content/>
-                    </div>
-                </div>
-
-            </Card>
-
-
-        </div>
-    </section>
+    <UpdateTheme client:only="react"
+                 theme={{isDark: realisation.data.theme.isDark, source: realisation.data.theme.source}}/>
+    <Project client:load meta={realisation.data}/>
 </Layout>
