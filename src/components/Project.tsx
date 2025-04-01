@@ -1,19 +1,18 @@
-import {faCircleXmark} from "@fortawesome/pro-regular-svg-icons";
-import {Card, IconButton} from "@udixio/ui";
-import {useEffect, useRef, useState} from "react";
 import {Canvas, useFrame} from "@react-three/fiber";
+import {useEffect, useMemo, useRef, useState} from "react";
 import {PointMaterial, Points} from "@react-three/drei";
+import {Card, IconButton} from "@udixio/ui";
+import {faCircleXmark} from "@fortawesome/pro-regular-svg-icons";
 
-type Props = {
+type ProjectProps = {
     meta: {
-        title: string
+        title: string;
         slug: string
         siteUrl?: string
         theme: {
-            isDark: boolean
-            source: string
-        }
-    }
+            isDark: boolean;
+        };
+    };
     content: {
         body: string
     }
@@ -21,28 +20,26 @@ type Props = {
         logo?: string
         image?: string
     }
-}
-
-type SpaceBackgroundProps = {
-    mode: "light" | "dark";
-    title: string;
 };
 
-// Composant pour gérer les particules (étoiles)
-const SpaceParticles = ({lightMode}: { lightMode: boolean }) => {
-    const ref = useRef(null);
-    const particlesCount = 5000;
+const SpaceParticles = ({isDark}: { isDark: boolean }) => {
+    const ref = useRef<Points>(null);
+    const particlesCount = 6000;
 
-    // Génération des étoiles
-    const positions = new Float32Array(particlesCount * 3);
-    for (let i = 0; i < particlesCount * 3; i++) {
-        positions[i] = (Math.random() - 0.5) * 10; // Étendre les étoiles dans l'espace
-    }
+    // Création unique des positions pour éviter les recalculs
+    const positions = useMemo(() => {
+        const posArray = new Float32Array(particlesCount * 3);
+        for (let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 15;
+        }
+        return posArray;
+    }, []);
 
+    // Animation fluide et interactive
     useFrame(({mouse}) => {
         if (ref.current) {
-            ref.current.rotation.x = -mouse.y * 0.02; // Réagir légèrement au déplacement de la souris
-            ref.current.rotation.y = mouse.x * 0.02;
+            ref.current.rotation.x += (mouse.y * 0.01 - ref.current.rotation.x) * 0.05;
+            ref.current.rotation.y += (mouse.x * 0.01 - ref.current.rotation.y) * 0.05;
         }
     });
 
@@ -50,8 +47,8 @@ const SpaceParticles = ({lightMode}: { lightMode: boolean }) => {
         <Points ref={ref} positions={positions} stride={3} frustumCulled>
             <PointMaterial
                 transparent
-                color={lightMode ? "#000000" : "#FFFFFF"} // Blanc pour le mode dark, noir pour le mode light
-                size={0.04}
+                color={isDark ? "#ffffff" : "#222222"}
+                size={0.05}
                 sizeAttenuation
                 depthWrite={false}
             />
@@ -60,7 +57,7 @@ const SpaceParticles = ({lightMode}: { lightMode: boolean }) => {
 };
 
 
-export const Project = ({meta}: Props) => {
+export const Project = ({meta}: ProjectProps) => {
     const [returnUrl, setReturnUrl] = useState<string>("/nos-realisations");
 
 
