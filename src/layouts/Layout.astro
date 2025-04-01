@@ -11,6 +11,7 @@ import "@fontsource/montserrat/700.css";
 import "@fontsource/montserrat/600.css";
 import defaultImage from "@assets/images/img.png";
 import {ClientRouter} from 'astro:transitions';
+import {SmoothScroll} from "@udixio/ui";
 
 export interface Link extends HTMLLinkElement {
     prefetch: boolean;
@@ -141,10 +142,21 @@ const seoDefault: SEOProps = {
 </head>
 <body class="bg-surface  transition-all duration-500">
 <Header/>
-<main>
-    <slot/>
-</main>
-<Footer/>
+<div class="h-screen">
+    <SmoothScroll
+            orientation={'vertical'}
+            client:load
+            transition=".75s"
+
+    >
+        <main>
+            <slot/>
+        </main>
+        <Footer/>
+    </SmoothScroll>
+</div>
+
+
 <script>
 
     import AOS from 'aos'

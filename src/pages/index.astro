@@ -29,7 +29,7 @@ import {FormContact} from "@components/FormContact";
 import {BackgroundColor} from "@components/BackgroundColor";
 import Realisations from "@components/Realisations";
 import {Icon} from "@udixio/ui"
-import {Card} from "@udixio/ui"
+import {Card, SmoothScroll} from "@udixio/ui"
 import {
     faAddressCard, faChartNetwork,
     faCircle, faCloud,
@@ -61,27 +61,31 @@ realisations.sort((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infini
     title: `Agence de conseil en stratégie digitale écoresponsable & SEO • udixio.fr`,
     description: "Udixio est une agence experte dans la création de sites web éco-conçus et optimisés pour le SEO. Optez pour des solutions digitales durables et performantes.",
 }}>
+
+
+        <section id="" class="relative z-20 pt-20 ">
+            <div class="max-width min-h-[75vh] padding-x flex items-center justify-center">
+                <div class="flex items-center flex-col">
+                    <p class="text-title-medium text-on-surface-variant">Site vitrine - e-commerce - portfolio</p>
+                    <h1 class="text-display-small md:text-display-large text-center max-w-4xl mt-4">On construit des
+                        sites web <span
+                                class="text-gradient">irresistible</span> à des tarifs accessible</h1>
+                    <p class="mt-8 text-body-large mx-auto max-w-xl text-center">Nous créons votre page d'accueil.<br/>
+                        Convaincu ? On continue.<br/> Sinon, c'est gratuit.</p>
+                    <Button href="#contact" className="w-fit mt-12 scale-125" label="Démarrer sans payer"/>
+                </div>
+
+            </div>
+            <!--<LinearGradient nextTheme="purple"/>-->
+        </section>
+
+        <Realisations realisations={realisations} client:load></Realisations>
+
     <style is:global>
         .grecaptcha-badge {
             visibility: hidden;
         }
     </style>
-    <section id="" class="relative z-20 pt-20 ">
-        <div class="max-width min-h-[75vh] padding-x flex items-center justify-center">
-            <div class="flex items-center flex-col">
-                <p class="text-title-medium text-on-surface-variant">Site vitrine - e-commerce - portfolio</p>
-                <h1 class="text-display-small md:text-display-large text-center max-w-4xl mt-4">On construit des sites web <span
-                        class="text-gradient">irresistible</span> à des tarifs accessible</h1>
-                <p class="mt-8 text-body-large mx-auto max-w-xl text-center">Nous créons votre page d'accueil.<br/>
-                    Convaincu ? On continue.<br/> Sinon, c'est gratuit.</p>
-                <Button href="#contact" className="w-fit mt-12 scale-125" label="Démarrer sans payer"/>
-            </div>
-
-        </div>
-        <!--<LinearGradient nextTheme="purple"/>-->
-    </section>
-
-    <Realisations realisations={realisations} client:load></Realisations>
 
 
 </Layout>
