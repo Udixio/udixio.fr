@@ -57,7 +57,7 @@ const Realisations = ({realisations}: any) => {
                         <a href={"/nos-realisations/" + project.id}>
                             <Card isInteractive className="h-full !rounded-[28px]"
                                   style={{viewTransitionName: "realisation-" + project.id}}>
-                                <img className={'object-cover  h-full w-full'} src={project.data.image.src}/>
+                                <img className={'object-cover  h-full w-full'} src={project.data.images.logo.src}/>
                             </Card>
                         </a>
                     </CarouselItem>

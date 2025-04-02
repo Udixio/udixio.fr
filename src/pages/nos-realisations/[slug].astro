@@ -22,5 +22,6 @@ const {Content} = await render(realisation);
 <Layout>
     <UpdateTheme client:only="react"
                  theme={{isDark: realisation.data.theme.isDark, source: realisation.data.theme.source}}/>
-    <Project client:load meta={realisation.data}/>
+    <Project client:load meta={{...realisation.data, slug: realisation.id}} content={Content}
+             media={realisation.data.images}/>
 </Layout>

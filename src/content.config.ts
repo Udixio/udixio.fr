@@ -11,11 +11,18 @@ const realisation = defineCollection({
             isDark: z.boolean(),
             source: z.string(),
         }),
-        image: z.object({
-            src: z.string(),
-            alt: z.string(),
+        images: z.object({
+            background: z.object({
+                src: z.string(),
+                alt: z.string(),
+            }),
+            logo: z.object({
+                src: z.string(),
+                alt: z.string(),
+            }),
         }),
+
     }),
 });
 
-export const collections = { realisation};
+export const collections = {realisation};
