@@ -19,8 +19,10 @@ const realisation = defineCollection({
             logo: z.object({
                 src: z.string(),
                 alt: z.string(),
-            }),
+            }).optional(),
         }),
+        website: z.string().url().optional(),
+        summary: z.string()
 
     }),
 });
