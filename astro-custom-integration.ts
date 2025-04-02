@@ -62,7 +62,7 @@ const recordPageScrollWithAnimations = async (url: string, outputPath: string) =
     // Initialiser l'enregistreur vidéo
     const recorder = new PuppeteerScreenRecorder(page, {
         followNewTab: true, // Enregistre l’activité dans les nouveaux onglets (si besoin)
-        fps: 30, // Taux d'images par seconde
+        fps: 90, // Taux d'images par seconde
         videoFrame: {
             width: 1440,
             height: 900,
@@ -75,39 +75,30 @@ const recordPageScrollWithAnimations = async (url: string, outputPath: string) =
     // Scénariser le scroll dynamique pour capturer les animations
     await page.evaluate(async () => {
         const delay = (time) => new Promise((resolve) => setTimeout(resolve, time));
+        const ease = (t) => t * (2 - t);
 
         // Scroll personnalisé : section par section
         const sections = document.querySelectorAll("section"); // Par exemple, des sections avec `data-section`
-        for (const section of sections) {
-            console.log(sections.length);
-            const smoothScrollTo = (target, duration) => {
-                return new Promise((resolve) => {
-                    const startPosition = window.scrollY;
-                    const targetPosition = target.getBoundingClientRect().top + window.scrollY;
-                    const distance = targetPosition - startPosition;
-                    const startTime = performance.now();
+        console.log(sections.length)
+        const max = 5
+        const totalSections = sections.length;
 
-                    const animateScroll = (currentTime) => {
-                        const elapsedTime = currentTime - startTime;
-                        const progress = Math.min(elapsedTime / duration, 1); // Ne dépasse pas 1
-                        const ease = progress * (2 - progress); // Fonction d'interpolation (Easing)
+        await delay(500);
+        for (const [index, section] of Array.from(sections).entries()) {
+            if (totalSections > max && index !== 0 && index !== totalSections - 1) {
+                if (index % Math.ceil(totalSections / max) !== 0)
+                    continue
+            }
 
-                        window.scrollTo(0, startPosition + distance * ease);
 
-                        if (progress < 1) {
-                            requestAnimationFrame(animateScroll);
-                        } else {
-                            resolve(); // Fin de l'animation
-                        }
-                    };
+            // await smoothScrollTo(section, 750);
+            section.scrollIntoView({
+                behavior: 'smooth', // Scroll fluide
+                block: 'start',     // Scroll pour aligner au haut de la section
+            });
 
-                    requestAnimationFrame(animateScroll);
-                });
-            };
-
-            await smoothScrollTo(section, 1000);
             // Scroll smooth vers chaque section
-            await delay(1000); // Pause pour laisser les animations se jouer
+            await delay(1750); // Pause pour laisser les animations se jouer
         }
 
         // Si aucun attribut "data-section", effectuer un scroll global
@@ -116,8 +107,11 @@ const recordPageScrollWithAnimations = async (url: string, outputPath: string) =
         //     window.scrollTo({top: i, behavior: "smooth"});
         //     await delay(1000); // Pause pour capturer les animations
         // }
-        window.scrollTo({top: 0, behavior: "smooth"}); // Scroll smooth vers le haut de la page
-        await delay(1000);
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
+        await delay(1500);
     });
 
     // Arrêter l'enregistrement après le scroll
@@ -148,6 +142,7 @@ export default function customIntegration(): AstroIntegration {
                         logger.info(`❌ Aucune vidéo trouvée pour "${slug}", création en cours...`);
                         await recordPageScrollWithAnimations(url, videoPath);
                         logger.info(`✅ Vidéo créée pour "${slug}" : ${videoPath}`);
+
                     }
                 }
             },
