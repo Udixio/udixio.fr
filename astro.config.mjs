@@ -9,6 +9,7 @@ import vercel from '@astrojs/vercel';
 import compress from "astro-compress";
 
 import mdx from "@astrojs/mdx";
+import customIntegration from "./astro-custom-integration";
 
 // https://astro.build/config
 export default defineConfig({
@@ -18,7 +19,7 @@ export default defineConfig({
     output: 'static',
     integrations: [react(), tailwind({
         applyBaseStyles: false
-    }), sitemap(), robotsTxt(), compress(), compressor(), mdx()],
+    }), sitemap(), robotsTxt(), compress(), compressor(), mdx(), customIntegration()],
     vite: {
         ssr: {
             noExternal: ["react-markdown", "@udixio/theme", "react-obfuscate", "react-google-recaptcha-v3"]
