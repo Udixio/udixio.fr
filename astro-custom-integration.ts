@@ -8,6 +8,7 @@ import {join} from 'path';
 import puppeteer from "puppeteer";
 import {PuppeteerScreenRecorder} from "puppeteer-screen-recorder";
 
+
 async function getAllMDXFiles(realisationsDir: string) {
     try {
         const files = await fs.readdir(realisationsDir);
@@ -50,7 +51,10 @@ const recordPageScrollWithAnimations = async (url: string, outputPath: string) =
     const page = await browser.newPage();
 
     // Configuration de la taille de la fenêtre
-    await page.setViewport({width: 1280, height: 720});
+    await page.setViewport({
+        width: 1440
+        , height: 900
+    });
 
     // Ouvrir la page souhaitée
     await page.goto(url, {waitUntil: "networkidle2"});
@@ -60,8 +64,8 @@ const recordPageScrollWithAnimations = async (url: string, outputPath: string) =
         followNewTab: true, // Enregistre l’activité dans les nouveaux onglets (si besoin)
         fps: 30, // Taux d'images par seconde
         videoFrame: {
-            width: 1280,
-            height: 720,
+            width: 1440,
+            height: 900,
         },
     });
 
@@ -73,17 +77,47 @@ const recordPageScrollWithAnimations = async (url: string, outputPath: string) =
         const delay = (time) => new Promise((resolve) => setTimeout(resolve, time));
 
         // Scroll personnalisé : section par section
-        const sections = document.querySelectorAll("[data-section]"); // Par exemple, des sections avec `data-section`
+        const sections = document.querySelectorAll("section"); // Par exemple, des sections avec `data-section`
         for (const section of sections) {
-            section.scrollIntoView({behavior: "smooth"}); // Scroll smooth vers chaque section
-            await delay(2000); // Pause pour laisser les animations se jouer
+            console.log(sections.length);
+            const smoothScrollTo = (target, duration) => {
+                return new Promise((resolve) => {
+                    const startPosition = window.scrollY;
+                    const targetPosition = target.getBoundingClientRect().top + window.scrollY;
+                    const distance = targetPosition - startPosition;
+                    const startTime = performance.now();
+
+                    const animateScroll = (currentTime) => {
+                        const elapsedTime = currentTime - startTime;
+                        const progress = Math.min(elapsedTime / duration, 1); // Ne dépasse pas 1
+                        const ease = progress * (2 - progress); // Fonction d'interpolation (Easing)
+
+                        window.scrollTo(0, startPosition + distance * ease);
+
+                        if (progress < 1) {
+                            requestAnimationFrame(animateScroll);
+                        } else {
+                            resolve(); // Fin de l'animation
+                        }
+                    };
+
+                    requestAnimationFrame(animateScroll);
+                });
+            };
+
+            await smoothScrollTo(section, 1000);
+            // Scroll smooth vers chaque section
+            await delay(1000); // Pause pour laisser les animations se jouer
         }
 
         // Si aucun attribut "data-section", effectuer un scroll global
-        for (let i = 0; i < document.body.scrollHeight; i += 800) {
-            window.scrollTo({top: i, behavior: "smooth"});
-            await delay(2000); // Pause pour capturer les animations
-        }
+        // for (let i = 0; i < document.body.scrollHeight; i += 800) {
+        //     console.log(2);
+        //     window.scrollTo({top: i, behavior: "smooth"});
+        //     await delay(1000); // Pause pour capturer les animations
+        // }
+        window.scrollTo({top: 0, behavior: "smooth"}); // Scroll smooth vers le haut de la page
+        await delay(1000);
     });
 
     // Arrêter l'enregistrement après le scroll
