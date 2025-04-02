@@ -8,6 +8,7 @@ import {join} from 'path';
 import puppeteer from "puppeteer";
 import {PuppeteerScreenRecorder} from "puppeteer-screen-recorder";
 import ffmpeg from 'fluent-ffmpeg';
+import path from "node:path";
 
 
 async function getAllMDXFiles(realisationsDir: string) {
@@ -21,6 +22,31 @@ async function getAllMDXFiles(realisationsDir: string) {
         return [];
     }
 }
+
+const extractFirstFrameAsWebP = async (videoPath: string, outputImagePath: string, imageName = "frame_%d"): Promise<void> => {
+    return new Promise((resolve, reject) => {
+        ffmpeg(videoPath)
+            .on('start', () => {
+                console.log(`📹 Début du processus: Extraction depuis ${videoPath}`);
+            })
+            .on('end', () => {
+                console.log(`✅ Extraction terminée : Image enregistrée sous ${outputImagePath}`);
+                resolve();
+            })
+            .on('error', (err) => {
+                console.error(`❌ Erreur lors de l'extraction :`, err);
+                reject(err);
+            })
+            // Extraire uniquement le premier frame à 0 seconde
+            .screenshots({
+                timestamps: ['00:00:00.000'], // Temps de la première image
+                filename: imageName + '.webp',   // Nom temporaire de l'image générée
+                folder: path.dirname(outputImagePath),
+                size: '1440x900'             // Optionnel : taille
+            })
+            .toFormat('webp');
+    });
+};
 
 
 /**
@@ -144,19 +170,29 @@ export default function customIntegration(): AstroIntegration {
                         await recordPageScrollWithAnimations(url, videoPath);
                         logger.info(`✅ Vidéo créée pour "${slug}" : ${videoPath}`);
 
+
+                        extractFirstFrameAsWebP(videoPath, `./src/assets/renders/${slug}.webp`, slug)
+                            .then(() => console.log('✅ Le process est terminé.'))
+                            .catch(err => console.error('❌ Une erreur est survenue durant le process.', err));
+
                         const videoOptimizer = ffmpeg(videoPath) // Vidéo source
                             .videoCodec('libvpx-vp9')
                             .noAudio()
                             .format('webm') // Format de sortie
-
+                            .fps(30)
+                            .addOption('-crf', '28')
+                            .addOption('-b:v', '1M')
+                            .addOption('-maxrate', '4M')
+                            .addOption('-bufsize', '2M')
+                            .addOption('-pix_fmt', 'yuv420p')
+                            .addOption('-preset', 'slower')
                             .on('end', () => console.log('Vidéo optimisée avec succès !'))
                             .on('error', (err) => console.error('Une erreur s\'est produite :', err))
 
 
                         videoOptimizer.output(videoPath.replace('.mp4', '-720.webm'))
                             .size('1280x720')
-                            .videoBitrate('1500k')
-                            .addOption('-crf', '28')
+
                             .run();
                         videoOptimizer.output(videoPath.replace('.mp4', '-480.webm'))
                             .size('720x480')
