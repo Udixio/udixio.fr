@@ -7,6 +7,7 @@ import matter from 'gray-matter';
 import {join} from 'path';
 import puppeteer from "puppeteer";
 import {PuppeteerScreenRecorder} from "puppeteer-screen-recorder";
+import ffmpeg from 'fluent-ffmpeg';
 
 
 async function getAllMDXFiles(realisationsDir: string) {
@@ -83,7 +84,7 @@ const recordPageScrollWithAnimations = async (url: string, outputPath: string) =
         const max = 5
         const totalSections = sections.length;
 
-        await delay(500);
+        await delay(250);
         for (const [index, section] of Array.from(sections).entries()) {
             if (totalSections > max && index !== 0 && index !== totalSections - 1) {
                 if (index % Math.ceil(totalSections / max) !== 0)
@@ -111,7 +112,7 @@ const recordPageScrollWithAnimations = async (url: string, outputPath: string) =
             top: 0,
             behavior: 'smooth',
         });
-        await delay(1500);
+        await delay(500);
     });
 
     // Arrêter l'enregistrement après le scroll
@@ -142,6 +143,24 @@ export default function customIntegration(): AstroIntegration {
                         logger.info(`❌ Aucune vidéo trouvée pour "${slug}", création en cours...`);
                         await recordPageScrollWithAnimations(url, videoPath);
                         logger.info(`✅ Vidéo créée pour "${slug}" : ${videoPath}`);
+
+                        const videoOptimizer = ffmpeg(videoPath) // Vidéo source
+                            .videoCodec('libvpx-vp9')
+                            .noAudio()
+                            .format('webm') // Format de sortie
+
+                            .on('end', () => console.log('Vidéo optimisée avec succès !'))
+                            .on('error', (err) => console.error('Une erreur s\'est produite :', err))
+
+
+                        videoOptimizer.output(videoPath.replace('.mp4', '-720.webm'))
+                            .size('1280x720')
+                            .videoBitrate('1500k')
+                            .addOption('-crf', '28')
+                            .run();
+                        videoOptimizer.output(videoPath.replace('.mp4', '-480.webm'))
+                            .size('720x480')
+                            .run();
 
                     }
                 }
