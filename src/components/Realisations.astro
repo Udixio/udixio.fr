@@ -1,0 +1,60 @@
+---
+import {getCollection} from "astro:content";
+import Layout from "@layouts/Layout.astro";
+import {Button, Card, classNames} from "@udixio/ui";
+import {BackgroundColor} from "@components/BackgroundColor";
+import {faArrowRight} from "@fortawesome/pro-regular-svg-icons";
+
+const realisations = await getCollection('realisation');
+realisations.sort((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infinity));
+---
+
+<div class="max-width gap-x-8 gap-y-32 grid grid-cols-1 sm:grid-cols-[repeat(20,minmax(0,1fr))] ">
+    {
+        realisations.map((realisation, index) => {
+            const isTrue = [0, 3, 4, 7].includes(index % 8); // Détermine "true" ou "false"
+
+            return (
+                    <a class={classNames('',
+                        {
+                            "col-[_span_11_/_span_11] aspect-[10/8]": isTrue,
+                            "col-[_span_9_/_span_9] row-span-2  aspect-[8/10]": !isTrue,
+
+                            'self-end': !(index % 4 === 0 || index % 4 === 1)
+                        }
+                    )} href={"/nos-realisations/" + realisation.id}>
+                        <Card isInteractive variant="filled"
+                              className="p-2 flex flex-col h-full group  transition-all duration-300"
+
+                              style={{
+                                  viewTransitionName: "realisation-" + realisation.id,
+                              }}>
+
+
+                            <div class="w-full flex-1 rounded-xl overflow-hidden relative bg-surface">
+                                <img class={classNames(
+                                    "w-full h-full group-hover:scale-[1.1] object-cover duration-300 transition-all ",
+                                    'group-hover:opacity-20'
+                                )}
+                                     src={realisation.data.images.background.src}
+                                     height="1920"
+                                     width="1080">
+                                <Button iconPosition="right" icon={faArrowRight}
+                                        className={classNames(
+                                            "!absolute  bottom-0 left-0  mx-auto w-fit transition-all duration-300 scale-150 translate-y-1/2",
+                                            "right-0 opacity-0 invisible max-w-[0]",
+                                            'group-hover:bottom-1/2 group-hover:opacity-100 group-hover:visible group-hover:max-w-full'
+                                        )}
+
+                                        label="Découvrir"/>
+                            </div>
+                            <div class="p-4 ">
+                                <p class="text-title-large">{realisation.data.title}</p>
+                                <p class="text-title-small mt-2">{realisation.data.summary}</p>
+                            </div>
+                        </Card>
+                    </a>
+            )
+        })
+    }
+</div>

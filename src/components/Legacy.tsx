@@ -5,7 +5,7 @@ import {BackgroundColor} from "@components/BackgroundColor.tsx";
 import {UpdateTheme} from "@components/UpdateTheme";
 
 
-const Realisations = ({realisations}: any) => {
+const Legacy = ({realisations}: any) => {
 
 
     const carouselRef = useRef<HTMLDivElement>(null);
@@ -71,4 +71,4 @@ const Realisations = ({realisations}: any) => {
 }
 
 
-export default Realisations
+export default Legacy

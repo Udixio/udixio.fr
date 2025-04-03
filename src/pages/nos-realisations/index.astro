@@ -3,6 +3,8 @@ import {getCollection} from "astro:content";
 import Layout from "@layouts/Layout.astro";
 import {Button, Card, classNames} from "@udixio/ui";
 import {BackgroundColor} from "../../components/BackgroundColor";
+import {faArrowRight} from "@fortawesome/pro-regular-svg-icons";
+import Realisations from "../../components/Realisations.astro";
 
 const realisations = await getCollection('realisation');
 realisations.sort((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infinity));
@@ -25,48 +27,11 @@ realisations.sort((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infini
 
         </div>
     </section>
-    <section id="" class="relative pt-20 md:pt-32">
+    <section id="" class="relative pt-20 md:pt-32 padding-x">
         <BackgroundColor client:load canEscape={true} count={6} radius={600}
                          className="opacity-100 -z-10 top-0 h-screen w-screen !fixed"/>
-        <div class="max-width padding-x gap-x-16 gap-y-32 grid grid-cols-1 sm:grid-cols-5 ">
-            {
-                realisations.map((realisation, index) => {
-                    const isTrue = [0, 3, 4, 7].includes(index % 8); // Détermine "true" ou "false"
-
-                    return (
-                            <a class={classNames('',
-                                {
-                                    "col-span-3 aspect-[3/2]": isTrue,
-                                    "col-span-2 row-span-2  aspect-[2/3]": !isTrue,
-                                    'mt-8': (index % 4 === 0 || index % 4 === 1),
-                                    'self-end': !(index % 4 === 0 || index % 4 === 1)
-                                }
-                            )} href={"/nos-realisations/" + realisation.id}>
-                                <Card isInteractive variant="filled" className="p-2 flex flex-col h-full group"
-
-                                      style={{
-                                          viewTransitionName: "realisation-" + realisation.id,
-                                      }}>
-
-
-                                    <div class="w-full flex-1 rounded-xl overflow-hidden">
-                                        <img class="w-full h-full group-hover:scale-[1.1] object-cover duration-300 transition-all"
-                                             src={realisation.data.images.background.src}
-                                             height="1920"
-                                             width="1080">
-                                    </div>
-
-
-                                    <div class="p-4 ">
-                                        <p class="text-title-large">{realisation.data.title}</p>
-                                        <p class="text-title-small mt-2">{realisation.data.summary}</p>
-                                    </div>
-                                </Card>
-                            </a>
-                    )
-                })
-            }
-        </div>
+        <Realisations/>
+        <Realisations/>
 
     </section>
 </Layout>
