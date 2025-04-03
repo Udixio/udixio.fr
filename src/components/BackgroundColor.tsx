@@ -1,7 +1,9 @@
 import React, {useMemo, useRef} from "react";
 import {Canvas, useFrame} from "@react-three/fiber";
-import {PerspectiveCamera, Points} from "@react-three/drei";
+import {PerspectiveCamera, Point, Points} from "@react-three/drei";
 import useMouse from "@react-hook/mouse-position";
+import {Bloom, DepthOfField, EffectComposer} from "@react-three/postprocessing";
+import {AdditiveBlending} from "three";
 
 interface CircleProps {
     circleRadius: number;
@@ -11,16 +13,15 @@ interface CircleProps {
 }
 
 
-const NebulaParticles = ({count = 100}: { count?: number }) => {
-    const pointsRef = useRef(null);
+const NebulaParticles = ({count = 25}: { count?: number }) => {
+
 
     // Génération des données pour les positions, couleurs et tailles
     const {positions, colors, sizes} = useMemo(() => {
         const numPoints = count; // Nombre total de points
-        const positions = new Float32Array(numPoints * 3); // x, y, z pour chaque point
-        const basePositions = new Float32Array(numPoints * 3); // Positions de base pour le parallaxe
-        const colors = new Float32Array(numPoints * 3); // r, g, b pour chaque point
-        const sizes = new Float32Array(numPoints); // Une taille par point
+        const positions: [x: number, y: number, z: number][] = [] // x, y, z pour chaque point
+        const colors: [r: number, g: number, b: number][] = []
+        const sizes: Float32Array = new Float32Array(numPoints); // Une taille par point
 
         for (let i = 0; i < numPoints; i++) {
             // Position aléatoire dans l'espace 3D (-5 à 5 pour chaque coordonnée)
@@ -28,21 +29,14 @@ const NebulaParticles = ({count = 100}: { count?: number }) => {
             const y = (Math.random() - 0.5) * 10;
             const z = (Math.random() - 0.5) * 5;
 
-            basePositions[i * 3] = x;
-            basePositions[i * 3 + 1] = y;
-            basePositions[i * 3 + 2] = z;
 
-            positions[i * 3] = x;
-            positions[i * 3 + 1] = y;
-            positions[i * 3 + 2] = z;
+            positions[i] = [x, y, z];
 
             // Couleur aléatoire
-            colors[i * 3] = Math.random(); // Rouge
-            colors[i * 3 + 1] = Math.random(); // Vert
-            colors[i * 3 + 2] = Math.random(); // Bleu
+            colors[i] = [Math.random(), Math.random(), Math.random()]; // Rouge
 
             // Taille aléatoire (0.1 à 1.0)
-            sizes[i] = Math.random() * 0.9 + 0.1;
+            sizes[i] = (Math.random() * 5 + 0.1);
         }
 
         return {positions, colors, sizes};
@@ -50,15 +44,26 @@ const NebulaParticles = ({count = 100}: { count?: number }) => {
 
 
     return (
-        <Points ref={pointsRef} positions={positions} colors={colors} sizes={sizes}>
-            {/* Matériau des points */}
+
+        <Points
+        >
             <pointsMaterial
                 vertexColors
                 transparent
-                opacity={0.8}
+                opacity={1}
                 alphaTest={0.5}
-
+                blending={AdditiveBlending}
+                size={1.5}
             />
+            {Array.from({length: count}, (_, i) => {
+                console.log(positions[i])
+                return (
+                    <Point
+
+                        key={i} // Une clé unique pour chaque élément
+                        position={positions[i]} color={colors[i]}/>
+                )
+            })}
         </Points>
     );
 
@@ -111,6 +116,7 @@ const MouseControlledCamera: React.FC = ({canvasRef}: { canvasRef: React.RefObje
             fov={75}
             near={0.1}
             far={1000}
+
         />
 
     );
@@ -135,6 +141,25 @@ export const BackgroundColor: React.FC<BackgroundColorProps> = ({
                 <MouseControlledCamera canvasRef={canvasRef}/>
                 {/* Exemples de contenu (ajoutez les vôtres ici) */}
                 <NebulaParticles/>
+
+                <EffectComposer>
+                    <Bloom
+                        intensity={1.2}               // Flou à intensité modérée
+                        luminanceThreshold={0.0}       // Appliquer à tous les niveaux de luminance des points
+                        luminanceSmoothing={0.5}       // Flou progressif et doux
+                        radius={1.5}                   // Augmenter la diffusion pour accentuer le flou
+                    />
+
+
+                    <DepthOfField
+                        focusDistance={8.0}   // Mise au point très, très loin
+                        focalLength={1.5}     // Longueur focale énorme pour une sensation d'extrême flou
+                        bokehScale={20.0}     // Bokehs extrêmement massifs
+                    />
+
+
+                </EffectComposer>
+
 
                 <ambientLight intensity={0.5}/>
                 <directionalLight position={[10, 10, 5]} intensity={1}/>
