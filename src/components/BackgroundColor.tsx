@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useRef, useState} from "react";
+import React, {useMemo, useRef} from "react";
 import {Canvas, useFrame} from "@react-three/fiber";
 import useMouse from "@react-hook/mouse-position";
 import {Points} from "@react-three/drei";
@@ -11,13 +11,12 @@ interface CircleProps {
 }
 
 
-const NebulaParticles = () => {
+const NebulaParticles = ({count = 100}: { count?: number }) => {
     const pointsRef = useRef(null);
-    const mousePosition = useRef({x: 0, y: 0});
 
     // Génération des données pour les positions, couleurs et tailles
-    const {positions, basePositions, colors, sizes} = useMemo(() => {
-        const numPoints = 1000; // Nombre total de points
+    const {positions, colors, sizes} = useMemo(() => {
+        const numPoints = count; // Nombre total de points
         const positions = new Float32Array(numPoints * 3); // x, y, z pour chaque point
         const basePositions = new Float32Array(numPoints * 3); // Positions de base pour le parallaxe
         const colors = new Float32Array(numPoints * 3); // r, g, b pour chaque point
@@ -27,7 +26,7 @@ const NebulaParticles = () => {
             // Position aléatoire dans l'espace 3D (-5 à 5 pour chaque coordonnée)
             const x = (Math.random() - 0.5) * 10;
             const y = (Math.random() - 0.5) * 10;
-            const z = (Math.random() - 0.5) * 10;
+            const z = (Math.random() - 0.5) * 5;
 
             basePositions[i * 3] = x;
             basePositions[i * 3 + 1] = y;
@@ -46,111 +45,23 @@ const NebulaParticles = () => {
             sizes[i] = Math.random() * 0.9 + 0.1;
         }
 
-        return {positions, basePositions, colors, sizes};
+        return {positions, colors, sizes};
     }, []);
 
-    // Suivi de la position de la souris
-    useEffect(() => {
-        const updateMousePosition = (event) => {
-            mousePosition.current.x = (event.clientX / window.innerWidth) * 2 - 1; // Normalisé entre -1 et 1
-            mousePosition.current.y = -(event.clientY / window.innerHeight) * 2 + 1; // Normalisé entre -1 et 1
-        };
-
-        window.addEventListener('mousemove', updateMousePosition);
-
-        return () => {
-            window.removeEventListener('mousemove', updateMousePosition);
-        };
-    }, []);
-
-    // Effet de parallaxe - changement du léger décalage en fonction de la souris
-    useEffect(() => {
-        if (!pointsRef.current) return;
-
-        const animateParallax = () => {
-            const positionsArray = pointsRef.current.geometry.attributes.position.array;
-
-            for (let i = 0; i < positionsArray.length; i += 3) {
-                const baseX = basePositions[i];
-                const baseY = basePositions[i + 1];
-
-                // Application d'un décalage basé sur la position de la souris
-                positionsArray[i] = baseX + mousePosition.current.x * 0.5; // X - léger décalage
-                positionsArray[i + 1] = baseY + mousePosition.current.y * 0.5; // Y - léger décalage
-            }
-
-            // Informer Three.js que les positions ont changé
-            pointsRef.current.geometry.attributes.position.needsUpdate = true;
-
-            // Boucle pour l'animation
-            requestAnimationFrame(animateParallax);
-        };
-
-        animateParallax();
-    }, [basePositions]);
 
     return (
         <Points ref={pointsRef} positions={positions} colors={colors} sizes={sizes}>
             {/* Matériau des points */}
             <pointsMaterial
-                size={0.5}
                 vertexColors
                 transparent
                 opacity={0.8}
+                alphaTest={0.5}
+
             />
         </Points>
     );
 
-};
-
-
-export const CircleComponent: React.FC<CircleProps> = ({
-                                                           circleRadius,
-                                                           mouse,
-                                                           index,
-                                                       }) => {
-    const meshRef = useRef<Mesh>(null!);
-    const [position, setPosition] = useState<[number, number, number]>([
-        (Math.random() - 0.5) * 10,
-        (Math.random() - 0.5) * 10,
-        0,
-    ]);
-    const velocityRef = useRef<[number, number]>([
-        (Math.random() - 0.5) * 0.02,
-        (Math.random() - 0.5) * 0.02,
-    ]);
-
-    // Animation Frame pour mettre à jour la position du cercle
-    useFrame(() => {
-        const [x, y, z] = position;
-        const [vx, vy] = velocityRef.current;
-
-        if (meshRef.current) {
-            const newX = x + vx;
-            const newY = y + vy;
-
-            // Distance en 2D entre le centre du cercle et la souris
-            const dx = mouse.x - newX;
-            const dy = mouse.y - newY;
-
-            let updatedX = newX;
-            let updatedY = newY;
-
-            // Redirection si le cercle sort des limites (-5, 5)
-            if (updatedX > 5 || updatedX < -5) velocityRef.current[0] *= -1;
-            if (updatedY > 5 || updatedY < -5) velocityRef.current[1] *= -1;
-
-            // Mise à jour de la position
-            setPosition([updatedX, updatedY, z]);
-        }
-    });
-
-    return (
-        <mesh ref={meshRef} position={position}>
-            <circleGeometry args={[circleRadius, 32]}/>
-            <meshBasicMaterial color="blue"/>
-        </mesh>
-    );
 };
 
 interface BackgroundColorProps {
@@ -158,6 +69,21 @@ interface BackgroundColorProps {
     circleRadius?: number;
     className?: string;
 }
+
+const MouseControlledCamera = ({mouse}) => {
+    const cameraRef = useRef(null);
+
+    // Utilisation de useFrame pour déplacer la caméra à chaque frame
+    useFrame(() => {
+        if (cameraRef.current) {
+            cameraRef.current.position.x += (mouse.x * 5 - cameraRef.current.position.x) * 0.05; // Lissage des mouvements
+            cameraRef.current.position.y += (mouse.y * 5 - cameraRef.current.position.y) * 0.05;
+            cameraRef.current.lookAt(0, 0, 0); // La caméra pointe toujours vers l'origine
+        }
+    });
+
+    return <perspectiveCamera ref={cameraRef} position={[0, 0, 10]}/>;
+};
 
 export const BackgroundColor: React.FC<BackgroundColorProps> = ({
                                                                     count = 20,
@@ -191,11 +117,12 @@ export const BackgroundColor: React.FC<BackgroundColorProps> = ({
             {/* Canvas contenant les cercles */}
             <Canvas
 
-                // camera={{position: [0, 0, 10], fov: 75}}
 
             >
 
                 <NebulaParticles/>
+                <MouseControlledCamera mouse={normalizedMouse}/>
+
                 {/*<EffectComposer>*/}
                 {/*    <Bloom intensity={1.5} luminanceThreshold={0.1} luminanceSmoothing={0.9}/>*/}
                 {/*</EffectComposer>*/}
