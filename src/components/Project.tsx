@@ -1,5 +1,5 @@
 import {type ReactNode, useEffect, useState} from "react";
-import {Card, IconButton} from "@udixio/ui";
+import {Card, Divider, IconButton} from "@udixio/ui";
 import {faCircleXmark} from "@fortawesome/pro-regular-svg-icons";
 
 type ProjectProps = {
@@ -57,7 +57,7 @@ export const Project = ({title, description, order, theme, images, slug, website
                     <div className={"absolute top-0 left-0 flex items-center w-full h-full"}>
                         <img style={{
                             maskImage: "linear-gradient(180deg,rgba(0,0,0,1) 75%,rgba(0,0,0,0))"
-                        }} className={"opacity-10"} src={images.background.src}/>
+                        }} className={"opacity-[.07] w-full object-cover"} src={images.background.src}/>
                     </div>
                     {
                         images.logo?.src &&
@@ -69,6 +69,7 @@ export const Project = ({title, description, order, theme, images, slug, website
                     <div className={"w-full max-w-sm"}>
 
                     </div>
+                    <Divider orientation={"vertical"}/>
                     <div className={"flex-1 prose-markdown"}>
                         {children}
                     </div>
