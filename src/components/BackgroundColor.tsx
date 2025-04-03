@@ -13,7 +13,6 @@ export const CircleComponent: React.FC<CircleProps> = ({
                                                            circleRadius,
                                                            mouse,
                                                            index,
-                                                           canEscape = true,
                                                        }) => {
     const meshRef = useRef<THREE.Mesh>(null!);
     const [position, setPosition] = useState<[number, number, number]>([
@@ -35,23 +34,18 @@ export const CircleComponent: React.FC<CircleProps> = ({
             const newX = x + vx;
             const newY = y + vy;
 
+            // Distance en 2D entre le centre du cercle et la souris
             const dx = mouse.x - newX;
             const dy = mouse.y - newY;
-            const distance = Math.sqrt(dx * dx + dy * dy);
 
             let updatedX = newX;
             let updatedY = newY;
 
-            if (canEscape && distance < circleRadius * 0.5) {
-                const escapeSpeed = 0.1;
-                updatedX -= (dx / distance) * escapeSpeed;
-                updatedY -= (dy / distance) * escapeSpeed;
-            }
-
-            // Redirection si les cercles sortent des limites (-5, 5)
+            // Redirection si le cercle sort des limites (-5, 5)
             if (updatedX > 5 || updatedX < -5) velocityRef.current[0] *= -1;
             if (updatedY > 5 || updatedY < -5) velocityRef.current[1] *= -1;
 
+            // Mise à jour de la position
             setPosition([updatedX, updatedY, z]);
         }
     });
@@ -67,14 +61,13 @@ export const CircleComponent: React.FC<CircleProps> = ({
 interface BackgroundColorProps {
     count?: number;
     circleRadius?: number;
-    canEscape?: boolean;
     className?: string;
 }
 
 export const BackgroundColor: React.FC<BackgroundColorProps> = ({
                                                                     count = 20,
                                                                     circleRadius = 1,
-                                                                    canEscape = true,
+
                                                                     className = "",
                                                                 }) => {
     const isClient = typeof window === "object";
@@ -129,7 +122,6 @@ export const BackgroundColor: React.FC<BackgroundColorProps> = ({
                         index={i}
                         circleRadius={circleRadius}
                         mouse={normalizedMouse}
-                        canEscape={canEscape}
                     />
                 ))}
             </Canvas>
