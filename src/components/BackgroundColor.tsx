@@ -1,4 +1,4 @@
-import React, {useMemo, useRef, useState} from "react";
+import React, {useEffect, useMemo, useRef, useState} from "react";
 import {Canvas, useFrame} from "@react-three/fiber";
 import useMouse from "@react-hook/mouse-position";
 import {Points} from "@react-three/drei";
@@ -11,25 +11,31 @@ interface CircleProps {
 }
 
 
-function PointsMaterial(props: { size: number, color: any, transparent: boolean }) {
-    return null;
-}
-
 const NebulaParticles = () => {
     const pointsRef = useRef(null);
+    const mousePosition = useRef({x: 0, y: 0});
 
     // Génération des données pour les positions, couleurs et tailles
-    const {positions, colors, sizes} = useMemo(() => {
+    const {positions, basePositions, colors, sizes} = useMemo(() => {
         const numPoints = 1000; // Nombre total de points
         const positions = new Float32Array(numPoints * 3); // x, y, z pour chaque point
+        const basePositions = new Float32Array(numPoints * 3); // Positions de base pour le parallaxe
         const colors = new Float32Array(numPoints * 3); // r, g, b pour chaque point
         const sizes = new Float32Array(numPoints); // Une taille par point
 
         for (let i = 0; i < numPoints; i++) {
             // Position aléatoire dans l'espace 3D (-5 à 5 pour chaque coordonnée)
-            positions[i * 3] = (Math.random() - 0.5) * 10;
-            positions[i * 3 + 1] = (Math.random() - 0.5) * 10;
-            positions[i * 3 + 2] = (Math.random() - 0.5) * 10;
+            const x = (Math.random() - 0.5) * 10;
+            const y = (Math.random() - 0.5) * 10;
+            const z = (Math.random() - 0.5) * 10;
+
+            basePositions[i * 3] = x;
+            basePositions[i * 3 + 1] = y;
+            basePositions[i * 3 + 2] = z;
+
+            positions[i * 3] = x;
+            positions[i * 3 + 1] = y;
+            positions[i * 3 + 2] = z;
 
             // Couleur aléatoire
             colors[i * 3] = Math.random(); // Rouge
@@ -40,8 +46,48 @@ const NebulaParticles = () => {
             sizes[i] = Math.random() * 0.9 + 0.1;
         }
 
-        return {positions, colors, sizes};
+        return {positions, basePositions, colors, sizes};
     }, []);
+
+    // Suivi de la position de la souris
+    useEffect(() => {
+        const updateMousePosition = (event) => {
+            mousePosition.current.x = (event.clientX / window.innerWidth) * 2 - 1; // Normalisé entre -1 et 1
+            mousePosition.current.y = -(event.clientY / window.innerHeight) * 2 + 1; // Normalisé entre -1 et 1
+        };
+
+        window.addEventListener('mousemove', updateMousePosition);
+
+        return () => {
+            window.removeEventListener('mousemove', updateMousePosition);
+        };
+    }, []);
+
+    // Effet de parallaxe - changement du léger décalage en fonction de la souris
+    useEffect(() => {
+        if (!pointsRef.current) return;
+
+        const animateParallax = () => {
+            const positionsArray = pointsRef.current.geometry.attributes.position.array;
+
+            for (let i = 0; i < positionsArray.length; i += 3) {
+                const baseX = basePositions[i];
+                const baseY = basePositions[i + 1];
+
+                // Application d'un décalage basé sur la position de la souris
+                positionsArray[i] = baseX + mousePosition.current.x * 0.5; // X - léger décalage
+                positionsArray[i + 1] = baseY + mousePosition.current.y * 0.5; // Y - léger décalage
+            }
+
+            // Informer Three.js que les positions ont changé
+            pointsRef.current.geometry.attributes.position.needsUpdate = true;
+
+            // Boucle pour l'animation
+            requestAnimationFrame(animateParallax);
+        };
+
+        animateParallax();
+    }, [basePositions]);
 
     return (
         <Points ref={pointsRef} positions={positions} colors={colors} sizes={sizes}>
