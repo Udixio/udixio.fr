@@ -1,6 +1,7 @@
-import React, {useRef, useState} from "react";
+import React, {useMemo, useRef, useState} from "react";
 import {Canvas, useFrame} from "@react-three/fiber";
 import useMouse from "@react-hook/mouse-position";
+import {Points} from "@react-three/drei";
 
 interface CircleProps {
     circleRadius: number;
@@ -9,12 +10,60 @@ interface CircleProps {
     canEscape?: boolean;
 }
 
+
+function PointsMaterial(props: { size: number, color: any, transparent: boolean }) {
+    return null;
+}
+
+const NebulaParticles = () => {
+    const pointsRef = useRef(null);
+
+    // Génération des données pour les positions, couleurs et tailles
+    const {positions, colors, sizes} = useMemo(() => {
+        const numPoints = 1000; // Nombre total de points
+        const positions = new Float32Array(numPoints * 3); // x, y, z pour chaque point
+        const colors = new Float32Array(numPoints * 3); // r, g, b pour chaque point
+        const sizes = new Float32Array(numPoints); // Une taille par point
+
+        for (let i = 0; i < numPoints; i++) {
+            // Position aléatoire dans l'espace 3D (-5 à 5 pour chaque coordonnée)
+            positions[i * 3] = (Math.random() - 0.5) * 10;
+            positions[i * 3 + 1] = (Math.random() - 0.5) * 10;
+            positions[i * 3 + 2] = (Math.random() - 0.5) * 10;
+
+            // Couleur aléatoire
+            colors[i * 3] = Math.random(); // Rouge
+            colors[i * 3 + 1] = Math.random(); // Vert
+            colors[i * 3 + 2] = Math.random(); // Bleu
+
+            // Taille aléatoire (0.1 à 1.0)
+            sizes[i] = Math.random() * 0.9 + 0.1;
+        }
+
+        return {positions, colors, sizes};
+    }, []);
+
+    return (
+        <Points ref={pointsRef} positions={positions} colors={colors} sizes={sizes}>
+            {/* Matériau des points */}
+            <pointsMaterial
+                size={0.5}
+                vertexColors
+                transparent
+                opacity={0.8}
+            />
+        </Points>
+    );
+
+};
+
+
 export const CircleComponent: React.FC<CircleProps> = ({
                                                            circleRadius,
                                                            mouse,
                                                            index,
                                                        }) => {
-    const meshRef = useRef<THREE.Mesh>(null!);
+    const meshRef = useRef<Mesh>(null!);
     const [position, setPosition] = useState<[number, number, number]>([
         (Math.random() - 0.5) * 10,
         (Math.random() - 0.5) * 10,
@@ -92,38 +141,26 @@ export const BackgroundColor: React.FC<BackgroundColorProps> = ({
 
     return (
         <div className={`h-full w-full absolute -z-10 ${className}`}>
-            {/* Ajout du filtre Gooey en SVG */}
-            <svg style={{position: "absolute", width: 0, height: 0}}>
-                <filter id="gooey">
-                    <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur"/>
-                    <feColorMatrix
-                        in="blur"
-                        mode="matrix"
-                        values="
-              1 0 0 0 0
-              0 1 0 0 0
-              0 0 1 0 0
-              0 0 0 18 -7"
-                        result="gooey"
-                    />
-                    <feBlend in="SourceGraphic" in2="gooey"/>
-                </filter>
-            </svg>
 
             {/* Canvas contenant les cercles */}
             <Canvas
-                style={{
-                    filter: "url(#gooey)", // Application du filtre gooey au Canvas
-                }}
+
+                // camera={{position: [0, 0, 10], fov: 75}}
+
             >
-                {Array.from({length: count}).map((_, i) => (
-                    <CircleComponent
-                        key={i}
-                        index={i}
-                        circleRadius={circleRadius}
-                        mouse={normalizedMouse}
-                    />
-                ))}
+
+                <NebulaParticles/>
+                {/*<EffectComposer>*/}
+                {/*    <Bloom intensity={1.5} luminanceThreshold={0.1} luminanceSmoothing={0.9}/>*/}
+                {/*</EffectComposer>*/}
+                {/*{Array.from({length: count}).map((_, i) => (*/}
+                {/*    <CircleComponent*/}
+                {/*        key={i}*/}
+                {/*        index={i}*/}
+                {/*        circleRadius={circleRadius}*/}
+                {/*        mouse={normalizedMouse}*/}
+                {/*    />*/}
+                {/*))}*/}
             </Canvas>
         </div>
     );
