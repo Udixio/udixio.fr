@@ -1,7 +1,7 @@
 import React, {useMemo, useRef} from "react";
 import {Canvas, useFrame} from "@react-three/fiber";
 import useMouse from "@react-hook/mouse-position";
-import {Points} from "@react-three/drei";
+import {PerspectiveCamera, Points} from "@react-three/drei";
 
 interface CircleProps {
     circleRadius: number;
@@ -70,20 +70,45 @@ interface BackgroundColorProps {
     className?: string;
 }
 
-const MouseControlledCamera = ({mouse}) => {
-    const cameraRef = useRef(null);
+const MouseControlledCamera: React.FC = () => {
+    const cameraRef = useRef<THREE.PerspectiveCamera>(null);
 
-    // Utilisation de useFrame pour déplacer la caméra à chaque frame
+    // Utilisation de la position de la souris
+    const mouse = useMouse(document.querySelector("body")!, {
+        fps: 30,
+        enterDelay: 100,
+        leaveDelay: 100,
+    });
+
     useFrame(() => {
-        if (cameraRef.current) {
-            cameraRef.current.position.x += (mouse.x * 5 - cameraRef.current.position.x) * 0.05; // Lissage des mouvements
-            cameraRef.current.position.y += (mouse.y * 5 - cameraRef.current.position.y) * 0.05;
-            cameraRef.current.lookAt(0, 0, 0); // La caméra pointe toujours vers l'origine
+        if (cameraRef.current && mouse.clientX !== undefined && mouse.clientY !== undefined) {
+            // Normaliser la position de la souris
+            const normalizedMouse = {
+                x: (mouse.clientX / window.innerWidth - 0.5) * 2, // Échelle entre -1 et 1
+                y: -(mouse.clientY / window.innerHeight - 0.5) * 2, // Échelle entre -1 et 1
+            };
+
+            // Lissage pour un mouvement fluide de la caméra
+            cameraRef.current.position.x += (normalizedMouse.x * 5 - cameraRef.current.position.x) * 0.05;
+            cameraRef.current.position.y += (normalizedMouse.y * 5 - cameraRef.current.position.y) * 0.05;
+
+            // S'assurer que la caméra regarde toujours vers le centre de la scène
+            cameraRef.current.lookAt(0, 0, 0);
         }
     });
 
-    return <perspectiveCamera ref={cameraRef} position={[0, 0, 10]}/>;
+    return (
+        <PerspectiveCamera
+            makeDefault // Définit cette caméra comme active pour le canvas
+            ref={cameraRef}
+            position={[0, 0, 5]} // Position initiale de la caméra
+            fov={75}
+            near={0.1}
+            far={1000}
+        />
+    );
 };
+
 
 export const BackgroundColor: React.FC<BackgroundColorProps> = ({
                                                                     count = 20,
@@ -91,37 +116,21 @@ export const BackgroundColor: React.FC<BackgroundColorProps> = ({
 
                                                                     className = "",
                                                                 }) => {
-    const isClient = typeof window === "object";
-
-    // Capture la position de la souris
-    const mouse = isClient
-        ? useMouse(document.querySelector("body")!, {
-            fps: 30,
-            enterDelay: 100,
-            leaveDelay: 100,
-        })
-        : {x: 0, y: 0};
-
-    let normalizedMouse: { x: number, y: number }
-    if ("clientX" in mouse) {
-        normalizedMouse = {
-            x: (mouse?.clientX || 0) / window.innerWidth - 0.5,
-            y: -((mouse?.clientY || 0) / window.innerHeight - 0.5),
-        };
-    }
 
 
     return (
         <div className={`h-full w-full absolute -z-10 ${className}`}>
 
-            {/* Canvas contenant les cercles */}
-            <Canvas
+            <Canvas>
 
 
-            >
-
+                <MouseControlledCamera/>
+                {/* Exemples de contenu (ajoutez les vôtres ici) */}
                 <NebulaParticles/>
-                <MouseControlledCamera mouse={normalizedMouse}/>
+
+                <ambientLight intensity={0.5}/>
+                <directionalLight position={[10, 10, 5]} intensity={1}/>
+
 
                 {/*<EffectComposer>*/}
                 {/*    <Bloom intensity={1.5} luminanceThreshold={0.1} luminanceSmoothing={0.9}/>*/}
