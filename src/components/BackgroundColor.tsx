@@ -1,7 +1,7 @@
 import React, {useMemo, useRef} from "react";
 import {Canvas, useFrame} from "@react-three/fiber";
-import useMouse from "@react-hook/mouse-position";
 import {PerspectiveCamera, Points} from "@react-three/drei";
+import useMouse from "@react-hook/mouse-position";
 
 interface CircleProps {
     circleRadius: number;
@@ -70,10 +70,9 @@ interface BackgroundColorProps {
     className?: string;
 }
 
-const MouseControlledCamera: React.FC = () => {
+const MouseControlledCamera: React.FC = ({canvasRef}: { canvasRef: React.RefObject<HTMLDivElement | null> }) => {
     const cameraRef = useRef<THREE.PerspectiveCamera>(null);
 
-    // Utilisation de la position de la souris
     const mouse = useMouse(document.querySelector("body")!, {
         fps: 30,
         enterDelay: 100,
@@ -81,31 +80,39 @@ const MouseControlledCamera: React.FC = () => {
     });
 
     useFrame(() => {
-        if (cameraRef.current && mouse.clientX !== undefined && mouse.clientY !== undefined) {
-            // Normaliser la position de la souris
-            const normalizedMouse = {
-                x: (mouse.clientX / window.innerWidth - 0.5) * 2, // Échelle entre -1 et 1
-                y: -(mouse.clientY / window.innerHeight - 0.5) * 2, // Échelle entre -1 et 1
-            };
+        // Obtenez la zone du canvas dans la page
+        const canvasRect = canvasRef.current?.getBoundingClientRect();
+        if (!canvasRect || !cameraRef.current) return;
 
-            // Lissage pour un mouvement fluide de la caméra
-            cameraRef.current.position.x += (normalizedMouse.x * 5 - cameraRef.current.position.x) * 0.05;
-            cameraRef.current.position.y += (normalizedMouse.y * 5 - cameraRef.current.position.y) * 0.05;
+        // Obtenez les coordonnées de la souris à l'intérieur du canvas
+        const mouseX = mouse.clientX
+        const mouseY = mouse.clientY
 
-            // S'assurer que la caméra regarde toujours vers le centre de la scène
-            cameraRef.current.lookAt(0, 0, 0);
-        }
+        const normalizedMouse = {
+            x: ((mouseX - canvasRect.left) / canvasRect.width - 0.5) * 2, // Normalisation par rapport au centre du canvas
+            y: -((mouseY - canvasRect.top) / canvasRect.height - 0.5) * 2,
+        };
+
+
+        // Mise à jour fluide de la position de la caméra
+        cameraRef.current.position.x += (normalizedMouse.x * 5 - cameraRef.current.position.x) * 0.05;
+        cameraRef.current.position.y += (normalizedMouse.y * 5 - cameraRef.current.position.y) * 0.05;
+
+        // La caméra reste centrée sur la scène
+        cameraRef.current.lookAt(0, 0, 0);
     });
 
     return (
+
         <PerspectiveCamera
-            makeDefault // Définit cette caméra comme active pour le canvas
+            makeDefault
             ref={cameraRef}
-            position={[0, 0, 5]} // Position initiale de la caméra
+            position={[0, 0, 5]} // Placez la caméra à une distance raisonnable
             fov={75}
             near={0.1}
             far={1000}
         />
+
     );
 };
 
@@ -116,15 +123,16 @@ export const BackgroundColor: React.FC<BackgroundColorProps> = ({
 
                                                                     className = "",
                                                                 }) => {
+    const canvasRef = useRef<HTMLDivElement>(null); // Référence pour le conteneur du `Canvas`
 
 
     return (
-        <div className={`h-full w-full absolute -z-10 ${className}`}>
+        <div ref={canvasRef} className={`h-full w-full absolute -z-10 ${className}`}>
 
             <Canvas>
 
 
-                <MouseControlledCamera/>
+                <MouseControlledCamera canvasRef={canvasRef}/>
                 {/* Exemples de contenu (ajoutez les vôtres ici) */}
                 <NebulaParticles/>
 
