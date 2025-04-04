@@ -28,7 +28,7 @@ function getCSSVariableColor(variableName: string): [number, number, number] {
 }
 
 
-const NebulaParticles = ({count = 25}: { count?: number }) => {
+const NebulaParticles = ({count = 15, size = 2.25}: { count?: number, size?: number }) => {
 
 
     // Génération des données pour les positions, couleurs et tailles
@@ -59,7 +59,7 @@ const NebulaParticles = ({count = 25}: { count?: number }) => {
             // ];
 
 
-            const sensitivity = 0.525;
+            const sensitivity = 0.675;
 
             const colorSource = Array.from({length: 3}, (_, i) => {
                 const minColorPourcent = Math.max(
@@ -100,10 +100,8 @@ const NebulaParticles = ({count = 25}: { count?: number }) => {
             <pointsMaterial
                 vertexColors
                 transparent
-                opacity={1}
-
-
-                size={2}
+                opacity={.8}
+                size={size}
             />
             {Array.from({length: count}, (_, i) => {
 
@@ -184,7 +182,7 @@ const MouseControlledCamera: React.FC = ({canvasRef}: { canvasRef: React.RefObje
             makeDefault
             ref={cameraRef}
             position={[0, 0, 5]} // Placez la caméra à une distance raisonnable
-            fov={75}
+            fov={70}
             near={0.1}
             far={1000}
 
