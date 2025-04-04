@@ -1,8 +1,8 @@
-import React, {useMemo, useRef} from "react";
+import React, {useEffect, useMemo, useRef} from "react";
 import {Canvas, useFrame} from "@react-three/fiber";
 import {PerspectiveCamera, Point, Points} from "@react-three/drei";
 import useMouse from "@react-hook/mouse-position";
-import {NoToneMapping} from "three";
+import {NoToneMapping, Vector3} from "three";
 
 interface CircleProps {
     circleRadius: number;
@@ -30,13 +30,19 @@ function getCSSVariableColor(variableName: string): [number, number, number] {
 
 const NebulaParticles = ({count = 15, size = 2.25}: { count?: number, size?: number }) => {
 
+    const mouse = useMouse(document.querySelector("body")!, {
+        fps: 30,
+        enterDelay: 100,
+        leaveDelay: 100,
+    });
+
 
     // Génération des données pour les positions, couleurs et tailles
-    const {positions, colors, sizes} = useMemo(() => {
+    const {positions, colors} = useMemo(() => {
         const numPoints = count; // Nombre total de points
         const positions: [x: number, y: number, z: number][] = [] // x, y, z pour chaque point
-        const colors: [r: number, g: number, b: number][] = []
-        const sizes: Float32Array = new Float32Array(numPoints); // Une taille par point
+        const colors: string[] = []
+
 
         for (let i = 0; i < numPoints; i++) {
             // Position aléatoire dans l'espace 3D (-5 à 5 pour chaque coordonnée)
@@ -84,13 +90,57 @@ const NebulaParticles = ({count = 15, size = 2.25}: { count?: number, size?: num
 
             // Couleur aléatoire
             colors[i] = colorHex; // Rouge
-            console.log(colors[i])
+
             // Taille aléatoire (0.1 à 1.0)
-            sizes[i] = (Math.random() * 10 + 0.1);
         }
 
-        return {positions, colors, sizes};
+        return {positions, colors};
     }, []);
+
+    const updatedPositions = useRef(positions);
+
+
+    const threshold = 4; // Distance minimale à laquelle les points sont "repoussés"
+    const repelForce = 0.5; // Force utilisée pour repousser
+    useEffect(() => {
+        // Si la position de la souris n'est pas disponible, ne rien faire
+        if (!mouse.clientX || !mouse.clientY) return;
+
+        // Conversion des coordonnées de la souris en espace 3D (fixation de Z à 0)
+        const mouse3D = new Vector3(
+            (mouse.clientX / window.innerWidth) * 10 - 5, // X normalisé (-5 à 5)
+            (mouse.clientY / window.innerHeight) * -10 + 5, // Y normalisé (-5 à 5)
+            0 // Z constant (fixé à 0)
+        );
+
+        // Mise à jour des positions des particules
+        updatedPositions.current = positions.map(([x, y, z]) => {
+            const particle = new Vector3(x, y, z);
+
+            // Ignorer Z pour le calcul de la distance (force Z à 0)
+            const projectedParticle = particle.clone();
+            projectedParticle.z = 0; // Forcer Z de la particule à 0 uniquement pour le calcul
+
+            const distance = projectedParticle.distanceTo(mouse3D);
+
+            if (distance < threshold) {
+                // Calculer la direction de répulsion uniquement en X et Y
+                const direction = projectedParticle
+                    .clone()
+                    .sub(mouse3D) // Direction opposée à la souris
+                    .normalize(); // Normalisation de la direction
+
+                // Déplacement uniquement en X et Y (aucune modification de Z)
+                return [
+                    x + direction.x * repelForce, // Nouvelle position X
+                    y + direction.y * repelForce, // Nouvelle position Y
+                    z // Z reste constant
+                ];
+            }
+
+            return [x, y, z]; // Si en dehors du seuil, aucune modification
+        });
+    }, [mouse, positions, threshold, repelForce]);
 
 
     return (
@@ -103,15 +153,10 @@ const NebulaParticles = ({count = 15, size = 2.25}: { count?: number, size?: num
                 opacity={.8}
                 size={size}
             />
-            {Array.from({length: count}, (_, i) => {
+            {updatedPositions.current.map((position, i) => (
+                <Point key={i} position={position} color={colors[i]}/>
+            ))}
 
-                return (
-                    <Point
-
-                        key={i} // Une clé unique pour chaque élément
-                        position={positions[i]} color={colors[i]}/>
-                )
-            })}
         </Points>
     );
 
@@ -202,7 +247,7 @@ export const BackgroundColor: React.FC<BackgroundColorProps> = ({
 
 
     return (
-        <div ref={canvasRef} className={`h-full blur-[100px]  w-full absolute -z-10 ${className}`}>
+        <div ref={canvasRef} className={`h-full.   w-full absolute -z-10 ${className}`}>
 
             <Canvas
                 gl={{toneMapping: NoToneMapping}}
