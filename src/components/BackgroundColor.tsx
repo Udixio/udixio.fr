@@ -59,6 +59,8 @@ const NebulaParticles = ({count = 25}: { count?: number }) => {
             // ];
 
 
+            const sensitivity = 0.525;
+
             const colorSource = Array.from({length: 3}, (_, i) => {
                 const minColorPourcent = Math.max(
                     ...primary, // Éclate les valeurs de primary
@@ -69,8 +71,11 @@ const NebulaParticles = ({count = 25}: { count?: number }) => {
                 const min = Math.min(primary[i], surface[i]);
                 const max = Math.max(primary[i], surface[i]);
 
+                const randomFactor = (1 - sensitivity) + Math.random() * (1 - (1 - sensitivity));
+
+
                 // Ajuste le calcul de Math.random() en fonction de minColorPourcent
-                return min + (minColorPourcent + Math.random() * (1 - minColorPourcent)) * (max - min);
+                return min + (minColorPourcent + randomFactor * (1 - minColorPourcent)) * (max - min);
 
             });
 
@@ -149,7 +154,6 @@ const MouseControlledCamera: React.FC = ({canvasRef}: { canvasRef: React.RefObje
             // Met à jour la ref avec les nouvelles coordonnées
             lastMouseRef.current = {x: mouseX, y: mouseY};
         }
-        console.log(mouseX, mouseY)
 
         const normalizedMouse = {
             x: ((mouseX - canvasRect.left) / canvasRect.width - 0.5) * 2, // Normalisation par rapport au centre du canvas
@@ -157,8 +161,8 @@ const MouseControlledCamera: React.FC = ({canvasRef}: { canvasRef: React.RefObje
         };
 
         // Ajuster la sensibilité de la caméra :
-        const sensitivity = 2; // Réduit l'impact des mouvements de la souris (5 = plus sensible, 2 = moins sensible)
-        const interpolationSpeed = 0.02; // Modifier pour ralentir ou accélérer les mouvements (0.05 = rapide, 0.02 = fluide et lent)
+        const sensitivity = 5; // Réduit l'impact des mouvements de la souris (5 = plus sensible, 2 = moins sensible)
+        const interpolationSpeed = 0.01; // Modifier pour ralentir ou accélérer les mouvements (0.05 = rapide, 0.02 = fluide et lent)
 
 
         // Mise à jour fluide de la position de la caméra
@@ -200,7 +204,7 @@ export const BackgroundColor: React.FC<BackgroundColorProps> = ({
 
 
     return (
-        <div ref={canvasRef} className={`h-full blur-3xl  w-full absolute -z-10 ${className}`}>
+        <div ref={canvasRef} className={`h-full blur-[100px]  w-full absolute -z-10 ${className}`}>
 
             <Canvas
                 gl={{toneMapping: NoToneMapping}}
