@@ -51,11 +51,31 @@ const NebulaParticles = ({count = 25}: { count?: number }) => {
             const primary = getCSSVariableColor('primary-container')
             const surface = getCSSVariableColor('surface')
 
-            console.log(primary)
 
+            // const colorSource = [
+            //     primary[0] + Math.random() * Math.abs(surface[0] - primary[0]),
+            //     primary[1] + Math.random() * Math.abs(surface[1] - primary[1]),
+            //     primary[2] + Math.random() * Math.abs(surface[2] - primary[2]),
+            // ];
+
+
+            const colorSource = Array.from({length: 3}, (_, i) => {
+                const minColorPourcent = Math.max(
+                    ...primary, // Éclate les valeurs de primary
+                    ...surface  // Éclate les valeurs de surface
+                ) / (255 * 3);
+
+
+                const min = Math.min(primary[i], surface[i]);
+                const max = Math.max(primary[i], surface[i]);
+
+                // Ajuste le calcul de Math.random() en fonction de minColorPourcent
+                return min + (minColorPourcent + Math.random() * (1 - minColorPourcent)) * (max - min);
+
+            });
 
             // Couleur en utilisant la variable CSS 'primary' convertie en valeur hexadécimale
-            const colorHex = `#${Math.round(primary[0]).toString(16).padStart(2, '0')}${Math.round(primary[1]).toString(16).padStart(2, '0')}${Math.round(primary[2]).toString(16).padStart(2, '0')}`;
+            const colorHex = `#${Math.round(colorSource[0]).toString(16).padStart(2, '0')}${Math.round(colorSource[1]).toString(16).padStart(2, '0')}${Math.round(colorSource[2]).toString(16).padStart(2, '0')}`;
 
             // Couleur aléatoire
             colors[i] = colorHex; // Rouge
