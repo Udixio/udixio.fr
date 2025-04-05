@@ -100,13 +100,14 @@ const NebulaParticles = ({count = 15, size = 2.25}: { count?: number, size?: num
     const updatedPositions = useRef(positions);
 
 
-    const threshold = 4; // Distance minimale à laquelle les points sont "repoussés"
-    const repelForce = 0.5; // Force utilisée pour repousser
+    const threshold = 3; // Distance minimale à laquelle les points sont "repoussés"
+    const repelForce = 0.75; // Force utilisée pour ralentir l'éloignement (plus petit pour être plus lent)
+
     useEffect(() => {
         // Si la position de la souris n'est pas disponible, ne rien faire
         if (!mouse.clientX || !mouse.clientY) return;
 
-        // Conversion des coordonnées de la souris en espace 3D (fixation de Z à 0)
+        // Conversion des coordonnées de la souris en espace 3D (fixe Z à 0)
         const mouse3D = new Vector3(
             (mouse.clientX / window.innerWidth) * 10 - 5, // X normalisé (-5 à 5)
             (mouse.clientY / window.innerHeight) * -10 + 5, // Y normalisé (-5 à 5)
@@ -114,31 +115,39 @@ const NebulaParticles = ({count = 15, size = 2.25}: { count?: number, size?: num
         );
 
         // Mise à jour des positions des particules
-        updatedPositions.current = positions.map(([x, y, z]) => {
+        updatedPositions.current = positions.map(([x, y, z], index) => {
             const particle = new Vector3(x, y, z);
 
-            // Ignorer Z pour le calcul de la distance (force Z à 0)
+            // Taille de la particule : `sizes[index]` (ou une taille par défaut)
+            const particleSize = size; // Taille par défaut si non défini
+
+            // Ignorer Z pour le calcul de la distance
             const projectedParticle = particle.clone();
-            projectedParticle.z = 0; // Forcer Z de la particule à 0 uniquement pour le calcul
+            projectedParticle.z = 0; // Z forcé à 0 uniquement pour le calcul de distance
 
             const distance = projectedParticle.distanceTo(mouse3D);
 
+            // Vérifier si la particule est dans la zone d'interaction (seuil)
             if (distance < threshold) {
-                // Calculer la direction de répulsion uniquement en X et Y
+                // Calculer dans quelle direction repousser (uniquement en X et Y)
                 const direction = projectedParticle
                     .clone()
-                    .sub(mouse3D) // Direction opposée à la souris
-                    .normalize(); // Normalisation de la direction
+                    .sub(mouse3D) // Direction opposée vers la souris
+                    .normalize(); // Normaliser la direction
 
-                // Déplacement uniquement en X et Y (aucune modification de Z)
+                // Calcul du déplacement basé sur la taille : 2x la largeur de la particule
+                const repelDistance = particleSize;
+
+                // Appliquer le déplacement, ralenti par la force (repelForce)
                 return [
-                    x + direction.x * repelForce, // Nouvelle position X
-                    y + direction.y * repelForce, // Nouvelle position Y
-                    z // Z reste constant
+                    x + direction.x * repelDistance,// Nouvelle position X
+                    y + direction.y * repelDistance, // Nouvelle position Y
+                    z // Z reste inchangé
                 ];
             }
 
-            return [x, y, z]; // Si en dehors du seuil, aucune modification
+            // Si hors zone (distance >= threshold), aucune modification
+            return [x, y, z];
         });
     }, [mouse, positions, threshold, repelForce]);
 
@@ -247,7 +256,7 @@ export const BackgroundColor: React.FC<BackgroundColorProps> = ({
 
 
     return (
-        <div ref={canvasRef} className={`h-full.   w-full absolute -z-10 ${className}`}>
+        <div ref={canvasRef} className={`h-full  w-full absolute -z-10 ${className}`}>
 
             <Canvas
                 gl={{toneMapping: NoToneMapping}}
