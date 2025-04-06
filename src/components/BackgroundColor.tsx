@@ -3,6 +3,7 @@ import {Canvas, useFrame} from "@react-three/fiber";
 import {PerspectiveCamera, Point, Points} from "@react-three/drei";
 import useMouse from "@react-hook/mouse-position";
 import {NoToneMapping, Vector3} from "three";
+import {lerp} from "maath/misc";
 
 interface CircleProps {
     circleRadius: number;
@@ -98,7 +99,7 @@ const NebulaParticles = ({count = 15, size = 2.25}: { count?: number, size?: num
     }, []);
 
     const updatedPositions = useRef(positions);
-
+    const animatedPositions = useRef(positions);
 
     const threshold = 3; // Distance minimale à laquelle les points sont "repoussés"
     const repelForce = 0.75; // Force utilisée pour ralentir l'éloignement (plus petit pour être plus lent)
@@ -116,21 +117,18 @@ const NebulaParticles = ({count = 15, size = 2.25}: { count?: number, size?: num
 
         // Mise à jour des positions des particules
         updatedPositions.current = positions.map(([x, y, z], index) => {
-            const particle = new Vector3(x, y, z);
+            const particle = new Vector3(x, y, 0);
 
             // Taille de la particule : `sizes[index]` (ou une taille par défaut)
             const particleSize = size; // Taille par défaut si non défini
 
-            // Ignorer Z pour le calcul de la distance
-            const projectedParticle = particle.clone();
-            projectedParticle.z = 0; // Z forcé à 0 uniquement pour le calcul de distance
 
-            const distance = projectedParticle.distanceTo(mouse3D);
+            const distance = particle.distanceTo(mouse3D);
 
             // Vérifier si la particule est dans la zone d'interaction (seuil)
             if (distance < threshold) {
                 // Calculer dans quelle direction repousser (uniquement en X et Y)
-                const direction = projectedParticle
+                const direction = particle
                     .clone()
                     .sub(mouse3D) // Direction opposée vers la souris
                     .normalize(); // Normaliser la direction
@@ -151,6 +149,20 @@ const NebulaParticles = ({count = 15, size = 2.25}: { count?: number, size?: num
         });
     }, [mouse, positions, threshold, repelForce]);
 
+    useFrame((_state, delta) => {
+        animatedPositions.current = animatedPositions.current.map((animated, i) => {
+            const target = updatedPositions.current[i];
+
+            // console.log(target)
+            return animated.map((coord, axis) => {
+                    // Interpolation vers la nouvelle position
+                    return lerp(coord, target[axis], delta / 0.5)
+                }
+            ) as [number, number, number]
+        });
+
+
+    });
 
     return (
 
@@ -162,7 +174,7 @@ const NebulaParticles = ({count = 15, size = 2.25}: { count?: number, size?: num
                 opacity={.8}
                 size={size}
             />
-            {updatedPositions.current.map((position, i) => (
+            {animatedPositions.current.map((position, i) => (
                 <Point key={i} position={position} color={colors[i]}/>
             ))}
 
