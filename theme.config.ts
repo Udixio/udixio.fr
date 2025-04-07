@@ -3,7 +3,7 @@ import {DislikeAnalyzer, sanitizeDegreesDouble, TonalPalette} from "@material/ma
 
 
 module.exports = defineConfig({
-    sourceColor: '#0489f5',
+    sourceColor: '#6478C0',
     variant: {
         ...VariantModel.tonalSpot,
         palettes: {

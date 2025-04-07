@@ -1,16 +1,10 @@
-import React, {useEffect, useMemo, useRef} from "react";
+import React, {useEffect, useMemo, useRef, useState} from "react";
 import {Canvas, useFrame} from "@react-three/fiber";
 import {PerspectiveCamera, Point, Points} from "@react-three/drei";
 import useMouse from "@react-hook/mouse-position";
 import {NoToneMapping, Vector3} from "three";
 import {lerp} from "maath/misc";
 
-interface CircleProps {
-    circleRadius: number;
-    mouse: { x: number; y: number }; // Coordonnées de la souris (normalisées)
-    index: number;
-    canEscape?: boolean;
-}
 
 function getCSSVariableColor(variableName: string): [number, number, number] {
     const style = getComputedStyle(document.documentElement); // Récupère les styles de `:root`
@@ -21,6 +15,7 @@ function getCSSVariableColor(variableName: string): [number, number, number] {
 
 
     if (rgbMatch) {
+
         return rgbMatch
     }
 
@@ -29,10 +24,10 @@ function getCSSVariableColor(variableName: string): [number, number, number] {
 }
 
 
-const NebulaParticles = ({count = 15, size = 2.25}: { count?: number, size?: number }) => {
+const NebulaParticles = ({count = 10, size = 6}: { count?: number, size?: number }) => {
 
     const mouse = useMouse(document.querySelector("body")!, {
-        fps: 30,
+        fps: 10,
         enterDelay: 100,
         leaveDelay: 100,
     });
@@ -49,13 +44,13 @@ const NebulaParticles = ({count = 15, size = 2.25}: { count?: number, size?: num
             // Position aléatoire dans l'espace 3D (-5 à 5 pour chaque coordonnée)
             const x = (Math.random() - 0.5) * 10;
             const y = (Math.random() - 0.5) * 10;
-            const z = (Math.random() - 0.5) * 5;
+            const z = (Math.random()) * -5;
 
 
             positions[i] = [x, y, z];
 
 
-            const primary = getCSSVariableColor('primary-container')
+            const primary = i % 3 === 0 ? getCSSVariableColor('tertiary-container') : getCSSVariableColor('primary-container');
             const surface = getCSSVariableColor('surface')
 
 
@@ -66,7 +61,7 @@ const NebulaParticles = ({count = 15, size = 2.25}: { count?: number, size?: num
             // ];
 
 
-            const sensitivity = 0.675;
+            const sensitivity = 0.5;
 
             const colorSource = Array.from({length: 3}, (_, i) => {
                 const minColorPourcent = Math.max(
@@ -99,10 +94,9 @@ const NebulaParticles = ({count = 15, size = 2.25}: { count?: number, size?: num
     }, []);
 
     const updatedPositions = useRef(positions);
-    const animatedPositions = useRef(positions);
+    const [animatedPositions, setAnimatedPositions] = useState(positions);
 
-    const threshold = 3; // Distance minimale à laquelle les points sont "repoussés"
-    const repelForce = 0.75; // Force utilisée pour ralentir l'éloignement (plus petit pour être plus lent)
+    const threshold = 4.5; // Distance minimale à laquelle les points sont "repoussés"
 
     useEffect(() => {
         // Si la position de la souris n'est pas disponible, ne rien faire
@@ -147,13 +141,16 @@ const NebulaParticles = ({count = 15, size = 2.25}: { count?: number, size?: num
             // Si hors zone (distance >= threshold), aucune modification
             return [x, y, z];
         });
-    }, [mouse, positions, threshold, repelForce]);
+    }, [mouse, positions, threshold]);
 
     useFrame((_state, delta) => {
-        animatedPositions.current = animatedPositions.current.map((animated, i) => {
-            const target = updatedPositions.current[i];
 
-            // console.log(target)
+        if (!mouse.isOver) {
+            return
+        }
+
+        const positions = animatedPositions.map((animated, i) => {
+            const target = updatedPositions.current[i];
             return animated.map((coord, axis) => {
                     // Interpolation vers la nouvelle position
                     return lerp(coord, target[axis], delta / 0.5)
@@ -161,7 +158,7 @@ const NebulaParticles = ({count = 15, size = 2.25}: { count?: number, size?: num
             ) as [number, number, number]
         });
 
-
+        setAnimatedPositions(positions)
     });
 
     return (
@@ -174,10 +171,14 @@ const NebulaParticles = ({count = 15, size = 2.25}: { count?: number, size?: num
                 opacity={.8}
                 size={size}
             />
-            {animatedPositions.current.map((position, i) => (
-                <Point key={i} position={position} color={colors[i]}/>
-            ))}
+            {Array.from({length: count}, (_, i) => {
+                return (
+                    <Point
 
+                        key={i} // Une clé unique pour chaque élément
+                        position={animatedPositions[i]} color={colors[i]}/>
+                )
+            })}
         </Points>
     );
 
@@ -268,7 +269,7 @@ export const BackgroundColor: React.FC<BackgroundColorProps> = ({
 
 
     return (
-        <div ref={canvasRef} className={`h-full  w-full absolute -z-10 ${className}`}>
+        <div ref={canvasRef} className={`h-full w-full blur-[100px] absolute -z-10 ${className}`}>
 
             <Canvas
                 gl={{toneMapping: NoToneMapping}}
