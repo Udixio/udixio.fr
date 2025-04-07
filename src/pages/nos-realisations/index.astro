@@ -16,7 +16,8 @@ realisations.sort((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infini
 
     <section class="relative z-20 pt-20 ">
         <div class="max-width min-h-[50vh] padding-x flex items-center justify-center">
-            <div class="flex items-center flex-col">
+            <div data-avoid-zone
+                 class="flex items-center flex-col">
                 <h1 class="text-display-small md:text-display-large text-center max-w-4xl mt-4">Nos réalisations</h1>
                 <p class="mt-8 text-body-large mx-auto max-w-prose text-center">Chaque réalisation de notre agence
                     digitale
@@ -27,10 +28,10 @@ realisations.sort((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infini
 
         </div>
     </section>
-    <section id="" class="relative pt-20 md:pt-32 padding-x">
+
+    <section id="" class=" relative pt-20 md:pt-32 padding-x">
         <BackgroundColor client:only="react"
                          className="opacity-100 -z-10 top-0 h-screen w-screen !fixed"/>
-        <!--<Realisations/>-->
-
+        <Realisations/>
     </section>
 </Layout>
