@@ -2,9 +2,12 @@ import React, {useEffect, useMemo, useRef, useState} from "react";
 import {Canvas, useFrame} from "@react-three/fiber";
 import {PerspectiveCamera, Point, Points} from "@react-three/drei";
 import useMouse from "@react-hook/mouse-position";
-import {NoToneMapping, Vector3} from "three";
+import {AdditiveBlending, NoToneMapping, TextureLoader, Vector3} from "three";
 import {lerp} from "maath/misc";
 
+const getColorHex = (colorSource: number[]): string => {
+    return `#${Math.round(colorSource[0]).toString(16).padStart(2, '0')}${Math.round(colorSource[1]).toString(16).padStart(2, '0')}${Math.round(colorSource[2]).toString(16).padStart(2, '0')}`;
+};
 
 function getCSSVariableColor(variableName: string): [number, number, number] {
     const style = getComputedStyle(document.documentElement); // Récupère les styles de `:root`
@@ -24,13 +27,19 @@ function getCSSVariableColor(variableName: string): [number, number, number] {
 }
 
 
-const NebulaParticles = ({count = 10, size = 6}: { count?: number, size?: number }) => {
+const NebulaParticles = ({count = 10, size = 10}: { count?: number, size?: number }) => {
 
     const mouse = useMouse(document.querySelector("body")!, {
         fps: 10,
         enterDelay: 100,
         leaveDelay: 100,
-    });
+    })
+
+
+    const [colorSurface, setColorSurface] = useState<[x: number, y: number, z: number]>([18, 19, 24]);
+    useEffect(() => {
+        setColorSurface(getCSSVariableColor('surface'))
+    }, []);
 
 
     // Génération des données pour les positions, couleurs et tailles
@@ -51,27 +60,24 @@ const NebulaParticles = ({count = 10, size = 6}: { count?: number, size?: number
 
 
             const primary = i % 3 === 0 ? getCSSVariableColor('tertiary-container') : getCSSVariableColor('primary-container');
-            const surface = getCSSVariableColor('surface')
-
-
-            // const colorSource = [
-            //     primary[0] + Math.random() * Math.abs(surface[0] - primary[0]),
-            //     primary[1] + Math.random() * Math.abs(surface[1] - primary[1]),
-            //     primary[2] + Math.random() * Math.abs(surface[2] - primary[2]),
-            // ];
 
 
             const sensitivity = 0.5;
 
             const colorSource = Array.from({length: 3}, (_, i) => {
+                if (!colorSurface) {
+                    throw new Error("An unexpected error occurred while calculating color values.");
+                }
+
                 const minColorPourcent = Math.max(
                     ...primary, // Éclate les valeurs de primary
-                    ...surface  // Éclate les valeurs de surface
+                    ...colorSurface // Éclate les valeurs de surface
                 ) / (255 * 3);
 
 
-                const min = Math.min(primary[i], surface[i]);
-                const max = Math.max(primary[i], surface[i]);
+                const min = Math.min(primary[i], colorSurface[i]);
+                const max = Math.max(primary[i], colorSurface[i]);
+
 
                 const randomFactor = (1 - sensitivity) + Math.random() * (1 - (1 - sensitivity));
 
@@ -82,10 +88,10 @@ const NebulaParticles = ({count = 10, size = 6}: { count?: number, size?: number
             });
 
             // Couleur en utilisant la variable CSS 'primary' convertie en valeur hexadécimale
-            const colorHex = `#${Math.round(colorSource[0]).toString(16).padStart(2, '0')}${Math.round(colorSource[1]).toString(16).padStart(2, '0')}${Math.round(colorSource[2]).toString(16).padStart(2, '0')}`;
 
+// Usage:
             // Couleur aléatoire
-            colors[i] = colorHex; // Rouge
+            colors[i] = getColorHex(colorSource); // Rougeconsole.log(colors[i])
 
             // Taille aléatoire (0.1 à 1.0)
         }
@@ -161,6 +167,20 @@ const NebulaParticles = ({count = 10, size = 6}: { count?: number, size?: number
         setAnimatedPositions(positions)
     });
 
+    const svgCircleTexture = useMemo(() => {
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+      <radialGradient id="grad" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+        <stop offset="0%" style="stop-color:rgb(255,255,255);stop-opacity:1" />
+        <stop offset="50%" style="stop-color:rgb(191,191,191);stop-opacity:1" />
+        <stop offset="100%" style="stop-color:rgb(${colorSurface.toString()});stop-opacity:1" />
+      </radialGradient>
+      <circle cx="128" cy="128" r="128" fill="url(#grad)" />
+    </svg>`;
+
+        return new TextureLoader().load(`data:image/svg+xml;base64,${btoa(svg)}`);
+    }, [colorSurface]);
+
+
     return (
 
         <Points
@@ -170,6 +190,10 @@ const NebulaParticles = ({count = 10, size = 6}: { count?: number, size?: number
                 transparent
                 opacity={.8}
                 size={size}
+                map={svgCircleTexture}
+                blending={AdditiveBlending} // Blending additif
+                depthWrite={false} // Empêche l'écriture dans le buffer de profondeur pour un meilleur rendu
+
             />
             {Array.from({length: count}, (_, i) => {
                 return (
@@ -275,46 +299,8 @@ export const BackgroundColor: React.FC<BackgroundColorProps> = ({
                 gl={{toneMapping: NoToneMapping}}
 
             >
-
-
                 <MouseControlledCamera canvasRef={canvasRef}/>
-                {/* Exemples de contenu (ajoutez les vôtres ici) */}
                 <NebulaParticles/>
-
-                {/*<EffectComposer>*/}
-                {/*    <Bloom*/}
-                {/*        intensity={1.2}               // Flou à intensité modérée*/}
-                {/*        luminanceThreshold={0.0}       // Appliquer à tous les niveaux de luminance des points*/}
-                {/*        luminanceSmoothing={0.5}       // Flou progressif et doux*/}
-                {/*        radius={1.5}                   // Augmenter la diffusion pour accentuer le flou*/}
-                {/*    />*/}
-
-
-                {/*    <DepthOfField*/}
-                {/*        focusDistance={8.0}   // Mise au point très, très loin*/}
-                {/*        focalLength={1.5}     // Longueur focale énorme pour une sensation d'extrême flou*/}
-                {/*        bokehScale={20.0}     // Bokehs extrêmement massifs*/}
-                {/*    />*/}
-
-
-                {/*</EffectComposer>*/}
-
-
-                {/*<ambientLight intensity={0.5}/>*/}
-                {/*<directionalLight position={[10, 10, 5]} intensity={1}/>*/}
-
-
-                {/*<EffectComposer>*/}
-                {/*    <Bloom intensity={1.5} luminanceThreshold={0.1} luminanceSmoothing={0.9}/>*/}
-                {/*</EffectComposer>*/}
-                {/*{Array.from({length: count}).map((_, i) => (*/}
-                {/*    <CircleComponent*/}
-                {/*        key={i}*/}
-                {/*        index={i}*/}
-                {/*        circleRadius={circleRadius}*/}
-                {/*        mouse={normalizedMouse}*/}
-                {/*    />*/}
-                {/*))}*/}
             </Canvas>
         </div>
     );
