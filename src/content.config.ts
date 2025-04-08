@@ -1,20 +1,30 @@
-import { defineCollection, z } from 'astro:content';
-import { glob } from 'astro/loaders'
+import {defineCollection, z} from 'astro:content';
+import {glob} from 'astro/loaders'
 
-const project = defineCollection({
-    loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: "./src/data/project" }),
+const realisation = defineCollection({
+    loader: glob({pattern: '**/[^_]*.{md,mdx}', base: "./src/data/realisation"}),
     schema: z.object({
         title: z.string(),
         description: z.string(),
+        order: z.number().optional(),
         theme: z.object({
             isDark: z.boolean(),
             source: z.string(),
         }),
-        image: z.object({
-            src: z.string(),
-            alt: z.string(),
+        images: z.object({
+            background: z.object({
+                src: z.string(),
+                alt: z.string(),
+            }),
+            logo: z.object({
+                src: z.string(),
+                alt: z.string(),
+            }).optional(),
         }),
+        website: z.string().url().optional(),
+        summary: z.string()
+
     }),
 });
 
-export const collections = { project };
+export const collections = {realisation};

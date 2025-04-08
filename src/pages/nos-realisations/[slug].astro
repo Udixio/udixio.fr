@@ -1,0 +1,29 @@
+---
+import {getCollection, render} from 'astro:content';
+import Layout from "../../layouts/Layout.astro";
+import {BackgroundColor} from "../../components/BackgroundColor";
+import {Project} from "@components/Project";
+import {Button, Card} from "@udixio/ui"
+import {getImage} from "astro:assets";
+import {UpdateTheme} from "../../components/UpdateTheme";
+import {faArrowLeft} from "@fortawesome/pro-regular-svg-icons";
+
+export async function getStaticPaths() {
+    const realisations = await getCollection('realisation');
+    return realisations.map((realisation) => ({
+        params: {slug: realisation.id},
+        props: {realisation},
+    }));
+}
+const {realisation} = Astro.props;
+const {Content} = await render(realisation);
+---
+
+<Layout>
+    <UpdateTheme client:only="react"
+                 theme={{isDark: realisation.data.theme.isDark, source: realisation.data.theme.source}}/>
+    <Project client:load {...realisation.data}
+    >
+        <Content/>
+    </Project>
+</Layout>

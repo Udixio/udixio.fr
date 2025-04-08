@@ -1,120 +1,102 @@
-import {Carousel, CarouselItem} from "@udixio/ui";
-import {type Key, useEffect, useRef, useState} from "react";
-import {bootstrapFromConfig, VariantModel} from "@udixio/theme";
-import {DislikeAnalyzer, sanitizeDegreesDouble, TonalPalette} from "@material/material-color-utilities";
-import {useInView} from "framer-motion";
-import {BackgroundColor} from "@components/BackgroundColor.tsx";
+import {type ReactNode} from "react";
+import {Button, Card, Divider, IconButton} from "@udixio/ui";
+import {faCircleXmark, faLink} from "@fortawesome/pro-regular-svg-icons";
 
 
-const Project = ({projects}: any) => {
-    const [{colorService, themeService}] = useState(
-        bootstrapFromConfig({
-            config: {
-                sourceColor: '#ee1838',
-                variant: {
-                    ...VariantModel.tonalSpot,
-                    palettes: {
-                        ...VariantModel.tonalSpot.palettes,
-                        secondary: (sourceColorHct) =>
-                            TonalPalette.fromHueAndChroma(sourceColorHct.hue, 24.0),
-                        tertiary: (sourceColorHct) =>
-                            TonalPalette.fromHueAndChroma(
-                                sanitizeDegreesDouble(sourceColorHct.hue + 45.0),
-                                24.0
-                            ),
+type ProjectProps = {
+    slug: string
+    title: string,
+    description: string,
+    order?: number,
+    theme: {
+        isDark: boolean,
+        source: string,
+    },
+    images: {
+        background: {
+            src: string,
+            alt: string,
+        },
+        logo?: {
+            src: string,
+            alt: string,
+        },
+    },
+    website?: string,
+    summary: string
+    children?: ReactNode,
+};
+
+
+export const Project = ({title, description, order, theme, images, slug, website, summary, children}: ProjectProps) => {
+
+    return <section id="projets"
+                    className=" tab-menu  pt-32 flex items-center relative padding ">
+        <Card className="!rounded-[28px] !overflow-auto max-width w-full bg-surface-container-lowest"
+              style={{viewTransitionName: "realisation-" + slug}}>
+            <IconButton variant='tonal' icon={faCircleXmark}
+                        className="block !absolute z-10 w-fit  ml-auto right-0 m-4 top-4 primary"
+                        arialLabel="retour aux projets"
+                        onClick={() => {
+                            const referrer = document.referrer;
+                            const currentDomain = window.location.origin; // Le domaine actuel, ex : "https://mon-site.com"
+
+                            if (referrer && referrer.startsWith(currentDomain)) {
+                                // Si le referrer appartient au même site, utiliser l'historique pour revenir en arrière
+                                window.history.back();
+                            } else {
+                                // Sinon, rediriger vers la page par défaut
+                                window.location.href = "/nos-realisations";
+                            }
+                        }}
+
+
+            />
+
+            <div className={" w-full h-full"}>
+                <div className="min-h-[75vh] relative flex justify-center  items-center">
+                    <div
+                        className={"absolute top-0 left-0 flex items-center w-full h-full bg-gradient-to-b from-primary/50 to-transparent"}>
+                        <img style={{
+                            maskImage: "linear-gradient(180deg,rgba(0,0,0,1) 75%,rgba(0,0,0,0))"
+                        }} className={"opacity-[.07] w-full object-cover h-full"} src={images.background.src}/>
+                    </div>
+                    {
+                        images.logo?.src &&
+                        <img className={"z-10 max-w-screen-sm"} src={images.logo.src}/>
                     }
-                },
-                colors: {
-                    colors: {
-                        tertiaryContainer: {
-                            tone: (s) => {
-                                const proposedHct = s
-                                    .getPalette('tertiary')
-                                    .getHct((s.isDark ? 30 : 93),);
-                                return DislikeAnalyzer.fixIfDisliked(proposedHct).tone;
-                            },
-                        },
-                    },
-                },
-            },
-        }),
-    );
+                </div>
+                <p className={"text-display-small text-center max-w-screen-md mx-auto"}>{summary}</p>
+                <div className={"flex mt-16 h-full gap-4"}>
+                    <div className={"w-fit max-w-sm padding-x"}>
+                        <div className={"sticky top-0"}>
+                            <Button icon={faLink} label={"Visiter le siteWeb"}/>
+                        </div>
+
+                    </div>
+                    <Divider orientation={"vertical"}/>
+                    <div className={"flex-1 padding-x pb-12"}>
+                        <div className={"prose-markdown px-4"}>
+                            {children}
+                            <h2 className={""}>Aperçu du Site</h2>
 
 
-    const updateTheme = (isDark: boolean, source: string) => {
-        themeService.update({isDark: isDark});
-        themeService.update({sourceColorHex: source});
-        for (const [key, value] of colorService.getColors().entries()) {
-            const newKey = key.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
-            const {r, g, b} = value.getRgb()
-            document.documentElement.style.setProperty('--colors-' + newKey, `${r} ${g} ${b}`);
-        }
-    }
-    const resetTheme = (isDark: boolean) => {
-        for (const [key] of colorService.getColors().entries()) {
-            const newKey = key.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
-            document.documentElement.style.removeProperty('--colors-' + newKey);
-        }
-    }
+                        </div>
+                        <video className={"w-full mt-8 rounded-2xl"} autoPlay muted loop playsInline>
+                            <source src="/videos/renders/netsimpler-720.webm" type="video/webm"/>
+                            Votre navigateur ne supporte pas l'élément vidéo.
+                        </video>
+
+                    </div>
+
+                </div>
 
 
-    const carouselRef = useRef<HTMLDivElement>(null);
-    const isInView = useInView(carouselRef, {amount: .5});
+            </div>
 
 
-    const [selectedProject, setSelectedProject] = useState<{
-        id: number,
-        dody: string,
-        collection: string,
-        data: {
-            title: string,
-            description: string,
-            theme: {
-                isDark: boolean,
-                source: string,
-            },
-            image: {
-                src: string,
-                alt: string,
-            },
-        }
-        body: string
-    }>(projects[0]);
+        </Card>
 
-    const handleScroll = (index: number) => {
-        setSelectedProject(projects[index])
-    };
-    useEffect(() => {
-        if (isInView) {
-            updateTheme(selectedProject.data.theme.isDark, selectedProject.data.theme.source)
-        } else {
-            resetTheme(selectedProject.data.theme.isDark)
-        }
-
-    }, [selectedProject, isInView]);
-
-    return <section id="projets" className=" tab-menu  pt-16 flex items-center relative">
-        <BackgroundColor canEscape={false} count={5} radius={800} className="opacity-100 z-10"/>
-        <div className="max-w-screen-2xl w-full padding-x mx-auto z-20">
-
-            <Carousel className="h-[auto] max-h-[600px] aspect-[16/9] " ref={carouselRef} onChange={handleScroll}
-                      outputRange={[40, 1000]}
-            >
-                {projects.map((project: any, index: Key | null | undefined) => (
-                    <CarouselItem className={'!max-w-full'} key={index}>
-
-                        <img
-                            className={'object-cover  h-full w-full'}
-                            alt={'illustration'}
-                            src={project.data.image.src}
-                        />
-                    </CarouselItem>
-                ))}
-            </Carousel>
-        </div>
 
     </section>
 }
-
-
-export default Project
