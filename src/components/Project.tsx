@@ -46,7 +46,7 @@ export const Project = ({title, description, order, theme, images, slug, website
             <div className={" w-full h-full"}>
                 <div className="min-h-[75vh] relative flex justify-center  items-center">
                     <div
-                        className={"absolute top-0 left-0 flex items-center w-full h-full bg-gradient-to-b from-primary/50 to-transparent"}>
+                        className={"absolute top-0 left-0 flex items-center w-full h-full bg-gradient-to-b from-primary/30 to-transparent"}>
                         <img style={{
                             maskImage: "linear-gradient(180deg,rgba(0,0,0,1) 75%,rgba(0,0,0,0))"
                         }} className={"opacity-[.07] w-full object-cover h-full"} src={images.background.src}/>
@@ -55,12 +55,17 @@ export const Project = ({title, description, order, theme, images, slug, website
                         images.logo?.src &&
                         <img className={"z-10 max-w-screen-sm"} src={images.logo.src}/>
                     }
+                    {
+                        !(images.logo?.src) &&
+                        <p className={"text-display-medium text-center max-w-screen-md mx-auto"}>{title}</p>
+                    }
                 </div>
                 <p className={"text-display-small text-center max-w-screen-md mx-auto"}>{summary}</p>
                 <div className={"flex mt-16 h-full gap-4"}>
                     <div className={"w-fit max-w-sm padding-x"}>
                         <div className={"sticky top-0"}>
-                            <Button icon={faLink} label={"Visiter le siteWeb"}/>
+                            {website &&
+                                <Button target="_blank" href={website} icon={faLink} label={"Visiter le siteWeb"}/>}
                         </div>
 
                     </div>
@@ -73,7 +78,7 @@ export const Project = ({title, description, order, theme, images, slug, website
 
                         </div>
                         <video className={"w-full mt-8 rounded-2xl"} autoPlay muted loop playsInline>
-                            <source src="/videos/renders/netsimpler-720.webm" type="video/webm"/>
+                            <source src={"/videos/renders/" + slug + "-720.webm"} type="video/webm"/>
                             Votre navigateur ne supporte pas l'élément vidéo.
                         </video>
 
