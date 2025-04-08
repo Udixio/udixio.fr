@@ -15,7 +15,7 @@ const realisation = defineCollection({
             background: z.object({
                 src: z.string(),
                 alt: z.string(),
-            }),
+            }).optional(),
             logo: z.object({
                 src: z.string(),
                 alt: z.string(),

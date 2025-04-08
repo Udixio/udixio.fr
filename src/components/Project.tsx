@@ -2,30 +2,20 @@ import {type ReactNode} from "react";
 import {Button, Card, Divider, IconButton} from "@udixio/ui";
 import {faCircleXmark, faLink} from "@fortawesome/pro-regular-svg-icons";
 
+import type {CollectionEntry} from 'astro:content';
 
-type ProjectProps = {
+// Inférez le type de votre collection `realisation`
+export type Realisation = CollectionEntry<"realisation">;
+
+export type ProjectProps = {
     slug: string
-    title: string,
-    description: string,
-    order?: number,
-    theme: {
-        isDark: boolean,
-        source: string,
-    },
+    children?: ReactNode,
     images: {
         background: {
-            src: string,
-            alt: string,
-        },
-        logo?: {
-            src: string,
-            alt: string,
-        },
-    },
-    website?: string,
-    summary: string
-    children?: ReactNode,
-};
+            src: string
+        }
+    }
+} & Realisation['data'];
 
 
 export const Project = ({title, description, order, theme, images, slug, website, summary, children}: ProjectProps) => {

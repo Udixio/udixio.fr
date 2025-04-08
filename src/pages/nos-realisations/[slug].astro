@@ -2,11 +2,12 @@
 import {getCollection, render} from 'astro:content';
 import Layout from "../../layouts/Layout.astro";
 import {BackgroundColor} from "../../components/BackgroundColor";
-import {Project} from "@components/Project";
+import {Project, ProjectProps} from "@components/Project";
 import {Button, Card} from "@udixio/ui"
 import {getImage} from "astro:assets";
 import {UpdateTheme} from "../../components/UpdateTheme";
 import {faArrowLeft} from "@fortawesome/pro-regular-svg-icons";
+import myBackground from "@assets/renders/netsimpler.webp"
 
 export async function getStaticPaths() {
     const realisations = await getCollection('realisation');
@@ -17,12 +18,30 @@ export async function getStaticPaths() {
 }
 const {realisation} = Astro.props;
 const {Content} = await render(realisation);
+
+if (!realisation.data.images.background) {
+    const imageImport = (await import("../../assets/renders/" + realisation.id + ".webp")).default
+    const background = await getImage({src: imageImport, format: 'webp'})
+    realisation.data.images.background = {
+        src: (background).src,
+        alt: ""
+    }
+}
+
+const projectProps: ProjectProps = {
+    slug: realisation.id,
+    ...realisation.data,
+    images: {
+        ...realisation.data.images,
+        background: realisation.data.images.background,
+    },
+}
 ---
 
 <Layout>
     <UpdateTheme client:only="react"
                  theme={{isDark: realisation.data.theme.isDark, source: realisation.data.theme.source}}/>
-    <Project client:load {...realisation.data}
+    <Project client:load {...projectProps}
     >
         <Content/>
     </Project>
