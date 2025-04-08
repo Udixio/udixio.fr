@@ -43,7 +43,7 @@ export const UpdateTheme = (args: {
     );
 
     const updateTheme = (isDark: boolean, source: string) => {
-        themeService.update({isDark: isDark});
+        themeService.update({isDark: true});
         themeService.update({sourceColorHex: source});
         for (const [key, value] of colorService.getColors().entries()) {
             const newKey = key.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
