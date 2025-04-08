@@ -16,22 +16,24 @@ realisations.sort((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infini
 
     <section class="relative z-20 pt-20 ">
         <div class="max-width min-h-[50vh] padding-x flex items-center justify-center">
-            <div data-avoid-zone
-                 class="flex items-center flex-col">
+            <div
+                    class="flex items-center flex-col relative">
                 <h1 class="text-display-small md:text-display-large text-center max-w-4xl mt-4">Nos réalisations</h1>
                 <p class="mt-8 text-body-large mx-auto max-w-prose text-center">Chaque réalisation de notre agence
                     digitale
                     Udixio est une rencontre unique entre innovation et créativité, pensée pour atteindre vos objectifs
                     commerciaux avec succès</p>
-                <!--<Button href="#contact" className="w-fit mt-12 scale-125" label="Démarrer sans payer"/>-->
+                <Button href="#contact" className="w-fit mt-12 scale-125" label="Travailler ensemble"/>
+                <div style={{
+                    background: `radial-gradient(rgb(var(--colors-surface)/1) 0%,rgb(var(--colors-surface)/0) 50%) no-repeat`,
+                }} class="absolute top-0 left-0 w-full h-full -z-10 scale-[3]"></div>
             </div>
-
         </div>
     </section>
 
     <section id="" class=" relative pt-20 md:pt-32 padding-x">
         <BackgroundColor client:only="react"
-                         className="opacity-100 -z-10 top-0 h-screen w-screen !fixed"/>
+                         className="opacity-70 -z-10 top-0 h-screen w-screen !fixed"/>
         <Realisations/>
     </section>
 </Layout>
