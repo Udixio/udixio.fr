@@ -10,12 +10,19 @@ import {getImage} from "astro:assets";
 const realisations = await getCollection('realisation');
 realisations.sort((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infinity));
 
+const images = import.meta.glob('@assets/renders/*.webp', {eager: true});
 
 const projectsProps: ProjectProps[] = await Promise.all(
     realisations.map(async (realisation) => {
         if (!realisation.data.images.background) {
-            const imageImport = (await import("../assets/renders/" + realisation.id + ".webp")).default;
-            const background = await getImage({src: imageImport, format: 'webp'});
+
+            const imageFileName = `${realisation.id}.webp`;
+
+            const imageEntry = ((Object.entries(images).find(([path]) =>
+                path.endsWith(imageFileName)
+            ))?.[1] as any).default;
+
+            const background = await getImage({src: imageEntry, format: 'webp'});
 
             realisation.data.images.background = {
                 src: background.src,
