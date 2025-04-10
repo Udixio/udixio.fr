@@ -1,6 +1,6 @@
 import {type ReactNode} from "react";
 import {Button, Card, Divider, IconButton} from "@udixio/ui";
-import {faCircleXmark, faLink} from "@fortawesome/pro-regular-svg-icons";
+import {faLink, faXmark} from "@fortawesome/pro-regular-svg-icons";
 
 import type {CollectionEntry} from 'astro:content';
 
@@ -24,7 +24,7 @@ export const Project = ({title, description, order, theme, images, slug, website
                     className=" tab-menu  pt-32 flex items-center relative padding ">
         <Card className="!rounded-[28px] !overflow-auto max-width w-full bg-surface-container-lowest"
               style={{viewTransitionName: "realisation-" + slug}}>
-            <IconButton variant='tonal' icon={faCircleXmark}
+            <IconButton variant='outlined' icon={faXmark}
                         className="block !absolute z-10 w-fit  ml-auto right-0 m-4 top-4 primary"
                         arialLabel="retour aux projets"
                         onClick={() => {
