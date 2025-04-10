@@ -22,7 +22,7 @@ export default defineConfig({
     }), sitemap(), robotsTxt(), compress(), compressor(), mdx(), customIntegration()],
     vite: {
         ssr: {
-            noExternal: ["react-markdown", "@udixio/theme", "react-obfuscate", "react-google-recaptcha-v3"]
+            noExternal: ["react-markdown", "react-textarea-autosize", "@udixio/theme", "react-obfuscate", "react-google-recaptcha-v3"]
         }
     },
     adapter: vercel()

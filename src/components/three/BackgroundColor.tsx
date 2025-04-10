@@ -2,9 +2,9 @@ import React, {useEffect, useMemo, useRef, useState} from "react";
 import {useFrame} from "@react-three/fiber";
 import {Point, Points} from "@react-three/drei";
 import useMouse from "@react-hook/mouse-position";
-import {TextureLoader, Vector3} from "three";
-import {lerp} from "maath/misc";
-import {AdditiveBlending} from "three/src/constants";
+import {AdditiveBlending, TextureLoader, Vector3} from "three";
+import {lerp} from "@material/material-color-utilities";
+
 
 const getColorHex = (colorSource: number[]): string => {
     return `#${Math.round(colorSource[0]).toString(16).padStart(2, '0')}${Math.round(colorSource[1]).toString(16).padStart(2, '0')}${Math.round(colorSource[2]).toString(16).padStart(2, '0')}`;

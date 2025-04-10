@@ -25,7 +25,7 @@ const projectsProps: ProjectProps[] = (await Promise.all(
                 path.endsWith(imageFileName)
             ))?.[1] as any).default;
 
-            const background = await getImage({src: imageEntry, format: 'webp'});
+            const background = await getImage({src: imageEntry, format: 'webp', width: 800});
 
             realisation.data.images.background = {
                 src: background.src,
@@ -71,7 +71,7 @@ const visibleProjects = max ? projectsProps.slice(0, max) : projectsProps;
 
 
                             <div class="w-full flex-1 rounded-2xl overflow-hidden relative bg-surface">
-                                <img class={classNames(
+                                <img loading="lazy" class={classNames(
                                     "w-full h-full group-hover:scale-[1.1] object-cover duration-700 transition-all ",
                                     'group-hover:opacity-50'
                                 )}
