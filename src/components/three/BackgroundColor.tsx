@@ -1,9 +1,10 @@
 import React, {useEffect, useMemo, useRef, useState} from "react";
-import {Canvas, useFrame} from "@react-three/fiber";
-import {PerspectiveCamera, Point, Points} from "@react-three/drei";
+import {useFrame} from "@react-three/fiber";
+import {Point, Points} from "@react-three/drei";
 import useMouse from "@react-hook/mouse-position";
-import {AdditiveBlending, NoToneMapping, TextureLoader, Vector3} from "three";
+import {TextureLoader, Vector3} from "three";
 import {lerp} from "maath/misc";
+import {AdditiveBlending} from "three/src/constants";
 
 const getColorHex = (colorSource: number[]): string => {
     return `#${Math.round(colorSource[0]).toString(16).padStart(2, '0')}${Math.round(colorSource[1]).toString(16).padStart(2, '0')}${Math.round(colorSource[2]).toString(16).padStart(2, '0')}`;
@@ -51,8 +52,8 @@ export const BackgroundColor = ({count = 10, size = 10}: { count?: number, size?
 
         for (let i = 0; i < numPoints; i++) {
             // Position aléatoire dans l'espace 3D (-5 à 5 pour chaque coordonnée)
-            const x = (Math.random() - 0.5) * 10;
-            const y = (Math.random() - 0.5) * 10;
+            const x = (Math.random() - 0.5) * 25;
+            const y = (Math.random() - 0.5) * 15;
             const z = (Math.random()) * -5;
 
 
@@ -62,7 +63,7 @@ export const BackgroundColor = ({count = 10, size = 10}: { count?: number, size?
             const primary = i % 3 === 0 ? getCSSVariableColor('tertiary-container') : getCSSVariableColor('primary-container');
 
 
-            const sensitivity = 0.5;
+            const sensitivity = 0.75;
 
             const colorSource = Array.from({length: 3}, (_, i) => {
                 if (!colorSurface) {
@@ -159,7 +160,7 @@ export const BackgroundColor = ({count = 10, size = 10}: { count?: number, size?
             const target = updatedPositions.current[i];
             return animated.map((coord, axis) => {
                     // Interpolation vers la nouvelle position
-                    return lerp(coord, target[axis], delta / 0.5)
+                    return lerp(coord, target[axis], delta / 0.75)
                 }
             ) as [number, number, number]
         });
@@ -188,10 +189,11 @@ export const BackgroundColor = ({count = 10, size = 10}: { count?: number, size?
             <pointsMaterial
                 vertexColors
                 transparent
-                opacity={.8}
+                opacity={.75}
                 size={size}
                 map={svgCircleTexture}
                 blending={AdditiveBlending} // Blending additif
+
                 depthWrite={false} // Empêche l'écriture dans le buffer de profondeur pour un meilleur rendu
 
             />

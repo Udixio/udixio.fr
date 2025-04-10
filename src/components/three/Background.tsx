@@ -4,6 +4,7 @@ import {NoToneMapping} from "three";
 import {BackgroundStar} from "./BackgroundStar";
 import {ControlledCamera} from "@components/three/ControlledCamera.tsx";
 import {BackgroundColor} from "./BackgroundColor";
+import {BrightnessContrast, EffectComposer} from "@react-three/postprocessing";
 
 export const Background = ({
                                count = 20,
@@ -20,17 +21,22 @@ export const Background = ({
 
             <Canvas
                 gl={{toneMapping: NoToneMapping}}
-                className={"blur-3xl"}
+                className={"blur-3xl  opacity-70"}
             >
                 <ControlledCamera canvasRef={canvasRef}/>
-                <BackgroundColor/>
+                <BackgroundColor count={10} size={20}/>
+                <EffectComposer>
+                    {/* Réduction de la lumière globale et ajustement du contraste */}
+                    <BrightnessContrast brightness={0.15} contrast={0.25}/>
+                </EffectComposer>
+
             </Canvas>
             <Canvas
                 className={"top-0 !absolute"}
             >
                 <ControlledCamera canvasRef={canvasRef}/>
 
-                <BackgroundStar/>
+                <BackgroundStar count={1000}/>
             </Canvas>
         </div>
     );

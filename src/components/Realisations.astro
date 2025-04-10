@@ -42,17 +42,17 @@ const projectsProps: ProjectProps[] = await Promise.all(
 );
 ---
 
-<div class="max-width gap-x-8 gap-y-32 grid grid-cols-1 sm:grid-cols-[repeat(20,minmax(0,1fr))] ">
+<div class="max-width padding-x gap-x-8 gap-y-16  md:gap-y-32 grid grid-cols-1 sm:grid-cols-[repeat(20,minmax(0,1fr))] ">
     {
         projectsProps.map((realisation, index) => {
             const isTrue = [0, 3, 4, 7].includes(index % 8); // Détermine "true" ou "false"
 
 
             return (
-                    <a class={classNames('',
+                    <a class={classNames('col-span-1 row-span-1',
                         {
-                            "col-[_span_11_/_span_11] aspect-[10/8]": isTrue,
-                            "col-[_span_9_/_span_9] row-span-2  aspect-[8/10]": !isTrue,
+                            "sm:col-[_span_11_/_span_11] sm:aspect-[10/8]": isTrue,
+                            "sm:col-[_span_9_/_span_9] row-span-2  sm:aspect-[8/10]": !isTrue,
 
                             'self-end': !(index % 4 === 0 || index % 4 === 1)
                         }
@@ -75,7 +75,7 @@ const projectsProps: ProjectProps[] = await Promise.all(
                                      width="1080">
                                 <Button iconPosition="right" icon={faArrowRight}
                                         className={classNames(
-                                            "!absolute  bottom-0 left-0  mx-auto w-fit transition-all duration-300 scale-150 translate-y-1/2",
+                                            "!absolute  bottom-0 left-0  mx-auto w-fit transition-all duration-300 scale-125 translate-y-1/2",
                                             "right-0 opacity-0 invisible max-w-[0]",
                                             'group-hover:bottom-1/2 group-hover:opacity-100 group-hover:visible group-hover:max-w-full'
                                         )}

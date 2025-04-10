@@ -49,7 +49,7 @@ export const BackgroundStar: React.FC<{ count?: number; radius?: number }> = ({c
 
             <Points positions={positions} ref={pointsRef}>
                 <PointMaterial
-                    size={0.175}
+                    size={0.1}
                     sizeAttenuation
                     depthWrite={false}
                     map={svgStarTexture}

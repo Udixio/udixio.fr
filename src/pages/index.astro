@@ -66,7 +66,7 @@ realisations.sort((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infini
 
     <section id="" class="relative z-20 pt-20 ">
         <div class="max-width min-h-[75vh] padding-x flex items-center justify-center">
-            <div class="flex items-center flex-col">
+            <div class="flex items-center flex-col relative">
                 <p class="text-title-medium text-on-surface-variant">Site vitrine - e-commerce - portfolio</p>
                 <h1 class="text-display-small md:text-display-large text-center max-w-4xl mt-4">On construit des
                     sites web <span
@@ -74,6 +74,9 @@ realisations.sort((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infini
                 <p class="mt-8 text-body-large mx-auto max-w-xl text-center">Nous créons votre page d'accueil.<br/>
                     Convaincu ? On continue.<br/> Sinon, c'est gratuit.</p>
                 <Button href="#contact" className="w-fit mt-12 scale-125" label="Travailler ensemble"/>
+                <div style={{
+                    background: `radial-gradient(rgb(var(--colors-surface)/1) 0%,rgb(var(--colors-surface)/0) 50%) no-repeat`,
+                }} class="absolute top-0 left-0 w-full h-full -z-10 scale-[3]"></div>
             </div>
 
         </div>
