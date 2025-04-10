@@ -13,6 +13,8 @@ import defaultImage from "@assets/images/img.png";
 import {ClientRouter} from 'astro:transitions';
 import {SmoothScroll} from "@udixio/ui";
 
+import {Background} from "@components/three/Background";
+
 export interface Link extends HTMLLinkElement {
     prefetch: boolean;
     crossorigin: string;
@@ -142,19 +144,22 @@ const seoDefault: SEOProps = {
 </head>
 <body class="bg-surface  transition-all duration-500">
 <Header/>
-<div class="h-screen">
-    <!--<SmoothScroll-->
-    <!--        orientation={'vertical'}-->
-    <!--        client:load-->
-    <!--        transition=".75s"-->
 
-    <!--&gt;-->
-    <main>
-        <slot/>
-    </main>
-    <Footer/>
-    <!--</SmoothScroll>-->
-</div>
+<!--<SmoothScroll-->
+<!--        orientation={'vertical'}-->
+<!--        client:load-->
+<!--        transition=".75s"-->
+
+<!--&gt;-->
+
+
+<main>
+    <Background client:only="react"
+    />
+    <slot/>
+</main>
+<Footer/>
+<!--</SmoothScroll>-->
 
 
 <script>
