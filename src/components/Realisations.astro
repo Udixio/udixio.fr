@@ -56,40 +56,43 @@ const visibleProjects = max ? projectsProps.slice(0, max) : projectsProps;
             return (
                     <a class={classNames('col-span-1 row-span-1',
                         {
-                            "sm:col-[_span_11_/_span_11] sm:aspect-[10/8]": isTrue,
+                            "sm:col-[_span_11_/_span_11] sm:aspect-[10/7]": isTrue,
                             "sm:col-[_span_9_/_span_9] row-span-2  sm:aspect-[8/10]": !isTrue,
 
                             'self-end': !(index % 4 === 0 || index % 4 === 1)
                         }
                     )} href={"/nos-realisations/" + realisation.slug}>
                         <Card isInteractive variant="filled"
-                              className="p-2 flex flex-col h-full group  transition-all duration-300"
+                              className=" flex flex-col h-full group bg-surface/60 backdrop-blur transition-all duration-300 rounded-2xl"
 
                               style={{
                                   viewTransitionName: "realisation-" + realisation.slug,
                               }}>
 
 
-                            <div class="w-full flex-1 rounded-xl overflow-hidden relative bg-surface">
+                            <div class="w-full flex-1 rounded-2xl overflow-hidden relative bg-surface">
                                 <img class={classNames(
-                                    "w-full h-full group-hover:scale-[1.1] object-cover duration-300 transition-all ",
-                                    'group-hover:opacity-20'
+                                    "w-full h-full group-hover:scale-[1.1] object-cover duration-700 transition-all ",
+                                    'group-hover:opacity-50'
                                 )}
                                      src={realisation.images.background.src}
                                      height="1920"
                                      width="1080">
-                                <Button iconPosition="right" icon={faArrowRight}
-                                        className={classNames(
-                                            "!absolute  bottom-0 left-0  mx-auto w-fit transition-all duration-300 scale-125 translate-y-1/2",
-                                            "right-0 opacity-0 invisible max-w-[0]",
-                                            'group-hover:bottom-1/2 group-hover:opacity-100 group-hover:visible group-hover:max-w-full'
-                                        )}
 
-                                        label="Découvrir"/>
                             </div>
-                            <div class="p-4 ">
-                                <p class="text-title-large">{realisation.title}</p>
-                                <p class="text-title-small mt-2">{realisation.summary}</p>
+                            <div class="p-4 gap-4 flex justify-between items-center">
+                                <div class="flex-1">
+                                    <p class="text-title-large">{realisation.title}</p>
+                                    <p class="text-title-small mt-2">{realisation.summary}</p>
+                                </div>
+                                <Button iconPosition="right" icon={faArrowRight} label="Découvrir"
+                                        className={classNames(
+                                            "  transition-all duration-300",
+                                            " opacity-0 invisible",
+                                            'group-hover:opacity-100 group-hover:visible'
+                                        )}
+                                />
+
                             </div>
                         </Card>
                     </a>
