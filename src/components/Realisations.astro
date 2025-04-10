@@ -7,12 +7,15 @@ import {faArrowRight} from "@fortawesome/pro-regular-svg-icons";
 import type {ProjectProps} from "./Project";
 import {getImage} from "astro:assets";
 
+
+const {max} = Astro.props;
+
 const realisations = await getCollection('realisation');
 realisations.sort((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infinity));
 
 const images = import.meta.glob('@assets/renders/*.webp', {eager: true});
 
-const projectsProps: ProjectProps[] = await Promise.all(
+const projectsProps: ProjectProps[] = (await Promise.all(
     realisations.map(async (realisation) => {
         if (!realisation.data.images.background) {
 
@@ -39,12 +42,14 @@ const projectsProps: ProjectProps[] = await Promise.all(
             },
         }
     })
-);
+))
+
+const visibleProjects = max ? projectsProps.slice(0, max) : projectsProps;
 ---
 
 <div class="max-width padding-x gap-x-8 gap-y-16  md:gap-y-32 grid grid-cols-1 sm:grid-cols-[repeat(20,minmax(0,1fr))] ">
     {
-        projectsProps.map((realisation, index) => {
+        visibleProjects.map((realisation, index) => {
             const isTrue = [0, 3, 4, 7].includes(index % 8); // Détermine "true" ou "false"
 
 

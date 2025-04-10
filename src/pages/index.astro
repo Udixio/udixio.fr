@@ -64,7 +64,7 @@ realisations.sort((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infini
 }}>
 
 
-    <section id="" class="relative z-20 pt-20 ">
+    <section id="" class="relative pt-20 ">
         <div class="max-width min-h-[75vh] padding-x flex items-center justify-center">
             <div class="flex items-center flex-col relative">
                 <p class="text-title-medium text-on-surface-variant">Site vitrine - e-commerce - portfolio</p>
@@ -83,7 +83,7 @@ realisations.sort((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infini
         <!--<LinearGradient nextTheme="purple"/>-->
     </section>
     <section>
-        <Realisations/>
+        <Realisations max={4}/>
         <Button href={"/nos-realisations"} className="mx-auto mt-8 w-fit" variant="text"
                 label="Voir tous les projets"/>
     </section>
