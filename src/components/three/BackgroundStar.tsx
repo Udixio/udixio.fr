@@ -42,6 +42,8 @@ export const BackgroundStar: React.FC<{ count?: number; radius?: number }> = ({c
 
         return new TextureLoader().load(`data:image/svg+xml;base64,${btoa(svg)}`);
     }, []);
+
+
     return (
         <group ref={groupRef} position={[0, 0, -5]}>
 
@@ -56,6 +58,8 @@ export const BackgroundStar: React.FC<{ count?: number; radius?: number }> = ({c
                     opacity={1}
                 />
             </Points>
+
+
         </group>
 
     );

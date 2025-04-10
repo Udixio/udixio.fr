@@ -1,9 +1,9 @@
 import React, {useRef} from "react";
 import {Canvas} from "@react-three/fiber";
 import {NoToneMapping} from "three";
-import {BackgroundColor} from "@components/three/BackgroundColor.tsx";
 import {BackgroundStar} from "./BackgroundStar";
 import {ControlledCamera} from "@components/three/ControlledCamera.tsx";
+import {BackgroundColor} from "./BackgroundColor";
 
 export const Background = ({
                                count = 20,
@@ -20,10 +20,16 @@ export const Background = ({
 
             <Canvas
                 gl={{toneMapping: NoToneMapping}}
-
+                className={"blur-3xl"}
             >
                 <ControlledCamera canvasRef={canvasRef}/>
                 <BackgroundColor/>
+            </Canvas>
+            <Canvas
+                className={"top-0 !absolute"}
+            >
+                <ControlledCamera canvasRef={canvasRef}/>
+
                 <BackgroundStar/>
             </Canvas>
         </div>
