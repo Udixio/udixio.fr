@@ -11,10 +11,11 @@ export const BackgroundStar: React.FC<{ count?: number; radius?: number }> = ({c
     // Générer aléatoirement des positions pour les étoiles
     const positions = useMemo(() => {
         const positionsArray: number[] = [];
+        const scale = 3.5;
         for (let i = 0; i < count; i++) {
-            const x = (Math.random() - 0.5) * 20;
-            const y = (Math.random() - 0.5) * 20;
-            const z = ((Math.random() - 0.5) * 20);
+            const x = (Math.random() - 0.5) * 10 * scale;
+            const y = (Math.random() - 0.5) * 10 * scale;
+            const z = ((Math.random() - 0.5) * 10 * scale);
 
             positionsArray.push(x, y, z);
         }
@@ -25,7 +26,9 @@ export const BackgroundStar: React.FC<{ count?: number; radius?: number }> = ({c
     useFrame(() => {
         if (groupRef.current) {
             // Effectuer la rotation autour de y = -5 du groupe contenant les étoiles
-            groupRef.current.rotation.y += 0.0005;
+            pointsRef.current.rotation.y += 0.0005;
+            groupRef.current.scale.set(1, 1, 0.3); //
+
         }
     });
 
@@ -44,7 +47,7 @@ export const BackgroundStar: React.FC<{ count?: number; radius?: number }> = ({c
 
             <Points positions={positions} ref={pointsRef}>
                 <PointMaterial
-                    size={0.1}
+                    size={0.175}
                     sizeAttenuation
                     depthWrite={false}
                     map={svgStarTexture}

@@ -39,7 +39,7 @@ export const ControlledCamera: React.FC = ({canvasRef}: { canvasRef: React.RefOb
         };
 
         // Ajuster la sensibilité de la caméra :
-        const sensitivity = 5; // Réduit l'impact des mouvements de la souris (5 = plus sensible, 2 = moins sensible)
+        const sensitivity = 3; // Réduit l'impact des mouvements de la souris (5 = plus sensible, 2 = moins sensible)
         const interpolationSpeed = 0.01; // Modifier pour ralentir ou accélérer les mouvements (0.05 = rapide, 0.02 = fluide et lent)
 
 
