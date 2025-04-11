@@ -116,6 +116,12 @@ export const Menu = ({
                     href={`/nos-realisations`}
                     label={"Réalisations"}
                 ></Tab>
+                <Tab
+                    className={"bg-transparent md:h-full  md:hidden block"}
+                    selected={1 === activeTab}
+                    href={`#contact`}
+                    label={"Contact"}
+                ></Tab>
 
 
             </Tabs>
