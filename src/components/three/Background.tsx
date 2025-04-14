@@ -16,11 +16,11 @@ export const Background = ({
 
     return (
         <div ref={canvasRef}
-             className={` fixed -z-10 opacity-70  top-0 h-screen w-screen !fixed"  ${className}`}>
+             className={` fixed -z-10   top-0 h-screen w-screen !fixed"  ${className}`}>
 
             <Canvas
                 gl={{toneMapping: NoToneMapping}}
-                className={"blur-3xl  opacity-80"}
+                className={"blur-3xl  opacity-30"}
             >
                 <ControlledCamera canvasRef={canvasRef}/>
                 <BackgroundColor count={10} size={20}/>
