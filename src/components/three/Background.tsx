@@ -27,7 +27,7 @@ export const Background = ({
 
             </Canvas>
             <Canvas
-                className={"top-0 !absolute"}
+                className={"top-0 !absolute opacity-90 "}
             >
                 <ControlledCamera canvasRef={canvasRef}/>
 

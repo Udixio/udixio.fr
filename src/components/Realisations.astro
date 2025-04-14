@@ -62,8 +62,8 @@ const visibleProjects = max ? projectsProps.slice(0, max) : projectsProps;
                             'self-end': !(index % 4 === 0 || index % 4 === 1)
                         }
                     )} href={"/nos-realisations/" + realisation.slug}>
-                        <Card isInteractive variant="filled"
-                              className=" flex flex-col h-full group bg-surface/60 backdrop-blur transition-all duration-300 rounded-2xl"
+                        <Card isInteractive variant="outlined"
+                              className=" flex flex-col h-full group bg-surface/60 backdrop-blur transition-all duration-300 !rounded-2xl"
 
                               style={{
                                   viewTransitionName: "realisation-" + realisation.slug,
