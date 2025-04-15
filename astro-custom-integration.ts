@@ -110,35 +110,42 @@ const recordPageScrollWithAnimations = async (url: string, outputPath: string) =
         const max = 5
         const totalSections = sections.length;
 
-        await delay(250);
-        for (const [index, section] of Array.from(sections).entries()) {
-            if (totalSections > max && index !== 0 && index !== totalSections - 1) {
-                if (index % Math.ceil(totalSections / max) !== 0)
-                    continue
-            }
-
-
-            // await smoothScrollTo(section, 750);
-            section.scrollIntoView({
-                behavior: 'smooth', // Scroll fluide
-                block: 'start',     // Scroll pour aligner au haut de la section
-            });
-
-            // Scroll smooth vers chaque section
-            await delay(1750); // Pause pour laisser les animations se jouer
-        }
-
-        // Si aucun attribut "data-section", effectuer un scroll global
-        // for (let i = 0; i < document.body.scrollHeight; i += 800) {
-        //     console.log(2);
-        //     window.scrollTo({top: i, behavior: "smooth"});
-        //     await delay(1000); // Pause pour capturer les animations
+        // await delay(250);
+        // for (const [index, section] of Array.from(sections).entries()) {
+        //     if (totalSections > max && index !== 0 && index !== totalSections - 1) {
+        //         if (index % Math.ceil(totalSections / max) !== 0)
+        //             continue
+        //     }
+        //
+        //
+        //     // await smoothScrollTo(section, 750);
+        //     section.scrollIntoView({
+        //         behavior: 'smooth', // Scroll fluide
+        //         block: 'start',     // Scroll pour aligner au haut de la section
+        //     });
+        //
+        //     // Scroll smooth vers chaque section
+        //     await delay(1750); // Pause pour laisser les animations se jouer
         // }
+
+        // if (!sections || sections.length === 0) {
+
+        for (let i = 0; i < document.body.scrollHeight; i += 900) {
+            window.scrollTo({top: i, behavior: "smooth"});
+            const isLastIteration = i + 900 >= document.body.scrollHeight;
+            if (!isLastIteration) {
+                await delay(1250); // Pause pour capturer les animations seulement si ce n'est pas la fin
+            } else {
+                await delay(500); // Pause pour laisser les animations se jouer
+            }
+        }
+        // }
+
         window.scrollTo({
             top: 0,
             behavior: 'smooth',
         });
-        await delay(500);
+        await delay(750);
     });
 
     // Arrêter l'enregistrement après le scroll
