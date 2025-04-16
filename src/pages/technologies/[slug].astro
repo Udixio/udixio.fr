@@ -1,0 +1,36 @@
+---
+import {getCollection, render} from 'astro:content';
+import Layout from "@layouts/Layout.astro";
+import {BackgroundColor} from "@components/BackgroundColor";
+import Project, {type ProjectProps} from "@components/project/Project.astro";
+import {Button, Card, Divider, IconButton} from "@udixio/ui"
+import {getImage} from "astro:assets";
+import {UpdateTheme} from "@components/UpdateTheme";
+import {faArrowLeft, faLink, faXmark} from "@fortawesome/pro-regular-svg-icons";
+import myBackground from "@assets/renders/netsimpler.webp"
+import Technology from "../../components/project/Technology.astro";
+
+export async function getStaticPaths() {
+    const realisations = await getCollection('technology');
+    return realisations.map((realisation) => ({
+        params: {slug: realisation.id},
+        props: {realisation},
+    }));
+}
+const {realisation} = Astro.props;
+const {Content} = await render(realisation);
+---
+
+<Layout>
+
+    <section
+            class=" pt-32 flex items-center relative padding max-width w-full ">
+
+
+        <div class="prose-markdown">
+            <Content/>
+        </div>
+
+
+    </section>
+</Layout>

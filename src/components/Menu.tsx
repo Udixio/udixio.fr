@@ -25,10 +25,10 @@ export const Menu = ({
         } else if (pathName?.startsWith("/nos-realisations/")) {
             return 1;
         } else {
-            return null;
+            return undefined;
         }
     };
-    const [activeTab, setActiveTab] = useState<number | null>(null);
+    const [activeTab, setActiveTab] = useState<number | null | undefined>(undefined);
 
 
     useLayoutEffect(() => {
@@ -89,7 +89,7 @@ export const Menu = ({
     }, [pathName]);
 
     return (
-        pathName != null &&
+        pathName !== null &&
         <div
             className={classNames(
                 "fixed max-w-full flex transition-opacity left-1/2 duration-300 ease-in-out top-8 z-50 mx-2 backdrop-blur-lg -translate-x-1/2 overflow-hidden rounded-full border border-surface-container-highest bg-surface-container-low/80",

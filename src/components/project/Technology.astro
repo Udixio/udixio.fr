@@ -1,0 +1,33 @@
+---
+import {getCollection} from "astro:content";
+import {Button} from "@udixio/ui"
+const technologies = await getCollection('technology');
+
+interface Props {
+    name: string
+}
+
+const {name} = Astro.props
+
+const technology = technologies.find(({id}) => {
+    return id == name.toLowerCase().replace(/\s+/g, '-')
+})
+
+---
+{technology &&
+
+<a href={"/technologies/" + technology.id}
+   class="group px-4 w-fit py-1.5 items-center flex gap-2 border relative overflow-hidden  border-outline-variant hover:border-primary-container hover:bg-primary-container rounded-lg">
+    <div class="group-state-on-primary-container absolute w-full h-full left-0 top-0">
+
+    </div>
+    <p
+            class="text-label-large text-on-secondary-container">{name}</p>
+</a>
+    }
+{!technology &&
+<div class="px-2 w-fit py-1.5 border border-transparent rounded-lg"><h2
+        class="text-label-large text-on-surface-variant">    {name}</h2>
+</div>}
+
+

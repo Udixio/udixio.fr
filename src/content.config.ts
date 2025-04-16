@@ -22,9 +22,20 @@ const realisation = defineCollection({
             }).optional(),
         }),
         website: z.string().url().optional(),
-        summary: z.string()
-
+        summary: z.string(),
+        technologies: z.array(z.string()).optional(),
+        services: z.array(z.string()).optional(),
     }),
 });
 
-export const collections = {realisation};
+const technology = defineCollection({
+    loader: glob({pattern: '**/[^_]*.{md,mdx}', base: "./src/data/technology"}),
+    schema: z.object({
+        name: z.string(), // Nom unique de la technologie
+        tags: z.string().optional(), // Ex. : framework, CMS, CSS, etc.
+        description: z.string().optional(), // Brève description
+        logo: z.string().optional(), // URL ou chemin vers le logo
+    }),
+})
+
+export const collections = {technology, realisation};

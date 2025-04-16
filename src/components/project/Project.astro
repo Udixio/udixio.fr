@@ -5,6 +5,7 @@ import {faLink, faXmark} from "@fortawesome/pro-regular-svg-icons";
 
 import type {CollectionEntry} from 'astro:content';
 import {getImage} from "astro:assets";
+import Technology from "./Technology.astro";
 
 
 
@@ -22,7 +23,7 @@ interface Props extends CollectionEntry<"realisation"> {
 }
 
 const {id: slug, data} = Astro.props;
-const {title, description, order, theme, images, website, summary} = data
+const {title, technologies, services, description, order, theme, images, website, summary} = data
 
 const renderImages = import.meta.glob('@assets/renders/*.webp', {eager: true});
 
@@ -40,6 +41,15 @@ if (!images.background) {
     }
 }
 ---
+<style>
+    .right, left {
+        fragment {
+            > :first-child {
+                margin-top: 0;
+            }
+        }
+    }
+</style>
 <section id="projets"
          class=" tab-menu  pt-32 flex items-center relative padding ">
     <Card className="!rounded-[28px] !overflow-auto max-width w-full bg-surface-container-lowest"
@@ -61,8 +71,6 @@ if (!images.background) {
                             window.location.href = "/nos-realisations";
                         }
                     }}
-
-
         />
 
         <div class={" w-full h-full"}>
@@ -83,23 +91,48 @@ if (!images.background) {
                 }
             </div>
             <p class={"text-display-small text-center max-w-screen-md mx-auto"}>{summary}</p>
-            <div class={"flex mt-16 h-full gap-4"}>
-                <div class={"w-fit max-w-sm padding-x"}>
-
-                    <div class={"prose-markdown"}>
+            <div class={"flex mt-32 h-full gap-4"}>
+                <div class={"left w-fit !max-w-sm padding-x "}>
+                    <div class="prose-markdown">
                         <slot name="sidebar"/>
                     </div>
-                    <div class={"sticky top-0"}>
+                    <div class="flex flex-col gap-12">
+                        {services &&
+                                <div>
+                                    <p class="text-headline-small uppercase m-2">Services</p>
+                                    <div class="flex flex-wrap">
+                                        {(
+                                            services.map((name) => (
+                                                    <Technology name={name}/>
+                                            ))
+                                        )}
+                                    </div>
+
+                                </div>}
+                        {technologies &&
+                                <div>
+                                    <p class="text-headline-small uppercase mb-2">Technologies</p>
+                                    <div class="flex flex-wrap">
+                                        {(
+                                            technologies.map((name) => (
+                                                    <Technology name={name}/>
+                                            ))
+                                        )}
+                                    </div>
+
+                                </div>}
                         {website &&
-                                <Button target="_blank" href={website} icon={faLink} label={"Visiter le siteWeb"}/>}
+                                <Button className="w-fit" target="_blank" href={website} icon={faLink}
+                                        label={"Visiter le siteWeb"}/>}
                     </div>
+
 
                 </div>
                 <Divider orientation={"vertical"}/>
-                <div class={"flex-1 padding-x pb-12"}>
+                <div class={"flex-1 right padding-x pb-12"}>
                     <div class={"prose-markdown px-4"}>
                         <slot name="body"/>
-                        {website && <h2 class={""}>Aperçu du Site</h2>}
+                        {website && <h2 class={"uppercase"}>Aperçu du Site</h2>}
 
 
                     </div>
