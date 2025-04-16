@@ -20,7 +20,7 @@ export const Background = ({
 
             <Canvas
                 gl={{toneMapping: NoToneMapping}}
-                className={"blur-3xl  opacity-30"}
+                className={"blur-xl  opacity-30"}
             >
                 <ControlledCamera canvasRef={canvasRef}/>
                 <BackgroundColor count={10} size={20}/>

@@ -56,10 +56,10 @@ const visibleProjects = max ? projectsProps.slice(0, max) : projectsProps;
             return (
                     <a class={classNames('col-span-1 row-span-1',
                         {
-                            "sm:col-[_span_11_/_span_11] sm:aspect-[10/7]": isTrue,
-                            "sm:col-[_span_9_/_span_9] sm:row-span-2  sm:aspect-[8/9]": !isTrue,
-
-                            'self-end': !(index % 4 === 0 || index % 4 === 1)
+                            "sm:col-[_span_11_/_span_11] sm:aspect-[10/7] ": isTrue,
+                            "sm:col-[_span_9_/_span_9] sm:aspect-[8/9]": !isTrue,
+                            "self-end": index % 4 == 0,
+                            'sm:-mt-[25%] ': (index % 4 === 1) && (index != 0 && index != 1)
                         }
                     )} href={"/nos-realisations/" + realisation.slug}>
                         <Card isInteractive variant="outlined"

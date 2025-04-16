@@ -65,25 +65,34 @@ realisations.sort((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infini
 }}>
 
 
-    <section id="" class="relative pt-20 ">
-        <div class="max-width min-h-[75vh] padding-x flex items-center justify-center">
-            <div class="flex items-center flex-col relative">
-                <p class="text-title-medium text-on-surface-variant">Site vitrine - e-commerce - portfolio</p>
-                <h1 class="text-display-small md:text-display-large text-center max-w-4xl mt-4">On construit des
-                    sites web <span
-                            class="text-gradient">irresistibles</span> à des tarifs accessibles</h1>
-                <p class="mt-8 text-body-large mx-auto max-w-xl text-center">Nous créons votre page d'accueil.<br/>
-                    Convaincu ? On continue.<br/> Sinon, c'est gratuit.</p>
-                <Button href="#contact" className="w-fit mt-12 scale-125" label="Travailler ensemble"/>
-                <div style={{
-                    background: `radial-gradient(rgb(var(--colors-surface)/1) 0%,rgb(var(--colors-surface)/0) 50%) no-repeat`,
-                }} class="absolute top-0 left-0 w-full h-full -z-10 scale-[3]"></div>
-            </div>
+    <section id="" class="relative pt-20 min-h-screen max-width  padding-x flex items-center justify-center">
 
+        <div class="flex items-center flex-col relative">
+            <p class="text-title-medium text-on-surface-variant">Site vitrine - e-commerce - portfolio</p>
+            <h1 class="text-display-small md:text-display-large text-center max-w-4xl mt-4">On construit des
+                sites web <span
+                        class="text-gradient">irresistibles</span> à des tarifs accessibles</h1>
+            <p class="mt-8 text-body-large mx-auto max-w-xl text-center">Nous créons votre page d'accueil.<br/>
+                Convaincu ? On continue.<br/> Sinon, c'est gratuit.</p>
+            <Button href="#contact" className="w-fit mt-12 scale-125" label="Travailler ensemble"/>
+            <div style={{
+                background: `radial-gradient(rgb(var(--colors-surface)/1) 0%,rgb(var(--colors-surface)/0) 50%) no-repeat`,
+            }} class="absolute top-0 left-0 w-full h-full -z-10 scale-[3]"></div>
         </div>
+
+
         <!--<LinearGradient nextTheme="purple"/>-->
     </section>
-    <section class="padding-y">
+    <section class="padding-y max-width">
+        <div class="padding-x max-w-screen-md xl:-mb-16 mb-8 relative">
+            <h2 class="text-headline-small ">L'agence web qui facilite l'accès au digital à tous ceux qui en ont
+                l’envie.
+            </h2>
+            <p class="mt-4">Nos réalisations parlent d'elles-mêmes. Découvrez un aperçu de projets innovants réalisés
+                par
+                Udixio."</p>
+        </div>
+
         <Realisations max={4}/>
         <Button href={"/nos-realisations"} className="mx-auto mt-8 w-fit" variant="text"
                 label="Voir tous les projets"/>
