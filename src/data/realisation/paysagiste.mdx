@@ -12,7 +12,16 @@ images:
 website: "https://paysagiste3.web.netsimpler.io/"
 summary: "Un site web professionnel pour paysagistes, facile à personnaliser et rapide à déployer."
 ---
+import Project from "@components/project/Project.astro"
+
+<Project {...{id: "paysagiste",data: frontmatter}}>
+<fragment slot="sidebar">
+
+</fragment>
+<fragment slot="body">
 
 ## Projet
 Ce template a été spécialement conçu pour les paysagistes souhaitant une présence en ligne professionnelle, sans code.
 Avec un design moderne et fonctionnel, il permet de présenter les services, les réalisations et les coordonnées facilement, tout en offrant une expérience utilisateur optimale.
+</fragment>
+</Project>

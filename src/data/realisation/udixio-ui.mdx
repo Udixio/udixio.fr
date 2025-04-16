@@ -1,0 +1,26 @@
+---
+title: "Udixio UI"
+description: "Portfolio personnel d’un développeur full-stack"
+order: 4
+theme:
+    isDark: true
+    source: "#4F4060"
+images:
+    background:
+        src: "/images/realisations/udixio-ui-background.webp"
+        alt: "Un jardin aménagé avec soin"
+summary: "Un portfolio qui reflète l'expertise technique et la créativité."
+---
+import Project from "@components/project/Project.astro"
+
+<Project {...{id: "udixio-ui",data: frontmatter}}>
+
+    <fragment slot="sidebar">
+        ## Projet
+    </fragment>
+    <fragment slot="body">
+        ## Projet
+        Ce portfolio présente le travail de Joël Vigreux, développeur full-stack et membre de notre équipe.
+        Il met en valeur son expertise technique, son approche du développement et une sélection de projets réalisés, dans un format sobre, clair et orienté performance.
+    </fragment>
+</Project>

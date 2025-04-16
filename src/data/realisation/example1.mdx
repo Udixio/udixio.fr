@@ -10,6 +10,17 @@ images: {}
 website: "https://vigreux-joel.github.io/Maquette2/index.html"
 summary: "Landing page professionnelle et optimisée pour la conversion d'une offre de formation en ligne."
 ---
+import Project from "@components/project/Project.astro"
+
+<Project {...{id: "example1",data: frontmatter}}>
+<fragment slot="sidebar">
+
+</fragment>
+<fragment slot="body">
+
 ## Projet
 Ce projet représente la création d'une landing page dédiée à la promotion d'une offre de formation en ligne.
 Avec une structure pensée pour maximiser l’engagement et la conversion, il inclut des techniques modernes de design web, une hiérarchisation efficace des informations, et une interface claire et intuitive pour améliorer l'expérience utilisateur.
+
+</fragment>
+</Project>

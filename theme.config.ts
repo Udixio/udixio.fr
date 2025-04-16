@@ -88,6 +88,8 @@ module.exports = defineConfig({
             darkMode: 'class',
             responsiveBreakPoints: {
                 sm: 1.125,
+                lg: 1.25,
+                xl: 1.375,
             },
             // subThemes: {
             //     blue: '#1A73E8',

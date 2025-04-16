@@ -1,6 +1,5 @@
 ---
 title: "Qovery Clone"
-order: 4
 description: "Reproduction d'une version antérieure du site web de Qovery"
 theme:
     isDark: false
@@ -9,7 +8,19 @@ images: {}
 website: "https://vigreux-joel.github.io/Maquette3/index.html"
 summary: "Une réplique précise d'une version antérieure du site de Qovery"
 ---
+import Project from "@components/project/Project.astro"
+
+<Project {...{id: "example2",data: frontmatter}}>
+<fragment slot="sidebar">
+
+</fragment>
+<fragment slot="body">
+
+
 ## Projet
 Ce projet consiste en la reproduction complète d'une ancienne version du site de Qovery, réalisée dans un souci de perfectionnement technique.
 Il a permis de maîtriser les aspects de structuration de sites complexes, l'intégration front-end, et l'optimisation de l’expérience utilisateur avec une attention particulière à la responsivité et à l’accessibilité.
 
+
+</fragment>
+</Project>

@@ -12,17 +12,16 @@ images:
 website: "https://vigreux-joel.fr/"
 summary: "Un portfolio qui reflète l'expertise technique et la créativité."
 ---
+import Project from "@components/project/Project.astro"
 
-{/* import {Button, Divider} from "@udixio/ui" */}
-{/* import {faGlobe} from "@fortawesome/pro-light-svg-icons" */}
-{/* import {faGithub} from "@fortawesome/free-brands-svg-icons" */}
+<Project {...{id: "vigreux-joel",data: frontmatter}}>
+<fragment slot="sidebar">
 
-{/* <div class="flex flex-wrap gap-4"> */}
-{/*     <Button target="_blank" href="https://vigreux-joel.fr/" icon={faGlobe} variant="outlined" label="Site web"/> */}
-{/*     <Button target="_blank" href="https://github.com/vigreux-joel/portfolio" icon={faGithub} variant="outlined" label="Code Source"/> */}
-{/* </div> */}
-{/* <Divider className="my-8"/> */}
+</fragment>
+<fragment slot="body">
 
 ## Projet
 Ce portfolio présente le travail de Joël Vigreux, développeur full-stack et membre de notre équipe.
 Il met en valeur son expertise technique, son approche du développement et une sélection de projets réalisés, dans un format sobre, clair et orienté performance.
+</fragment>
+</Project>
