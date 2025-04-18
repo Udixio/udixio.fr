@@ -133,7 +133,7 @@ const seoDefault: SEOProps = {
 };
 ---
 <!DOCTYPE html>
-<html class="dark-mode" lang="fr">
+<html lang="fr">
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width"/>
@@ -155,9 +155,7 @@ const seoDefault: SEOProps = {
 
 
 <main>
-    <Background transition:name="background" transition:persist client:idle
-    />
-    <div class="-z-10 h-[75vh] w-full absolute top-0 bg-gradient-to-b from-surface via-surface-60 to-transparent"/>
+
     <slot/>
 
 </main>

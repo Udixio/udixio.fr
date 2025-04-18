@@ -54,6 +54,7 @@ import {LinearGradient} from "@components/LinearGradient";
 import {getCollection} from "astro:content";
 import Realisations from "../components/Realisations.astro";
 import Mask from "../components/Mask.astro";
+import {Background} from "../components/three/Background";
 
 
 const realisations = await getCollection('realisation');
@@ -65,9 +66,11 @@ realisations.sort((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infini
 }}>
 
 
-    <section id="" class="relative pt-20 min-h-screen max-width  padding-x flex items-center justify-center">
-
-        <div class="flex items-center flex-col relative">
+    <section id=""
+             class=" relative pt-20 min-h-[90vh] pb-[50px]   flex items-center justify-center">
+        <Background transition:name="background" transition:persist client:idle
+        />
+        <div class="dark-mode text-on-surface flex items-center flex-col relative max-width padding-x">
             <p class="text-title-medium text-on-surface-variant">Site vitrine - e-commerce - portfolio</p>
             <h1 class="text-display-small md:text-display-large text-center max-w-4xl mt-4">On construit des
                 sites web <span
@@ -75,11 +78,15 @@ realisations.sort((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infini
             <p class="mt-8 text-body-large mx-auto max-w-xl text-center">Nous créons votre page d'accueil.<br/>
                 Convaincu ? On continue.<br/> Sinon, c'est gratuit.</p>
             <Button href="#contact" className="w-fit mt-12 scale-125" label="Travailler ensemble"/>
-            <div style={{
-                background: `radial-gradient(rgb(var(--colors-surface)/1) 0%,rgb(var(--colors-surface)/0) 50%) no-repeat`,
-            }} class="absolute top-0 left-0 w-full h-full -z-10 scale-[3]"></div>
+
         </div>
 
+        <svg class="absolute bottom-0 w-full fill-surface light-mode" width="1000" height="50" viewBox="0 0 1000 50"
+             fill="none"
+             preserveAspectRatio="none"
+             xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 50C0 50 246 0.000136659 500 2.80133e-10C754 -0.000136659 1000 50 1000 50H0Z"/>
+        </svg>
 
         <!--<LinearGradient nextTheme="purple"/>-->
     </section>

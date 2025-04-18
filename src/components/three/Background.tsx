@@ -1,8 +1,6 @@
 import React, {useRef} from "react";
 import {Canvas} from "@react-three/fiber";
-import {NoToneMapping} from "three";
 import {ControlledCamera} from "@components/three/ControlledCamera.tsx";
-import {BackgroundColor} from "./BackgroundColor";
 import {BackgroundStar} from "@components/three/BackgroundStar.tsx";
 
 export const Background = ({
@@ -16,22 +14,15 @@ export const Background = ({
 
     return (
         <div ref={canvasRef}
-             className={` fixed -z-10   top-0 h-screen w-screen !fixed"  ${className}`}>
+             className={` absolute -z-10   top-0 h-full w-full "  ${className}`}>
 
             <Canvas
-                gl={{toneMapping: NoToneMapping}}
-                className={"blur-xl  opacity-30"}
+                className={"top-0 !absolute opacity-90 bg-black"}
             >
-                <ControlledCamera canvasRef={canvasRef}/>
-                <BackgroundColor count={10} size={20}/>
 
-            </Canvas>
-            <Canvas
-                className={"top-0 !absolute opacity-90 "}
-            >
                 <ControlledCamera canvasRef={canvasRef}/>
 
-                <BackgroundStar count={1000}/>
+                <BackgroundStar/>
             </Canvas>
         </div>
     );

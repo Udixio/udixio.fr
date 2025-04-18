@@ -1,7 +1,7 @@
 import React, {useRef} from "react";
 import useMouse from "@react-hook/mouse-position";
-import {useFrame} from "@react-three/fiber";
 import {PerspectiveCamera} from "@react-three/drei";
+import {useFrame} from "@react-three/fiber";
 
 export const ControlledCamera: React.FC = ({canvasRef}: { canvasRef: React.RefObject<HTMLDivElement | null> }) => {
     const cameraRef = useRef<PerspectiveCamera | null>(null);
@@ -44,15 +44,19 @@ export const ControlledCamera: React.FC = ({canvasRef}: { canvasRef: React.RefOb
 
 
         // Mise à jour fluide de la position de la caméra
-        cameraRef.current.position.x +=
-            (normalizedMouse.x * sensitivity - cameraRef.current.position.x) *
-            interpolationSpeed;
-        cameraRef.current.position.y +=
-            (normalizedMouse.y * sensitivity - cameraRef.current.position.y) *
-            interpolationSpeed;
+        // cameraRef.current.position.x +=
+        //     (normalizedMouse.x * sensitivity - cameraRef.current.position.x) *
+        //     interpolationSpeed;
+        // cameraRef.current.position.y +=
+        //     (normalizedMouse.y * sensitivity - cameraRef.current.position.y) *
+        //     interpolationSpeed;
+
+        cameraRef.current.position.y = (1 - ((normalizedMouse.y + 1) / 2)) * sensitivity * 3
+        console.log(cameraRef.current.position.y)
+        // cameraRef.current.position.z = (1 - ((normalizedMouse.y + 1) / 2)) * 2 + 3
 
         // La caméra reste centrée sur la scène
-        cameraRef.current.lookAt(0, 0, 0);
+        cameraRef.current.lookAt(0, normalizedMouse.y * sensitivity * 2, 0);
 
     });
 
@@ -61,11 +65,10 @@ export const ControlledCamera: React.FC = ({canvasRef}: { canvasRef: React.RefOb
         <PerspectiveCamera
             makeDefault
             ref={cameraRef}
-            position={[0, 0, 5]} // Placez la caméra à une distance raisonnable
+            position={[0, 5, 5]} // Placez la caméra à une distance raisonnable
             fov={70}
             near={0.1}
             far={1000}
-
         />
 
     );

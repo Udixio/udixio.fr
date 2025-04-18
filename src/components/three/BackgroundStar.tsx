@@ -4,14 +4,14 @@ import {useFrame} from "@react-three/fiber";
 import {PointMaterial, Points} from "@react-three/drei";
 import {TextureLoader} from "three";
 
-export const BackgroundStar: React.FC<{ count?: number; radius?: number }> = ({count = 200, radius = 5}) => {
+export const BackgroundStar: React.FC<{ count?: number; radius?: number }> = ({count = 1000, radius = 5}) => {
     const pointsRef = useRef<any>(null);
     const groupRef = useRef<any>(null);
 
     // Générer aléatoirement des positions pour les étoiles
     const positions = useMemo(() => {
         const positionsArray: number[] = [];
-        const scale = 3.5;
+        const scale = 2.5;
         for (let i = 0; i < count; i++) {
             const x = (Math.random() - 0.5) * 10 * scale;
             const y = (Math.random() - 0.5) * 10 * scale;
