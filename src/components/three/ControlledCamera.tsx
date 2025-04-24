@@ -14,6 +14,7 @@ export const ControlledCamera: React.FC = ({canvasRef}: { canvasRef: React.RefOb
         enterDelay: 100,
         leaveDelay: 100,
     });
+    const previousLookAtY = useRef(0);
 
     useFrame(() => {
         // Obtenez la zone du canvas dans la page
@@ -51,12 +52,19 @@ export const ControlledCamera: React.FC = ({canvasRef}: { canvasRef: React.RefOb
         //     (normalizedMouse.y * sensitivity - cameraRef.current.position.y) *
         //     interpolationSpeed;
 
-        cameraRef.current.position.y = (1 - ((normalizedMouse.y + 1) / 2)) * sensitivity * 3
-        console.log(cameraRef.current.position.y)
-        // cameraRef.current.position.z = (1 - ((normalizedMouse.y + 1) / 2)) * 2 + 3
+        cameraRef.current.position.y += (((1 - ((normalizedMouse.y + 1) / 2)) * sensitivity * 3) - cameraRef.current.position.y) * interpolationSpeed
+
+
+        cameraRef.current.position.z += (((1 - ((normalizedMouse.y + 1) / 2)) * 5 + 3) - cameraRef.current.position.z) * interpolationSpeed
 
         // La caméra reste centrée sur la scène
-        cameraRef.current.lookAt(0, normalizedMouse.y * sensitivity * 2, 0);
+        const targetLookAtY = normalizedMouse.y * sensitivity * 2;
+
+        previousLookAtY.current +=
+            (targetLookAtY - previousLookAtY.current) * interpolationSpeed;
+
+        cameraRef.current.lookAt(0, previousLookAtY.current
+            , 0);
 
     });
 
