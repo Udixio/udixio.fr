@@ -54,7 +54,8 @@ import {LinearGradient} from "@components/LinearGradient";
 import {getCollection} from "astro:content";
 import Realisations from "../components/Realisations.astro";
 import Mask from "../components/Mask.astro";
-import {Background} from "../components/three/Background";
+import {Background} from "@components/three/Background";
+import {Hero} from "@components/three/Hero";
 
 
 const realisations = await getCollection('realisation');
@@ -65,31 +66,17 @@ realisations.sort((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infini
     description: "Udixio est une agence experte dans la création de sites web éco-conçus et optimisés pour le SEO. Optez pour des solutions digitales durables et performantes.",
 }}>
 
+    <Hero client:load>
+        <p class="text-title-medium text-on-surface-variant">Site vitrine - e-commerce - portfolio</p>
+        <h1 class="text-display-small md:text-display-large text-center max-w-4xl mt-4">On construit des
+            sites web <span
+                    class="text-gradient">irresistibles</span> à des tarifs accessibles</h1>
+        <p class="mt-8 text-body-large mx-auto max-w-xl text-center">Nous créons votre page d'accueil.<br/>
+            Convaincu ? On continue.<br/> Sinon, c'est gratuit.</p>
+        <Button href="#contact" className="w-fit mt-12 scale-125" label="Travailler ensemble"/>
 
-    <section id=""
-             class=" relative pt-20 min-h-[95vh] pb-[50px]   flex items-center justify-center">
-        <Background transition:name="background" transition:persist client:idle
-        />
-        <div class="dark-mode text-on-surface flex items-center flex-col relative max-width padding-x">
-            <p class="text-title-medium text-on-surface-variant">Site vitrine - e-commerce - portfolio</p>
-            <h1 class="text-display-small md:text-display-large text-center max-w-4xl mt-4">On construit des
-                sites web <span
-                        class="text-gradient">irresistibles</span> à des tarifs accessibles</h1>
-            <p class="mt-8 text-body-large mx-auto max-w-xl text-center">Nous créons votre page d'accueil.<br/>
-                Convaincu ? On continue.<br/> Sinon, c'est gratuit.</p>
-            <Button href="#contact" className="w-fit mt-12 scale-125" label="Travailler ensemble"/>
+    </Hero>
 
-        </div>
-
-        <svg class="absolute bottom-0 w-full fill-surface light-mode" width="1000" height="50" viewBox="0 0 1000 50"
-             fill="none"
-             preserveAspectRatio="none"
-             xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 50C0 50 246 0.000136659 500 2.80133e-10C754 -0.000136659 1000 50 1000 50H0Z"/>
-        </svg>
-
-        <!--<LinearGradient nextTheme="purple"/>-->
-    </section>
     <section class="padding-y max-width">
         <div class="padding-x max-w-screen-md xl:-mb-16 mb-8 relative">
             <h2 class="text-headline-small ">L'agence web qui facilite l'accès au digital à tous ceux qui en ont

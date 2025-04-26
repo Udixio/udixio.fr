@@ -2,8 +2,20 @@ import React, {useRef} from "react";
 import useMouse from "@react-hook/mouse-position";
 import {PerspectiveCamera} from "@react-three/drei";
 import {useFrame} from "@react-three/fiber";
+import type {MotionValue} from "motion-dom";
 
-export const ControlledCamera: React.FC = ({canvasRef}: { canvasRef: React.RefObject<HTMLDivElement | null> }) => {
+
+export const ControlledCamera: React.FC = ({canvasRef, scrollYProgress}: {
+    canvasRef: React.RefObject<HTMLDivElement | null>,
+    scrollYProgress: MotionValue<number>
+}) => {
+    if (scrollYProgress > 1) {
+        scrollYProgress = 1
+    } else if (scrollYProgress < -1) {
+        scrollYProgress = -1
+    }
+
+
     const cameraRef = useRef<PerspectiveCamera | null>(null);
 
     const lastMouseRef = useRef({x: 0, y: 0}); // Par défaut, considéré comme au centre (0, 0)
@@ -17,6 +29,7 @@ export const ControlledCamera: React.FC = ({canvasRef}: { canvasRef: React.RefOb
     const previousLookAtY = useRef(0);
 
     useFrame(() => {
+
         // Obtenez la zone du canvas dans la page
         const canvasRect = canvasRef.current?.getBoundingClientRect();
         if (!canvasRect || !cameraRef.current) return;
@@ -35,9 +48,11 @@ export const ControlledCamera: React.FC = ({canvasRef}: { canvasRef: React.RefOb
         }
 
         const normalizedMouse = {
-            x: ((mouseX - canvasRect.left) / canvasRect.width - 0.5) * 2, // Normalisation par rapport au centre du canvas
-            y: -((mouseY - canvasRect.top) / canvasRect.height - 0.5) * 2,
+            // x: ((mouseX - canvasRect.left) / canvasRect.width - 0.5) * 2, // Normalisation par rapport au centre du canvas
+            x: 0.5,
+            y: -((scrollYProgress.get() - 0.5) * 2)
         };
+
 
         // Ajuster la sensibilité de la caméra :
         const sensitivity = 3; // Réduit l'impact des mouvements de la souris (5 = plus sensible, 2 = moins sensible)
