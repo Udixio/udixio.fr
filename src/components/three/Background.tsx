@@ -1,8 +1,6 @@
 import React, {useRef} from "react";
 import {Canvas} from "@react-three/fiber";
-import {NoToneMapping} from "three";
 import {ControlledCamera} from "@components/three/ControlledCamera.tsx";
-import {BackgroundColor} from "./BackgroundColor";
 import {BackgroundStar} from "@components/three/BackgroundStar.tsx";
 import {AnimatePresence, motion, useInView} from "framer-motion";
 
@@ -28,14 +26,6 @@ export const Background = ({
                             exit={{opacity: 0,}}
                             transition={{duration: 1, ease: "easeInOut",}}
                             className={"w-full h-full"}>
-                            <Canvas
-                                gl={{toneMapping: NoToneMapping}}
-                                className={"blur-xl  opacity-30"}
-                            >
-                                <ControlledCamera canvasRef={canvasRef}/>
-                                <BackgroundColor count={10} size={20}/>
-
-                            </Canvas>
                             <Canvas
                                 className={"top-0 !absolute opacity-90 "}
                             >

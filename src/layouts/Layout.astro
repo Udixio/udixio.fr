@@ -14,7 +14,7 @@ import defaultImage from "@assets/images/img.png";
 import {ClientRouter} from 'astro:transitions';
 import {SmoothScroll} from "@udixio/ui";
 
-import {Background} from "@components/three/Background";
+import {BackgroundColor} from "@components/three/BackgroundColor";
 
 export interface Link extends HTMLLinkElement {
     prefetch: boolean;
@@ -155,7 +155,8 @@ const seoDefault: SEOProps = {
 
 
 <main>
-
+    <BackgroundColor transition:name="background-color" transition:persist client:idle
+    />
     <div class="-z-10 h-[75vh] w-full absolute top-0 bg-gradient-to-b from-surface via-surface-60 to-transparent"/>
     <slot/>
 
