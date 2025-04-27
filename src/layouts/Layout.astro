@@ -156,8 +156,9 @@ const seoDefault: SEOProps = {
 
 <main>
 
-    <BackgroundColor className="fixed -z-10  top-0 h-screen w-screen opacity-70" transition:name="background-color"
-                     transition:persist client:idle/>
+    <BackgroundColor size="80%" className="fixed -z-30  top-0 h-screen w-screen opacity-40"
+                     transition:name="background-color"
+                     transition:persist client:only="react"/>
 
     <div class="-z-10 h-[75vh] w-full absolute top-0 bg-gradient-to-b from-surface via-surface-60 to-transparent"/>
     <slot/>

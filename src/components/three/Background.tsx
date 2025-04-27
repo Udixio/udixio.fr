@@ -16,7 +16,7 @@ export const Background = ({
 
     return (
         <div ref={canvasRef}
-             className={` absolute -z-10   top-0 h-screen w-screen ${className}`}>
+             className={` absolute -z-10 lef-0  top-0 h-screen w-screen ${className}`}>
             <AnimatePresence>
                 {
                     isInView && (
