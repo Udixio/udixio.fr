@@ -83,7 +83,7 @@ export const BackgroundColor = ({count = 10, size = "75%", className}: {
             const primary = i % 3 === 0 ? getCSSVariableColor('tertiary-container') : getCSSVariableColor('primary-container');
 
 
-            const sensitivity = 0.675;
+            const sensitivity = 0.6;
 
             const colorSource = Array.from({length: 3}, (_, i) => {
                 if (!colorSurface) {
