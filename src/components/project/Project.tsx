@@ -2,6 +2,8 @@ import {Button, Card, classNames, Divider, IconButton} from "@udixio/ui";
 import {faArrowRight, faLink, faXmark} from "@fortawesome/pro-regular-svg-icons";
 import type {CollectionEntry} from "astro:content";
 import type {ReactNode} from "react";
+import {useState} from "react";
+import {AnimatePresence, motion} from "framer-motion";
 
 type Props = CollectionEntry<"realisation">['data'] & {
     slug: string,
@@ -19,6 +21,9 @@ type Props = CollectionEntry<"realisation">['data'] & {
 }
 
 export const Project = (props: Props) => {
+
+    const [isHovered, setHovered] = useState(false);
+
     const {slug, images, title, services, technologies, website, summary, sidebar, body, view = "full"} = props
     return (
         <Card
@@ -29,44 +34,75 @@ export const Project = (props: Props) => {
                     "!rounded-[28px] !overflow-auto max-width w-full bg-surface-container-lowest": view == "full"
                 })
             }
-            style={{viewTransitionName: "realisation-" + slug}}>
+            style={{viewTransitionName: "realisation-" + slug}}
+            onMouseOver={(e) => {
+                setHovered(true)
+            }}
+            onMouseOut={(e) => {
+                setHovered(false)
+            }}
+        >
             {
                 view == "full" && <ProjectFull {...props}/>
             }
             {
-                view == "mini" && <ProjectMini {...props}/>
+                view == "mini" && <ProjectMini {...props} isHovered={isHovered}/>
             }
         </Card>
     );
 }
 
 
-export const ProjectMini = ({slug, images, title, summary}: Props) => {
+export const ProjectMini = ({slug, images, title, summary, isHovered}: Props & { isHovered: boolean }) => {
     return (
         <>
             <div className="w-full flex-1 rounded-2xl overflow-hidden relative bg-surface">
                 <img loading="lazy" className={classNames(
                     "w-full h-full aspect-video group-hover:scale-[1.1] object-cover duration-700 transition-all ",
-                    'group-hover:opacity-50'
+                    {
+                        "scale-[1.1] opacity-70": isHovered
+                    }
                 )}
                      src={images.background.src}
                      height="1920"
                      width="1080"/>
 
             </div>
-            <div className="p-4 gap-4 flex flex-col md:flex-row md:justify-between md:items-center">
+            <div
+                className={classNames("p-4 gap-4 absolute backdrop-blur bottom-0  transition-all duration-300 w-full",
+                    ' bg-surface/70',
+                    " group-hover:bg-surface/80"
+                )}>
                 <div className="flex-1">
                     <p className="text-title-large">{title}</p>
-                    <p className="text-title-small mt-2">{summary}</p>
+                    <p style={{viewTransitionName: "realisation-summary-" + slug}}
+                       className="text-title-small mt-2 transition-all  duration-300">{summary}</p>
                 </div>
-                <Button iconPosition="right" icon={faArrowRight} label="Découvrir"
-                        className={classNames(
-                            "  transition-all duration-300",
-                            " lg:opacity-0 lg:invisible",
-                            'group-hover:opacity-100 group-hover:visible'
-                        )}
-                />
+                <AnimatePresence>
+                    {
+                        isHovered && <motion.div
+                            initial={{
+                                opacity: 0,
+                                height: 0,
+                                marginTop: 0
+                            }} // Démarre avec une marge supérieure négative et est invisible
+                            animate={{
+                                opacity: 1,
+                                height: "auto",
+                                marginTop: 6 * 4
+                            }} // Devient visible avec une légère marge supérieure
+                            exit={{opacity: 0, height: 0, marginTop: 0}} // Disparaît avec une marge supprimée
 
+                            transition={{duration: 0.3}}       // Durée de l'animation
+                        >
+                            <Button iconPosition="right" icon={faArrowRight} label="Découvrir"
+                                    className={classNames(
+                                        "transition-all duration-300 hover:gap-4",
+                                    )}
+                            />
+                        </motion.div>
+                    }
+                </AnimatePresence>
             </div>
         </>
     );
@@ -118,10 +154,11 @@ export const ProjectFull = ({
                     }
                     {
                         !(images.logo?.src) &&
-                        <p className={"text-display-medium text-center max-w-screen-md mx-auto"}>{title}</p>
+                        <p className={"text-display-medium text-center max-w-screen-md mx-auto transition-all  duration-300"}>{title}</p>
                     }
                 </div>
-                <p className={"text-display-small text-center max-w-screen-md mx-auto"}>{summary}</p>
+                <p style={{viewTransitionName: "realisation-summary-" + slug}}
+                   className={"text-display-small text-center max-w-screen-md mx-auto"}>{summary}</p>
                 <div className={"flex mt-32 h-full gap-4"}>
                     <div className={"left w-fit !max-w-sm padding-x "}>
                         <div className="prose-markdown">
