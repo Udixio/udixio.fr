@@ -1,6 +1,5 @@
 import React, {useEffect, useMemo, useRef, useState} from "react";
 import {CircleComponent} from "@components/CircleComponent.tsx";
-import {classNames} from "@udixio/ui";
 
 
 const getColorHex = (colorSource: number[]): string => {
@@ -25,7 +24,11 @@ function getCSSVariableColor(variableName: string): [number, number, number] {
 }
 
 
-export const BackgroundColor = ({count = 10, size = "75%", className}: { count?: number, size?: string, className?: string}) => {
+export const BackgroundColor = ({count = 10, size = "75%", className}: {
+    count?: number,
+    size?: string,
+    className?: string
+}) => {
 
     // const mouse = useMouse(document.querySelector("body")!, {
     //     fps: 10,
@@ -114,8 +117,6 @@ export const BackgroundColor = ({count = 10, size = "75%", className}: { count?:
             // Taille aléatoire (0.1 à 1.0)
         }
 
-
-        console.log(colors)
 
         setColors(colors)
     }, []);

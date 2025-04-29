@@ -6,7 +6,7 @@ import {faLink, faXmark} from "@fortawesome/pro-regular-svg-icons";
 import type {CollectionEntry} from 'astro:content';
 import {getImage} from "astro:assets";
 import Technology from "./Technology.astro";
-
+import {Project} from './Project.tsx'
 
 
 
@@ -41,8 +41,8 @@ if (!images.background) {
     }
 }
 ---
-<style>
-    .right, left {
+<style is:global>
+    .right, .left {
         fragment {
             > :first-child {
                 margin-top: 0;
@@ -52,106 +52,22 @@ if (!images.background) {
 </style>
 <section id="projets"
          class=" tab-menu  pt-32 flex items-center relative padding ">
-    <Card className="!rounded-[28px] !overflow-auto max-width w-full bg-surface-container-lowest"
-          style={{viewTransitionName: "realisation-" + slug}}>
-        <IconButton variant='outlined' icon={faXmark}
-                    className="block !absolute z-10 w-fit  ml-auto right-0 m-4 top-4 primary"
-                    arialLabel="retour aux projets"
-                    onClick={() => {
-                        const referrer = document.referrer;
-                        const currentDomain = window.location.origin; // Le domaine actuel, ex : "https://mon-site.com"
+    <Project client:load
+             {...{...data, images, technologies: undefined, services, slug }}>
+        <Fragment slot="technologies">
+            {
+                technologies.map((name) => (
+                        <Technology name={name}/>
+                ))
+            }
+        </Fragment>
+        <Fragment slot="sidebar">
+            <slot name="sidebar"/>
+        </Fragment>
+        <Fragment slot="body">
+            <slot name="body"/>
+        </Fragment>
 
-                        if (referrer && referrer.startsWith(currentDomain)) {
-                            // Si le referrer appartient au même site, utiliser l'historique pour revenir en arrière
-
-                            window.history.back();
-                        } else {
-                            // Sinon, rediriger vers la page par défaut
-
-                            window.location.href = "/nos-realisations";
-                        }
-                    }}
-        />
-
-        <div class={" w-full h-full"}>
-            <div class="min-h-[75vh] relative flex justify-center  items-center">
-                <div
-                        class={"absolute top-0 left-0 flex items-center w-full h-full bg-gradient-to-b from-primary/30 to-transparent"}>
-                    <img style={{
-                        maskImage: "linear-gradient(180deg,rgba(0,0,0,1) 75%,rgba(0,0,0,0))"
-                    }} class={"opacity-[.07] w-full object-cover h-full"} src={images.background.src}/>
-                </div>
-                {
-                    images.logo?.src &&
-                        <img class={"z-10 max-w-screen-sm"} src={images.logo.src}/>
-                }
-                {
-                    !(images.logo?.src) &&
-                        <p class={"text-display-medium text-center max-w-screen-md mx-auto"}>{title}</p>
-                }
-            </div>
-            <p class={"text-display-small text-center max-w-screen-md mx-auto"}>{summary}</p>
-            <div class={"flex mt-32 h-full gap-4"}>
-                <div class={"left w-fit !max-w-sm padding-x "}>
-                    <div class="prose-markdown">
-                        <slot name="sidebar"/>
-                    </div>
-                    <div class="flex flex-col gap-12">
-                        {services &&
-                                <div>
-                                    <p class="text-headline-small uppercase m-2">Services</p>
-                                    <div class="flex flex-wrap">
-                                        {(
-                                            services.map((name) => (
-                                                    <Technology name={name}/>
-                                            ))
-                                        )}
-                                    </div>
-
-                                </div>}
-                        {technologies &&
-                                <div>
-                                    <p class="text-headline-small uppercase mb-2">Technologies</p>
-                                    <div class="flex flex-wrap">
-                                        {(
-                                            technologies.map((name) => (
-                                                    <Technology name={name}/>
-                                            ))
-                                        )}
-                                    </div>
-
-                                </div>}
-                        {website &&
-                                <Button className="w-fit" target="_blank" href={website} icon={faLink}
-                                        label={"Visiter le siteWeb"}/>}
-                    </div>
-
-
-                </div>
-                <Divider orientation={"vertical"}/>
-                <div class={"flex-1 right padding-x pb-12"}>
-                    <div class={"prose-markdown px-4"}>
-                        <slot name="body"/>
-                        {website && <h2 class={"uppercase"}>Aperçu du Site</h2>}
-
-
-                    </div>
-                    {website &&
-                            <video class={"w-full mt-8 rounded-2xl"} autoplay muted loop playsinline>
-                                <source src={"/videos/renders/" + slug + "-720.webm"} type="video/webm"/>
-                                Votre navigateur ne supporte pas l'élément vidéo.
-                            </video>}
-
-
-                </div>
-
-            </div>
-
-
-        </div>
-
-
-    </Card>
-
+    </Project>
 
 </section>
