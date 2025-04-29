@@ -36,7 +36,7 @@
     "@types/react-dom": "^19.0.3",
     "@udixio/tailwind-material": "^1.0.0-beta.18",
     "@udixio/theme": "^1.0.0-beta.28",
-    "@udixio/ui": "^1.5.3",
+    "@udixio/ui": "^1.5.4",
     "aos": "^2.3.4",
     "astro": "^5.1.8",
     "astro-compress": "^2.3.6",

@@ -6,6 +6,7 @@ import {BackgroundColor} from "@components/BackgroundColor";
 import {faArrowRight} from "@fortawesome/pro-regular-svg-icons";
 import type {ProjectProps} from "./Project";
 import {getImage} from "astro:assets";
+import {Project} from "./project/Project.tsx";
 
 
 const {max} = Astro.props;
@@ -62,39 +63,7 @@ const visibleProjects = max ? projectsProps.slice(0, max) : projectsProps;
                             'sm:-mt-[25%] ': (index % 4 === 1) && (index != 0 && index != 1)
                         }
                     )} href={"/nos-realisations/" + realisation.slug}>
-                        <Card isInteractive variant="outlined"
-                              className=" flex flex-col h-full group bg-surface/60 backdrop-blur transition-all duration-300 !rounded-2xl"
-
-                              style={{
-                                  viewTransitionName: "realisation-" + realisation.slug,
-                              }}>
-
-
-                            <div class="w-full flex-1 rounded-2xl overflow-hidden relative bg-surface">
-                                <img loading="lazy" class={classNames(
-                                    "w-full h-full aspect-video group-hover:scale-[1.1] object-cover duration-700 transition-all ",
-                                    'group-hover:opacity-50'
-                                )}
-                                     src={realisation.images.background.src}
-                                     height="1920"
-                                     width="1080">
-
-                            </div>
-                            <div class="p-4 gap-4 flex flex-col md:flex-row md:justify-between md:items-center">
-                                <div class="flex-1">
-                                    <p class="text-title-large">{realisation.title}</p>
-                                    <p class="text-title-small mt-2">{realisation.summary}</p>
-                                </div>
-                                <Button iconPosition="right" icon={faArrowRight} label="Découvrir"
-                                        className={classNames(
-                                            "  transition-all duration-300",
-                                            " lg:opacity-0 lg:invisible",
-                                            'group-hover:opacity-100 group-hover:visible'
-                                        )}
-                                />
-
-                            </div>
-                        </Card>
+                        <Project client:load view="mini" {...realisation}></Project>
                     </a>
             )
         })

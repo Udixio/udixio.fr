@@ -1,5 +1,5 @@
-import {Button, Card, Divider, IconButton} from "@udixio/ui";
-import {faLink, faXmark} from "@fortawesome/pro-regular-svg-icons";
+import {Button, Card, classNames, Divider, IconButton} from "@udixio/ui";
+import {faArrowRight, faLink, faXmark} from "@fortawesome/pro-regular-svg-icons";
 import type {CollectionEntry} from "astro:content";
 import type {ReactNode} from "react";
 
@@ -14,12 +14,77 @@ type Props = CollectionEntry<"realisation">['data'] & {
     services?: ReactNode,
     body: ReactNode,
     sidebar: ReactNode
+    view?: "mini" | "full";
+
 }
 
-export const Project = ({slug, images, title, services, technologies, website, summary, sidebar, body}: Props) => {
+export const Project = (props: Props) => {
+    const {slug, images, title, services, technologies, website, summary, sidebar, body, view = "full"} = props
     return (
-        <Card className="!rounded-[28px] !overflow-auto max-width w-full bg-surface-container-lowest"
-              style={{viewTransitionName: "realisation-" + slug}}>
+        <Card
+            isInteractive={view == "mini"}
+            className={
+                classNames({
+                    " flex flex-col h-full group bg-surface/60 backdrop-blur transition-all duration-300 !rounded-2xl": view == "mini",
+                    "!rounded-[28px] !overflow-auto max-width w-full bg-surface-container-lowest": view == "full"
+                })
+            }
+            style={{viewTransitionName: "realisation-" + slug}}>
+            {
+                view == "full" && <ProjectFull {...props}/>
+            }
+            {
+                view == "mini" && <ProjectMini {...props}/>
+            }
+        </Card>
+    );
+}
+
+
+export const ProjectMini = ({slug, images, title, summary}: Props) => {
+    return (
+        <>
+            <div className="w-full flex-1 rounded-2xl overflow-hidden relative bg-surface">
+                <img loading="lazy" className={classNames(
+                    "w-full h-full aspect-video group-hover:scale-[1.1] object-cover duration-700 transition-all ",
+                    'group-hover:opacity-50'
+                )}
+                     src={images.background.src}
+                     height="1920"
+                     width="1080"/>
+
+            </div>
+            <div className="p-4 gap-4 flex flex-col md:flex-row md:justify-between md:items-center">
+                <div className="flex-1">
+                    <p className="text-title-large">{title}</p>
+                    <p className="text-title-small mt-2">{summary}</p>
+                </div>
+                <Button iconPosition="right" icon={faArrowRight} label="Découvrir"
+                        className={classNames(
+                            "  transition-all duration-300",
+                            " lg:opacity-0 lg:invisible",
+                            'group-hover:opacity-100 group-hover:visible'
+                        )}
+                />
+
+            </div>
+        </>
+    );
+};
+
+export const ProjectFull = ({
+                                slug,
+                                images,
+                                title,
+                                summary,
+                                services,
+                                technologies,
+                                body,
+                                sidebar,
+                                website,
+                            }: Props) => {
+    return (
+        <>
             <IconButton variant='outlined' icon={faXmark}
                         className="block !absolute z-10 w-fit  ml-auto right-0 m-4 top-4 primary"
                         arialLabel="retour aux projets"
@@ -107,8 +172,7 @@ export const Project = ({slug, images, title, services, technologies, website, s
 
 
             </div>
-
-
-        </Card>
+        </>
     );
-}
+};
+
