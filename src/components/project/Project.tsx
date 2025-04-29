@@ -69,7 +69,7 @@ export const ProjectMini = ({slug, images, title, summary, isHovered}: Props & {
 
             </div>
             <div
-                className={classNames("p-4 gap-4 absolute backdrop-blur bottom-0  transition-all duration-300 w-full",
+                className={classNames("p-4 gap-4 lg:absolute backdrop-blur bottom-0  transition-all duration-300 w-full",
                     ' bg-surface/70',
                     " group-hover:bg-surface/80"
                 )}>

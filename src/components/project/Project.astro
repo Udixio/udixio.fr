@@ -54,10 +54,17 @@ if (!images.background) {
          class=" tab-menu  pt-32 flex items-center relative padding ">
     <Project client:load
              {...{...data, images, technologies: undefined, services, slug }}>
+        <Fragment slot="services">
+            {
+                services && services.map((name) => (
+                            <Technology name={name}/>
+                ))
+            }
+        </Fragment>
         <Fragment slot="technologies">
             {
-                technologies.map((name) => (
-                        <Technology name={name}/>
+                technologies && technologies.map((name) => (
+                            <Technology name={name}/>
                 ))
             }
         </Fragment>
