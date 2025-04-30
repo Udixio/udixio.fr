@@ -24,6 +24,7 @@ import layoutResponsive from "@assets/images/Responsive-pana.svg"
 import flutterLogo from "@assets/images/flutter-logo.svg?raw"
 import astronautOnRocket from "@assets/images/astronaut-on-rocket.webp"
 import astronautHugEarth from "@assets/images/astronaut-hug-earth.png"
+import astronautFixingRocket from "@assets/images/astronaut-fixing-rocket.png"
 import tailwindLogo from "@assets/images/tailwind-logo.svg?raw"
 import baseLogo from "@assets/images/base-logo.svg?raw"
 import portrait from "@assets/images/portrait.jpg"
@@ -57,7 +58,8 @@ import {getCollection} from "astro:content";
 import Realisations from "../components/Realisations.astro";
 import Mask from "../components/Mask.astro";
 import {Background} from "../components/three/Background";
-import Logo from "../components/Logo.astro";
+import Logo from "../components/Logo";
+import {Hero} from "../components/home/hero";
 
 
 const realisations = await getCollection('realisation');
@@ -69,41 +71,23 @@ realisations.sort((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infini
 }}>
 
 
-    <section id=""
-             class="overflow-hidden relative min-h-screen  flex items-center justify-center bg-gradient-to-b from-surface to-transparent">
+    <Hero client:idle>
+        <div class="max-width relative z-0">
+            <div class="absolute right-0 -bottom-8 max-w-[80vw]">
+                <Image class="" width={400} src={astronautFixingRocket}
+                       alt=""></Image>
+                <div
+                        style={{
+                            background: "radial-gradient(ellipse,rgb(var(--colors-tertiary)/0.3) 0%, rgba(0, 0, 0, 0) 50%);"
+                        }}
+                        class="absolute left-1/2 -translate-x-1/2 blur-xl -bottom-16 w-[800px] h-36 rounded-[50%] -z-10"></div>
 
-        <div class="flex flex-col relative  max-width padding-x mb-32 ">
-            <Logo className="w-full mt-24 max-w-screen-xl fill-on-surface/[0.05]"/>
-
-            <h1 class="text-display-small md:text-display-large  max-w-4xl mt-4">Votre site, pensé comme une mission
-                stratégique</h1>
-            <p class="mt-8 text-body-large  max-w-2xl">Chez Udixio, nous concevons des expériences
-                sur-mesure qui valorisent vos contenus, renforcent votre image, et facilitent votre quotidien.</p>
-            <div class="flex gap-4">
-                <Button href="#contact" className="w-fit mt-12 " label="Contacter un expert"/>
-                <Button variant="outlined" href="#contact" className="w-fit mt-12 backdrop-blur"
-                        label="Découvrir notre méthode"/>
             </div>
 
-            <div style={{
-                background: `radial-gradient(rgb(var(--colors-surface)/1) 0%,rgb(var(--colors-surface)/0) 50%) no-repeat`,
-            }} class="absolute top-0 left-0 w-full h-full -z-10 scale-[3]"></div>
         </div>
-        <Background className="!h-full" transition:name="background" transition:persist client:idle
-        />
-        <svg preserveAspectRatio="none" class="absolute z-10 bottom-0 fill-surface-container-lowest w-screen"
-             width="850"
-             height="50"
-             viewBox="0 0 850 72"
-             xmlns="http://www.w3.org/2000/svg">
-            <path fill-rule="evenodd" clip-rule="evenodd"
-                  d="M850 72C850 72 659.721 0 425 0C190.279 0 0 72 0 72H425H850Z"/>
-        </svg>
 
-
-        <!--<LinearGradient nextTheme="purple"/>-->
-    </section>
-    <section class="padding-y bg-gradient-to-b from-surface-container-lowest to-transparent pt-16">
+    </Hero>
+    <section class="padding-y bg-gradient-to-b from-surface-container-lowest to-transparent pt-32">
         <div class="max-width">
             <div class="padding-x max-w-screen-md xl:-mb-16 mb-8  relative">
                 <h2 class="text-headline-small ">L'agence web qui facilite l'accès au digital à tous ceux qui en ont
@@ -124,7 +108,7 @@ realisations.sort((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infini
 
 
     <section class="padding relative pt-32 min-h-screen z-10">
-        <Background className="-z-10 !h-full" client:visible/>
+        <Background className="-z-10 !h-full overflow-hidden" client:visible/>
         <div class="max-width mx-auto">
             <h2 class="text-display-large text-display-small text-center max-w-screen-sm mx-auto">Les sites Udixio sont
                 conçus pour durer
