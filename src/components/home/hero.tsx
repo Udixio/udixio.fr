@@ -74,7 +74,7 @@ export const Hero = ({children}) => {
                 "visible opacity-100": isMinimize,
 
             })}>
-                <Button href="#contact" className="w-fit " label="Contacter un expert"/>
+                <Button href="#contact" className="w-fit scale-125 ml-8" label="Contacter un expert"/>
                 {/*<Button variant="outlined" href="#contact" className="bg-surface/30"*/}
                 {/*        label="Découvrir notre méthode"/>*/}
             </div>
