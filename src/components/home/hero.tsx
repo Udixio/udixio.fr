@@ -23,7 +23,7 @@ export const Hero = ({children}) => {
         className=" relative  flex items-center justify-center bg-gradient-to-b from-surface to-transparent z-10">
 
 
-        <div className=" relative w-full min-h-[50vh] max-width padding-x my-48 z-30">
+        <div className=" relative w-full min-h-[50vh] max-width padding-x mb-64 mt-32 md:my-48 z-30">
 
 
             <div

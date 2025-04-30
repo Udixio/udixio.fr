@@ -65,7 +65,7 @@ export const ProjectMini = ({slug, images, title, summary, isHovered}: Props & {
                 )}
                      src={images.background.src}
                      height="1920"
-                     width="1080"/>
+                     width="1080" alt={"Illustration d'un projet"}/>
 
             </div>
             <div
