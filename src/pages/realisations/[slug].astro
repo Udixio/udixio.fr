@@ -5,7 +5,6 @@ import {BackgroundColor} from "@components/BackgroundColor";
 import Project, {type ProjectProps} from "@components/project/Project.astro";
 import {Button, Card} from "@udixio/ui-react"
 import {getImage} from "astro:assets";
-import {UpdateTheme} from "@components/UpdateTheme";
 import {faArrowLeft} from "@fortawesome/pro-regular-svg-icons";
 import myBackground from "@assets/renders/netsimpler.webp"
 
@@ -21,7 +20,5 @@ const {Content} = await render(realisation);
 ---
 
 <Layout>
-    <UpdateTheme client:only="react"
-                 theme={{isDark: realisation.data.theme.isDark, source: realisation.data.theme.source}}/>
     <Content/>
 </Layout>
