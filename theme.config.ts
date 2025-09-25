@@ -7,7 +7,8 @@ export default defineConfig({
     sourceColor: '#a2afff',
     variant: Variants.Fidelity,
     palettes: {
-        green: "#2ec038"
+        success: "#2ec038",
+        warning: "#e5bb79",
     },
     colors: {
         colors: {
@@ -20,7 +21,7 @@ export default defineConfig({
                 },
             },
         },
-        fromPalettes: "green"
+        fromPalettes: ["success", "warning"]
     },
     plugins: [
         new FontPlugin({
@@ -80,16 +81,16 @@ export default defineConfig({
         new TailwindPlugin({
             darkMode: 'class',
             responsiveBreakPoints: {
-                sm: 1.125,
-                lg: 1.25,
-                xl: 1.375,
+                lg: 1.125,
+                xl: 1.25,
             },
-            // subThemes: {
-            //     blue: '#1A73E8',
-            //     green: '#4CA66B',
-            //     purple: "#7852A9",
-            //     orange: '#F5704B'
-            // }
+            subThemes: {
+                warning: '#e5bb79',
+                success: '#2ec038',
+                default: '#a2afff',
+                // purple: "#7852A9",
+                // orange: '#F5704B'
+            }
         }),
 
     ],

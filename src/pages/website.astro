@@ -1,0 +1,233 @@
+---
+import Layout from "../layouts/Layout.astro";
+import {Icon, Button,} from "@udixio/ui-react"
+import {Card} from "@/components/Card"
+import {
+    faTriangleExclamation,
+    faPhoneVolume,
+    faCircleCheck,
+    faRocket,
+    faRocketLaunch,
+} from "@fortawesome/pro-solid-svg-icons";
+import {faUser} from "@fortawesome/pro-regular-svg-icons";
+import {faQuoteRight} from "@fortawesome/free-solid-svg-icons";
+---
+<Layout seo={{
+    title: `Agence de conseil en stratégie digitale écoresponsable & SEO • udixio.fr`,
+    description: "Udixio est une agence experte dans la création de sites web éco-conçus et optimisés pour le SEO. Optez pour des solutions digitales durables et performantes.",
+}}>
+    <section class="section min-h-screen flex items-center">
+        <div>
+            <h1 class="text-display-medium max-w-prose">
+                DÉPLOYEZ UNE MACHINE
+                DE CROISSANCE DANS
+                VOTRE ENTREPRISE
+            </h1>
+            <p class="text-body-large mt-8 max-w-prose">Développer une entreprise est difficile...
+                Obtenir plus de marge, de demandes récurrentes et qualifiées
+                chaque mois l’est encore plus.
+            </p>
+            <p class="text-body-large mt-8 max-w-prose">
+                Nous rendons cela beaucoup plus simple, plus prévisible et moins
+                stressant grâce à un système qui fonctionne 24 heures sur 24 et 7
+                jours sur 7 pour booster votre chiffre d’affaires.
+            </p>
+
+            <p class="flex gap-3 items-center mt-8 max-w-prose text-warning text-body-medium ml-1">
+                <Icon className="size-5" icon={faTriangleExclamation}></Icon>
+                Sous réserve d’éligibilité et de validation
+            </p>
+
+            <Button className="w-fit mt-8" client:load href="#contact">Nous contacter</Button>
+
+
+        </div>
+    </section>
+
+    <section class="section grid grid-cols-3 gap-8">
+        <Card className={"p-12 col-span-2"}>
+            <div class="p-6  aspect-square flex items-center justify-center rounded-2xl bg-secondary-container w-fit">
+                <Icon className="size-10 text-on-secondary-container" icon={faPhoneVolume}></Icon>
+            </div>
+            <p class="text-headline-small mt-8">
+                Imaginez être en <span class="text-gradient text-headline-medium">top position</span>
+                sur <span class="text-gradient  text-headline-medium">Google</span> recevez des
+                <span class="text-gradient  text-headline-medium">demandes</span> en continu
+            </p>
+        </Card>
+        <Card className={"p-12 col-span-1 theme-warning"}>
+            <div class="p-6  aspect-square flex items-center justify-center rounded-2xl bg-secondary-container w-fit">
+                <Icon className="size-10 text-on-secondary-container" icon={faTriangleExclamation}></Icon>
+            </div>
+            <p class="text-headline-small mt-8">
+               <span class="text-gradient text-headline-medium mb-1">  Sous réserve de votre
+                   éligibilité</span>
+            </p>
+            <p class="text-title-large mt-2">
+                Des documents de
+                vérifications sont
+                nécessaires pour ce service.
+            </p>
+        </Card>
+        <Card className={"p-12 col-span-1  theme-success"}>
+            <div class="p-6  aspect-square flex items-center justify-center rounded-2xl bg-secondary-container w-fit">
+                <Icon className="size-10 text-on-secondary-container" icon={faCircleCheck}></Icon>
+            </div>
+            <p class="text-headline-small mt-8">
+                <span class="text-gradient  text-headline-medium">Améliorez</span>
+                votre
+                <span class="text-gradient  text-headline-medium">notoriété</span>
+            </p>
+            <p class="text-title-large mt-2">
+                Plus de visibilité, plus
+                d’opportunités.
+            </p>
+        </Card>
+        <Card className={"p-12 col-span-1  "}>
+            <div class="p-6  aspect-square flex items-center justify-center rounded-2xl bg-secondary-container w-fit">
+                <Icon className="size-10 text-on-secondary-container" icon={faRocketLaunch}></Icon>
+            </div>
+            <p class="text-headline-small mt-8">
+                <span class="text-gradient  text-headline-medium">100% clé en main</span>
+            </p>
+            <p class="text-title-large mt-2">
+                Dominez votre secteur en
+                propulsant votre visibilité
+                digitale dans une zone
+                stratégique définie.
+            </p>
+        </Card>
+        <Card className={"p-12 col-span-1 overflow-visible flex flex-col justify-between"}>
+            <Icon className="absolute text-display-medium right-0 top-0 -translate-y-1/3 translate-x-1/3 size-18"
+                  icon={faQuoteRight}/>
+            <p class="text-headline-small">
+                <span class=" text-headline-large mb-1 block">“J’ai eu 48
+                demandes le
+                mois dernier”</span>
+            </p>
+            <div class="w-fit ml-auto flex gap-4">
+                <div class="text-title-large text-right">
+                    <p>Laurent</p>
+                    <p>Avocat dans le 64</p>
+                </div>
+                <div class="p-2 aspect-square flex items-center justify-center rounded-2xl bg-secondary-container w-fit">
+                    <Icon className="size-10 text-on-secondary-container" icon={faUser}></Icon>
+                </div>
+            </div>
+        </Card>
+    </section>
+
+    <section>
+
+    </section>
+
+    Pourquoi est-il important
+    d’avoir un site internet?
+    PLUS DE VISIBILITÉ,
+    PLUS DE CLIENTS
+    Pourquoi nous faire confiance
+
+    Nous comprenons vos problématiques et
+    les transformons en opportunité.
+
+    Vous en avez assez d’être invisible?
+
+    Désactivons le mode fantôme et faisons
+    connaître vos services partout autour de
+    vous.
+
+    WEB HAUT DE GAMME
+    Création de vitrine web
+    professionnelle qui met en valeur
+    votre expertise.
+    RENTABILITÉ
+    Votre solution fonctionne sans
+    relâche, 24h/24 , 7j/7 , attirant un
+    flux d’appels et de prospects
+    ECOUTE ET PROXIMITÉ
+    Bénéficiez d’une proximité
+    d'écoute et de solutions adaptées
+    à vos besoins.
+    Design & contenu
+    Référencement et visibilité
+    Accompagnement
+    Fonctionnalités
+    Expert SEO Expert SEO
+    Bonus : 6 mois de gestion
+    Option supplémentaire (payante)
+    Bonus : 4 mois de gestion
+    Design personnalisé dynamique
+    Nombre de pages avec rédaction de contenu
+    Conformité technique SEO, stratégie & optimisation
+    Nombre de mots clés SEO
+
+    Paramétrage & Setup des annonces Google Ads
+
+    Intervenant création
+    Suivi post livraison
+    Formulaire contact
+    Growth Marketing : popup capture de données
+    Connection avis Google en temps réel
+    Nom de domaine privé et email professionnel
+
+    Optimisation Fiche Google My Business
+    PACK CROISSANCE PACK PERFORMANCE
+    Jusqu’à 10 pages
+    10 Localités
+    Webmaster dédié
+    Support + 2 bilan /an
+    Jusqu’à 15 pages
+    30 mots clés
+    Webmaster dédié + Expert SEO
+    Support + 4 bilans / an
+    PACK ULTIMATE
+    Sur Mesure
+    Plus de 40 mots clés
+    Webmaster dédié + Expert SEO
+    Support + 6 bilans / an
+    Ajout de page SEO / Newsletter / Connection API / Lead nurturing / Reportage photos, vidéo & drone / Formation &
+    consulting / E-Commerce / Système de réservation en ligne / Paiement en ligne...
+    Responsive design : PC, Tablette & Smartphone
+
+    Page d’acquisition de prospect SEA
+    Branding publicitaire unique : Logo, Carte de visite
+    digitale, fond d’écran de téléphone, QR codes
+    Growth Marketing : exit overlay
+    Social Wall
+    One Page Performance
+    Webmaster dédié
+    Support + 1 bilan /an
+    PACK STARTER
+    750€ht frais création
+    + 169€ht / mois
+    Gestion & Optimisation Google Ads (budget Ads non inclu) Bonus : 2 mois de gestion
+
+    Localité(s) référencée(s)
+    10 mots clés 15 mots clés
+    1 Localité 30 Localités 40 Localités
+    Protocoles de sécurité avancés SSL / Protection contre les attaques / Sauvegardes régulières
+    1500€ht frais création
+    + 189€ht/mois
+    SSL / Protection contre les attaques / Sauvegardes régulières SSL / Protection contre les attaques / Sauvegardes
+    régulières SSL / Protection contre les attaques / Sauvegardes régulières
+    24 MOIS
+
+    2500€ht frais création
+    + 244€ht/mois
+    3700€ht frais création
+    + 298€ht/mois
+    Notre siège
+    229 Rue Saint-Honoré,
+    75001 Paris, France
+    Téléphone
+    +33 7 57 93 92 81
+    Notre site web
+
+    digilever.fr
+
+    Adresse email
+
+    contact@digilever.fr
+
+    Nous contacter
+</layout>
