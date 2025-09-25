@@ -11,6 +11,7 @@ import {
 } from "@fortawesome/pro-solid-svg-icons";
 import {faDisplay, faMoneyBillTrendUp, faUser} from "@fortawesome/pro-regular-svg-icons";
 import {faQuoteRight} from "@fortawesome/free-solid-svg-icons";
+import Compare from "@/components/Compare";
 ---
 <Layout seo={{
     noindex: true,
@@ -232,6 +233,87 @@ import {faQuoteRight} from "@fortawesome/free-solid-svg-icons";
                             à vos besoins</span>.</p>
                 </div>
             </Card>
+        </div>
+    </section>
+    <section class="section">
+        <h2 class="text-display-medium text-center">Comparez nos offres</h2>
+        <div class="mt-8">
+            <Compare client:load groups={[
+                {
+                    id: 'site',
+                    label: 'Sites vitrines',
+                    plans: [
+                        { id: 'start', name: 'Start', price: 'à partir de 890 €', badge: 'Populaire' },
+                        { id: 'pro', name: 'Pro', price: 'à partir de 1 990 €' },
+                        { id: 'business', name: 'Business', price: 'à partir de 3 490 €' },
+                        { id: 'elite', name: 'Elite', price: 'sur devis' },
+                    ],
+                    categories: [
+                        {
+                            id: 'design',
+                            label: 'Design & branding',
+                            features: [
+                                { id: 'ui', label: 'Design moderne et responsive', value: { start: true, pro: true, business: true, elite: true } },
+                                { id: 'branding', label: 'Personnalisation avancée du thème', value: { start: 'Basique', pro: 'Standard', business: 'Avancée', elite: 'Sur-mesure' } },
+                            ],
+                        },
+                        {
+                            id: 'seo',
+                            label: 'SEO & performance',
+                            features: [
+                                { id: 'seo-tech', label: 'SEO technique de base', value: { start: true, pro: true, business: true, elite: true } },
+                                { id: 'seo-adv', label: 'Optimisation SEO avancée', value: { start: false, pro: 'partial', business: true, elite: true }, note: 'Schema, maillage interne, contenus piliers' },
+                                { id: 'perf', label: 'Optimisation des performances', value: { start: true, pro: true, business: true, elite: true } },
+                            ],
+                        },
+                        {
+                            id: 'content',
+                            label: 'Contenus inclus',
+                            features: [
+                                { id: 'pages', label: 'Nombre de pages incluses', value: { start: '1–3', pro: '4–6', business: '7–12', elite: 'Illimité*' }, note: '* selon cahier des charges' },
+                                { id: 'blog', label: 'Blog', value: { start: false, pro: true, business: true, elite: true } },
+                            ],
+                        },
+                        {
+                            id: 'support',
+                            label: 'Accompagnement',
+                            features: [
+                                { id: 'formation', label: 'Formation à la prise en main', value: { start: true, pro: true, business: true, elite: true } },
+                                { id: 'suivi', label: 'Support & maintenance', value: { start: '30 j', pro: '3 mois', business: '6 mois', elite: '12 mois' } },
+                            ],
+                        },
+                    ],
+                },
+                {
+                    id: 'marketing',
+                    label: 'Marketing local',
+                    plans: [
+                        { id: 'basic', name: 'Essentiel', price: 'à partir de 390 €/mois' },
+                        { id: 'boost', name: 'Boost', price: 'à partir de 690 €/mois', badge: 'Recommandé' },
+                        { id: 'growth', name: 'Croissance', price: 'à partir de 1 190 €/mois' },
+                        { id: 'dominate', name: 'Domination', price: 'sur devis' },
+                    ],
+                    categories: [
+                        {
+                            id: 'ads',
+                            label: 'Publicité & acquisition',
+                            features: [
+                                { id: 'google-ads', label: 'Gestion Google Ads', value: { basic: false, boost: true, growth: true, dominate: true } },
+                                { id: 'meta-ads', label: 'Gestion Meta Ads', value: { basic: false, boost: 'partial', growth: true, dominate: true } },
+                            ],
+                        },
+                        {
+                            id: 'tracking',
+                            label: 'Suivi & analytics',
+                            features: [
+                                { id: 'ga4', label: 'Mise en place GA4 + conversions', value: { basic: true, boost: true, growth: true, dominate: true } },
+                                { id: 'report', label: 'Rapport mensuel', value: { basic: true, boost: true, growth: true, dominate: true } },
+                                { id: 'call', label: 'Call stratégique mensuel', value: { basic: false, boost: true, growth: true, dominate: true } },
+                            ],
+                        },
+                    ],
+                }
+            ]} />
         </div>
     </section>
 </Layout>
