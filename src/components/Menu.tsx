@@ -1,4 +1,4 @@
-import {Button, classNames, Tab, Tabs} from "@udixio/ui";
+import {Button, classNames, Tab, Tabs} from "@udixio/ui-react";
 import React, {useEffect, useLayoutEffect, useRef, useState} from "react";
 
 
@@ -20,15 +20,15 @@ export const Menu = ({
     const getCurrentTab = () => {
         if (pathName === "/") {
             return 0;
-        } else if (pathName === "/nos-realisations") {
+        } else if (pathName === "/realisations") {
             return 1;
-        } else if (pathName?.startsWith("/nos-realisations/")) {
+        } else if (pathName?.startsWith("/realisations/")) {
             return 1;
         } else {
-            return null;
+            return undefined;
         }
     };
-    const [activeTab, setActiveTab] = useState<number | null>(null);
+    const [activeTab, setActiveTab] = useState<number | null | undefined>(undefined);
 
 
     useLayoutEffect(() => {
@@ -89,7 +89,7 @@ export const Menu = ({
     }, [pathName]);
 
     return (
-        pathName != null &&
+        pathName !== null &&
         <div
             className={classNames(
                 "fixed max-w-full flex transition-opacity left-1/2 duration-300 ease-in-out top-8 z-50 mx-2 backdrop-blur-lg -translate-x-1/2 overflow-hidden rounded-full border border-surface-container-highest bg-surface-container-low/80",
@@ -105,7 +105,7 @@ export const Menu = ({
             >
 
                 <Tab
-                    className={"bg-transparent md:h-full"}
+                    className={"bg-transparent md:h-full pl-6"}
                     selected={0 === activeTab}
                     href={`/`}
                     label={"Accueil"}
@@ -113,13 +113,21 @@ export const Menu = ({
                 <Tab
                     className={"bg-transparent md:h-full"}
                     selected={1 === activeTab}
-                    href={`/nos-realisations`}
+                    href={`/realisations`}
                     label={"Réalisations"}
+                ></Tab>
+                <Tab
+                    className={"bg-transparent md:h-full  md:hidden block"}
+                    selected={1 === activeTab}
+                    href={`#contact`}
+                    label={"Contact"}
                 ></Tab>
 
 
             </Tabs>
             <Button
+                size={"small"}
+                allowShapeTransformation={false}
                 href={"#contact"}
                 className={"m-2 hidden md:block"}
                 label={"Contact"}

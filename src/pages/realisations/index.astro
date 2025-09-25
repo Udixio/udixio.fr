@@ -1,7 +1,7 @@
 ---
 import {getCollection} from "astro:content";
 import Layout from "@layouts/Layout.astro";
-import {Button, Card, classNames} from "@udixio/ui";
+import {Button, Card, classNames} from "@udixio/ui-react";
 import {BackgroundColor} from "../../components/BackgroundColor";
 import {faArrowRight} from "@fortawesome/pro-regular-svg-icons";
 import Realisations from "../../components/Realisations.astro";
@@ -14,7 +14,7 @@ realisations.sort((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infini
     description: "Udixio est une agence experte dans la création de sites web éco-conçus et optimisés pour le SEO. Optez pour des solutions digitales durables et performantes.",
 }}>
 
-    <section class="relative z-20 pt-20 ">
+    <section class="relative pt-20 ">
         <div class="max-width min-h-[75vh] padding-x flex items-center justify-center">
             <div
                     class="flex items-center flex-col relative">
@@ -23,7 +23,7 @@ realisations.sort((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infini
                     digitale
                     Udixio est une rencontre unique entre innovation et créativité, pensée pour atteindre vos objectifs
                     commerciaux avec succès</p>
-                <Button href="#contact" className="w-fit mt-12 scale-125" label="Travailler ensemble"/>
+                <Button href="#contact" className="w-fit mt-12" label="Travailler ensemble"/>
                 <div style={{
                     background: `radial-gradient(rgb(var(--colors-surface)/1) 0%,rgb(var(--colors-surface)/0) 50%) no-repeat`,
                 }} class="absolute top-0 left-0 w-full h-full -z-10 scale-[3]"></div>
@@ -31,9 +31,7 @@ realisations.sort((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infini
         </div>
     </section>
 
-    <section id="" class=" relative pt-20 md:pt-32 padding-x">
-        <BackgroundColor client:only="react"
-                         className="opacity-70 -z-10 top-0 h-screen w-screen !fixed"/>
+    <section id="" class=" relative">
         <Realisations/>
     </section>
 </Layout>

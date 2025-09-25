@@ -24,16 +24,16 @@ module.exports = {
             flex: {
                 2: '2 2 0%',
             },
-            animation: {
-                "border-beam": "border-beam calc(var(--duration)*1s) infinite linear",
-            },
             keyframes: {
-                "border-beam": {
-                    "100%": {
-                        "offset-distance": "100%",
-                    },
+                float: {
+                    '0%, 100%': {transform: 'translateY(0px)'},
+                    '50%': {transform: 'translateY(-15px)'},
                 },
-            }
+            },
+            animation: {
+                float: 'float 3s ease-in-out infinite',
+            },
+
         },
     },
     plugins: [...plugins, require('@tailwindcss/typography'), require('@tailwindcss/container-queries')],

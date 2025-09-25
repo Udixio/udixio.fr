@@ -1,7 +1,8 @@
 ---
 import Footer from "./Footer.astro";
-import "../styles/base.scss";
+import "../styles/base.css";
 import Header from "@layouts/Header.astro";
+import {Cursor} from "@components/Cursor";
 import {SEO} from "astro-seo";
 import {getImage} from "astro:assets";
 export type TwitterCardType = "summary" | "summary_large_image" | "app" | "player";
@@ -11,7 +12,9 @@ import "@fontsource/montserrat/700.css";
 import "@fontsource/montserrat/600.css";
 import defaultImage from "@assets/images/img.png";
 import {ClientRouter} from 'astro:transitions';
-import {SmoothScroll} from "@udixio/ui";
+import {SmoothScroll} from "@udixio/ui-react";
+
+import {BackgroundColor} from "@components/three/BackgroundColor";
 
 export interface Link extends HTMLLinkElement {
     prefetch: boolean;
@@ -130,11 +133,11 @@ const seoDefault: SEOProps = {
 };
 ---
 <!DOCTYPE html>
-<html class="dark-mode" lang="fr">
+<html class="dark" lang="fr">
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width"/>
-    <link rel="icon" type="image/png" href="/favicon.png"/>
+    <link rel="icon" type="image/png" href="/favicon.svg"/>
 
 
     <SEO {...seoDefault}/>
@@ -142,28 +145,36 @@ const seoDefault: SEOProps = {
 </head>
 <body class="bg-surface  transition-all duration-500">
 <Header/>
-<div class="h-screen">
-    <!--<SmoothScroll-->
-    <!--        orientation={'vertical'}-->
-    <!--        client:load-->
-    <!--        transition=".75s"-->
 
-    <!--&gt;-->
-    <main>
-        <slot/>
-    </main>
-    <Footer/>
-    <!--</SmoothScroll>-->
-</div>
+<!--<SmoothScroll-->
+<!--        orientation={'vertical'}-->
+<!--        client:load-->
+<!--        transition=".75s"-->
+
+<!--&gt;-->
 
 
-<script>
+<main>
 
-    import AOS from 'aos'
+    <BackgroundColor size="80%" className="fixed -z-30 opacity-55 top-0 h-screen w-screen "
+                     transition:name="background-color"
+                     transition:persist client:only="react"/>
 
-    document.addEventListener('astro:page-load', () => {
-        AOS.init()
-    })
-</script>
+    <div class="-z-10 h-[75vh] w-full absolute top-0 bg-gradient-to-b from-surface via-surface-60 to-transparent"/>
+    <slot/>
+
+</main>
+<Footer/>
+<!--</SmoothScroll>-->
+
+
+<!--<script>-->
+
+<!--    import AOS from 'aos'-->
+
+<!--    document.addEventListener('astro:page-load', () => {-->
+<!--        AOS.init()-->
+<!--    })-->
+<!--</script>-->
 </body>
 </html>

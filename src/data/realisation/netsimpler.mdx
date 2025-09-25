@@ -1,23 +1,41 @@
 ---
 title: "Netsimpler.io"
-description: "Un exemple illustrant l'utilisation de la structure de métadonnées spécifiée."
+description: "Créer son site web pro sans code"
+order: 2
 theme:
     isDark: false
     source: "#0A65EC"
 images:
+    background:
+        src: "/images/realisations/netsimpler-background.webp"
+        alt: "Un jardin aménagé avec soin"
     logo:
         src: "/images/realisations/netsimpler-logo.svg"
         alt: "Illustration du projet avec un point principal."
-    background:
-        src: "/images/realisations/netsimpler-background.webp"
-        alt: "Illustration du projet avec un point principal."
 website: "https://netsimpler.io/"
-summary: "Créez des sites web sur mesure, en toute autonomie."
+summary: "Libérez la création de votre site web avec Netsimpler.io."
+technologies:
+    - React
+    - Astro
+    - Tailwind
+    - Motion
+    - Builder.io
+    - Sanity
+    - Udixio UI
+services:
+    - Stratégie de marque
+    - Web design
+    - Développement web
 ---
+import Project from "@components/project/Project.astro"
 
-### Projet
+<Project {...{id: "netsimpler",data: frontmatter}}>
+<fragment slot="sidebar">
 
-Phigames, a game studio based in the UK, reached out to us to design and build the official website for their PlayStation 5 release title about the birth of sentient AI.
-
-The team wanted a custom React website to showcase the game’s stunning visuals without compromising on loading speed, especially for users on less performant mobile and tablet devices.
-
+</fragment>
+<fragment slot="body">
+## Projet
+Netsimpler.io est une solution web clé en main destinée aux entrepreneurs souhaitant créer leur site en toute autonomie.
+Ce projet incarne notre volonté de démocratiser l’accès à des outils performants, simples et personnalisables, tout en conservant une qualité professionnelle.
+</fragment>
+</Project>

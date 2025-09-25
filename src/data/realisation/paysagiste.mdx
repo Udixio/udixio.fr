@@ -1,62 +1,32 @@
 ---
-title: "Exemple MDX avec Metadata"
-description: "Un exemple illustrant l'utilisation de la structure de métadonnées spécifiée."
+title: "Template Paysagiste"
+description: "Template clé en main pour paysagistes, conçu sur Netsimpler"
+order: 3
 theme:
     isDark: false
     source: "#374836"
 images:
-    logo:
-        src: "/images/realisations/netsimpler-logo.svg"
-        alt: "Illustration du projet avec un point principal."
     background:
-        src: "/images/realisations/netsimpler-background.webp"
-        alt: "Illustration du projet avec un point principal."
-summary: "Un outil simple et puissant pour créer des sites web sur mesure, en toute autonomie."
+        src: "/images/realisations/paysagiste-background.webp"
+        alt: "Un jardin aménagé avec soin"
+website: "https://paysagiste3.web.netsimpler.io/"
+summary: "Un site web professionnel pour paysagistes, facile à personnaliser et rapide à déployer."
+technologies:
+    - Netsimpler
+services:
+    - Développement web
+    - Web design
 ---
+import Project from "@components/project/Project.astro"
 
-# Bienvenue dans MDX
+<Project {...{id: "paysagiste",data: frontmatter}}>
+<fragment slot="sidebar">
 
-MDX vous permet de combiner **Markdown** et **JSX** dans un seul fichier. Voici un exemple de ce que vous pouvez faire :
+</fragment>
+<fragment slot="body">
 
-## Section Markdown
-
-Vous pouvez utiliser Markdown de manière classique :
-
-- Liste d'éléments
-- Utilisation normale de Markdown
-- **Texte en gras**
-- *Texte en italique*
-
-Voici un exemple de code :
-
-```javascript
-const greet = () => {
-  console.log("Bonjour, MDX !");
-};
-```
-
-## Section avec des composants React
-
-MDX permet aussi d'insérer des composants React directement dans le contenu :
-
-
-
-## Conclusion
-
-MDX est super pratique !
-
----
-
-## Définir vos composants ici (ou ailleurs)
-
-```javascript
-export const MyComponent = ({ message }) => (
-  <div style={{ padding: "10px", backgroundColor: "#f8f8f8", borderRadius: "5px" }}>
-    <p>{message}</p>
-  </div>
-);
-```
-
----
-
-Dites-moi si vous avez besoin de plus d'exemples ou de détails ! 😊
+## Projet
+Ce template a été spécialement conçu pour les paysagistes souhaitant une présence en ligne professionnelle, sans code.
+Avec un design moderne et fonctionnel, il permet de présenter les services, les réalisations et les coordonnées facilement, tout en offrant une expérience utilisateur optimale.
+</fragment>
+</Project>

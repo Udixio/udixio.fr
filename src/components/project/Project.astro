@@ -1,0 +1,80 @@
+---
+import {type ReactNode} from "react";
+import {Button, Card, Divider, IconButton} from "@udixio/ui-react";
+import {faLink, faXmark} from "@fortawesome/pro-regular-svg-icons";
+
+import type {CollectionEntry} from 'astro:content';
+import {getImage} from "astro:assets";
+import Technology from "./Technology.astro";
+import {Project} from './Project.tsx'
+
+
+
+interface Props extends CollectionEntry<"realisation"> {
+    slug: string,
+    data: {
+        images: {
+            background: {
+                src: string
+            }
+        }
+    } & CollectionEntry<"realisation">['data']
+
+}
+
+const {id: slug, data} = Astro.props;
+const {title, technologies, services, description, order, theme, images, website, summary} = data
+
+const renderImages = import.meta.glob('@assets/renders/*.webp', {eager: true});
+
+if (!images.background) {
+
+    const imageFileName = `${slug}.webp`;
+
+    const imageEntry = ((Object.entries(renderImages).find(([path]) =>
+        path.endsWith(imageFileName)
+    ))?.[1] as any).default;
+    const background = await getImage({src: imageEntry, format: 'webp'})
+    images.background = {
+        src: (background).src,
+        alt: ""
+    }
+}
+---
+<style is:global>
+    .right, .left {
+        fragment {
+            > :first-child {
+                margin-top: 0;
+            }
+        }
+    }
+</style>
+<section id="projets"
+         class=" tab-menu  pt-32 flex items-center relative padding ">
+    <Project client:load
+             {...{...data, images, technologies: undefined, services, slug }}>
+        <Fragment slot="services">
+            {
+                services && services.map((name) => (
+                            <Technology name={name}/>
+                ))
+            }
+        </Fragment>
+        <Fragment slot="technologies">
+            {
+                technologies && technologies.map((name) => (
+                            <Technology name={name}/>
+                ))
+            }
+        </Fragment>
+        <Fragment slot="sidebar">
+            <slot name="sidebar"/>
+        </Fragment>
+        <Fragment slot="body">
+            <slot name="body"/>
+        </Fragment>
+
+    </Project>
+
+</section>

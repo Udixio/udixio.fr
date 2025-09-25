@@ -1,0 +1,29 @@
+---
+title: "Udixio UI"
+description: "Portfolio personnel d’un développeur full-stack"
+order: 4
+theme:
+    isDark: true
+    source: "#4F4060"
+images:
+    background:
+        src: "/images/realisations/udixio-ui-background.webp"
+        alt: "Un jardin aménagé avec soin"
+summary: "Simplicité, innovation et performance au service de la créativité"
+technologies:
+    - React
+    - Tailwind
+    - Motion
+---
+import Project from "@components/project/Project.astro"
+
+<Project {...{id: "udixio-ui",data: frontmatter}}>
+
+    <fragment slot="sidebar">
+
+    </fragment>
+    <fragment slot="body">
+        ## Projet
+        Udixio UI est une bibliothèque d'interface utilisateur moderne et performante, développée avec des technologies de pointe comme **React**, **Tailwind CSS**, et **Motion** pour offrir une expérience unique en matière de développement et d'animation
+    </fragment>
+</Project>

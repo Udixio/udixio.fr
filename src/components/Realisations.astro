@@ -1,58 +1,69 @@
 ---
 import {getCollection} from "astro:content";
 import Layout from "@layouts/Layout.astro";
-import {Button, Card, classNames} from "@udixio/ui";
+import {Button, Card, classNames} from "@udixio/ui-react";
 import {BackgroundColor} from "@components/BackgroundColor";
 import {faArrowRight} from "@fortawesome/pro-regular-svg-icons";
+import type {ProjectProps} from "./Project";
+import {getImage} from "astro:assets";
+import {Project} from "./project/Project.tsx";
+
+
+const {max} = Astro.props;
 
 const realisations = await getCollection('realisation');
 realisations.sort((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infinity));
+
+const images = import.meta.glob('@assets/renders/*.webp', {eager: true});
+
+const projectsProps: ProjectProps[] = (await Promise.all(
+    realisations.map(async (realisation) => {
+        if (!realisation.data.images.background) {
+
+            const imageFileName = `${realisation.id}.webp`;
+
+            const imageEntry = ((Object.entries(images).find(([path]) =>
+                path.endsWith(imageFileName)
+            ))?.[1] as any).default;
+
+            const background = await getImage({src: imageEntry, format: 'webp', width: 800});
+
+            realisation.data.images.background = {
+                src: background.src,
+                alt: "",
+            };
+        }
+
+        return {
+            slug: realisation.id,
+            ...realisation.data,
+            images: {
+                ...realisation.data.images,
+                background: realisation.data.images.background,
+            },
+        }
+    })
+))
+
+const visibleProjects = max ? projectsProps.slice(0, max) : projectsProps;
 ---
 
-<div class="max-width gap-x-8 gap-y-32 grid grid-cols-1 sm:grid-cols-[repeat(20,minmax(0,1fr))] ">
+<div class="max-width padding-x gap-x-8 gap-y-16  md:gap-y-32 grid grid-cols-1 sm:grid-cols-[repeat(20,minmax(0,1fr))] ">
     {
-        realisations.map((realisation, index) => {
+        visibleProjects.map((realisation, index) => {
             const isTrue = [0, 3, 4, 7].includes(index % 8); // Détermine "true" ou "false"
 
+
             return (
-                    <a class={classNames('',
+                    <a class={classNames('col-span-1 row-span-1',
                         {
-                            "col-[_span_11_/_span_11] aspect-[10/8]": isTrue,
-                            "col-[_span_9_/_span_9] row-span-2  aspect-[8/10]": !isTrue,
-
-                            'self-end': !(index % 4 === 0 || index % 4 === 1)
+                            "sm:col-[_span_11_/_span_11] sm:aspect-[10/7] ": isTrue,
+                            "sm:col-[_span_9_/_span_9] sm:aspect-[8/9]": !isTrue,
+                            "self-end": index % 4 == 0,
+                            'sm:-mt-[25%] ': (index % 4 === 1) && (index != 0 && index != 1)
                         }
-                    )} href={"/nos-realisations/" + realisation.id}>
-                        <Card isInteractive variant="filled"
-                              className="p-2 flex flex-col h-full group  transition-all duration-300"
-
-                              style={{
-                                  viewTransitionName: "realisation-" + realisation.id,
-                              }}>
-
-
-                            <div class="w-full flex-1 rounded-xl overflow-hidden relative bg-surface">
-                                <img class={classNames(
-                                    "w-full h-full group-hover:scale-[1.1] object-cover duration-300 transition-all ",
-                                    'group-hover:opacity-20'
-                                )}
-                                     src={realisation.data.images.background.src}
-                                     height="1920"
-                                     width="1080">
-                                <Button iconPosition="right" icon={faArrowRight}
-                                        className={classNames(
-                                            "!absolute  bottom-0 left-0  mx-auto w-fit transition-all duration-300 scale-150 translate-y-1/2",
-                                            "right-0 opacity-0 invisible max-w-[0]",
-                                            'group-hover:bottom-1/2 group-hover:opacity-100 group-hover:visible group-hover:max-w-full'
-                                        )}
-
-                                        label="Découvrir"/>
-                            </div>
-                            <div class="p-4 ">
-                                <p class="text-title-large">{realisation.data.title}</p>
-                                <p class="text-title-small mt-2">{realisation.data.summary}</p>
-                            </div>
-                        </Card>
+                    )} href={"/realisations/" + realisation.slug}>
+                        <Project client:load view="mini" {...realisation}></Project>
                     </a>
             )
         })

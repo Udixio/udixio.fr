@@ -1,21 +1,14 @@
-import {defineConfig, FontPlugin, TailwindPlugin, VariantModel} from "@udixio/theme";
-import {DislikeAnalyzer, sanitizeDegreesDouble, TonalPalette} from "@material/material-color-utilities";
+import {defineConfig, FontPlugin, Variants} from "@udixio/theme";
+import {DislikeAnalyzer} from "@material/material-color-utilities";
+import {TailwindPlugin} from "@udixio/tailwind";
 
 
-module.exports = defineConfig({
-    sourceColor: '#6852a9',
-    variant: {
-        ...VariantModel.tonalSpot,
-        palettes: {
-            ...VariantModel.tonalSpot.palettes,
-            secondary: (sourceColorHct) =>
-                TonalPalette.fromHueAndChroma(sourceColorHct.hue, 24.0),
-            tertiary: (sourceColorHct) =>
-                TonalPalette.fromHueAndChroma(
-                    sanitizeDegreesDouble(sourceColorHct.hue + 45.0),
-                    24.0
-                ),
-        }
+export default defineConfig({
+    sourceColor: '#a2afff',
+    variant: Variants.Fidelity,
+    palettes: {
+        success: "#2ec038",
+        warning: "#e5bb79",
     },
     colors: {
         colors: {
@@ -28,6 +21,7 @@ module.exports = defineConfig({
                 },
             },
         },
+        fromPalettes: ["success", "warning"]
     },
     plugins: [
         new FontPlugin({
@@ -67,15 +61,16 @@ module.exports = defineConfig({
                 // },
                 body: {
                     large: {
-                        // fontSize: 1.125,
+                        fontSize: 1.25,
+                        lineHeight: 1.5625,
                     },
                     medium: {
-                        // fontSize: 1,
+                        fontSize: 1,
                         lineHeight: 1.25,
                     },
                     small: {
-                        // fontSize: 0.875,
-                        lineHeight: 1.125,
+                        fontSize: 0.75,
+                        lineHeight: 1,
                     },
                 },
             },
@@ -87,14 +82,16 @@ module.exports = defineConfig({
         new TailwindPlugin({
             darkMode: 'class',
             responsiveBreakPoints: {
-                sm: 1.125,
+                lg: 1.125,
+                xl: 1.25,
             },
-            // subThemes: {
-            //     blue: '#1A73E8',
-            //     green: '#4CA66B',
-            //     purple: "#7852A9",
-            //     orange: '#F5704B'
-            // }
+            subThemes: {
+                warning: '#e5bb79',
+                success: '#2ec038',
+                default: '#a2afff',
+                // purple: "#7852A9",
+                // orange: '#F5704B'
+            }
         }),
 
     ],
