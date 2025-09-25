@@ -61,15 +61,16 @@ export default defineConfig({
                 // },
                 body: {
                     large: {
-                        // fontSize: 1.125,
+                        fontSize: 1.25,
+                        lineHeight: 1.5625,
                     },
                     medium: {
-                        // fontSize: 1,
+                        fontSize: 1,
                         lineHeight: 1.25,
                     },
                     small: {
-                        // fontSize: 0.875,
-                        lineHeight: 1.125,
+                        fontSize: 0.75,
+                        lineHeight: 1,
                     },
                 },
             },
