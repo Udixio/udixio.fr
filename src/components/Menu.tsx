@@ -126,6 +126,8 @@ export const Menu = ({
 
             </Tabs>
             <Button
+                size={"small"}
+                allowShapeTransformation={false}
                 href={"#contact"}
                 className={"m-2 hidden md:block"}
                 label={"Contact"}

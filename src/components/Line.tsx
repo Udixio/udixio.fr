@@ -51,7 +51,7 @@ export const Line = ({
                 {Icon && <Icon className={"h-6 w-full relative z-10  "} icon={icon}/>}
                 <div
                     className={
-                        "bg-primary blur-lg rounded-full h-full w-full absolute top-0 left-0 scale-125 " +
+                        "bg-primary blur-lg rounded-full h-full w-full absolute top-0 left-0 " +
                         (isFirst ? "hidden" : "")
                     }
                 ></div>

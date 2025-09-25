@@ -4,8 +4,11 @@ import {TailwindPlugin} from "@udixio/tailwind";
 
 
 export default defineConfig({
-    sourceColor: '#ABB8F2',
+    sourceColor: '#a2afff',
     variant: Variants.Fidelity,
+    palettes: {
+        green: "#2ec038"
+    },
     colors: {
         colors: {
             tertiaryContainer: {
@@ -17,6 +20,7 @@ export default defineConfig({
                 },
             },
         },
+        fromPalettes: "green"
     },
     plugins: [
         new FontPlugin({

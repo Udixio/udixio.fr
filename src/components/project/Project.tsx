@@ -27,6 +27,7 @@ export const Project = (props: Props) => {
     const {slug, images, title, services, technologies, website, summary, sidebar, body, view = "full"} = props
     return (
         <Card
+            variant={"filled"}
             isInteractive={view == "mini"}
             className={
                 classNames({
@@ -95,7 +96,7 @@ export const ProjectMini = ({slug, images, title, summary, isHovered}: Props & {
 
                             transition={{duration: 0.3}}       // Durée de l'animation
                         >
-                            <Button iconPosition="right" icon={faArrowRight} label="Découvrir"
+                            <Button iconPosition="right" icon={faArrowRight} size={"small"} label="Découvrir"
                                     className={classNames(
                                         "transition-all duration-300 hover:gap-4",
                                     )}
