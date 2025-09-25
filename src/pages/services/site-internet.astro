@@ -7,12 +7,13 @@ import {
     faPhoneVolume,
     faCircleCheck,
     faRocket, faMagnifyingGlass,
-    faRocketLaunch, faUserTie, faHandHoldingDollar
+    faRocketLaunch, faUserTie, faHandHoldingDollar, faHandshake
 } from "@fortawesome/pro-solid-svg-icons";
-import {faUser} from "@fortawesome/pro-regular-svg-icons";
+import {faDisplay, faMoneyBillTrendUp, faUser} from "@fortawesome/pro-regular-svg-icons";
 import {faQuoteRight} from "@fortawesome/free-solid-svg-icons";
 ---
 <Layout seo={{
+    noindex: true,
     title: `Agence de conseil en stratégie digitale écoresponsable & SEO • udixio.fr`,
     description: "Udixio est une agence experte dans la création de sites web éco-conçus et optimisés pour le SEO. Optez pour des solutions digitales durables et performantes.",
 }}>
@@ -20,7 +21,7 @@ import {faQuoteRight} from "@fortawesome/free-solid-svg-icons";
         <div>
             <h1 class="text-display-medium max-w-prose">
                 DÉPLOYEZ UNE MACHINE
-                DE CROISSANCE DANS
+                DE CROISSANCE POUR
                 VOTRE ENTREPRISE
             </h1>
             <p class="text-body-large mt-8 max-w-prose">Développer une entreprise est difficile...
@@ -35,12 +36,10 @@ import {faQuoteRight} from "@fortawesome/free-solid-svg-icons";
 
             <p class="flex gap-3 items-center mt-8 max-w-prose text-warning text-body-medium ml-1">
                 <Icon className="size-5" icon={faTriangleExclamation}></Icon>
-                Sous réserve d’éligibilité et de validation
+                Service soumis à éligibilité et validation.
             </p>
 
-            <Button className="w-fit mt-8" client:load href="#contact">Nous contacter</Button>
-
-
+            <Button className="w-fit mt-8" client:load href="#contact">Demander un devis gratuit</Button>
         </div>
     </section>
 
@@ -196,42 +195,43 @@ import {faQuoteRight} from "@fortawesome/free-solid-svg-icons";
             <p class="mt-8 ">Vous en avez assez d’être invisible ?</p>
             <p class="mt-8 ">Désactivons le mode fantôme et faisons
                 connaître vos services partout autour de
-                vous.</p>
+                vous</p>
         </Card>
         <div class="flex flex-col gap-8">
             <Card className="p-12 flex gap-12 items-center">
                 <div class="p-6 aspect-square flex items-center justify-center bg-secondary-container w-fit rounded-full">
-                    <Icon className="size-16 text-on-secondary-container" icon={faRocketLaunch}></Icon>
+                    <Icon className="size-16 text-on-secondary-container" icon={faDisplay}></Icon>
                 </div>
                 <div>
                     <h3 class="text-headline-medium">WEB HAUT DE GAMME</h3>
-                    <p class="mt-4">Création de vitrine web
-                        professionnelle qui met en valeur
-                        votre expertise</p>
+                    <p class="text-body-large text-on-surface-variant mt-4">
+                        Création de <span class="text-on-surface ">vitrine web
+                        professionnelle</span> qui <span class="text-on-surface ">met en valeur
+                        votre expertise</span></p>
                 </div>
             </Card>
             <Card className="p-12 flex gap-12 items-center">
                 <div class="p-6 aspect-square flex items-center justify-center bg-secondary-container w-fit rounded-full">
-                    <Icon className="size-16 text-on-secondary-container" icon={faRocketLaunch}></Icon>
+                    <Icon className="size-16 text-on-secondary-container" icon={faMoneyBillTrendUp}></Icon>
                 </div>
                 <div>
                     <h3 class="text-headline-medium">RENTABILITÉ</h3>
-                    <p class="mt-4">Votre solution fonctionne sans
-                        relâche, 24h/24, 7j/7, attirant un
-                        flux d’appels et de prospects</p>
+                    <p class="text-body-large text-on-surface-variant mt-4">Votre solution fonctionne sans
+                        relâche, <span class="text-on-surface ">24h/24, 7j/7, attirant un
+                            flux d’appels et de prospects</span></p>
                 </div>
             </Card>
             <Card className="p-12 flex gap-12 items-center">
                 <div class="p-6 aspect-square flex items-center justify-center bg-secondary-container w-fit rounded-full">
-                    <Icon className="size-16 text-on-secondary-container" icon={faRocketLaunch}></Icon>
+                    <Icon className="size-16 text-on-secondary-container" icon={faHandshake}></Icon>
                 </div>
                 <div>
                     <h3 class="text-headline-medium">ECOUTE ET PROXIMITÉ</h3>
-                    <p class="mt-4">Bénéficiez d’une proximité
-                        d'écoute et de solutions adaptées
-                        à vos besoins.</p>
+                    <p class="text-body-large text-on-surface-variant mt-4">Bénéficiez d’une proximité
+                        d'écoute et de <span class="text-on-surface ">solutions adaptées
+                            à vos besoins</span>.</p>
                 </div>
             </Card>
         </div>
     </section>
-</layout>
+</Layout>
