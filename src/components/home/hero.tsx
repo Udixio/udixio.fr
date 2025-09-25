@@ -1,7 +1,7 @@
 import {Logo} from "@components/Logo"
-import {Button, classNames} from "@udixio/ui"
+import {Button, classNames} from "@udixio/ui-react"
 import {Background} from "@components/three/Background.tsx";
-import {AnimatePresence, motion, useMotionValueEvent, useScroll} from "framer-motion";
+import {AnimatePresence, motion, useMotionValueEvent, useScroll} from "motion/react";
 import {useState} from "react";
 
 
@@ -50,8 +50,7 @@ export const Hero = ({children}) => {
                     }
                 </AnimatePresence>
                 <div
-                    className={"padding-x top-8 left-0 "}
-                    style={{position: isFirst ? "fixed" : "static",}}
+                    className={classNames("padding-x top-8 left-0 ", {'static lg:fixed': isFirst, 'static': !isFirst})}
                 >
                     <motion.div layout transition={{duration: 1}}>
                         <Logo className="fill-on-surface/[0.1]"/>

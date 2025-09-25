@@ -1,6 +1,6 @@
 ---
 import Footer from "./Footer.astro";
-import "../styles/base.scss";
+import "../styles/base.css";
 import Header from "@layouts/Header.astro";
 import {Cursor} from "@components/Cursor";
 import {SEO} from "astro-seo";
@@ -12,7 +12,7 @@ import "@fontsource/montserrat/700.css";
 import "@fontsource/montserrat/600.css";
 import defaultImage from "@assets/images/img.png";
 import {ClientRouter} from 'astro:transitions';
-import {SmoothScroll} from "@udixio/ui";
+import {SmoothScroll} from "@udixio/ui-react";
 
 import {BackgroundColor} from "@components/three/BackgroundColor";
 
@@ -133,7 +133,7 @@ const seoDefault: SEOProps = {
 };
 ---
 <!DOCTYPE html>
-<html class="dark-mode" lang="fr">
+<html class="dark" lang="fr">
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width"/>

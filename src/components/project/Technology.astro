@@ -1,6 +1,6 @@
 ---
 import {getCollection} from "astro:content";
-import {Button} from "@udixio/ui"
+import {Button} from "@udixio/ui-react"
 const technologies = await getCollection('technology');
 
 interface Props {
@@ -12,7 +12,6 @@ const {name} = Astro.props
 const technology = technologies.find(({id}) => {
     return id == name.toLowerCase().replace(/\s+/g, '-')
 })
-
 ---
 {technology &&
 

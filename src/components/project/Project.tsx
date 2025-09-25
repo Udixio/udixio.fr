@@ -1,9 +1,9 @@
-import {Button, Card, classNames, Divider, IconButton} from "@udixio/ui";
+import {Button, Card, classNames, Divider, IconButton} from "@udixio/ui-react";
 import {faArrowRight, faLink, faXmark} from "@fortawesome/pro-regular-svg-icons";
 import type {CollectionEntry} from "astro:content";
 import type {ReactNode} from "react";
 import {useState} from "react";
-import {AnimatePresence, motion} from "framer-motion";
+import {AnimatePresence, motion} from "motion/react";
 
 type Props = CollectionEntry<"realisation">['data'] & {
     slug: string,
@@ -123,7 +123,7 @@ export const ProjectFull = ({
         <>
             <IconButton variant='outlined' icon={faXmark}
                         className="block !absolute z-10 w-fit  ml-auto right-0 m-4 top-4 primary"
-                        arialLabel="retour aux projets"
+                        label="retour aux projets"
                         onClick={() => {
                             const referrer = document.referrer;
                             const currentDomain = window.location.origin; // Le domaine actuel, ex : "https://mon-site.com"

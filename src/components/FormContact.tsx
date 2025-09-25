@@ -1,4 +1,4 @@
-import {Button, Snackbar, TextField} from "@udixio/ui";
+import {Button, Snackbar, TextField} from "@udixio/ui-react";
 import {useFormik} from "formik";
 
 import {useCallback, useEffect, useRef, useState} from "react";

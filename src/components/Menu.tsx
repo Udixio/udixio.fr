@@ -1,4 +1,4 @@
-import {Button, classNames, Tab, Tabs} from "@udixio/ui";
+import {Button, classNames, Tab, Tabs} from "@udixio/ui-react";
 import React, {useEffect, useLayoutEffect, useRef, useState} from "react";
 
 

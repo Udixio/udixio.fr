@@ -2,7 +2,7 @@ import React, {useRef} from "react";
 import {Canvas} from "@react-three/fiber";
 import {ControlledCamera} from "@components/three/ControlledCamera.tsx";
 import {BackgroundStar} from "@components/three/BackgroundStar.tsx";
-import {AnimatePresence, motion, useInView} from "framer-motion";
+import {AnimatePresence, motion, useInView} from "motion/react";
 
 export const Background = ({
                                count = 20,

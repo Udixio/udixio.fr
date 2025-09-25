@@ -1,9 +1,9 @@
 "use client";
 import React, {useEffect, useRef, useState} from "react";
-import {motion, useMotionValueEvent, useScroll} from "framer-motion";
+import {motion, useMotionValueEvent, useScroll} from "motion/react";
 
 import {Link} from "@components/Link.tsx";
-import {classNames} from "@udixio/ui";
+import {classNames} from "@udixio/ui-react";
 
 const content: {
     text: React.ReactNode;
