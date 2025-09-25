@@ -165,8 +165,8 @@ export default function Compare({groups, initialGroupId, className}: CompareProp
 
               {/* Features rows */}
               {cat.features.map((f, rowIdx) => (
-                <div key={f.id} className={cx('grid', gridCols, rowIdx % 2 === 0 ? 'bg-surface' : 'bg-surface-variant/10')}>
-                  <div className="sticky left-0 z-10 p-3 bg-inherit">
+                <div key={f.id} className={cx('grid group', gridCols, rowIdx % 2 === 0 ? 'bg-surface' : 'bg-surface-variant/10', 'hover:bg-secondary-container/20 transition-colors')}>
+                  <div className="sticky left-0 z-10 p-3 bg-inherit group-hover:bg-secondary-container/20">
                     <div className="text-body-medium">{f.label}</div>
                     {f.note && <div className="text-body-small opacity-70 mt-1">{f.note}</div>}
                   </div>
