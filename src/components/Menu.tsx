@@ -20,9 +20,9 @@ export const Menu = ({
     const getCurrentTab = () => {
         if (pathName === "/") {
             return 0;
-        } else if (pathName === "/nos-realisations") {
+        } else if (pathName === "/realisations") {
             return 1;
-        } else if (pathName?.startsWith("/nos-realisations/")) {
+        } else if (pathName?.startsWith("/realisations/")) {
             return 1;
         } else {
             return undefined;
@@ -113,7 +113,7 @@ export const Menu = ({
                 <Tab
                     className={"bg-transparent md:h-full"}
                     selected={1 === activeTab}
-                    href={`/nos-realisations`}
+                    href={`/realisations`}
                     label={"Réalisations"}
                 ></Tab>
                 <Tab

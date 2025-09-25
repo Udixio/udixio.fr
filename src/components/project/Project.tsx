@@ -136,7 +136,7 @@ export const ProjectFull = ({
                             } else {
                                 // Sinon, rediriger vers la page par défaut
 
-                                window.location.href = "/nos-realisations";
+                                window.location.href = "/realisations";
                             }
                         }}
             />

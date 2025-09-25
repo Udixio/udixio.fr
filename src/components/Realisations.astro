@@ -62,7 +62,7 @@ const visibleProjects = max ? projectsProps.slice(0, max) : projectsProps;
                             "self-end": index % 4 == 0,
                             'sm:-mt-[25%] ': (index % 4 === 1) && (index != 0 && index != 1)
                         }
-                    )} href={"/nos-realisations/" + realisation.slug}>
+                    )} href={"/realisations/" + realisation.slug}>
                         <Project client:load view="mini" {...realisation}></Project>
                     </a>
             )

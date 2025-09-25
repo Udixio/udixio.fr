@@ -54,7 +54,7 @@
 //             >
 //                 {realisations.map((project: any, index: Key | null | undefined) => (
 //                     <CarouselItem className={'!max-w-full'} key={index}>
-//                         <a href={"/nos-realisations/" + project.id}>
+//                         <a href={"/realisations/" + project.id}>
 //                             <Card isInteractive className="h-full !rounded-[28px]"
 //                                   style={{viewTransitionName: "realisation-" + project.id}}>
 //                                 <img className={'object-cover  h-full w-full'} src={project.data.images.logo.src}/>
@@ -63,7 +63,7 @@
 //                     </CarouselItem>
 //                 ))}
 //             </Carousel>
-//             <Button href={"/nos-realisations"} className="mx-auto mt-4 w-fit" variant="text"
+//             <Button href={"/realisations"} className="mx-auto mt-4 w-fit" variant="text"
 //                     label="Voir tous les projets"/>
 //         </div>
 //
