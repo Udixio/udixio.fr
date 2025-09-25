@@ -44,8 +44,8 @@ import Compare from "@/components/Compare";
         </div>
     </section>
 
-    <section class="section grid grid-cols-3 gap-8">
-        <Card className={"p-12 col-span-2"}>
+    <section class="section grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        <Card className={"p-12 md:col-span-2"}>
             <div class="p-6  aspect-square flex items-center justify-center rounded-2xl bg-secondary-container w-fit">
                 <Icon className="size-10 text-on-secondary-container" icon={faPhoneVolume}></Icon>
             </div>
@@ -120,7 +120,7 @@ import Compare from "@/components/Compare";
     <section class="section">
         <h2 class="text-display-medium text-center">Pourquoi est-il important
             d’avoir un site internet ?</h2>
-        <div class="flex gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
             <Card className={"p-12 flex-1"}>
                 <div class="flex gap-4 items-center ">
                     <Icon className="size-10 " icon={faMagnifyingGlass}></Icon>
@@ -178,7 +178,7 @@ import Compare from "@/components/Compare";
             </Card>
         </div>
     </section>
-    <section class="flex section gap-8">
+    <section class="section grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
         <Card className="p-12">
             <div class="flex gap-6">
                 <img loading="lazy" class="size-24" alt="Logo de Udixio" src="/favicon.svg"/>
@@ -198,7 +198,7 @@ import Compare from "@/components/Compare";
                 connaître vos services partout autour de
                 vous</p>
         </Card>
-        <div class="flex flex-col gap-8">
+        <div class="flex flex-col gap-6 lg:gap-8">
             <Card className="p-12 flex gap-12 items-center">
                 <div class="p-6 aspect-square flex items-center justify-center bg-secondary-container w-fit rounded-full">
                     <Icon className="size-16 text-on-secondary-container" icon={faDisplay}></Icon>
