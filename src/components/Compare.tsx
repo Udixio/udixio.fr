@@ -129,10 +129,11 @@ export default function Compare({groups, initialGroupId, className}: CompareProp
             )}
 
             {/* Mobile simplified view */}
-            <Card variant="outlined" className="mt-6 md:hidden overflow-auto">
+            <Card variant="outlined" className="mt-6 md:hidden overflow-clip">
                 {/* Sticky Plan Tabs (mobile) */}
                 <div className="sticky top-0 z-20  ">
-                    <Tabs selectedTab={activePlanIdx} setSelectedTab={setActivePlanIdx as any} variant={"secondary"}>
+                    <Tabs scrollable selectedTab={activePlanIdx} setSelectedTab={setActivePlanIdx as any}
+                          variant={"secondary"}>
                         {current?.plans?.map((p, idx) => (
                             <Tab
                                 key={p.id}
@@ -146,7 +147,7 @@ export default function Compare({groups, initialGroupId, className}: CompareProp
                     {current?.categories?.map((cat) => (
                         <div key={cat.id}>
                             <div
-                                className="sticky top-[46px] z-10 p-3 bg-secondary-container/50 text-label-medium text-on-secondary-container">
+                                className="sticky top-[46px] z-10 p-3 bg-secondary-container text-label-medium text-on-secondary-container">
                                 {cat.label}
                             </div>
                             {cat.features.map((f, rowIdx) => (
