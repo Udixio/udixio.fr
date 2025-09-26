@@ -22,7 +22,7 @@ import astronautAnalyzingData from "@assets/images/astronaut-analyzing-data.png"
     description: "Udixio est une agence experte dans la création de sites web éco-conçus et optimisés pour le SEO. Optez pour des solutions digitales durables et performantes.",
 }}>
     <section class="max-width min-h-[80vh] flex items-center">
-        <div class="padding pr-0">
+        <div class="padding xl:pr-0">
             <div class="flex gap-6 mt-8">
                 <img loading="lazy" class="size-24" alt="Logo de Udixio" src="/favicon.svg"/>
                 <div>
@@ -30,7 +30,7 @@ import astronautAnalyzingData from "@assets/images/astronaut-analyzing-data.png"
                     <p class="text-title-small">Votre levier digital</p>
                 </div>
             </div>
-            <h1 class="text-display-large my-12 max-w-5xl">
+            <h1 class="text-display-medium xl:text-display-large my-12 max-w-5xl">
                 DÉPLOYEZ UNE MACHINE
                 DE CROISSANCE POUR
                 VOTRE ENTREPRISE
@@ -53,15 +53,15 @@ import astronautAnalyzingData from "@assets/images/astronaut-analyzing-data.png"
             <Button className="w-fit mt-8" client:load href="#contact">Demander un devis gratuit</Button>
         </div>
         <Image loading="eager"
-               class="absolute animate-float right-0 bottom-0  translate-x-1/3 translate-y-16 scale-125"
+               class="absolute hidden xl:block animate-float right-0 bottom-0  translate-x-1/3 translate-y-16 scale-125"
                width={600}
                src={astronautRidingRocket}
                alt=""></Image>
     </section>
 
     <section class="section grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-        <Card data-aos="zoom-in" className={"md:col-span-2 flex"}>
-            <div class="p-12 ">
+        <Card data-aos="zoom-in" className={"md:col-span-2 flex flex-wrap justify-center"}>
+            <div class="p-12 flex-1">
                 <div class="p-6  aspect-square flex items-center justify-center rounded-2xl bg-secondary-container w-fit">
                     <Icon className="size-10 text-on-secondary-container" icon={faPhoneVolume}></Icon>
                 </div>
@@ -72,7 +72,7 @@ import astronautAnalyzingData from "@assets/images/astronaut-analyzing-data.png"
                 </p>
             </div>
             <Image
-                    class="self-end pr-12"
+                    class="self-end md:pr-12"
                     height={300}
                     src={astronautAnalyzingData}
                     alt=""></Image>
@@ -144,7 +144,7 @@ import astronautAnalyzingData from "@assets/images/astronaut-analyzing-data.png"
         <h2 class="text-display-medium text-center max-w-3xl mx-auto my-16">Pourquoi est-il important
             d’avoir un site internet ?</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-            <Card data-aos="zoom-in" className={"p-12 flex-1"}>
+            <Card data-aos="zoom-in" className={"xl:p-12 p-6 flex-1"}>
                 <div class="flex gap-4 items-center ">
                     <Icon className="size-10 " icon={faMagnifyingGlass}></Icon>
                     <h3 class="text-headline-medium">Visibilité</h3>
@@ -161,7 +161,7 @@ import astronautAnalyzingData from "@assets/images/astronaut-analyzing-data.png"
                     un professionnel
                 </p>
             </Card>
-            <Card data-aos="zoom-in" data-aos-delay="100" className={"p-12 flex-1"}>
+            <Card data-aos="zoom-in" data-aos-delay="100" className={"xl:p-12 p-6 flex-1"}>
                 <div class="flex gap-4 items-center ">
                     <Icon className="size-10 " icon={faUserTie}></Icon>
                     <h3 class="text-headline-medium">Crédibilité</h3>
@@ -180,7 +180,7 @@ import astronautAnalyzingData from "@assets/images/astronaut-analyzing-data.png"
                     site web
                 </p>
             </Card>
-            <Card data-aos="zoom-in" data-aos-delay="200" className={"p-12 flex-1"}>
+            <Card data-aos="zoom-in" data-aos-delay="200" className={"xl:p-12 p-6  flex-1"}>
                 <div class="flex gap-4 items-center ">
                     <Icon className="size-10 " icon={faHandHoldingDollar}></Icon>
                     <h3 class="text-headline-medium">Vente 24/7</h3>
@@ -222,9 +222,10 @@ import astronautAnalyzingData from "@assets/images/astronaut-analyzing-data.png"
                 vous</p>
         </Card>
         <div class="flex flex-col gap-6 lg:gap-8">
-            <Card data-aos="fade-up-left" data-aos-delay="75" className="p-12 flex gap-12 items-center">
+            <Card data-aos="fade-up-left" data-aos-delay="75"
+                  className="p-6 md:p-12 flex gap-6 md:gap-12 items-start md:items-center">
                 <div class="p-6 aspect-square flex items-center justify-center bg-secondary-container w-fit rounded-full">
-                    <Icon className="size-16 text-on-secondary-container" icon={faDisplay}></Icon>
+                    <Icon className="size-10 md:size-16 text-on-secondary-container" icon={faDisplay}></Icon>
                 </div>
                 <div>
                     <h3 class="text-headline-medium">WEB HAUT DE GAMME</h3>
@@ -234,9 +235,10 @@ import astronautAnalyzingData from "@assets/images/astronaut-analyzing-data.png"
                         votre expertise</span></p>
                 </div>
             </Card>
-            <Card data-aos="fade-up-left" data-aos-delay="175" className="p-12 flex gap-12 items-center">
+            <Card data-aos="fade-up-left" data-aos-delay="75"
+                  className="p-6 md:p-12 flex gap-6 md:gap-12 items-start md:items-center">
                 <div class="p-6 aspect-square flex items-center justify-center bg-secondary-container w-fit rounded-full">
-                    <Icon className="size-16 text-on-secondary-container" icon={faMoneyBillTrendUp}></Icon>
+                    <Icon className="size-10 md:size-16 text-on-secondary-container" icon={faMoneyBillTrendUp}></Icon>
                 </div>
                 <div>
                     <h3 class="text-headline-medium">RENTABILITÉ</h3>
@@ -245,9 +247,10 @@ import astronautAnalyzingData from "@assets/images/astronaut-analyzing-data.png"
                             flux d’appels et de prospects</span></p>
                 </div>
             </Card>
-            <Card data-aos="fade-up-left" data-aos-delay="275" className="p-12 flex gap-12 items-center">
+            <Card data-aos="fade-up-left" data-aos-delay="75"
+                  className="p-6 md:p-12 flex gap-6 md:gap-12 items-start md:items-center">
                 <div class="p-6 aspect-square flex items-center justify-center bg-secondary-container w-fit rounded-full">
-                    <Icon className="size-16 text-on-secondary-container" icon={faHandshake}></Icon>
+                    <Icon className="size-10 md:size-16 text-on-secondary-container" icon={faHandshake}></Icon>
                 </div>
                 <div>
                     <h3 class="text-headline-medium">ECOUTE ET PROXIMITÉ</h3>
