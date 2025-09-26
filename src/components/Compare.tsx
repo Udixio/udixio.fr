@@ -1,5 +1,5 @@
 import React, {useMemo, useState} from 'react'
-import {Button, classNames, Icon} from '@udixio/ui-react'
+import {Button, classNames, Icon, Tab, Tabs} from '@udixio/ui-react'
 import {faCircleCheck, faCircleMinus, faCircleXmark} from '@fortawesome/pro-solid-svg-icons'
 import {Card} from "@components/Card.tsx";
 
@@ -79,6 +79,15 @@ function StatusCell({value}: { value: Feature['value'] }) {
 }
 
 export default function Compare({groups, initialGroupId, className}: CompareProps) {
+    function getCellValue(f: Feature, planId: string): Feature['value'] {
+        let cellValue: Feature['value'] = f.value
+        if (typeof f.value === 'object' && f.value !== null && planId in (f.value as any)) {
+            // @ts-ignore
+            cellValue = (f.value as any)[planId]
+        }
+        return cellValue
+    }
+
     const initialIndex = Math.max(0, groups.findIndex(g => g.id === initialGroupId))
     const [active, setActive] = useState(initialIndex === -1 ? 0 : initialIndex)
 
@@ -86,6 +95,7 @@ export default function Compare({groups, initialGroupId, className}: CompareProp
     const planCount = current?.plans?.length ?? 0
     const tooManyOrFew = planCount !== 4
 
+    const [activePlanIdx, setActivePlanIdx] = useState(0)
     const gridCols = useMemo(() => {
         // 1 sticky feature-name column + 4 plan columns
         return `grid-cols-[minmax(220px,0.9fr)_repeat(4,minmax(140px,1fr))]`
@@ -118,13 +128,59 @@ export default function Compare({groups, initialGroupId, className}: CompareProp
                 </p>
             )}
 
-            {/* Table-like grid */}
+            {/* Mobile simplified view */}
+            <Card variant="outlined" className="mt-6 md:hidden overflow-auto">
+                {/* Sticky Plan Tabs (mobile) */}
+                <div className="sticky top-0 z-20  ">
+                    <Tabs selectedTab={activePlanIdx} setSelectedTab={setActivePlanIdx as any} variant={"secondary"}>
+                        {current?.plans?.map((p, idx) => (
+                            <Tab
+                                key={p.id}
+                                label={p.name}
+                            />
+                        ))}
+                    </Tabs>
+                </div>
+                {/* Category and features for active plan only */}
+                <div className="divide-y divide-outline-variant">
+                    {current?.categories?.map((cat) => (
+                        <div key={cat.id}>
+                            <div
+                                className="sticky top-[46px] z-10 p-3 bg-secondary-container/50 text-label-medium text-on-secondary-container">
+                                {cat.label}
+                            </div>
+                            {cat.features.map((f, rowIdx) => (
+                                <div key={rowIdx} className={classNames('grid grid-cols-[1fr_minmax(100px,0.8fr)]',
+                                    'transition-colors',
+                                    {
+                                        'bg-surface-container-low/50 hover:bg-surface-container-high/80': rowIdx % 2 === 0,
+                                        'bg-surface-container/50 hover:bg-surface-container-highest/80': rowIdx % 2 !== 0,
+                                    }
+                                )}>
+                                    <div className="p-3">
+                                        <div className="text-label-large">{f.label}</div>
+                                        {f.note && <div
+                                            className="text-body-small text-on-surface-variant mt-1">{f.note}</div>}
+                                    </div>
+                                    <div className="p-3 flex items-center justify-center">
+                                        {current?.plans?.[activePlanIdx] && (
+                                            <StatusCell value={getCellValue(f, current.plans[activePlanIdx].id)}/>
+                                        )}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ))}
+                </div>
+            </Card>
+
+            {/* Table-like grid (desktop) */}
             <Card
                 variant="outlined"
                 id={`compare-panel-${current?.id}`}
                 role="tabpanel"
                 aria-labelledby={current?.id}
-                className="mt-6"
+                className="mt-6 hidden md:block"
             >
                 {/* Header */}
                 <div
