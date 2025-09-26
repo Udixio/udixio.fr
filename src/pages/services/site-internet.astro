@@ -92,7 +92,7 @@ import Compare from "@/components/Compare";
             </p>
             <p class="text-body-large mt-2">
                 Dominez votre secteur en
-                propulsant votre visibilité
+                croissancepulsant votre visibilité
                 digitale dans une zone
                 stratégique définie.
             </p>
@@ -243,134 +243,196 @@ import Compare from "@/components/Compare";
                     id: 'site',
                     label: 'Sites vitrines',
                     plans: [
-                        {id: 'start', name: 'Start', price: 'à partir de 890 €', badge: 'Populaire'},
-                        {id: 'pro', name: 'Pro', price: 'à partir de 1 990 €'},
-                        {id: 'business', name: 'Business', price: 'à partir de 3 490 €'},
-                        {id: 'elite', name: 'Elite', price: 'sur devis'},
+                        {
+                            id: 'Starter',
+                            name: 'Starter',
+                            price: {
+                                setup: 750,
+                                monthly: 169
+                            },
+                            badge: 'Populaire'
+                        },
+                        {
+                            id: 'croissance', name: 'Croissance',
+                            price: {
+                                setup: 1500,
+                                monthly: 189
+                            },
+                        },
+                        {
+                            id: 'performance', name: 'Performance',
+                            price: {
+                                setup: 2500,
+                                monthly: 244
+                            },
+                        },
+                        {
+                            id: 'ultimate', name: 'Ultimate',
+                            price: {
+                                setup: 3700,
+                                monthly: 298
+                            },
+                        }
                     ],
                     categories: [
                         {
                             id: 'design',
-                            label: 'Design & branding',
+                            label: 'Design & contenu',
                             features: [
                                 {
-                                    id: 'ui',
-                                    label: 'Design moderne et responsive',
-                                    value: {start: true, pro: true, business: true, elite: true}
+                                    label: 'Design personnalisé dynamique',
+                                    value: {Starter: true, croissance: true, performance: true, ultimate: true}
                                 },
                                 {
-                                    id: 'branding',
-                                    label: 'Personnalisation avancée du thème',
-                                    value: {start: 'Basique', pro: 'Standard', business: 'Avancée', elite: 'Sur-mesure'}
+                                    label: 'Responsive design : PC, Tablette & Smartphone',
+                                    value: {Starter: true, croissance: true, performance: true, ultimate: true}
+                                },
+                                {
+                                    label: 'Nombre de pages avec rédaction de contenu',
+                                    value: {
+                                        Starter: "One Page Performance",
+                                        croissance: "Jusqu’à 10 pages",
+                                        performance: "Jusqu’à 15 pages",
+                                        ultimate: "Sur Mesure"
+                                    }
+                                },
+                                {
+                                    label: 'Nom de domaine privé et email professionnel',
+                                    value: {Starter: true, croissance: true, performance: true, ultimate: true}
+                                },
+                                {
+                                    label: 'Protocoles de sécurité avancés ',
+                                    value: {
+                                        Starter: "SSL / Protection contre les attaques / Sauvegardes régulières",
+                                        croissance: "SSL / Protection contre les attaques / Sauvegardes régulières",
+                                        performance: "SSL / Protection contre les attaques / Sauvegardes régulières",
+                                        ultimate: "SSL / Protection contre les attaques / Sauvegardes régulières"
+                                    }
+                                },
+                                {
+                                    label: 'Branding publicitaire unique : Logo, Carte de visite\n' +
+                                        'digitale, fond d’écran de téléphone, QR codes',
+                                    value: {Starter: true, croissance: true, performance: true, ultimate: true}
                                 },
                             ],
                         },
                         {
                             id: 'seo',
-                            label: 'SEO & performance',
+                            label: 'Référencement et visibilité',
                             features: [
                                 {
-                                    id: 'seo-tech',
-                                    label: 'SEO technique de base',
-                                    value: {start: true, pro: true, business: true, elite: true}
+                                    label: 'Conformité technique SEO, stratégie & optimisation',
+                                    value: {
+                                        Starter: true,
+                                        croissance: true,
+                                        performance: "Expert SEO ",
+                                        ultimate: "Expert SEO"
+                                    }
                                 },
                                 {
-                                    id: 'seo-adv',
-                                    label: 'Optimisation SEO avancée',
-                                    value: {start: false, pro: 'partial', business: true, elite: true},
-                                    note: 'Schema, maillage interne, contenus piliers'
+                                    label: 'Nombre de mots clés SEO',
+                                    value: {
+                                        Starter: "10 mots clés",
+                                        croissance: '15 mots clés',
+                                        performance: "30 mots clés",
+                                        ultimate: "Plus de 40 mots clés"
+                                    },
                                 },
                                 {
-                                    id: 'perf',
-                                    label: 'Optimisation des performances',
-                                    value: {start: true, pro: true, business: true, elite: true}
+                                    label: 'Localité(s) référencée(s)',
+                                    value: {
+                                        Starter: "1 Localité",
+                                        croissance: '10 Localités',
+                                        performance: "30 Localités",
+                                        ultimate: "40 Localités"
+                                    },
+                                },
+                                {
+                                    label: 'Paramétrage & Setup des annonces Google Ads',
+                                    value: {
+                                        Starter: true,
+                                        croissance: true,
+                                        performance: true,
+                                        ultimate: true,
+                                    },
+                                },
+                                {
+                                    label: 'Optimisation google my business',
+                                    note: "budget Ads non inclus",
+                                    value: {
+                                        Starter: false,
+                                        croissance: "Bonus : 2 mois de gestion",
+                                        performance: "Bonus : 4 mois de gestion",
+                                        ultimate: "Bonus : 6 mois de gestion",
+                                    },
+                                },
+                                {
+                                    label: 'Page d’acquisition de prospect SEA',
+                                    value: {
+                                        Starter: false,
+                                        croissance: false,
+                                        performance: true,
+                                        ultimate: true,
+                                    },
                                 },
                             ],
                         },
                         {
-                            id: 'content',
-                            label: 'Contenus inclus',
-                            features: [
-                                {
-                                    id: 'pages',
-                                    label: 'Nombre de pages incluses',
-                                    value: {start: '1–3', pro: '4–6', business: '7–12', elite: 'Illimité*'},
-                                    note: '* selon cahier des charges'
-                                },
-                                {
-                                    id: 'blog',
-                                    label: 'Blog',
-                                    value: {start: false, pro: true, business: true, elite: true}
-                                },
-                            ],
-                        },
-                        {
-                            id: 'support',
+                            id: 'accompagnement',
                             label: 'Accompagnement',
                             features: [
                                 {
-                                    id: 'formation',
-                                    label: 'Formation à la prise en main',
-                                    value: {start: true, pro: true, business: true, elite: true}
+                                    label: 'Intervenant création',
+                                    value: {
+                                        Starter: 'Webmaster dédié',
+                                        croissance: 'Webmaster dédié',
+                                        performance: 'Webmaster dédié + Expert SEO',
+                                        ultimate: 'Webmaster dédié + Expert SEO'
+                                    },
                                 },
                                 {
-                                    id: 'suivi',
-                                    label: 'Support & maintenance',
-                                    value: {start: '30 j', pro: '3 mois', business: '6 mois', elite: '12 mois'}
+                                    label: 'Suivi post livraison',
+                                    value: {
+                                        Starter: "Support + 1 bilan /an",
+                                        croissance: "Support + 2 bilan /an",
+                                        performance: "Support + 4 bilans / an",
+                                        ultimate: "Support + 6 bilans / an"
+                                    }
+                                },
+                            ],
+                        },
+                        {
+                            id: 'fonctionnalités',
+                            label: 'Fonctionnalités',
+                            features: [
+                                {
+                                    label: 'Formulaire contact',
+                                    value: {Starter: true, croissance: true, performance: true, ultimate: true}
+                                },
+                                {
+                                    label: 'Growth Marketing : popup capture de données',
+                                    value: {Starter: true, croissance: true, performance: true, ultimate: true}
+                                },
+                                {
+                                    label: 'Connection avis Google en temps réel',
+                                    value: {Starter: true, croissance: true, performance: true, ultimate: true}
+                                },
+                                {
+                                    label: 'Growth Marketing : exit overlay',
+                                    value: {Starter: false, croissance: true, performance: true, ultimate: true}
+                                },
+                                {
+                                    label: 'Optimisation Fiche Google My Business',
+                                    value: {Starter: false, croissance: false, performance: true, ultimate: true}
+                                },
+                                {
+                                    label: 'Social Wall',
+                                    value: {Starter: false, croissance: false, performance: true, ultimate: true}
                                 },
                             ],
                         },
                     ],
                 },
-                {
-                    id: 'marketing',
-                    label: 'Marketing local',
-                    plans: [
-                        {id: 'basic', name: 'Essentiel', price: 'à partir de 390 €/mois'},
-                        {id: 'boost', name: 'Boost', price: 'à partir de 690 €/mois', badge: 'Recommandé'},
-                        {id: 'growth', name: 'Croissance', price: 'à partir de 1 190 €/mois'},
-                        {id: 'dominate', name: 'Domination', price: 'sur devis'},
-                    ],
-                    categories: [
-                        {
-                            id: 'ads',
-                            label: 'Publicité & acquisition',
-                            features: [
-                                {
-                                    id: 'google-ads',
-                                    label: 'Gestion Google Ads',
-                                    value: {basic: false, boost: true, growth: true, dominate: true}
-                                },
-                                {
-                                    id: 'meta-ads',
-                                    label: 'Gestion Meta Ads',
-                                    value: {basic: false, boost: 'partial', growth: true, dominate: true}
-                                },
-                            ],
-                        },
-                        {
-                            id: 'tracking',
-                            label: 'Suivi & analytics',
-                            features: [
-                                {
-                                    id: 'ga4',
-                                    label: 'Mise en place GA4 + conversions',
-                                    value: {basic: true, boost: true, growth: true, dominate: true}
-                                },
-                                {
-                                    id: 'report',
-                                    label: 'Rapport mensuel',
-                                    value: {basic: true, boost: true, growth: true, dominate: true}
-                                },
-                                {
-                                    id: 'call',
-                                    label: 'Call stratégique mensuel',
-                                    value: {basic: false, boost: true, growth: true, dominate: true}
-                                },
-                            ],
-                        },
-                    ],
-                }
             ]}/>
         </div>
     </section>

@@ -6,15 +6,18 @@ import {Card} from "@components/Card.tsx";
 export type PlanColumn = {
     id: string
     name: string
-    price?: string
+    price?: {
+        monthly?: number
+        setup?: number
+    }
     badge?: string
 }
 
 export type Feature = {
-    id: string
+
     label: string
     // status: true (included), false (not included), 'partial' | string (other)
-    value: boolean | 'partial' | string
+    value: Record<string, boolean | 'partial' | string>
     note?: string
 }
 
@@ -72,7 +75,7 @@ function StatusCell({value}: { value: Feature['value'] }) {
         )
     }
     // string or custom rendering
-    return <span className="text-body-medium text-center block">{String(value)}</span>
+    return <span className="text-body-small text-center block">{String(value)}</span>
 }
 
 export default function Compare({groups, initialGroupId, className}: CompareProps) {
@@ -91,19 +94,22 @@ export default function Compare({groups, initialGroupId, className}: CompareProp
     return (
         <div className={classNames('w-full', className)}>
             {/* Tabs */}
-            <div role="tablist" aria-label="Sélection du groupe de plans" className="flex gap-2 ">
-                {groups.map((g, idx) => (
-                    <Button
-                        size={"small"}
-                        key={g.id}
-                        variant={idx === active ? 'filled' : 'outlined'}
-                        activated={idx === active}
-                        onClick={() => setActive(idx)}
-                    >
-                        {g.label}
-                    </Button>
-                ))}
-            </div>
+            {groups.length > 1 &&
+                <div role="tablist" aria-label="Sélection du groupe de plans" className="flex gap-2 ">
+                    {groups.map((g, idx) => (
+                        <Button
+                            size={"small"}
+                            key={g.id}
+                            variant={idx === active ? 'filled' : 'outlined'}
+                            activated={idx === active}
+                            onClick={() => setActive(idx)}
+                        >
+                            {g.label}
+                        </Button>
+                    ))}
+                </div>
+            }
+
 
             {/* Warning if not exactly 4 plans */}
             {tooManyOrFew && (
@@ -130,14 +136,19 @@ export default function Compare({groups, initialGroupId, className}: CompareProp
                 >
                     <div
                         className="p-4 sticky left-0 z-20 font-medium text-title-small border-b border-outline-variant">
-                        Fonctionnalités
                     </div>
                     {current?.plans?.map((plan) => (
                         <div key={plan.id} className="p-4 text-center border-b border-outline-variant">
-                            <div className="text-title-small font-semibold">{plan.name}
+                            <div className="text-title-medium">{plan.name}
                                 {plan.badge && <Pill>{plan.badge}</Pill>}
                             </div>
-                            {plan.price && <div className="text-body-medium opacity-70 mt-1">{plan.price}</div>}
+                            {plan.price && (
+                                <div className="text-body-small opacity-70 mt-1">
+                                    {plan.price.monthly && <div>{plan.price.monthly}€ ht /mois</div>}
+                                    {plan.price.setup &&
+                                        <div className="mt-0.5">+ {plan.price.setup}€ ht frais de création</div>}
+                                </div>
+                            )}
                         </div>
                     ))}
                 </div>
@@ -149,7 +160,7 @@ export default function Compare({groups, initialGroupId, className}: CompareProp
                             {/* Category row */}
                             <div className={classNames('grid', gridCols, 'bg-secondary-container/20')}>
                                 <div
-                                    className="sticky left-0 z-10 p-3 bg-secondary-container/50 text-title-small font-medium">
+                                    className="sticky left-0 z-10 p-3 bg-secondary-container/50 text-label-medium text-on-secondary-container">
                                     {cat.label}
                                 </div>
                                 {/* empty header filler cells for category row */}
@@ -160,7 +171,7 @@ export default function Compare({groups, initialGroupId, className}: CompareProp
 
                             {/* Features rows */}
                             {cat.features.map((f, rowIdx) => (
-                                <div key={f.id}
+                                <div key={rowIdx}
                                      className={classNames('grid group', gridCols,
                                          ' transition-colors',
                                          {
@@ -170,12 +181,9 @@ export default function Compare({groups, initialGroupId, className}: CompareProp
                                      )}>
                                     <div
                                         className={
-                                            classNames("sticky left-0 z-10 p-3", {
-                                                "bg-surface-container/20": rowIdx % 2 === 0,
-                                                "bg-surface-container-high/20": rowIdx % 2 !== 0
-                                            })
+                                            classNames("sticky left-0 z-10 p-3 bg-surface-variant/10", {})
                                         }>
-                                        <div className="text-body-medium">{f.label}</div>
+                                        <div className="text-label-large">{f.label}</div>
                                         {f.note && <div
                                             className="text-body-small text-on-surface-variant mt-1">{f.note}</div>}
                                     </div>
