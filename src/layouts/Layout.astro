@@ -94,10 +94,10 @@ export interface SEOProps {
 interface Props {
     seo: SEOProps;
     hiddenFooter: boolean;
-    hiddenMenu: boolean;
+    menu: boolean;
 }
 
-const {seo, hiddenFooter = false, hiddenMenu = false}: Props = Astro.props;
+const {seo, hiddenFooter = false, menu = true}: Props = Astro.props;
 
 // const currentPath = Astro.url.pathname.replace("/fr", "");
 // const domain = Astro.url.origin;
@@ -144,7 +144,8 @@ const seoDefault: SEOProps = {
     <ClientRouter/>
 </head>
 <body class="bg-surface  transition-all duration-500">
-<Header/>
+{menu &&
+        <Header/>}
 
 <!--<SmoothScroll-->
 <!--        orientation={'vertical'}-->
