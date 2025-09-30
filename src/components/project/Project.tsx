@@ -198,7 +198,7 @@ export const ProjectFull = ({
 
                         </div>
                         {website &&
-                            <video className={"w-full mt-8 rounded-2xl"} autoplay muted loop playsinline>
+                            <video className={"w-full mt-8 rounded-2xl"} autoPlay muted loop playsInline>
                                 <source src={"/videos/renders/" + slug + "-720.webm"} type="video/webm"/>
                                 Votre navigateur ne supporte pas l'élément vidéo.
                             </video>}

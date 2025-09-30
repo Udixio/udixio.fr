@@ -91,7 +91,7 @@ export const Hero = ({children}) => {
                  height="50"
                  viewBox="0 0 850 72"
                  xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" clip-rule="evenodd"
+                <path fillRule="evenodd" clipRule="evenodd"
                       d="M850 72C850 72 659.721 0 425 0C190.279 0 0 72 0 72H425H850Z"/>
             </svg>
             {children}

@@ -94,10 +94,10 @@ export interface SEOProps {
 interface Props {
     seo: SEOProps;
     hiddenFooter: boolean;
-    hiddenMenu: boolean;
+    menu: boolean;
 }
 
-const {seo, hiddenFooter = false, hiddenMenu = false}: Props = Astro.props;
+const {seo, hiddenFooter = false, menu = true}: Props = Astro.props;
 
 // const currentPath = Astro.url.pathname.replace("/fr", "");
 // const domain = Astro.url.origin;
@@ -144,7 +144,8 @@ const seoDefault: SEOProps = {
     <ClientRouter/>
 </head>
 <body class="bg-surface  transition-all duration-500">
-<Header/>
+{menu &&
+        <Header/>}
 
 <!--<SmoothScroll-->
 <!--        orientation={'vertical'}-->
@@ -156,7 +157,7 @@ const seoDefault: SEOProps = {
 
 <main>
 
-    <BackgroundColor size="80%" className="fixed -z-30 opacity-55 top-0 h-screen w-screen "
+    <BackgroundColor size="max(50vw, 800px)" className="fixed -z-30 opacity-55 top-0 h-screen w-screen "
                      transition:name="background-color"
                      transition:persist client:only="react"/>
 
@@ -168,13 +169,13 @@ const seoDefault: SEOProps = {
 <!--</SmoothScroll>-->
 
 
-<!--<script>-->
+<script>
 
-<!--    import AOS from 'aos'-->
+    import AOS from 'aos'
 
-<!--    document.addEventListener('astro:page-load', () => {-->
-<!--        AOS.init()-->
-<!--    })-->
-<!--</script>-->
+    document.addEventListener('astro:page-load', () => {
+        AOS.init()
+    })
+</script>
 </body>
 </html>

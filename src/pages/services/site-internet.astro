@@ -12,15 +12,25 @@ import {
 import {faDisplay, faMoneyBillTrendUp, faUser} from "@fortawesome/pro-regular-svg-icons";
 import {faQuoteRight} from "@fortawesome/free-solid-svg-icons";
 import Compare from "@/components/Compare";
+import {Image} from "astro:assets";
+import astronautRidingRocket from "@assets/images/astronaut-ride-a-rocket.webp"
+import astronautAnalyzingData from "@assets/images/astronaut-analyzing-data.png"
 ---
-<Layout seo={{
+<Layout menu={false} seo={{
     noindex: true,
     title: `Agence de conseil en stratégie digitale écoresponsable & SEO • udixio.fr`,
     description: "Udixio est une agence experte dans la création de sites web éco-conçus et optimisés pour le SEO. Optez pour des solutions digitales durables et performantes.",
 }}>
-    <section class="section min-h-screen flex items-center">
-        <div>
-            <h1 class="text-display-medium max-w-prose">
+    <section class="max-width min-h-[80vh] flex items-center">
+        <div class="padding xl:pr-0">
+            <div class="flex gap-6 mt-8">
+                <img loading="lazy" class="size-24" alt="Logo de Udixio" src="/favicon.svg"/>
+                <div>
+                    <p class="text-display-medium">UDIXIO</p>
+                    <p class="text-title-small">Votre levier digital</p>
+                </div>
+            </div>
+            <h1 class="text-display-medium xl:text-display-large my-12 max-w-5xl">
                 DÉPLOYEZ UNE MACHINE
                 DE CROISSANCE POUR
                 VOTRE ENTREPRISE
@@ -42,20 +52,32 @@ import Compare from "@/components/Compare";
 
             <Button className="w-fit mt-8" client:load href="#contact">Demander un devis gratuit</Button>
         </div>
+        <Image loading="eager"
+               class="absolute hidden xl:block animate-float right-0 bottom-0  translate-x-1/3 translate-y-16 scale-125"
+               width={600}
+               src={astronautRidingRocket}
+               alt=""></Image>
     </section>
 
     <section class="section grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-        <Card className={"p-12 md:col-span-2"}>
-            <div class="p-6  aspect-square flex items-center justify-center rounded-2xl bg-secondary-container w-fit">
-                <Icon className="size-10 text-on-secondary-container" icon={faPhoneVolume}></Icon>
+        <Card data-aos="zoom-in" className={"md:col-span-2 flex flex-wrap justify-center"}>
+            <div class="p-12 flex-1">
+                <div class="p-6  aspect-square flex items-center justify-center rounded-2xl bg-secondary-container w-fit">
+                    <Icon className="size-10 text-on-secondary-container" icon={faPhoneVolume}></Icon>
+                </div>
+                <p class="text-headline-small mt-8">
+                    Imaginez être en <span class="text-gradient text-headline-medium">top position</span>
+                    sur <span class="text-gradient  text-headline-medium">Google</span> recevez des
+                    <span class="text-gradient  text-headline-medium">demandes</span> en continu
+                </p>
             </div>
-            <p class="text-headline-small mt-8">
-                Imaginez être en <span class="text-gradient text-headline-medium">top position</span>
-                sur <span class="text-gradient  text-headline-medium">Google</span> recevez des
-                <span class="text-gradient  text-headline-medium">demandes</span> en continu
-            </p>
+            <Image
+                    class="self-end md:pr-12"
+                    height={300}
+                    src={astronautAnalyzingData}
+                    alt=""></Image>
         </Card>
-        <Card className={"p-12 col-span-1 theme-warning"}>
+        <Card data-aos="zoom-in" data-aos-delay="100" className={"p-12 col-span-1 theme-warning"}>
             <div class="p-6  aspect-square flex items-center justify-center rounded-2xl bg-secondary-container w-fit">
                 <Icon className="size-10 text-on-secondary-container" icon={faTriangleExclamation}></Icon>
             </div>
@@ -69,7 +91,7 @@ import Compare from "@/components/Compare";
                 nécessaires pour ce service.
             </p>
         </Card>
-        <Card className={"p-12 col-span-1  theme-success"}>
+        <Card data-aos="zoom-in" data-aos-delay="50" className={"p-12 col-span-1  theme-success"}>
             <div class="p-6  aspect-square flex items-center justify-center rounded-2xl bg-secondary-container w-fit">
                 <Icon className="size-10 text-on-secondary-container" icon={faCircleCheck}></Icon>
             </div>
@@ -83,7 +105,7 @@ import Compare from "@/components/Compare";
                 d’opportunités.
             </p>
         </Card>
-        <Card className={"p-12 col-span-1  "}>
+        <Card data-aos="zoom-in" data-aos-delay="150" className={"p-12 col-span-1  "}>
             <div class="p-6  aspect-square flex items-center justify-center rounded-2xl bg-secondary-container w-fit">
                 <Icon className="size-10 text-on-secondary-container" icon={faRocketLaunch}></Icon>
             </div>
@@ -92,12 +114,13 @@ import Compare from "@/components/Compare";
             </p>
             <p class="text-body-large mt-2">
                 Dominez votre secteur en
-                propulsant votre visibilité
+                croissancepulsant votre visibilité
                 digitale dans une zone
                 stratégique définie.
             </p>
         </Card>
-        <Card className={"p-12 col-span-1 overflow-visible flex flex-col justify-between"}>
+        <Card data-aos="zoom-in" data-aos-delay="250"
+              className={"p-12 col-span-1 overflow-visible flex flex-col justify-between"}>
             <Icon className="absolute text-display-medium right-0 top-0 -translate-y-1/3 translate-x-1/3 size-18"
                   icon={faQuoteRight}/>
             <p class="text-headline-small">
@@ -118,10 +141,10 @@ import Compare from "@/components/Compare";
     </section>
 
     <section class="section">
-        <h2 class="text-display-medium text-center max-w-3xl mx-auto">Pourquoi est-il important
+        <h2 class="text-display-medium text-center max-w-3xl mx-auto my-16">Pourquoi est-il important
             d’avoir un site internet ?</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mt-8">
-            <Card className={"p-12 flex-1"}>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+            <Card data-aos="zoom-in" className={"xl:p-12 p-6 flex-1"}>
                 <div class="flex gap-4 items-center ">
                     <Icon className="size-10 " icon={faMagnifyingGlass}></Icon>
                     <h3 class="text-headline-medium">Visibilité</h3>
@@ -138,7 +161,7 @@ import Compare from "@/components/Compare";
                     un professionnel
                 </p>
             </Card>
-            <Card className={"p-12 flex-1"}>
+            <Card data-aos="zoom-in" data-aos-delay="100" className={"xl:p-12 p-6 flex-1"}>
                 <div class="flex gap-4 items-center ">
                     <Icon className="size-10 " icon={faUserTie}></Icon>
                     <h3 class="text-headline-medium">Crédibilité</h3>
@@ -157,7 +180,7 @@ import Compare from "@/components/Compare";
                     site web
                 </p>
             </Card>
-            <Card className={"p-12 flex-1"}>
+            <Card data-aos="zoom-in" data-aos-delay="200" className={"xl:p-12 p-6  flex-1"}>
                 <div class="flex gap-4 items-center ">
                     <Icon className="size-10 " icon={faHandHoldingDollar}></Icon>
                     <h3 class="text-headline-medium">Vente 24/7</h3>
@@ -178,8 +201,8 @@ import Compare from "@/components/Compare";
             </Card>
         </div>
     </section>
-    <section class="section grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
-        <Card className="p-12">
+    <section class="section grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 mt-16">
+        <Card data-aos="fade-right" className="p-12">
             <div class="flex gap-6">
                 <img loading="lazy" class="size-24" alt="Logo de Udixio" src="/favicon.svg"/>
                 <div>
@@ -188,8 +211,8 @@ import Compare from "@/components/Compare";
                 </div>
             </div>
 
-            <h3 class="mt-8 text-headline-large">PLUS DE VISIBILITÉ,
-                PLUS DE CLIENTS</h3>
+            <h2 class="my-12 text-headline-large">PLUS DE VISIBILITÉ,
+                PLUS DE CLIENTS</h2>
             <p class="mt-8 text-body-large">Pourquoi nous faire confiance</p>
             <p class="mt-8 text-body-large">Nous comprenons vos problématiques et
                 les transformons en opportunité.</p>
@@ -199,9 +222,10 @@ import Compare from "@/components/Compare";
                 vous</p>
         </Card>
         <div class="flex flex-col gap-6 lg:gap-8">
-            <Card className="p-12 flex gap-12 items-center">
+            <Card data-aos="fade-up-left" data-aos-delay="75"
+                  className="p-6 md:p-12 flex gap-6 md:gap-12 items-start md:items-center">
                 <div class="p-6 aspect-square flex items-center justify-center bg-secondary-container w-fit rounded-full">
-                    <Icon className="size-16 text-on-secondary-container" icon={faDisplay}></Icon>
+                    <Icon className="size-10 md:size-16 text-on-secondary-container" icon={faDisplay}></Icon>
                 </div>
                 <div>
                     <h3 class="text-headline-medium">WEB HAUT DE GAMME</h3>
@@ -211,9 +235,10 @@ import Compare from "@/components/Compare";
                         votre expertise</span></p>
                 </div>
             </Card>
-            <Card className="p-12 flex gap-12 items-center">
+            <Card data-aos="fade-up-left" data-aos-delay="75"
+                  className="p-6 md:p-12 flex gap-6 md:gap-12 items-start md:items-center">
                 <div class="p-6 aspect-square flex items-center justify-center bg-secondary-container w-fit rounded-full">
-                    <Icon className="size-16 text-on-secondary-container" icon={faMoneyBillTrendUp}></Icon>
+                    <Icon className="size-10 md:size-16 text-on-secondary-container" icon={faMoneyBillTrendUp}></Icon>
                 </div>
                 <div>
                     <h3 class="text-headline-medium">RENTABILITÉ</h3>
@@ -222,9 +247,10 @@ import Compare from "@/components/Compare";
                             flux d’appels et de prospects</span></p>
                 </div>
             </Card>
-            <Card className="p-12 flex gap-12 items-center">
+            <Card data-aos="fade-up-left" data-aos-delay="75"
+                  className="p-6 md:p-12 flex gap-6 md:gap-12 items-start md:items-center">
                 <div class="p-6 aspect-square flex items-center justify-center bg-secondary-container w-fit rounded-full">
-                    <Icon className="size-16 text-on-secondary-container" icon={faHandshake}></Icon>
+                    <Icon className="size-10 md:size-16 text-on-secondary-container" icon={faHandshake}></Icon>
                 </div>
                 <div>
                     <h3 class="text-headline-medium">ECOUTE ET PROXIMITÉ</h3>
@@ -236,141 +262,204 @@ import Compare from "@/components/Compare";
         </div>
     </section>
     <section class="section">
-        <h2 class="text-display-medium text-center">Comparez nos offres</h2>
-        <div class="mt-8">
+        <h2 class="text-display-medium text-center  my-16">Comparez nos offres <span class="text-on-surface-variant">(24 mois)</span>
+        </h2>
+        <div data-aos="zoom-in-up" class="mt-8">
             <Compare client:load groups={[
                 {
                     id: 'site',
                     label: 'Sites vitrines',
                     plans: [
-                        {id: 'start', name: 'Start', price: 'à partir de 890 €', badge: 'Populaire'},
-                        {id: 'pro', name: 'Pro', price: 'à partir de 1 990 €'},
-                        {id: 'business', name: 'Business', price: 'à partir de 3 490 €'},
-                        {id: 'elite', name: 'Elite', price: 'sur devis'},
+                        {
+                            id: 'Starter',
+                            name: 'Starter',
+                            price: {
+                                setup: 750,
+                                monthly: 169
+                            },
+                            badge: 'Populaire'
+                        },
+                        {
+                            id: 'croissance', name: 'Croissance',
+                            price: {
+                                setup: 1500,
+                                monthly: 189
+                            },
+                        },
+                        {
+                            id: 'performance', name: 'Performance',
+                            price: {
+                                setup: 2500,
+                                monthly: 244
+                            },
+                        },
+                        {
+                            id: 'ultimate', name: 'Ultimate',
+                            price: {
+                                setup: 3700,
+                                monthly: 298
+                            },
+                        }
                     ],
                     categories: [
                         {
                             id: 'design',
-                            label: 'Design & branding',
+                            label: 'Design & contenu',
                             features: [
                                 {
-                                    id: 'ui',
-                                    label: 'Design moderne et responsive',
-                                    value: {start: true, pro: true, business: true, elite: true}
+                                    label: 'Design personnalisé dynamique',
+                                    value: {Starter: true, croissance: true, performance: true, ultimate: true}
                                 },
                                 {
-                                    id: 'branding',
-                                    label: 'Personnalisation avancée du thème',
-                                    value: {start: 'Basique', pro: 'Standard', business: 'Avancée', elite: 'Sur-mesure'}
+                                    label: 'Responsive design : PC, Tablette & Smartphone',
+                                    value: {Starter: true, croissance: true, performance: true, ultimate: true}
+                                },
+                                {
+                                    label: 'Nombre de pages avec rédaction de contenu',
+                                    value: {
+                                        Starter: "One Page Performance",
+                                        croissance: "Jusqu’à 10 pages",
+                                        performance: "Jusqu’à 15 pages",
+                                        ultimate: "Sur Mesure"
+                                    }
+                                },
+                                {
+                                    label: 'Nom de domaine privé et email professionnel',
+                                    value: {Starter: true, croissance: true, performance: true, ultimate: true}
+                                },
+                                {
+                                    label: 'Protocoles de sécurité avancés ',
+                                    value: {
+                                        Starter: "SSL / Protection contre les attaques / Sauvegardes régulières",
+                                        croissance: "SSL / Protection contre les attaques / Sauvegardes régulières",
+                                        performance: "SSL / Protection contre les attaques / Sauvegardes régulières",
+                                        ultimate: "SSL / Protection contre les attaques / Sauvegardes régulières"
+                                    }
+                                },
+                                {
+                                    label: 'Branding publicitaire unique : Logo, Carte de visite\n' +
+                                        'digitale, fond d’écran de téléphone, QR codes',
+                                    value: {Starter: true, croissance: true, performance: true, ultimate: true}
                                 },
                             ],
                         },
                         {
                             id: 'seo',
-                            label: 'SEO & performance',
+                            label: 'Référencement et visibilité',
                             features: [
                                 {
-                                    id: 'seo-tech',
-                                    label: 'SEO technique de base',
-                                    value: {start: true, pro: true, business: true, elite: true}
+                                    label: 'Conformité technique SEO, stratégie & optimisation',
+                                    value: {
+                                        Starter: true,
+                                        croissance: true,
+                                        performance: "Expert SEO ",
+                                        ultimate: "Expert SEO"
+                                    }
                                 },
                                 {
-                                    id: 'seo-adv',
-                                    label: 'Optimisation SEO avancée',
-                                    value: {start: false, pro: 'partial', business: true, elite: true},
-                                    note: 'Schema, maillage interne, contenus piliers'
+                                    label: 'Nombre de mots clés SEO',
+                                    value: {
+                                        Starter: "10 mots clés",
+                                        croissance: '15 mots clés',
+                                        performance: "30 mots clés",
+                                        ultimate: "Plus de 40 mots clés"
+                                    },
                                 },
                                 {
-                                    id: 'perf',
-                                    label: 'Optimisation des performances',
-                                    value: {start: true, pro: true, business: true, elite: true}
+                                    label: 'Localité(s) référencée(s)',
+                                    value: {
+                                        Starter: "1 Localité",
+                                        croissance: '10 Localités',
+                                        performance: "30 Localités",
+                                        ultimate: "40 Localités"
+                                    },
+                                },
+                                {
+                                    label: 'Paramétrage & Setup des annonces Google Ads',
+                                    value: {
+                                        Starter: true,
+                                        croissance: true,
+                                        performance: true,
+                                        ultimate: true,
+                                    },
+                                },
+                                {
+                                    label: 'Optimisation google my business',
+                                    note: "budget Ads non inclus",
+                                    value: {
+                                        Starter: false,
+                                        croissance: "Bonus : 2 mois de gestion",
+                                        performance: "Bonus : 4 mois de gestion",
+                                        ultimate: "Bonus : 6 mois de gestion",
+                                    },
+                                },
+                                {
+                                    label: 'Page d’acquisition de prospect SEA',
+                                    value: {
+                                        Starter: false,
+                                        croissance: false,
+                                        performance: true,
+                                        ultimate: true,
+                                    },
                                 },
                             ],
                         },
                         {
-                            id: 'content',
-                            label: 'Contenus inclus',
-                            features: [
-                                {
-                                    id: 'pages',
-                                    label: 'Nombre de pages incluses',
-                                    value: {start: '1–3', pro: '4–6', business: '7–12', elite: 'Illimité*'},
-                                    note: '* selon cahier des charges'
-                                },
-                                {
-                                    id: 'blog',
-                                    label: 'Blog',
-                                    value: {start: false, pro: true, business: true, elite: true}
-                                },
-                            ],
-                        },
-                        {
-                            id: 'support',
+                            id: 'accompagnement',
                             label: 'Accompagnement',
                             features: [
                                 {
-                                    id: 'formation',
-                                    label: 'Formation à la prise en main',
-                                    value: {start: true, pro: true, business: true, elite: true}
+                                    label: 'Intervenant création',
+                                    value: {
+                                        Starter: 'Webmaster dédié',
+                                        croissance: 'Webmaster dédié',
+                                        performance: 'Webmaster dédié + Expert SEO',
+                                        ultimate: 'Webmaster dédié + Expert SEO'
+                                    },
                                 },
                                 {
-                                    id: 'suivi',
-                                    label: 'Support & maintenance',
-                                    value: {start: '30 j', pro: '3 mois', business: '6 mois', elite: '12 mois'}
+                                    label: 'Suivi post livraison',
+                                    value: {
+                                        Starter: "Support + 1 bilan /an",
+                                        croissance: "Support + 2 bilan /an",
+                                        performance: "Support + 4 bilans / an",
+                                        ultimate: "Support + 6 bilans / an"
+                                    }
+                                },
+                            ],
+                        },
+                        {
+                            id: 'fonctionnalités',
+                            label: 'Fonctionnalités',
+                            features: [
+                                {
+                                    label: 'Formulaire contact',
+                                    value: {Starter: true, croissance: true, performance: true, ultimate: true}
+                                },
+                                {
+                                    label: 'Growth Marketing : popup capture de données',
+                                    value: {Starter: true, croissance: true, performance: true, ultimate: true}
+                                },
+                                {
+                                    label: 'Connection avis Google en temps réel',
+                                    value: {Starter: true, croissance: true, performance: true, ultimate: true}
+                                },
+                                {
+                                    label: 'Growth Marketing : exit overlay',
+                                    value: {Starter: false, croissance: true, performance: true, ultimate: true}
+                                },
+                                {
+                                    label: 'Optimisation Fiche Google My Business',
+                                    value: {Starter: false, croissance: false, performance: true, ultimate: true}
+                                },
+                                {
+                                    label: 'Social Wall',
+                                    value: {Starter: false, croissance: false, performance: true, ultimate: true}
                                 },
                             ],
                         },
                     ],
                 },
-                {
-                    id: 'marketing',
-                    label: 'Marketing local',
-                    plans: [
-                        {id: 'basic', name: 'Essentiel', price: 'à partir de 390 €/mois'},
-                        {id: 'boost', name: 'Boost', price: 'à partir de 690 €/mois', badge: 'Recommandé'},
-                        {id: 'growth', name: 'Croissance', price: 'à partir de 1 190 €/mois'},
-                        {id: 'dominate', name: 'Domination', price: 'sur devis'},
-                    ],
-                    categories: [
-                        {
-                            id: 'ads',
-                            label: 'Publicité & acquisition',
-                            features: [
-                                {
-                                    id: 'google-ads',
-                                    label: 'Gestion Google Ads',
-                                    value: {basic: false, boost: true, growth: true, dominate: true}
-                                },
-                                {
-                                    id: 'meta-ads',
-                                    label: 'Gestion Meta Ads',
-                                    value: {basic: false, boost: 'partial', growth: true, dominate: true}
-                                },
-                            ],
-                        },
-                        {
-                            id: 'tracking',
-                            label: 'Suivi & analytics',
-                            features: [
-                                {
-                                    id: 'ga4',
-                                    label: 'Mise en place GA4 + conversions',
-                                    value: {basic: true, boost: true, growth: true, dominate: true}
-                                },
-                                {
-                                    id: 'report',
-                                    label: 'Rapport mensuel',
-                                    value: {basic: true, boost: true, growth: true, dominate: true}
-                                },
-                                {
-                                    id: 'call',
-                                    label: 'Call stratégique mensuel',
-                                    value: {basic: false, boost: true, growth: true, dominate: true}
-                                },
-                            ],
-                        },
-                    ],
-                }
             ]}/>
         </div>
     </section>
