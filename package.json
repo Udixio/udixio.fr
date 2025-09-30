@@ -53,7 +53,7 @@
     "motion": "^12.23.21",
     "nanostores": "^1.0.1",
     "nodemailer": "^6.9.14",
-    "puppeteer": "^24.5.0",
+    "puppeteer": "^24.22.3",
     "puppeteer-screen-recorder": "^3.0.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -73,6 +73,7 @@
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.12",
     "@types/aos": "^3.0.7",
+    "@types/fluent-ffmpeg": "^2.1.27",
     "@types/nodemailer": "^6.4.15",
     "@types/sendmail": "^1.4.7",
     "@types/validator": "^13.12.0",

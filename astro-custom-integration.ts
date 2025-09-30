@@ -74,13 +74,18 @@ const recordPageScrollWithAnimations = async (url: string, outputPath: string) =
     // Lancement du navigateur
     const browser = await puppeteer.launch({
         headless: false, // Laisser visible pour tester si besoin
+        args: [
+            '--window-size=1920,1080', // Définir explicitement la taille de la fenêtre
+            '--start-maximized'       // (optionnel) Lance la fenêtre maximisée
+        ],
     });
     const page = await browser.newPage();
 
     // Configuration de la taille de la fenêtre
     await page.setViewport({
-        width: 1440
-        , height: 900
+        width: 1920
+        , height: 1080,
+        deviceScaleFactor: 1
     });
 
     // Ouvrir la page souhaitée
@@ -91,8 +96,8 @@ const recordPageScrollWithAnimations = async (url: string, outputPath: string) =
         followNewTab: true, // Enregistre l’activité dans les nouveaux onglets (si besoin)
         fps: 90, // Taux d'images par seconde
         videoFrame: {
-            width: 1440,
-            height: 900,
+            width: 1920,
+            height: 1080,
         },
     });
 
