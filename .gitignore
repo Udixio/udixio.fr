@@ -7,6 +7,8 @@ dist/
 # dependencies
 node_modules/
 
+public/videos/renders/*.mp4
+
 # logs
 npm-debug.log*
 yarn-debug.log*

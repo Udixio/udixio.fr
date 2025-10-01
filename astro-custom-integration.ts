@@ -70,21 +70,21 @@ async function getMDXMetadata(dir: string, files: string[]) {
     return metadata;
 }
 
-const recordPageScrollWithAnimations = async (url: string, outputPath: string) => {
+const recordPageScrollWithAnimations = async (url: string, outputPath: string, height: number = 1080) => {
     // Lancement du navigateur
     const browser = await puppeteer.launch({
         headless: false, // Laisser visible pour tester si besoin
         args: [
-            '--window-size=1920,1080', // Définir explicitement la taille de la fenêtre
-            '--start-maximized'       // (optionnel) Lance la fenêtre maximisée
+            `--window-size=1920,${height}`,
+            '--start-maximized'
         ],
     });
     const page = await browser.newPage();
 
     // Configuration de la taille de la fenêtre
     await page.setViewport({
-        width: 1920
-        , height: 1080,
+        width: 1920,
+        height: height,
         deviceScaleFactor: 1
     });
 
@@ -97,7 +97,7 @@ const recordPageScrollWithAnimations = async (url: string, outputPath: string) =
         fps: 90, // Taux d'images par seconde
         videoFrame: {
             width: 1920,
-            height: 1080,
+            height: height,
         },
     });
 
@@ -174,42 +174,60 @@ export default function customIntegration(): AstroIntegration {
                     if (!url) continue;
 
                     const videoPath = join('public', 'videos', 'renders', `${slug}.mp4`);
+                    const maltVideoPath = join('public', 'videos', 'renders', `${slug}-malt.mp4`);
+
+
+                    const videoOptimizer = ffmpeg(videoPath)
+                        .videoCodec('libvpx-vp9')
+                        .noAudio()
+                        .format('webm')
+                        .fps(30)
+                        .addOption('-crf', '28')
+                        .addOption('-b:v', '1M')
+                        .addOption('-maxrate', '4M')
+                        .addOption('-bufsize', '2M')
+                        .addOption('-pix_fmt', 'yuv420p')
+                        .addOption('-preset', 'slower')
+                        .on('end', () => console.log('Vidéo optimisée avec succès !'))
+                        .on('error', (err) => console.error('Une erreur s\'est produite :', err))
+
                     try {
-                        await fs.access(videoPath); // Vérifier si le fichier vidéo existe
+                        await fs.access(videoPath);
                         logger.info(`✅ Vidéo trouvée pour "${slug}" : ${videoPath}`);
+
                     } catch {
                         logger.info(`❌ Aucune vidéo trouvée pour "${slug}", création en cours...`);
-                        await recordPageScrollWithAnimations(url, videoPath);
-                        logger.info(`✅ Vidéo créée pour "${slug}" : ${videoPath}`);
-
+                        await recordPageScrollWithAnimations(url, videoPath, 1080);
+                        await recordPageScrollWithAnimations(url, maltVideoPath, 1380);
+                        logger.info(`✅ Vidéos créées pour "${slug}"`);
 
                         extractFirstFrameAsWebP(videoPath, `./src/assets/renders/${slug}.webp`, slug)
                             .then(() => console.log('✅ Le process est terminé.'))
                             .catch(err => console.error('❌ Une erreur est survenue durant le process.', err));
 
-                        const videoOptimizer = ffmpeg(videoPath) // Vidéo source
-                            .videoCodec('libvpx-vp9')
-                            .noAudio()
-                            .format('webm') // Format de sortie
-                            .fps(30)
-                            .addOption('-crf', '28')
-                            .addOption('-b:v', '1M')
-                            .addOption('-maxrate', '4M')
-                            .addOption('-bufsize', '2M')
-                            .addOption('-pix_fmt', 'yuv420p')
-                            .addOption('-preset', 'slower')
-                            .on('end', () => console.log('Vidéo optimisée avec succès !'))
-                            .on('error', (err) => console.error('Une erreur s\'est produite :', err))
-
 
                         videoOptimizer.output(videoPath.replace('.mp4', '-720.webm'))
                             .size('1280x720')
-
                             .run();
                         videoOptimizer.output(videoPath.replace('.mp4', '-480.webm'))
                             .size('720x480')
                             .run();
 
+
+                    }
+                    try {
+                        await fs.access(maltVideoPath);
+                        logger.info(`✅ Vidéo trouvée pour "${slug}" : ${maltVideoPath}`);
+
+                    } catch {
+                        logger.info(`❌ Aucune vidéo trouvée pour "${slug}", création en cours...`);
+                        await recordPageScrollWithAnimations(url, maltVideoPath, 1380);
+
+                        videoOptimizer.output(maltVideoPath.replace('.mp4', '-malt.webm'))
+                            .size('1920x1380')
+                            .run();
+
+                        logger.info(`✅ Vidéos créées pour "${slug}"`);
                     }
                 }
             },
