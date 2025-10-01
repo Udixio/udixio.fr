@@ -173,11 +173,8 @@ export default function customIntegration(): AstroIntegration {
                 for (const {website: url, slug} of realisationsData) {
                     if (!url) continue;
 
-                    const videoPath = join('public', 'videos', 'renders', `${slug}.mp4`);
-                    const maltVideoPath = join('public', 'videos', 'renders', `${slug}-malt.mp4`);
 
-
-                    const videoOptimizer = ffmpeg(videoPath)
+                    const videoOptimizer = (output: string) => ffmpeg(videoPath)
                         .videoCodec('libvpx-vp9')
                         .noAudio()
                         .format('webm')
@@ -189,8 +186,10 @@ export default function customIntegration(): AstroIntegration {
                         .addOption('-pix_fmt', 'yuv420p')
                         .addOption('-preset', 'slower')
                         .on('end', () => console.log('Vidéo optimisée avec succès !'))
-                        .on('error', (err) => console.error('Une erreur s\'est produite :', err))
+                        .on('error', (err) => console.error('Une erreur s\'est produite :', err)).output(output)
 
+
+                    const videoPath = join('public', 'videos', 'renders', `${slug}.mp4`);
                     try {
                         await fs.access(videoPath);
                         logger.info(`✅ Vidéo trouvée pour "${slug}" : ${videoPath}`);
@@ -198,23 +197,22 @@ export default function customIntegration(): AstroIntegration {
                     } catch {
                         logger.info(`❌ Aucune vidéo trouvée pour "${slug}", création en cours...`);
                         await recordPageScrollWithAnimations(url, videoPath, 1080);
-                        await recordPageScrollWithAnimations(url, maltVideoPath, 1380);
                         logger.info(`✅ Vidéos créées pour "${slug}"`);
 
                         extractFirstFrameAsWebP(videoPath, `./src/assets/renders/${slug}.webp`, slug)
                             .then(() => console.log('✅ Le process est terminé.'))
                             .catch(err => console.error('❌ Une erreur est survenue durant le process.', err));
 
-
-                        videoOptimizer.output(videoPath.replace('.mp4', '-720.webm'))
+                        videoOptimizer(videoPath.replace('.mp4', '-720.webm'))
                             .size('1280x720')
                             .run();
-                        videoOptimizer.output(videoPath.replace('.mp4', '-480.webm'))
+                        videoOptimizer(videoPath.replace('.mp4', '-480.webm'))
                             .size('720x480')
                             .run();
-
-
                     }
+
+
+                    const maltVideoPath = join('public', 'videos', 'renders', `${slug}-malt.mp4`);
                     try {
                         await fs.access(maltVideoPath);
                         logger.info(`✅ Vidéo trouvée pour "${slug}" : ${maltVideoPath}`);
@@ -223,7 +221,7 @@ export default function customIntegration(): AstroIntegration {
                         logger.info(`❌ Aucune vidéo trouvée pour "${slug}", création en cours...`);
                         await recordPageScrollWithAnimations(url, maltVideoPath, 1380);
 
-                        videoOptimizer.output(maltVideoPath.replace('.mp4', '-malt.webm'))
+                        videoOptimizer(maltVideoPath.replace('.mp4', '.webm'))
                             .size('1920x1380')
                             .run();
 
