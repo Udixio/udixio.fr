@@ -71,9 +71,9 @@ async function getMDXMetadata(dir: string, files: string[]) {
 }
 
 const recordPageScrollWithAnimations = async (url: string, outputPath: string, height: number = 1080) => {
-    // Lancement du navigateur
+    console.log(`🎥 Recording ${url} at 1920x${height}`);
     const browser = await puppeteer.launch({
-        headless: false, // Laisser visible pour tester si besoin
+        headless: false,
         args: [
             `--window-size=1920,${height}`,
             '--start-maximized'
@@ -81,70 +81,37 @@ const recordPageScrollWithAnimations = async (url: string, outputPath: string, h
     });
     const page = await browser.newPage();
 
-    // Configuration de la taille de la fenêtre
     await page.setViewport({
         width: 1920,
         height: height,
         deviceScaleFactor: 1
     });
 
-    // Ouvrir la page souhaitée
     await page.goto(url, {waitUntil: "networkidle2"});
 
-    // Initialiser l'enregistreur vidéo
     const recorder = new PuppeteerScreenRecorder(page, {
-        followNewTab: true, // Enregistre l’activité dans les nouveaux onglets (si besoin)
-        fps: 90, // Taux d'images par seconde
+        followNewTab: true,
+        fps: 90,
         videoFrame: {
             width: 1920,
             height: height,
         },
     });
 
-    // Démarrer l'enregistrement
     await recorder.start(outputPath);
 
-    // Scénariser le scroll dynamique pour capturer les animations
     await page.evaluate(async () => {
         const delay = (time) => new Promise((resolve) => setTimeout(resolve, time));
-        const ease = (t) => t * (2 - t);
-
-        // Scroll personnalisé : section par section
-        const sections = document.querySelectorAll("section"); // Par exemple, des sections avec `data-section`
-        console.log(sections.length)
-        const max = 5
-        const totalSections = sections.length;
-
-        // await delay(250);
-        // for (const [index, section] of Array.from(sections).entries()) {
-        //     if (totalSections > max && index !== 0 && index !== totalSections - 1) {
-        //         if (index % Math.ceil(totalSections / max) !== 0)
-        //             continue
-        //     }
-        //
-        //
-        //     // await smoothScrollTo(section, 750);
-        //     section.scrollIntoView({
-        //         behavior: 'smooth', // Scroll fluide
-        //         block: 'start',     // Scroll pour aligner au haut de la section
-        //     });
-        //
-        //     // Scroll smooth vers chaque section
-        //     await delay(1750); // Pause pour laisser les animations se jouer
-        // }
-
-        // if (!sections || sections.length === 0) {
 
         for (let i = 0; i < document.body.scrollHeight; i += 900) {
             window.scrollTo({top: i, behavior: "smooth"});
             const isLastIteration = i + 900 >= document.body.scrollHeight;
             if (!isLastIteration) {
-                await delay(1250); // Pause pour capturer les animations seulement si ce n'est pas la fin
+                await delay(1250);
             } else {
-                await delay(500); // Pause pour laisser les animations se jouer
+                await delay(500);
             }
         }
-        // }
 
         window.scrollTo({
             top: 0,
@@ -153,10 +120,7 @@ const recordPageScrollWithAnimations = async (url: string, outputPath: string, h
         await delay(750);
     });
 
-    // Arrêter l'enregistrement après le scroll
     await recorder.stop();
-
-    // Fermer le navigateur
     await browser.close();
 };
 
@@ -166,15 +130,19 @@ export default function customIntegration(): AstroIntegration {
         hooks: {
             'astro:config:setup': async ({logger}) => {
 
-                const realisationsDir = join('src', 'data', 'realisation'); // Répertoire des réalisations
-                const mdxFiles = await getAllMDXFiles(realisationsDir); // Récupérer tous les fichiers MDX
-                const realisationsData: any = await getMDXMetadata(realisationsDir, mdxFiles); // Extraire les métadonnées
+                const realisationsDir = join('src', 'data', 'realisation');
+                const mdxFiles = await getAllMDXFiles(realisationsDir);
+                const realisationsData: any = await getMDXMetadata(realisationsDir, mdxFiles);
+                
+                const validRealisations = realisationsData.filter(({website}) => website);
+                const totalCount = validRealisations.length;
+                logger.info(`🎬 Starting video processing for ${totalCount} projects`);
 
-                for (const {website: url, slug} of realisationsData) {
-                    if (!url) continue;
+                for (const [index, {website: url, slug}] of validRealisations.entries()) {
+                    const current = index + 1;
+                    logger.info(`\n📊 Processing ${current}/${totalCount}: ${slug}`);
 
-
-                    const videoOptimizer = (output: string) => ffmpeg(videoPath)
+                    const videoOptimizer = (output: string, inputPath: string) => ffmpeg(inputPath)
                         .videoCodec('libvpx-vp9')
                         .noAudio()
                         .format('webm')
@@ -185,49 +153,73 @@ export default function customIntegration(): AstroIntegration {
                         .addOption('-bufsize', '2M')
                         .addOption('-pix_fmt', 'yuv420p')
                         .addOption('-preset', 'slower')
-                        .on('end', () => console.log('Vidéo optimisée avec succès !'))
-                        .on('error', (err) => console.error('Une erreur s\'est produite :', err)).output(output)
-
+                        .on('end', () => console.log(`✅ Optimization complete: ${output}`))
+                        .on('error', (err) => console.error(`❌ Optimization error: ${output}`, err))
+                        .output(output);
 
                     const videoPath = join('public', 'videos', 'renders', `${slug}.mp4`);
+                    const maltVideoPath = join('public', 'videos', 'renders', `${slug}-malt.mp4`);
+                    
+                    let recordingsNeeded = 0;
+                    let optimizationsNeeded = 0;
+                    
                     try {
                         await fs.access(videoPath);
-                        logger.info(`✅ Vidéo trouvée pour "${slug}" : ${videoPath}`);
-
+                        logger.info(`✅ Standard video exists: ${slug}`);
                     } catch {
-                        logger.info(`❌ Aucune vidéo trouvée pour "${slug}", création en cours...`);
+                        recordingsNeeded++;
+                        logger.info(`🎬 Recording standard video (1920x1080): ${slug}`);
                         await recordPageScrollWithAnimations(url, videoPath, 1080);
-                        logger.info(`✅ Vidéos créées pour "${slug}"`);
-
+                        logger.info(`✅ Standard recording complete: ${slug}`);
+                        
+                        optimizationsNeeded += 3;
                         extractFirstFrameAsWebP(videoPath, `./src/assets/renders/${slug}.webp`, slug)
-                            .then(() => console.log('✅ Le process est terminé.'))
-                            .catch(err => console.error('❌ Une erreur est survenue durant le process.', err));
+                            .then(() => console.log(`✅ Thumbnail created: ${slug}`))
+                            .catch(err => console.error(`❌ Thumbnail error: ${slug}`, err));
 
-                        videoOptimizer(videoPath.replace('.mp4', '-720.webm'))
+                        videoOptimizer(videoPath.replace('.mp4', '-720.webm'), videoPath)
                             .size('1280x720')
                             .run();
-                        videoOptimizer(videoPath.replace('.mp4', '-480.webm'))
+                        videoOptimizer(videoPath.replace('.mp4', '-480.webm'), videoPath)
                             .size('720x480')
                             .run();
                     }
 
-
-                    const maltVideoPath = join('public', 'videos', 'renders', `${slug}-malt.mp4`);
                     try {
                         await fs.access(maltVideoPath);
-                        logger.info(`✅ Vidéo trouvée pour "${slug}" : ${maltVideoPath}`);
-
+                        logger.info(`✅ Malt video exists: ${slug}`);
                     } catch {
-                        logger.info(`❌ Aucune vidéo trouvée pour "${slug}", création en cours...`);
+                        recordingsNeeded++;
+                        logger.info(`🎬 Recording Malt video (1920x1380): ${slug}`);
                         await recordPageScrollWithAnimations(url, maltVideoPath, 1380);
-
-                        videoOptimizer(maltVideoPath.replace('.mp4', '.webm'))
+                        logger.info(`✅ Malt recording complete: ${slug}`);
+                        
+                        optimizationsNeeded += 2;
+                        ffmpeg(maltVideoPath)
+                            .screenshots({
+                                timestamps: ['00:00:00.000'],
+                                filename: `${slug}-malt.webp`,
+                                folder: './src/assets/renders',
+                                size: '522x375'
+                            })
+                            .toFormat('webp')
+                            .on('end', () => console.log(`✅ Malt preview created: ${slug}`))
+                            .on('error', (err) => console.error(`❌ Malt preview error: ${slug}`, err));
+                        
+                        videoOptimizer(maltVideoPath.replace('.mp4', '.webm'), maltVideoPath)
                             .size('1920x1380')
                             .run();
-
-                        logger.info(`✅ Vidéos créées pour "${slug}"`);
+                    }
+                    
+                    const remaining = totalCount - current;
+                    if (recordingsNeeded > 0 || optimizationsNeeded > 0) {
+                        logger.info(`📈 ${slug}: ${recordingsNeeded} recordings, ${optimizationsNeeded} optimizations queued`);
+                    }
+                    if (remaining > 0) {
+                        logger.info(`⏳ ${remaining} projects remaining`);
                     }
                 }
+                logger.info(`🎉 All video processing complete!`);
             },
         },
     };
