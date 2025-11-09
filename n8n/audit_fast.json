@@ -592,11 +592,6 @@
       "main": [
         [
           {
-            "node": "OpenRouter_Gemini",
-            "type": "ai_languageModel",
-            "index": 0
-          },
-          {
             "node": "LLM_Generate_Audit",
             "type": "main",
             "index": 0
@@ -608,8 +603,8 @@
       "ai_languageModel": [
         [
           {
-            "node": "Structured_Output_Parser",
-            "type": "ai_outputParser",
+            "node": "LLM_Generate_Audit",
+            "type": "ai_languageModel",
             "index": 0
           }
         ]
