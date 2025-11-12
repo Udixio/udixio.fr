@@ -93,11 +93,11 @@ export interface SEOProps {
 
 interface Props {
     seo: SEOProps;
-    hiddenFooter: boolean;
+    footer: boolean;
     menu: boolean;
 }
 
-const {seo, hiddenFooter = false, menu = true}: Props = Astro.props;
+const {seo, footer = true, menu = true}: Props = Astro.props;
 
 // const currentPath = Astro.url.pathname.replace("/fr", "");
 // const domain = Astro.url.origin;
@@ -165,7 +165,10 @@ const seoDefault: SEOProps = {
     <slot/>
 
 </main>
-<Footer/>
+{
+    footer &&
+        <Footer/>
+}
 <!--</SmoothScroll>-->
 
 
