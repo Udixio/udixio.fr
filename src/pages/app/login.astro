@@ -1,0 +1,25 @@
+---
+import Layout from "@layouts/Layout.astro";
+// Import the server action defined at src/actions/login.ts
+import {actions} from 'astro:actions';
+import App from "@layouts/App.astro";
+import {TextField, Button, Card} from "@udixio/ui-react"
+
+export const prerender = false;
+
+const result = Astro.getActionResult(actions.login);
+---
+<App>
+    <section class="mx-auto min-h-screen max-w-md py-12 flex items-center justify-center">
+        <Card className="p-8">
+            <h1 class="text-headline-small">Connexion avec un token API n8n</h1>
+            <form method="post" action={actions.login} class="flex-col gap-4 flex mt-8">
+                <TextField client:load type="password" name="token" variant="outlined" label="API Token"/>
+                {result?.error && (
+                        <p class="error">Impossible d'enregistrer le token. Veuillez réessayer.</p>
+                )}
+                <Button client:load className="mt-6" type="submit">Enregistrer</Button>
+            </form>
+        </Card>
+    </section>
+</App>

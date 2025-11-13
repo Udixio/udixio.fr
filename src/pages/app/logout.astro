@@ -1,0 +1,8 @@
+---
+export const prerender = false;
+
+// Supprime le cookie d'authentification et redirige vers la page de login
+Astro.cookies.delete('n8n_token', { path: '/' });
+
+return Astro.redirect('/app/login');
+---
