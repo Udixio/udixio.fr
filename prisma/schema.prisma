@@ -13,3 +13,218 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+// =============================
+// Data model for Admin Platform
+// =============================
+
+// Generic lifecycle/follow-up status usable on Organization/Client/Project
+enum LifecycleStatus {
+  POTENTIAL     // lead, to qualify
+  QUALIFIED     // validated as a fit
+  ACTIVE        // currently engaged/active
+  PAUSED        // temporarily on hold
+  NOT_POSSIBLE  // not feasible
+  LOST          // lost deal/opportunity
+  CLOSED        // closed/won or delivered
+  ARCHIVED
+}
+
+// Project execution status (more operational than lifecycle)
+enum ProjectStatus {
+  PLANNING
+  IN_PROGRESS
+  BLOCKED
+  REVIEW
+  MAINTENANCE
+  COMPLETED
+  CANCELLED
+}
+
+// Audit execution status
+enum AuditStatus {
+  DRAFT
+  SCHEDULED
+  RUNNING
+  NEEDS_REVIEW
+  PASSED
+  FAILED
+  ARCHIVED
+}
+
+// Audit type, allows future extensions
+enum AuditType {
+  LIGHTHOUSE
+  SEO
+  PERFORMANCE
+  ACCESSIBILITY
+  SECURITY
+  MANUAL
+  OTHER
+}
+
+// Contact record kind
+enum ContactKind {
+  PERSON   // a specific person
+  GENERIC  // generic/shared contact point (e.g., support@, contact form)
+}
+
+model Organization {
+  id          String           @id @default(cuid())
+  name        String
+  legalName   String?          // optional registered name
+  website     String?          // e.g., https://example.com
+  lifecycle   LifecycleStatus  @default(POTENTIAL)
+  notes       String?
+
+  // Relations
+  clients     Client[]
+  // Generic or shared contacts for the organization (many-to-many to allow reuse)
+  contacts    Contact[]        @relation("OrganizationContacts")
+
+  // Optional structured info
+  addresses   Json?            // { billing: {...}, office: [...] }
+  metadata    Json?            // any extra fields
+
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  @@index([name])
+}
+
+model Client {
+  id          String           @id @default(cuid())
+  name        String
+  website     String?
+  lifecycle   LifecycleStatus  @default(POTENTIAL)
+  notes       String?
+
+  // Relations
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  organizationId String?
+
+  // A client can share projects with other clients (m-n)
+  projects    Project[]        @relation("ClientProjects")
+
+  // Client-specific contacts (m-n, can share with org or across clients)
+  contacts    Contact[]        @relation("ClientContacts")
+
+  tags        String[]         // arbitrary labels (e.g., industry, size)
+  metadata    Json?
+
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  @@index([name])
+  @@index([organizationId])
+}
+
+model Project {
+  id            String           @id @default(cuid())
+  name          String
+  description   String?
+  status        ProjectStatus    @default(PLANNING)
+  lifecycle     LifecycleStatus  @default(POTENTIAL)
+  priority      Int?             // 1 (highest) .. n
+  startDate     DateTime?
+  dueDate       DateTime?
+  notes         String?
+
+  // Relations
+  // Many clients can be linked to the same project and vice-versa
+  clients       Client[]         @relation("ClientProjects")
+
+  // Domains associated with this project (at least one expected in practice)
+  domains       Domain[]
+
+  // Audits for this project (multiple over time)
+  audits        Audit[]
+
+  // Project-specific contacts (stakeholders, tech contacts, etc.)
+  contacts      Contact[]        @relation("ProjectContacts")
+
+  // Arbitrary structured data (deployment info, stack, etc.)
+  metadata      Json?
+
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  @@index([name])
+  @@index([status, lifecycle])
+}
+
+model Domain {
+  id         String    @id @default(cuid())
+  host       String    // e.g., example.com, app.example.com
+  isPrimary  Boolean   @default(false)
+  sslEnabled Boolean?  // whether HTTPS/valid cert is enabled
+  notes      String?
+
+  // Relation
+  project   Project  @relation(fields: [projectId], references: [id])
+  projectId String
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@unique([host])
+  @@index([projectId])
+}
+
+model Audit {
+  id           String       @id @default(cuid())
+  type         AuditType    @default(LIGHTHOUSE)
+  status       AuditStatus  @default(DRAFT)
+
+  // Required: JSON fields for Lighthouse and scroller data
+  lighthouse   Json?        // raw Lighthouse result JSON object
+  scroller     Json?        // scrolling metrics, CLS traces, etc.
+
+  title        String?      // optional descriptive title
+  description  String?
+  runAt        DateTime?    // when the audit run took place
+  startedAt    DateTime?
+  finishedAt   DateTime?
+  createdBy    String?      // auditor name or user id (if no user model yet)
+
+  // Relation to Project (many audits per project)
+  project   Project  @relation(fields: [projectId], references: [id])
+  projectId String
+
+  // Additional structured data per audit
+  metrics    Json?          // normalized KPIs (TTFB, LCP, etc.)
+  resources  Json?          // assets, screenshots, trace links
+  metadata   Json?
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([projectId])
+  @@index([type, status])
+  @@index([runAt])
+}
+
+model Contact {
+  id           String       @id @default(cuid())
+  kind         ContactKind  @default(PERSON)
+
+  // Person fields (used when kind == PERSON)
+  firstName    String?
+  lastName     String?
+  jobTitle     String?
+  company      String?
+
+  // Generic contact channels; keep flexible via JSON
+  channels     Json?        // { emails: [..], phones: [..], slack: ..., whatsapp: ..., url: ... }
+  isPrimary    Boolean?     // can mark primary per usage context in UI
+  notes        String?
+
+  // Many-to-many relations to allow sharing the same contact across orgs/clients/projects
+  organizations Organization[] @relation("OrganizationContacts")
+  clients       Client[]       @relation("ClientContacts")
+  projects      Project[]      @relation("ProjectContacts")
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([lastName, firstName])
+}
