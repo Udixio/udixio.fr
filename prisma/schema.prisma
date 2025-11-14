@@ -244,6 +244,7 @@ model User {
 
   // Relations
   contacts Contact[] @relation("UserContacts")
+  deals    Deal[]
 
   @@unique([email])
   @@map("user")
