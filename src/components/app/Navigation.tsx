@@ -25,31 +25,31 @@ export const Navigation = () => {
 
     return <NavigationRail className="bg-surface-container-highest" alignment="top">
         {/* Primary, frequently used items */}
-        <NavigationRailItem href={"/projects"} icon={farDiagramProject} iconSelected={fasDiagramProject} selected>
+        <NavigationRailItem href={"/app/projects"} icon={farDiagramProject} iconSelected={fasDiagramProject} selected>
             Projects
         </NavigationRailItem>
-        <NavigationRailItem href={"/deals"} icon={farHandshake} iconSelected={fasHandshake}>
+        <NavigationRailItem href={"/app/deals"} icon={farHandshake} iconSelected={fasHandshake}>
             Deals
         </NavigationRailItem>
-        <NavigationRailItem href={"/activities"} icon={farPhone} iconSelected={fasPhone}>
+        <NavigationRailItem href={"/app/activities"} icon={farPhone} iconSelected={fasPhone}>
             Activities
         </NavigationRailItem>
-        <NavigationRailItem href={"/audits"} icon={farMagnifyingGlassChart} iconSelected={fasMagnifyingGlassChart}>
+        <NavigationRailItem href={"/app/audits"} icon={farMagnifyingGlassChart} iconSelected={fasMagnifyingGlassChart}>
             Audits
         </NavigationRailItem>
-        <NavigationRailItem href={"/tasks"} icon={farListCheck} iconSelected={fasListCheck}>
+        <NavigationRailItem href={"/app/tasks"} icon={farListCheck} iconSelected={fasListCheck}>
             Tasks
         </NavigationRailItem>
 
         {/* Rarely accessed items kept behind the burger/menu section */}
         <NavigationRailSection label={"More"}/>
-        <NavigationRailItem href={"/documents"} icon={farFileLines} iconSelected={fasFileLines}>
+        <NavigationRailItem href={"/app/documents"} icon={farFileLines} iconSelected={fasFileLines}>
             Documents
         </NavigationRailItem>
-        <NavigationRailItem href={"/services"} icon={farBriefcase} iconSelected={fasBriefcase}>
+        <NavigationRailItem href={"/app/services"} icon={farBriefcase} iconSelected={fasBriefcase}>
             Services
         </NavigationRailItem>
-        <NavigationRailItem href={"/settings"} icon={farGear} iconSelected={fasGear}>
+        <NavigationRailItem href={"/app/settings"} icon={farGear} iconSelected={fasGear}>
             Settings
         </NavigationRailItem>
     </NavigationRail>

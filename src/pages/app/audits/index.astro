@@ -1,18 +1,7 @@
 ---
 import App from "@layouts/App.astro";
+import AuditsIndex from "@/components/app/Audits/Index";
 ---
 <App>
-
-    <script>
-        import {appService} from "@/stores/appStore.ts";
-
-        appService.set({
-            actions: [
-                {
-                    label: "exemple", action: () => {
-                    }
-                }
-            ]
-        })
-    </script>
+    <AuditsIndex client:load/>
 </App>

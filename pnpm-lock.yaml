@@ -15,8 +15,8 @@ importers:
         specifier: 4.3.6
         version: 4.3.6(astro@5.13.11(@types/node@24.10.1)(@vercel/functions@2.2.13(@aws-sdk/credential-provider-web-identity@3.929.0))(jiti@2.6.1)(lightningcss@1.30.2)(rollup@4.53.2)(sass@1.94.0)(terser@5.39.0)(tsx@4.20.6)(typescript@5.9.3)(yaml@2.8.1))
       '@astrojs/react':
-        specifier: 4.3.1
-        version: 4.3.1(@types/node@24.10.1)(@types/react-dom@19.2.3(@types/react@19.2.4))(@types/react@19.2.4)(jiti@2.6.1)(lightningcss@1.30.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(sass@1.94.0)(terser@5.39.0)(tsx@4.20.6)(yaml@2.8.1)
+        specifier: ^4.4.2
+        version: 4.4.2(@types/node@24.10.1)(@types/react-dom@19.2.3(@types/react@19.2.4))(@types/react@19.2.4)(jiti@2.6.1)(lightningcss@1.30.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(sass@1.94.0)(terser@5.39.0)(tsx@4.20.6)(yaml@2.8.1)
       '@astrojs/sitemap':
         specifier: 3.6.0
         version: 3.6.0
@@ -262,8 +262,8 @@ packages:
     resolution: {integrity: sha512-q8VwfU/fDZNoDOf+r7jUnMC2//H2l0TuQ6FkGJL8vD8nw/q5KiL3DS1KKBI3QhI9UQhpJ5dc7AtqfbXWuOgLCQ==}
     engines: {node: 18.20.8 || ^20.3.0 || >=22.0.0}
 
-  '@astrojs/react@4.3.1':
-    resolution: {integrity: sha512-Jhv35TsDHuQLvwof2z10P3g1s9wIR4UN9jE7O4NZBJNXOt/+qk+L0rY9th4SX7VzccKmRltUGxAhI1cXH52gXw==}
+  '@astrojs/react@4.4.2':
+    resolution: {integrity: sha512-1tl95bpGfuaDMDn8O3x/5Dxii1HPvzjvpL2YTuqOOrQehs60I2DKiDgh1jrKc7G8lv+LQT5H15V6QONQ+9waeQ==}
     engines: {node: 18.20.8 || ^20.3.0 || >=22.0.0}
     peerDependencies:
       '@types/react': ^17.0.50 || ^18.0.21 || ^19.0.0
@@ -5065,7 +5065,7 @@ snapshots:
     dependencies:
       prismjs: 1.30.0
 
-  '@astrojs/react@4.3.1(@types/node@24.10.1)(@types/react-dom@19.2.3(@types/react@19.2.4))(@types/react@19.2.4)(jiti@2.6.1)(lightningcss@1.30.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(sass@1.94.0)(terser@5.39.0)(tsx@4.20.6)(yaml@2.8.1)':
+  '@astrojs/react@4.4.2(@types/node@24.10.1)(@types/react-dom@19.2.3(@types/react@19.2.4))(@types/react@19.2.4)(jiti@2.6.1)(lightningcss@1.30.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(sass@1.94.0)(terser@5.39.0)(tsx@4.20.6)(yaml@2.8.1)':
     dependencies:
       '@types/react': 19.2.4
       '@types/react-dom': 19.2.3(@types/react@19.2.4)
