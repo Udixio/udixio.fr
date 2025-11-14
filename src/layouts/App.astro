@@ -1,6 +1,7 @@
 ---
 import Layout from "@layouts/Layout.astro";
 import {Navigation} from "@/components/app/Navigation"
+import {Actions} from "@/components/app/Actions.tsx"
 export const prerender = false;
 ---
 <Layout menu={false} footer={false} seo={{noindex: true}}>
@@ -10,6 +11,7 @@ export const prerender = false;
 
     <slot/>
 
+    <Actions client:load/>
 
     <script>
         import {actions} from 'astro:actions';

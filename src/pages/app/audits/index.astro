@@ -3,4 +3,16 @@ import App from "@layouts/App.astro";
 ---
 <App>
 
+    <script>
+        import {appService} from "@/stores/appStore.ts";
+
+        appService.set({
+            actions: [
+                {
+                    label: "exemple", action: () => {
+                    }
+                }
+            ]
+        })
+    </script>
 </App>
