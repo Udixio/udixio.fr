@@ -1,0 +1,11 @@
+---
+import Layout from "@layouts/Layout.astro";
+import Login from "@/components/app/Login.tsx";
+
+export const prerender = false;
+---
+<Layout>
+    <div class="mx-auto min-h-screen max-w-md py-12 flex items-center justify-center">
+        <Login client:load />
+    </div>
+</Layout>
