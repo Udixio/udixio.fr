@@ -15,7 +15,7 @@ export const prerender = false;
         import {actions} from 'astro:actions';
 
         (async () => {
-            const isLoginPage = window.location.pathname === '/app/login';
+            const isLoginPage = window.location.pathname === '/login';
             if (isLoginPage) {
                 const {data, error} = await actions.checkAuth({})
                 if (error) {
@@ -31,7 +31,7 @@ export const prerender = false;
                     window.location.replace('/500');
                 }
                 if (!data?.authenticated) {
-                    window.location.replace('/app/login');
+                    window.location.replace('/login');
                 }
             } catch (e) {
                 window.location.replace('/500');
@@ -42,7 +42,7 @@ export const prerender = false;
     <noscript>
         <div class="p-4 text-sm text-red-600">
             JavaScript est requis pour vérifier votre session. Activez JavaScript ou
-            rendez-vous sur <a class="underline" href="/app/login">/app/login</a> pour vous connecter.
+            rendez-vous sur <a class="underline" href="/login">/login</a> pour vous connecter.
         </div>
     </noscript>
 </Layout>
