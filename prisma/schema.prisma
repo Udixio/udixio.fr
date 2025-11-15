@@ -30,6 +30,8 @@ enum LifecycleStatus {
   ARCHIVED
 }
 
+// Commercial "client status" removed to simplify: deal statuses now carry the relationship signal
+
 // Project execution status (more operational than lifecycle)
 
 enum ProjectStatus {
@@ -80,6 +82,8 @@ model Organization {
   website   String? // e.g., https://example.com
   lifecycle LifecycleStatus @default(POTENTIAL)
   notes     String?
+  // High-level commercial info
+  targetBudget Decimal? @db.Decimal(12, 2)
 
   // Relations
   // Members are managed via Member model
@@ -121,6 +125,10 @@ model Project {
   organization   Organization @relation(fields: [organizationId], references: [id])
   organizationId String
 
+  // Optional primary person (Client) associated with this project (e.g., project contact)
+  client   Client? @relation(fields: [clientId], references: [id])
+  clientId String?
+
   // Domains associated with this project (at least one expected in practice)
   domains Domain[]
 
@@ -142,6 +150,7 @@ model Project {
   @@index([name])
   @@index([status, lifecycle])
   @@index([organizationId])
+  @@index([clientId])
 }
 
 model Domain {
@@ -214,6 +223,7 @@ model Contact {
   organizations Organization[] @relation("OrganizationContacts")
   users         User[]         @relation("UserContacts")
   projects      Project[]      @relation("ProjectContacts")
+  clients       Client[]       @relation("ClientContacts")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -246,8 +256,40 @@ model User {
   contacts Contact[] @relation("UserContacts")
   deals    Deal[]
 
+  // A User is a Client by default (1-1). The Client record stores CRM-specific info.
+  client   Client?
+
   @@unique([email])
   @@map("user")
+}
+
+// =============================
+// Client (profil CRM minimal) — 1:1 avec User
+// =============================
+
+/// Un Client représente un profil CRM minimal pour une personne (User).
+/// Règles métier (gérées côté application):
+/// - À la création d’un User, créer un Client associé.
+/// - À la désactivation/suppression d’un User, archiver/anonymiser le Client selon la politique.
+model Client {
+  id        String          @id @default(cuid())
+
+  // 1-1 relation with User
+  user     User   @relation(fields: [userId], references: [id])
+  userId   String @unique
+
+  // Notes & metadata
+  commercialNotes String?
+  metadata        Json?
+
+  // Relations
+  deals         Deal[]
+  projects      Project[]
+  contacts      Contact[]      @relation("ClientContacts")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("client")
 }
 
 // =============================
@@ -281,6 +323,11 @@ model Deal {
   project   Project? @relation(fields: [projectId], references: [id])
   projectId String?
 
+  // Primary person for the deal; migrating from direct User link to Client
+  client Client? @relation(fields: [clientId], references: [id])
+  clientId String?
+
+  // Deprecated: keep for backward compatibility during migration
   user   User?   @relation(fields: [userId], references: [id])
   userId String?
 
@@ -291,6 +338,7 @@ model Deal {
   @@index([organizationId])
   @@index([projectId])
   @@index([userId])
+  @@index([clientId])
   @@index([status])
 }
 
