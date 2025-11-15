@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from "react";
+import React, {useEffect, useMemo, useRef, useState} from "react";
 import {withState} from '@astrojs/react/actions';
 import {useActionState} from "react";
 import {actions} from 'astro:actions';
@@ -23,6 +23,7 @@ export default function ProjectsIndex() {
   const [orgId, setOrgId] = useState("");
   const [showCreate, setShowCreate] = useState(false);
   const [showImport, setShowImport] = useState(false);
+  const formRef = useRef<HTMLFormElement | null>(null);
 
   const [listState, listAction, listPending] = useActionState<ListState, FormData>(listProjects, undefined);
   const [createState, createAction, createPending] = useActionState<any, FormData>(createProject, undefined);
@@ -35,20 +36,14 @@ export default function ProjectsIndex() {
         {label: "Nouveau projet", action: () => setShowCreate(true)},
         {label: "Importer CSV", action: () => setShowImport(true)},
         {label: "Rafraîchir", action: () => {
-          const fd = new FormData();
-          if (query) fd.set("q", query);
-          if (orgId) fd.set("organizationId", orgId);
-          listAction(fd);
+          // Soumettre le formulaire directement, sans FormData manuelle
+          formRef.current?.requestSubmit();
         }},
       ]
     });
-  }, [query, orgId, listAction]);
+  }, [query, orgId]);
 
-  // Load once on mount
-  useEffect(() => {
-    const fd = new FormData();
-    listAction(fd);
-  }, [listAction]);
+  // Pas de chargement initial automatique: l'utilisateur soumet le formulaire
 
   const items = listState?.items ?? [];
 
@@ -56,7 +51,7 @@ export default function ProjectsIndex() {
     <div className="p-4 space-y-4">
       <h1 className="text-xl font-semibold">Projects</h1>
 
-      <form className="flex gap-2 items-end" action={listAction}>
+      <form ref={formRef} className="flex gap-2 items-end" action={listAction}>
         <div>
           <label className="block text-sm">Recherche</label>
           <input name="q" value={query} onChange={(e)=>setQuery(e.target.value)} className="border px-2 py-1" placeholder="Nom..."/>

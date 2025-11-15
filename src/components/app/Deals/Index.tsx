@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {withState} from '@astrojs/react/actions';
 import {useActionState} from "react";
 import {actions} from 'astro:actions';
@@ -28,6 +28,7 @@ export default function DealsIndex() {
   const [filters, setFilters] = useState({ organizationId: "", projectId: "", userId: "", status: "" });
   const [showCreate, setShowCreate] = useState(false);
   const [showImport, setShowImport] = useState(false);
+  const formRef = useRef<HTMLFormElement | null>(null);
 
   const [listState, listAction, listPending] = useActionState<ListState, FormData>(listDeals, undefined);
   const [createState, createAction, createPending] = useActionState<any, FormData>(createDeal, undefined);
@@ -39,18 +40,14 @@ export default function DealsIndex() {
         {label: "Nouveau deal", action: () => setShowCreate(true)},
         {label: "Importer CSV", action: () => setShowImport(true)},
         {label: "Rafraîchir", action: () => {
-          const fd = new FormData();
-          Object.entries(filters).forEach(([k,v])=>{ if (v) fd.set(k, v as string); });
-          listAction(fd);
+          // Soumission directe du formulaire de filtre
+          formRef.current?.requestSubmit();
         }},
       ]
     });
-  }, [filters, listAction]);
+  }, [filters]);
 
-  useEffect(() => {
-    const fd = new FormData();
-    listAction(fd);
-  }, [listAction]);
+  // Pas d'appel initial automatique: l'utilisateur soumet le formulaire
 
   const items = listState?.items ?? [];
 
@@ -58,7 +55,7 @@ export default function DealsIndex() {
     <div className="p-4 space-y-4">
       <h1 className="text-xl font-semibold">Deals</h1>
 
-      <form className="grid gap-2 grid-cols-2 md:grid-cols-5 items-end" action={listAction}
+      <form ref={formRef} className="grid gap-2 grid-cols-2 md:grid-cols-5 items-end" action={listAction}
             onChange={(e)=>{
               const t = e.target as HTMLInputElement;
               if (!t.name) return;

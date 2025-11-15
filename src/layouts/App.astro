@@ -5,14 +5,11 @@ import {Actions} from "@/components/app/Actions.tsx"
 export const prerender = false;
 ---
 <Layout menu={false} footer={false} seo={{noindex: true}}>
-    <div class="h-[100vh]">
+    <div class="h-[100vh] flex">
         <Navigation client:load/>
+        <slot/>
+        <Actions client:load/>
     </div>
-
-    <slot/>
-
-    <Actions client:load/>
-
     <script>
         import {actions} from 'astro:actions';
 

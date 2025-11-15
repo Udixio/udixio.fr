@@ -1,4 +1,4 @@
-import React, {useActionState, useEffect, useState} from "react";
+import React, {useActionState, useEffect, useRef, useState} from "react";
 import {withState} from '@astrojs/react/actions';
 import {actions} from 'astro:actions';
 import {appService} from "@/stores/appStore";
@@ -14,32 +14,30 @@ type Audit = {
 
 type ListState = { items: Audit[]; total: number } | undefined;
 
+// Déclarer l'action une seule fois hors composant (React Actions pattern)
+const listAudits = withState(actions.listAudits);
+
 
 export default function AuditsIndex() {
     const [filters, setFilters] = useState({projectId: "", status: "", type: ""});
-    const [listState, listAction, listPending] = useActionState<ListState, FormData>(
-        withState(actions.listAudits), undefined);
+    const [listState, listAction, listPending] = useActionState<ListState, FormData>(listAudits, undefined);
+    const formRef = useRef<HTMLFormElement | null>(null);
 
     useEffect(() => {
         appService.set({
             actions: [
                 {
-                    label: "Rafraîchir", action: () => {
-                        const fd = new FormData();
-                        Object.entries(filters).forEach(([k, v]) => {
-                            if (v) fd.set(k, v as string);
-                        });
-                        listAction(fd);
+                    label: "Rafraîchir",
+                    action: () => {
+                        // Soumet le formulaire directement (pas de FormData manuelle)
+                        formRef.current?.requestSubmit();
                     }
                 },
             ]
         });
-    }, [filters, listAction]);
+    }, [filters]);
 
-    useEffect(() => {
-        const fd = new FormData();
-        listAction(fd);
-    }, [listAction]);
+    // Pas d'appel initial automatique: l'utilisateur soumet le formulaire
 
     const items = listState?.items ?? [];
 
@@ -47,7 +45,7 @@ export default function AuditsIndex() {
         <div className="p-4 space-y-4">
             <h1 className="text-xl font-semibold">Audits</h1>
 
-            <form className="grid gap-2 grid-cols-2 md:grid-cols-4 items-end" action={listAction}
+            <form ref={formRef} className="grid gap-2 grid-cols-2 md:grid-cols-4 items-end" action={listAction}
                   onChange={(e) => {
                       const t = e.target as HTMLInputElement;
                       if (!t.name) return;
