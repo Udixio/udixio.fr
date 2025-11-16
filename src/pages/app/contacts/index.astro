@@ -1,0 +1,8 @@
+---
+import App from "@layouts/App.astro";
+import ContactsIndex from "@/components/app/Contacts/Index";
+export const prerender = false;
+---
+<App>
+    <ContactsIndex client:load/>
+</App>

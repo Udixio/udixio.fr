@@ -31,7 +31,7 @@ export const Navigation = () => {
 
     return <NavigationRail className="bg-surface-container-highest" alignment="top">
         {/* Primary: orienté CRM autour du Client */}
-        <NavigationRailItem href={"/app/clients"} icon={farUser} iconSelected={fasUser} selected>
+        <NavigationRailItem href={"/app/clients"} icon={farUser} iconSelected={fasUser}>
             Clients
         </NavigationRailItem>
         <NavigationRailItem href={"/app/deals"} icon={farHandshake} iconSelected={fasHandshake}>
