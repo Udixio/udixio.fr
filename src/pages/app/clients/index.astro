@@ -1,7 +1,11 @@
 ---
 import App from "@layouts/App.astro";
 import ClientsIndex from "@/components/app/Clients/Index";
+
 export const prerender = false;
+
+// Remplacé par une action serveur (server.getModels) pour l'introspection des modèles Prisma.
+// Voir src/actions/index.ts → getModels
 ---
 <App>
     <ClientsIndex client:load/>

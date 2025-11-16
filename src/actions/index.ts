@@ -4,6 +4,53 @@ import {defineAction} from 'astro:actions';
 import {z} from 'astro:schema';
 
 export const server = {
+    // ===== Introspection / Models =====
+    getModels: defineAction({
+        input: z.object({
+            // optional list of model names to include; if omitted, returns all
+            models: z.array(z.string()).optional(),
+        }).optional(),
+        handler: async (input) => {
+            // Prisma exposes a runtime data model on the client instance.
+            // We only extract serializable information for fields to help build dynamic forms.
+            const runtimeModels = (prisma as any)?._runtimeDataModel?.models ?? {};
+            const requested = input?.models?.length ? new Set(input.models.map((m) => m.toString())) : null;
+
+            const result: Record<string, Array<{
+                name: string;
+                isList: boolean;
+                isRequired: boolean;
+                isUnique: boolean;
+                isId: boolean;
+                isReadOnly: boolean;
+                hasDefaultValue: boolean;
+                type: string;
+                default?: any;
+                relationName?: string | null;
+                documentation?: string | null;
+            }>> = {};
+
+            for (const [modelName, modelDef] of Object.entries(runtimeModels)) {
+                if (requested && !requested.has(modelName)) continue;
+                const fields = (modelDef as any).fields as any[];
+                result[modelName] = fields.map((f) => ({
+                    name: f.name,
+                    isList: Boolean(f.isList),
+                    isRequired: Boolean(f.isRequired),
+                    isUnique: Boolean(f.isUnique),
+                    isId: Boolean(f.isId),
+                    isReadOnly: Boolean(f.isReadOnly),
+                    hasDefaultValue: Boolean(f.hasDefaultValue),
+                    type: String(f.type),
+                    default: typeof f.default === 'function' ? undefined : f.default,
+                    relationName: (f.relationName ?? null) as any,
+                    documentation: (f.documentation ?? null) as any,
+                }));
+            }
+
+            return {models: result};
+        }
+    }),
     checkAuth: defineAction({
         // Aucun input requis, mais on accepte un objet vide
         input: z.object({}).optional(),
