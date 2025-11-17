@@ -2,7 +2,6 @@
 import Layout from "@layouts/Layout.astro";
 import {Navigation} from "@/components/app/Navigation"
 import {Actions} from "@/components/app/Actions.tsx"
-export const prerender = false;
 ---
 <Layout menu={false} footer={false} seo={{noindex: true}}>
     <div class="h-[100vh] flex">
@@ -13,29 +12,29 @@ export const prerender = false;
     <script>
         import {actions} from 'astro:actions';
 
-        (async () => {
-            const isLoginPage = window.location.pathname === '/login';
-            if (isLoginPage) {
-                const {data, error} = await actions.checkAuth({})
-                if (error) {
+            (async () => {
+                const isLoginPage = window.location.pathname === '/login';
+                if (isLoginPage) {
+                    const {data, error} = await actions.checkAuth({})
+                    if (error) {
+                        window.location.replace('/500');
+                        }
+                    if (data?.authenticated) {
+                        window.location.replace('/app');
+                        }
+                    }
+                try {
+                    const {data, error} = await actions.checkAuth({})
+                    if (error) {
+                        window.location.replace('/500');
+                        }
+                    if (!data?.authenticated) {
+                        window.location.replace('/login');
+                        }
+                    } catch (e) {
                     window.location.replace('/500');
-                }
-                if (data?.authenticated) {
-                    window.location.replace('/app');
-                }
-            }
-            try {
-                const {data, error} = await actions.checkAuth({})
-                if (error) {
-                    window.location.replace('/500');
-                }
-                if (!data?.authenticated) {
-                    window.location.replace('/login');
-                }
-            } catch (e) {
-                window.location.replace('/500');
-            }
-        })();
+                    }
+                })();
     </script>
 
     <noscript>

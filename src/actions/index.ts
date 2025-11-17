@@ -4,7 +4,6 @@ import {defineAction} from 'astro:actions';
 import {z} from 'astro:schema';
 
 export const server = {
-    // ===== Introspection / Models =====
     getModels: defineAction({
         input: z.object({
             // optional list of model names to include; if omitted, returns all
@@ -15,9 +14,32 @@ export const server = {
             // We only extract serializable information for fields to help build dynamic forms.
             const runtimeModels = (prisma as any)?._runtimeDataModel?.models ?? {};
             const requested = input?.models?.length ? new Set(input.models.map((m) => m.toString())) : null;
-
-            const result: Record<string, Array<{
-                name: string;
+            console.log("Effective models:");
+            // When specific models are requested, also include their dependent models recursively
+            let effective: Set<string> | null = requested ? new Set<string>(requested) : null;
+            if (requested) {
+                const isModel = (name: string) => Object.prototype.hasOwnProperty.call(runtimeModels, name);
+                const queue: string[] = Array.from(requested);
+                const visited = new Set<string>();
+                while (queue.length) {
+                    const current = queue.shift()!;
+                    if (visited.has(current)) continue;
+                    visited.add(current);
+                    const modelDef = (runtimeModels as any)[current];
+                    if (!modelDef) continue;
+                    const fields: any[] = (modelDef as any).fields ?? [];
+                    for (const f of fields) {
+                        const t = String(f?.type ?? '');
+                        // If field type names another Prisma model, include it
+                        if (t && isModel(t) && !effective!.has(t)) {
+                            effective!.add(t);
+                            queue.push(t);
+                        }
+                    }
+                }
+            }
+            console.log("Effective models:");
+            const result: Record<string, Record<string, {
                 isList: boolean;
                 isRequired: boolean;
                 isUnique: boolean;
@@ -27,28 +49,129 @@ export const server = {
                 type: string;
                 default?: any;
                 relationName?: string | null;
+                relationFromFields?: string[] | null;
+                relationToFields?: string[] | null;
                 documentation?: string | null;
             }>> = {};
 
+            console.log("Effective models:", effective);
+
             for (const [modelName, modelDef] of Object.entries(runtimeModels)) {
-                if (requested && !requested.has(modelName)) continue;
+                if (effective && !effective.has(modelName)) continue;
                 const fields = (modelDef as any).fields as any[];
-                result[modelName] = fields.map((f) => ({
-                    name: f.name,
-                    isList: Boolean(f.isList),
-                    isRequired: Boolean(f.isRequired),
-                    isUnique: Boolean(f.isUnique),
-                    isId: Boolean(f.isId),
-                    isReadOnly: Boolean(f.isReadOnly),
-                    hasDefaultValue: Boolean(f.hasDefaultValue),
-                    type: String(f.type),
-                    default: typeof f.default === 'function' ? undefined : f.default,
-                    relationName: (f.relationName ?? null) as any,
-                    documentation: (f.documentation ?? null) as any,
-                }));
+                const fieldsRecord: typeof result[string] = {};
+
+                fields.forEach((f) => {
+                    fieldsRecord[f.name] = {
+                        isList: Boolean(f.isList),
+                        isRequired: Boolean(f.isRequired),
+                        isUnique: Boolean(f.isUnique),
+                        isId: Boolean(f.isId),
+                        isReadOnly: Boolean(f.isReadOnly),
+                        hasDefaultValue: Boolean(f.hasDefaultValue),
+                        type: String(f.type),
+                        default: typeof f.default === 'function' ? undefined : f.default,
+                        relationName: (f.relationName ?? null) as any,
+                        relationFromFields: (f.relationFromFields ?? null) as any,
+                        relationToFields: (f.relationToFields ?? null) as any,
+                        documentation: (f.documentation ?? null) as any,
+                    };
+                });
+                result[modelName] = fieldsRecord;
             }
 
-            return {models: result};
+
+            console.log("Models:", result);
+            return result;
+        }
+    }),
+    // ===== Generic entities (whitelisted) =====
+    listEntities: defineAction({
+        input: z.object({
+            model: z.enum(["User", "Organization", "Project", "Deal", "Contact", "Client"]),
+            q: z.string().optional(),
+            limit: z.number().int().min(1).max(100).default(25),
+            offset: z.number().int().min(0).default(0),
+            whereJson: z.string().optional(),
+        }),
+        handler: async (input) => {
+            const {model, q, limit, offset, whereJson} = input;
+            const where: any = whereJson ? JSON.parse(whereJson) : {};
+            // Basic search mapping per model
+            if (q) {
+                const contains = (field: string) => ({[field]: {contains: q, mode: 'insensitive'}});
+                if (model === 'User') where.OR = [contains('name'), contains('email')];
+                if (model === 'Organization') where.OR = [contains('name'), contains('slug')];
+                if (model === 'Project') where.name = {contains: q, mode: 'insensitive'};
+                if (model === 'Deal') where.title = {contains: q, mode: 'insensitive'};
+                if (model === 'Contact') where.OR = [contains('firstName'), contains('lastName'), contains('company')];
+                if (model === 'Client') where.user = {OR: [contains('name'), contains('email')]} as any;
+            }
+            const clientAny = prisma as any;
+            const [items, total] = await Promise.all([
+                clientAny[model.toLowerCase()].findMany({
+                    where,
+                    take: limit,
+                    skip: offset,
+                    orderBy: {createdAt: 'desc'}
+                }),
+                clientAny[model.toLowerCase()].count({where})
+            ]);
+            return {items, total};
+        }
+    }),
+    createEntity: defineAction({
+        input: z.object({
+            model: z.enum(["User", "Organization", "Project", "Deal", "Contact", "Client"]),
+            dataJson: z.string(),
+        }),
+        handler: async (input) => {
+            const data = JSON.parse(input.dataJson);
+            // Guard against writing read-only/id fields will be handled at Prisma level too
+            const clientAny = prisma as any;
+            const created = await clientAny[input.model.toLowerCase()].create({data});
+            return {created};
+        }
+    }),
+
+    // ===== Users (minimal) =====
+    listUsers: defineAction({
+        input: z.object({
+            q: z.string().optional(),
+            limit: z.number().int().min(1).max(100).default(25),
+            offset: z.number().int().min(0).default(0),
+        }).optional(),
+        handler: async (input) => {
+            const where: any = {};
+            if (input?.q) {
+                where.OR = [
+                    {name: {contains: input.q, mode: "insensitive"}},
+                    {email: {contains: input.q, mode: "insensitive"}},
+                ]
+            }
+            const [items, total] = await Promise.all([
+                prisma.user.findMany({
+                    where,
+                    orderBy: {createdAt: 'desc'},
+                    select: {id: true, name: true, email: true},
+                    take: input?.limit ?? 25,
+                    skip: input?.offset ?? 0,
+                }),
+                prisma.user.count({where}),
+            ]);
+            return {items, total};
+        }
+    }),
+    createUser: defineAction({
+        input: z.object({
+            name: z.string().min(2),
+            email: z.string().email(),
+        }),
+        handler: async (input) => {
+            const created = await prisma.user.create({
+                data: {name: input.name, email: input.email}
+            });
+            return {created};
         }
     }),
     checkAuth: defineAction({
@@ -91,7 +214,7 @@ export const server = {
         input: z.object({
             name: z.string().min(2),
             slug: z.string().min(2),
-            lifecycle: z.enum(["POTENTIAL","QUALIFIED","ACTIVE","PAUSED","NOT_POSSIBLE","LOST","CLOSED","ARCHIVED"]).optional(),
+            lifecycle: z.enum(["POTENTIAL", "QUALIFIED", "ACTIVE", "PAUSED", "NOT_POSSIBLE", "LOST", "CLOSED", "ARCHIVED"]).optional(),
             notes: z.string().optional(),
             website: z.string().optional(),
         }),
@@ -116,7 +239,7 @@ export const server = {
             const lines = input.csv.split(/\r?\n/).filter(l => l.trim().length > 0);
             if (lines.length === 0) return {created: 0};
             const [header, ...rows] = lines;
-            const cols = header.split(",").map(c=>c.trim().toLowerCase());
+            const cols = header.split(",").map(c => c.trim().toLowerCase());
             const idx = (k: string) => cols.indexOf(k.toLowerCase());
             const nIdx = idx("name");
             const sIdx = idx("slug");
@@ -168,7 +291,7 @@ export const server = {
     }),
     createContact: defineAction({
         input: z.object({
-            kind: z.enum(["PERSON","GENERIC"]).default("PERSON"),
+            kind: z.enum(["PERSON", "GENERIC"]).default("PERSON"),
             firstName: z.string().optional(),
             lastName: z.string().optional(),
             company: z.string().optional(),
@@ -199,18 +322,18 @@ export const server = {
             const lines = input.csv.split(/\r?\n/).filter(l => l.trim().length > 0);
             if (lines.length === 0) return {created: 0};
             const [header, ...rows] = lines;
-            const cols = header.split(",").map(c=>c.trim().toLowerCase());
+            const cols = header.split(",").map(c => c.trim().toLowerCase());
             const idx = (k: string) => cols.indexOf(k.toLowerCase());
             let count = 0;
             for (const row of rows) {
                 const v = row.split(",");
-                const kind = (idx("kind")>=0 ? v[idx("kind")]?.trim() : "PERSON") as any;
-                const firstName = idx("firstname")>=0 ? v[idx("firstname")]?.trim() || undefined : undefined;
-                const lastName = idx("lastname")>=0 ? v[idx("lastname")]?.trim() || undefined : undefined;
-                const company = idx("company")>=0 ? v[idx("company")]?.trim() || undefined : undefined;
-                const jobTitle = idx("jobtitle")>=0 ? v[idx("jobtitle")]?.trim() || undefined : undefined;
-                const channelsStr = idx("channels_json")>=0 ? v[idx("channels_json")]?.trim() : undefined;
-                const notes = idx("notes")>=0 ? v[idx("notes")]?.trim() || undefined : undefined;
+                const kind = (idx("kind") >= 0 ? v[idx("kind")]?.trim() : "PERSON") as any;
+                const firstName = idx("firstname") >= 0 ? v[idx("firstname")]?.trim() || undefined : undefined;
+                const lastName = idx("lastname") >= 0 ? v[idx("lastname")]?.trim() || undefined : undefined;
+                const company = idx("company") >= 0 ? v[idx("company")]?.trim() || undefined : undefined;
+                const jobTitle = idx("jobtitle") >= 0 ? v[idx("jobtitle")]?.trim() || undefined : undefined;
+                const channelsStr = idx("channels_json") >= 0 ? v[idx("channels_json")]?.trim() : undefined;
+                const notes = idx("notes") >= 0 ? v[idx("notes")]?.trim() || undefined : undefined;
                 await prisma.contact.create({
                     data: {
                         kind,
@@ -241,12 +364,12 @@ export const server = {
             const [items, total] = await Promise.all([
                 prisma.client.findMany({
                     orderBy: {createdAt: 'desc'},
-                    include: { user: { select: { id: true, name: true, email: true } } },
+                    include: {user: {select: {id: true, name: true, email: true}}},
                     take: input?.limit ?? 25,
                     skip: input?.offset ?? 0,
-                    where: { user: whereUser }
+                    where: {user: whereUser}
                 }),
-                prisma.client.count({ where: { user: whereUser } })
+                prisma.client.count({where: {user: whereUser}})
             ]);
             return {items, total};
         }
@@ -274,7 +397,7 @@ export const server = {
             const lines = input.csv.split(/\r?\n/).filter(l => l.trim().length > 0);
             if (lines.length === 0) return {created: 0};
             const [header, ...rows] = lines;
-            const cols = header.split(",").map(c=>c.trim().toLowerCase());
+            const cols = header.split(",").map(c => c.trim().toLowerCase());
             const idx = (k: string) => cols.indexOf(k.toLowerCase());
             const uIdx = idx("userid");
             let count = 0;
@@ -282,11 +405,210 @@ export const server = {
                 const v = row.split(",");
                 const userId = v[uIdx]?.trim();
                 if (!userId) continue;
-                const commercialNotes = idx("commercialnotes")>=0 ? v[idx("commercialnotes")]?.trim() || undefined : undefined;
-                await prisma.client.create({ data: { userId, commercialNotes } });
+                const commercialNotes = idx("commercialnotes") >= 0 ? v[idx("commercialnotes")]?.trim() || undefined : undefined;
+                await prisma.client.create({data: {userId, commercialNotes}});
                 count++;
             }
             return {created: count};
+        }
+    }),
+
+    // ===== Client wizard (composite creation) =====
+    createClientWizard: defineAction({
+        input: z.object({
+            // Client info
+            commercialNotes: z.string().optional(),
+            clientDataJson: z.string().optional(), // additional scalar fields for Client
+
+            // User: either existing by id or create minimal
+            user: z.discriminatedUnion('mode', [
+                z.object({mode: z.literal('existing'), userId: z.string()}),
+                z.object({mode: z.literal('create'), name: z.string().min(2), email: z.string().email()}),
+            ]),
+
+            // Organization: none | existing | create
+            organization: z.union([
+                z.object({mode: z.literal('none')}),
+                z.object({mode: z.literal('existing'), organizationId: z.string()}),
+                z.object({mode: z.literal('create'), name: z.string().min(2), slug: z.string().min(2)}),
+            ]).default({mode: 'none' as const}),
+
+            // Optional initial project (single for v1)
+            project: z.union([
+                z.object({mode: z.literal('none')}),
+                z.object({mode: z.literal('existing'), projectId: z.string()}),
+                z.object({
+                    mode: z.literal('create'),
+                    name: z.string().min(2),
+                    description: z.string().optional(),
+                    organizationId: z.string().optional()
+                }),
+            ]).default({mode: 'none' as const}),
+        }),
+        handler: async (input) => {
+            // Resolve/create user
+            let userId: string;
+            if (input.user.mode === 'existing') {
+                userId = input.user.userId;
+            } else {
+                const u = await prisma.user.create({data: {name: input.user.name, email: input.user.email}});
+                userId = u.id;
+            }
+
+            // Create client
+            const clientData = input.clientDataJson ? JSON.parse(input.clientDataJson) : {};
+            const client = await prisma.client.create({
+                data: {
+                    ...clientData,
+                    userId,
+                    commercialNotes: input.commercialNotes ?? clientData.commercialNotes,
+                },
+                include: {user: {select: {id: true, name: true, email: true}}}
+            });
+
+            // Resolve/create organization and link via Member (User <-> Organization)
+            let organizationId: string | undefined = undefined;
+            if (input.organization.mode === 'existing') {
+                organizationId = input.organization.organizationId;
+            } else if (input.organization.mode === 'create') {
+                const org = await prisma.organization.create({
+                    data: {
+                        name: input.organization.name,
+                        slug: input.organization.slug,
+                    }
+                });
+                organizationId = org.id;
+            }
+            if (organizationId) {
+                // create Member link between user and organization if not exists
+                const exists = await prisma.member.findFirst({where: {userId, organizationId}});
+                if (!exists) {
+                    await prisma.member.create({
+                        data: {
+                            id: `${userId}_${organizationId}`,
+                            userId,
+                            organizationId,
+                            role: 'MEMBER',
+                            createdAt: new Date()
+                        }
+                    });
+                }
+            }
+
+            // Optional project processing
+            let projectId: string | undefined = undefined;
+            if (input.project.mode === 'existing') {
+                projectId = input.project.projectId;
+                // attach client to existing project
+                await prisma.project.update({where: {id: projectId}, data: {clientId: client.id}});
+            } else if (input.project.mode === 'create') {
+                const orgForProject = input.project.organizationId ?? organizationId;
+                if (!orgForProject) {
+                    // No organization available -> skip creation and return warning
+                } else {
+                    const proj = await prisma.project.create({
+                        data: {
+                            name: input.project.name,
+                            description: input.project.description,
+                            organizationId: orgForProject,
+                            clientId: client.id,
+                        }
+                    });
+                    projectId = proj.id;
+                }
+            }
+
+            return {created: {client, organizationId, projectId}};
+        }
+    }),
+
+    // Same as createClientWizard but accepts a JSON payload to simplify client form posting
+    createClientWizardJson: defineAction({
+        input: z.object({payload: z.string()}),
+        handler: async (input) => {
+            const parsed = JSON.parse(input.payload);
+            // Re-use the same logic by calling through Prisma directly
+            // Validate minimal shape
+            const safe = z.object({
+                commercialNotes: z.string().optional(),
+                clientDataJson: z.string().optional(),
+                user: z.object({mode: z.string()}).passthrough(),
+                organization: z.object({mode: z.string()}).passthrough().optional(),
+                project: z.object({mode: z.string()}).passthrough().optional(),
+            }).parse(parsed);
+
+            // Map to createClientWizard input and delegate by reusing the code above
+            // Resolve/create user
+            let userId: string;
+            if (safe.user.mode === 'existing') {
+                userId = (safe.user as any).userId as string;
+            } else {
+                const u = await prisma.user.create({
+                    data: {
+                        name: (safe.user as any).name,
+                        email: (safe.user as any).email
+                    }
+                });
+                userId = u.id;
+            }
+
+            const clientData = safe.clientDataJson ? JSON.parse(safe.clientDataJson) : {};
+            const client = await prisma.client.create({
+                data: {userId, ...clientData, commercialNotes: safe.commercialNotes ?? clientData.commercialNotes},
+                include: {user: {select: {id: true, name: true, email: true}}}
+            });
+
+            // Organization handling (link through Member)
+            let organizationId: string | undefined;
+            const org = safe.organization;
+            if (org?.mode === 'existing') {
+                organizationId = (org as any).organizationId as string;
+            } else if (org?.mode === 'create') {
+                const created = await prisma.organization.create({
+                    data: {
+                        name: (org as any).name,
+                        slug: (org as any).slug
+                    }
+                });
+                organizationId = created.id;
+            }
+            if (organizationId) {
+                const exists = await prisma.member.findFirst({where: {userId: client.userId, organizationId}});
+                if (!exists) {
+                    await prisma.member.create({
+                        data: {
+                            id: `${client.userId}_${organizationId}`,
+                            userId: client.userId,
+                            organizationId,
+                            role: 'MEMBER',
+                            createdAt: new Date()
+                        }
+                    });
+                }
+            }
+
+            // Project handling
+            let projectId: string | undefined;
+            const proj = safe.project;
+            if (proj?.mode === 'existing') {
+                projectId = (proj as any).projectId as string;
+                await prisma.project.update({where: {id: projectId}, data: {clientId: client.id}});
+            } else if (proj?.mode === 'create') {
+                const orgForProject = (proj as any).organizationId ?? organizationId;
+                if (orgForProject) {
+                    const created = await prisma.project.create({
+                        data: {
+                            name: (proj as any).name,
+                            description: (proj as any).description,
+                            organizationId: orgForProject,
+                            clientId: client.id
+                        }
+                    });
+                    projectId = created.id;
+                }
+            }
+
+            return {created: {client, organizationId, projectId}};
         }
     }),
 
@@ -388,7 +710,7 @@ export const server = {
                         organization: {select: {id: true, name: true}},
                         project: {select: {id: true, name: true}},
                         user: {select: {id: true, name: true, email: true}},
-                        client: {select: { id: true, user: { select: { id: true, name: true, email: true } } }},
+                        client: {select: {id: true, user: {select: {id: true, name: true, email: true}}}},
                     },
                     take: input?.limit ?? 25,
                     skip: input?.offset ?? 0,
