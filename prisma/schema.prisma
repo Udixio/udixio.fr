@@ -76,14 +76,14 @@ enum ContactKind {
 }
 
 model Organization {
-  id        String          @id @default(cuid())
-  name      String
-  legalName String? // optional registered name
-  website   String? // e.g., https://example.com
-  lifecycle LifecycleStatus @default(POTENTIAL)
-  notes     String?
+  id           String          @id @default(cuid())
+  name         String
+  legalName    String? // optional registered name
+  website      String? // e.g., https://example.com
+  lifecycle    LifecycleStatus @default(POTENTIAL)
+  notes        String?
   // High-level commercial info
-  targetBudget Decimal? @db.Decimal(12, 2)
+  targetBudget Decimal?        @db.Decimal(12, 2)
 
   // Relations
   // Members are managed via Member model
@@ -94,7 +94,6 @@ model Organization {
 
   // Optional structured info
   addresses Json? // { billing: {...}, office: [...] }
-  metadata  Json? // any extra fields
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -249,15 +248,11 @@ model User {
   banned     Boolean?  @default(false)
   banReason  String?
   banExpires DateTime?
-
-  notes String?
-
   // Relations
-  contacts Contact[] @relation("UserContacts")
-  deals    Deal[]
+  contacts   Contact[] @relation("UserContacts")
 
   // A User is a Client by default (1-1). The Client record stores CRM-specific info.
-  client   Client?
+  client Client?
 
   @@unique([email])
   @@map("user")
@@ -272,23 +267,24 @@ model User {
 /// - À la création d’un User, créer un Client associé.
 /// - À la désactivation/suppression d’un User, archiver/anonymiser le Client selon la politique.
 model Client {
-  id        String          @id @default(cuid())
+  id String @id @default(cuid())
 
   // 1-1 relation with User
-  user     User   @relation(fields: [userId], references: [id])
-  userId   String @unique
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
 
   // Notes & metadata
-  commercialNotes String?
-  metadata        Json?
+  notes    String?
+  metadata Json?
 
   // Relations
-  deals         Deal[]
-  projects      Project[]
-  contacts      Contact[]      @relation("ClientContacts")
+  deals    Deal[]
+  projects Project[]
+  contacts Contact[] @relation("ClientContacts")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
   @@map("client")
 }
 
@@ -324,7 +320,7 @@ model Deal {
   projectId String?
 
   // Primary person for the deal; migrating from direct User link to Client
-  client Client? @relation(fields: [clientId], references: [id])
+  client   Client? @relation(fields: [clientId], references: [id])
   clientId String?
 
   // Deprecated: keep for backward compatibility during migration

@@ -136,13 +136,13 @@ export default function customIntegration(): AstroIntegration {
 
 
                     const {DATABASE_URL} = loadEnv(process.env.DATABASE_URL, process.cwd(), "");
-                    console.log('regegregrgrgr', DATABASE_URL)
                     const prisma = new PrismaClient({
                         datasources: {db: {url: DATABASE_URL}}
                     } as any);
                     const runtimeModels: any = (prisma as any)?._runtimeDataModel?.models ?? {};
+
                     // Write to a PRIVATE path (not publicly served)
-                    const outDir = path.join(process.cwd(), 'src', '__generated__');
+                    const outDir = path.join(process.cwd(), 'src', 'generated');
                     const outFile = path.join(outDir, 'prisma-models.json');
                     await fs.mkdir(outDir, {recursive: true});
 
@@ -170,13 +170,63 @@ export default function customIntegration(): AstroIntegration {
                                     hidden: false,
                                     label: null as string | null,
                                     placeholder: null as string | null,
+                                    // valeur par défaut côté UI (ne change pas la valeur Prisma par défaut)
+                                    // utilisée pour pré-remplir les formulaires générés
+                                    default: null as any,
                                 },
                             };
                         }
                         formatted[modelName] = rec;
                     }
 
-                    await fs.writeFile(outFile, JSON.stringify(formatted, null, 2), 'utf8');
+
+                    // Merge with existing JSON if present: replace models/fields to match current schema
+                    // while preserving any custom props (like `ui`) from the previous file.
+                    let merged: Record<string, Record<string, any>> = {};
+                    const CORE_KEYS = new Set([
+                        'isList', 'isRequired', 'isUnique', 'isId', 'isReadOnly', 'hasDefaultValue',
+                        'type', 'default', 'relationName', 'relationFromFields', 'relationToFields', 'documentation', 'ui'
+                    ]);
+
+                    try {
+                        const prevBuf = await fs.readFile(outFile, 'utf8');
+                        const previous: Record<string, Record<string, any>> = JSON.parse(prevBuf);
+                        // Only keep models that exist now; add new models as needed
+                        for (const [modelName, newFields] of Object.entries(formatted)) {
+                            const oldFields = previous[modelName] || {};
+                            const nextFields: Record<string, any> = {};
+                            for (const [fieldName, newMeta] of Object.entries(newFields)) {
+                                const oldMeta = oldFields[fieldName];
+                                if (!oldMeta) {
+                                    nextFields[fieldName] = newMeta;
+                                } else {
+                                    // Start from new core meta, then re-attach any custom props from old
+                                    const combined: any = {...newMeta};
+                                    // Fusionner les blocs UI: garder les clés du nouveau (dont default),
+                                    // puis surcharger par l'ancien pour préserver les personnalisations
+                                    if (oldMeta.ui !== undefined || (combined as any).ui !== undefined) {
+                                        combined.ui = {
+                                            ...((combined as any).ui || {}),
+                                            ...(oldMeta.ui || {}),
+                                        };
+                                    }
+                                    // Preserve any extra custom keys present in old that are not core
+                                    for (const [k, v] of Object.entries(oldMeta)) {
+                                        if (!CORE_KEYS.has(k)) {
+                                            combined[k] = v;
+                                        }
+                                    }
+                                    nextFields[fieldName] = combined;
+                                }
+                            }
+                            merged[modelName] = nextFields;
+                        }
+                    } catch {
+                        // No previous file: use freshly formatted structure
+                        merged = formatted;
+                    }
+
+                    await fs.writeFile(outFile, JSON.stringify(merged, null, 2), 'utf8');
                     logger.info(`🧩 Prisma model metadata generated (private) at ${path.relative(process.cwd(), outFile)}`);
                     try {
                         await (prisma as any).$disconnect?.();

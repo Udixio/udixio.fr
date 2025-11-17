@@ -15,7 +15,7 @@ export const server = {
             // Load pre-generated JSON exported by the Astro integration at startup/build
             // Fallback to prisma._runtimeDataModel if JSON missing (dev safety)
             // Read from PRIVATE generated metadata (not publicly served)
-            const jsonPath = path.join(process.cwd(), 'src', '__generated__', 'prisma-models.json');
+            const jsonPath = path.join(process.cwd(), 'src', 'generated', 'prisma-models.json');
             let runtimeModels: Record<string, Record<string, any>> = {};
             try {
                 const buf = await readFile(jsonPath, 'utf8');
@@ -38,7 +38,8 @@ export const server = {
                             };
                         }
                     }
-                } catch { /* no overrides */ }
+                } catch { /* no overrides */
+                }
             } catch {
                 runtimeModels = (prisma as any)?._runtimeDataModel?.models ?? {};
                 // If coming from prisma runtime, transform into expected shape Record<model, Record<field, meta>>

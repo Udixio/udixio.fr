@@ -12,11 +12,11 @@ export const auth = betterAuth({
         expiresIn: 60 * 60 * 24 * 7, // 7 jours
         updateAge: 60 * 60 * 24,     // rafraîchit la session si actif
     },
-    actions: {
-        signUp: async () => {
-            throw new Error("Inscription publique désactivée. Contactez un admin.");
-        },
-    },
+    // actions: {
+    //     signUp: async () => {
+    //         throw new Error("Inscription publique désactivée. Contactez un admin.");
+    //     },
+    // },
 
     hooks: {
         async onUserCreated(user) {

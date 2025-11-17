@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useState} from "react";
-import {TextField, Button, Card} from "@udixio/ui-react";
+import {Button, Card, TextField} from "@udixio/ui-react";
 import {authClient} from "@/lib/auth-client.ts";
 
 export const Login: React.FC = () => {
@@ -46,6 +46,7 @@ export const Login: React.FC = () => {
                     return;
                 }
                 setLoading(true);
+
                 const {error} = await authClient.emailOtp.sendVerificationOtp({
                     email: emailTrimmed,
                     type: "sign-in",
@@ -96,7 +97,7 @@ export const Login: React.FC = () => {
                                 name="email"
                                 label="Email"
                                 value={email}
-                                onChange={(e: any) => setEmail(e.target.value)}
+                                onChange={(v) => setEmail(v)}
                             />
                         </div>
                     )}
@@ -108,7 +109,7 @@ export const Login: React.FC = () => {
                                 label="Code OTP"
                                 type="number"
                                 value={otp}
-                                onChange={(e: any) => setOtp(e.target.value)}
+                                onChange={(v) => setOtp(v)}
                                 autoFocus
                             />
                         </div>
