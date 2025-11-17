@@ -8,7 +8,6 @@ type Props = {
     onChange?: (value: Record<string, any>) => void;
     onSubmit?: (value: Record<string, any>) => Promise<any> | any;
     // Optionally filter fields
-    include?: string[];
     exclude?: string[];
     disabledFields?: string[];
     className?: string;
@@ -44,22 +43,44 @@ export default function DynamicModelForm({
     const [initial, setInitial] = useState<Record<string, any>>(value ?? {});
     useEffect(() => setInitial(value ?? {}), [value]);
 
-    console.log(models);
-
     const fields = useMemo(() => {
 
-        const defs = models?.data?.[model];
-        console.log(defs);
-        if (!defs) return [] as any[];
-        let list = Object.entries(defs).map(([name, meta]) => ({
-            name,
-            ...(meta as any),
-        }));
-        // Garde uniquement les scalaires éditables
-        list = list.filter((f: any) => !f.isId && !f.isReadOnly && !f.isList && (f.relationName == null));
-        if (include?.length) list = list.filter(f => include!.includes(f.name));
-        if (exclude?.length) list = list.filter(f => !exclude!.includes(f.name));
-        return list;
+        const defs = models?.data;
+        if (!defs) return [];
+
+        const modelFields = [defs[model]]
+
+        while (modelFields.length) {
+            const m = modelFields.pop();
+            if (!m) continue;
+
+            for (const f of Object.values(m)) {
+                console.log(f)
+                if (f.relationName && !exclude?.includes(f.relationName)) {
+                    const rel = defs[f.relationName];
+                    if (rel) modelFields.push(rel);
+                }
+            }
+        }
+
+
+        // return Object.entries(defs).map(([modeName, fields]) => {
+        //     let list = Object.entries(fields).map(([name, meta]) => ({
+        //         name,
+        //         ...(meta as any),
+        //     }));
+        //     // Garde uniquement les scalaires éditables
+        //     list = list.filter((f: any) => !f.isId && !f.isReadOnly && !f.isList && (f.relationName == null));
+        //     if (include?.length) list = list.filter(f => include!.includes(f.name));
+        //     if (exclude?.length) list = list.filter(f => !exclude!.includes(f.name));
+        //
+        //     console.log(list)
+        //
+        //     return list;
+        // })
+
+        // return list();
+        return []
     }, [models, include, exclude, pending]);
 
     // Build Formik

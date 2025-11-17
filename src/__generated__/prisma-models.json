@@ -1,0 +1,3348 @@
+{
+  "Organization": {
+    "id": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": true,
+      "isReadOnly": false,
+      "hasDefaultValue": true,
+      "type": "String",
+      "default": {
+        "name": "cuid",
+        "args": [
+          1
+        ]
+      },
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "name": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "legalName": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "website": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "lifecycle": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": true,
+      "type": "LifecycleStatus",
+      "default": "POTENTIAL",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "notes": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "targetBudget": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Decimal",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "projects": {
+      "isList": true,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Project",
+      "relationName": "OrganizationToProject",
+      "relationFromFields": [],
+      "relationToFields": [],
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "deals": {
+      "isList": true,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Deal",
+      "relationName": "DealToOrganization",
+      "relationFromFields": [],
+      "relationToFields": [],
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "contacts": {
+      "isList": true,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Contact",
+      "relationName": "OrganizationContacts",
+      "relationFromFields": [],
+      "relationToFields": [],
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "addresses": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Json",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "metadata": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Json",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "createdAt": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": true,
+      "type": "DateTime",
+      "default": {
+        "name": "now",
+        "args": []
+      },
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "updatedAt": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "DateTime",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "slug": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": true,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "logo": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "members": {
+      "isList": true,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Member",
+      "relationName": "MemberToOrganization",
+      "relationFromFields": [],
+      "relationToFields": [],
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "invitations": {
+      "isList": true,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Invitation",
+      "relationName": "InvitationToOrganization",
+      "relationFromFields": [],
+      "relationToFields": [],
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    }
+  },
+  "Project": {
+    "id": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": true,
+      "isReadOnly": false,
+      "hasDefaultValue": true,
+      "type": "String",
+      "default": {
+        "name": "cuid",
+        "args": [
+          1
+        ]
+      },
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "name": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "description": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "status": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": true,
+      "type": "ProjectStatus",
+      "default": "PLANNING",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "lifecycle": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": true,
+      "type": "LifecycleStatus",
+      "default": "POTENTIAL",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "priority": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Int",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "startDate": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "DateTime",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "dueDate": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "DateTime",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "notes": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "organization": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Organization",
+      "relationName": "OrganizationToProject",
+      "relationFromFields": [
+        "organizationId"
+      ],
+      "relationToFields": [
+        "id"
+      ],
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "organizationId": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": true,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "client": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Client",
+      "relationName": "ClientToProject",
+      "relationFromFields": [
+        "clientId"
+      ],
+      "relationToFields": [
+        "id"
+      ],
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "clientId": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": true,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "domains": {
+      "isList": true,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Domain",
+      "relationName": "DomainToProject",
+      "relationFromFields": [],
+      "relationToFields": [],
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "audits": {
+      "isList": true,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Audit",
+      "relationName": "AuditToProject",
+      "relationFromFields": [],
+      "relationToFields": [],
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "contacts": {
+      "isList": true,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Contact",
+      "relationName": "ProjectContacts",
+      "relationFromFields": [],
+      "relationToFields": [],
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "deals": {
+      "isList": true,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Deal",
+      "relationName": "DealToProject",
+      "relationFromFields": [],
+      "relationToFields": [],
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "metadata": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Json",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "createdAt": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": true,
+      "type": "DateTime",
+      "default": {
+        "name": "now",
+        "args": []
+      },
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "updatedAt": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "DateTime",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    }
+  },
+  "Domain": {
+    "id": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": true,
+      "isReadOnly": false,
+      "hasDefaultValue": true,
+      "type": "String",
+      "default": {
+        "name": "cuid",
+        "args": [
+          1
+        ]
+      },
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "host": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": true,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "isPrimary": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": true,
+      "type": "Boolean",
+      "default": false,
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "sslEnabled": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Boolean",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "notes": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "project": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Project",
+      "relationName": "DomainToProject",
+      "relationFromFields": [
+        "projectId"
+      ],
+      "relationToFields": [
+        "id"
+      ],
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "projectId": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": true,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "createdAt": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": true,
+      "type": "DateTime",
+      "default": {
+        "name": "now",
+        "args": []
+      },
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "updatedAt": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "DateTime",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    }
+  },
+  "Audit": {
+    "id": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": true,
+      "isReadOnly": false,
+      "hasDefaultValue": true,
+      "type": "String",
+      "default": {
+        "name": "cuid",
+        "args": [
+          1
+        ]
+      },
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "type": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": true,
+      "type": "AuditType",
+      "default": "LIGHTHOUSE",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "status": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": true,
+      "type": "AuditStatus",
+      "default": "DRAFT",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "lighthouse": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Json",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "scroller": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Json",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "title": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "description": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "runAt": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "DateTime",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "startedAt": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "DateTime",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "finishedAt": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "DateTime",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "createdBy": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "project": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Project",
+      "relationName": "AuditToProject",
+      "relationFromFields": [
+        "projectId"
+      ],
+      "relationToFields": [
+        "id"
+      ],
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "projectId": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": true,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "metrics": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Json",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "resources": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Json",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "metadata": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Json",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "createdAt": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": true,
+      "type": "DateTime",
+      "default": {
+        "name": "now",
+        "args": []
+      },
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "updatedAt": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "DateTime",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    }
+  },
+  "Contact": {
+    "id": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": true,
+      "isReadOnly": false,
+      "hasDefaultValue": true,
+      "type": "String",
+      "default": {
+        "name": "cuid",
+        "args": [
+          1
+        ]
+      },
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "kind": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": true,
+      "type": "ContactKind",
+      "default": "PERSON",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "firstName": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "lastName": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "jobTitle": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "company": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "channels": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Json",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "isPrimary": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Boolean",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "notes": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "organizations": {
+      "isList": true,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Organization",
+      "relationName": "OrganizationContacts",
+      "relationFromFields": [],
+      "relationToFields": [],
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "users": {
+      "isList": true,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "User",
+      "relationName": "UserContacts",
+      "relationFromFields": [],
+      "relationToFields": [],
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "projects": {
+      "isList": true,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Project",
+      "relationName": "ProjectContacts",
+      "relationFromFields": [],
+      "relationToFields": [],
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "clients": {
+      "isList": true,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Client",
+      "relationName": "ClientContacts",
+      "relationFromFields": [],
+      "relationToFields": [],
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "createdAt": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": true,
+      "type": "DateTime",
+      "default": {
+        "name": "now",
+        "args": []
+      },
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "updatedAt": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "DateTime",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    }
+  },
+  "User": {
+    "id": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": true,
+      "isReadOnly": false,
+      "hasDefaultValue": true,
+      "type": "String",
+      "default": {
+        "name": "cuid",
+        "args": [
+          1
+        ]
+      },
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "name": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "email": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": true,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "emailVerified": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": true,
+      "type": "Boolean",
+      "default": false,
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "image": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "createdAt": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": true,
+      "type": "DateTime",
+      "default": {
+        "name": "now",
+        "args": []
+      },
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "updatedAt": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": true,
+      "type": "DateTime",
+      "default": {
+        "name": "now",
+        "args": []
+      },
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "sessions": {
+      "isList": true,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Session",
+      "relationName": "SessionToUser",
+      "relationFromFields": [],
+      "relationToFields": [],
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "accounts": {
+      "isList": true,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Account",
+      "relationName": "AccountToUser",
+      "relationFromFields": [],
+      "relationToFields": [],
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "members": {
+      "isList": true,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Member",
+      "relationName": "MemberToUser",
+      "relationFromFields": [],
+      "relationToFields": [],
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "invitations": {
+      "isList": true,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Invitation",
+      "relationName": "InvitationToUser",
+      "relationFromFields": [],
+      "relationToFields": [],
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "role": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "banned": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": true,
+      "type": "Boolean",
+      "default": false,
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "banReason": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "banExpires": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "DateTime",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "notes": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "contacts": {
+      "isList": true,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Contact",
+      "relationName": "UserContacts",
+      "relationFromFields": [],
+      "relationToFields": [],
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "deals": {
+      "isList": true,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Deal",
+      "relationName": "DealToUser",
+      "relationFromFields": [],
+      "relationToFields": [],
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "client": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Client",
+      "relationName": "ClientToUser",
+      "relationFromFields": [],
+      "relationToFields": [],
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    }
+  },
+  "Client": {
+    "id": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": true,
+      "isReadOnly": false,
+      "hasDefaultValue": true,
+      "type": "String",
+      "default": {
+        "name": "cuid",
+        "args": [
+          1
+        ]
+      },
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "user": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "User",
+      "relationName": "ClientToUser",
+      "relationFromFields": [
+        "userId"
+      ],
+      "relationToFields": [
+        "id"
+      ],
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "userId": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": true,
+      "isId": false,
+      "isReadOnly": true,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "commercialNotes": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "metadata": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Json",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "deals": {
+      "isList": true,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Deal",
+      "relationName": "ClientToDeal",
+      "relationFromFields": [],
+      "relationToFields": [],
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "projects": {
+      "isList": true,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Project",
+      "relationName": "ClientToProject",
+      "relationFromFields": [],
+      "relationToFields": [],
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "contacts": {
+      "isList": true,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Contact",
+      "relationName": "ClientContacts",
+      "relationFromFields": [],
+      "relationToFields": [],
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "createdAt": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": true,
+      "type": "DateTime",
+      "default": {
+        "name": "now",
+        "args": []
+      },
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "updatedAt": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "DateTime",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    }
+  },
+  "Deal": {
+    "id": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": true,
+      "isReadOnly": false,
+      "hasDefaultValue": true,
+      "type": "String",
+      "default": {
+        "name": "cuid",
+        "args": [
+          1
+        ]
+      },
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "title": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "status": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": true,
+      "type": "DealStatus",
+      "default": "LEAD",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "amount": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Decimal",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "probability": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Int",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "notes": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "openedAt": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "DateTime",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "closedAt": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "DateTime",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "organization": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Organization",
+      "relationName": "DealToOrganization",
+      "relationFromFields": [
+        "organizationId"
+      ],
+      "relationToFields": [
+        "id"
+      ],
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "organizationId": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": true,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "project": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Project",
+      "relationName": "DealToProject",
+      "relationFromFields": [
+        "projectId"
+      ],
+      "relationToFields": [
+        "id"
+      ],
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "projectId": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": true,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "client": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Client",
+      "relationName": "ClientToDeal",
+      "relationFromFields": [
+        "clientId"
+      ],
+      "relationToFields": [
+        "id"
+      ],
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "clientId": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": true,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "user": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "User",
+      "relationName": "DealToUser",
+      "relationFromFields": [
+        "userId"
+      ],
+      "relationToFields": [
+        "id"
+      ],
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "userId": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": true,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "metadata": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Json",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "createdAt": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": true,
+      "type": "DateTime",
+      "default": {
+        "name": "now",
+        "args": []
+      },
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "updatedAt": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "DateTime",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    }
+  },
+  "Session": {
+    "id": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": true,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "expiresAt": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "DateTime",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "token": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": true,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "createdAt": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": true,
+      "type": "DateTime",
+      "default": {
+        "name": "now",
+        "args": []
+      },
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "updatedAt": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "DateTime",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "ipAddress": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "userAgent": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "userId": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": true,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "user": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "User",
+      "relationName": "SessionToUser",
+      "relationFromFields": [
+        "userId"
+      ],
+      "relationToFields": [
+        "id"
+      ],
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "activeOrganizationId": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "impersonatedBy": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    }
+  },
+  "Account": {
+    "id": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": true,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "accountId": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "providerId": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "userId": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": true,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "user": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "User",
+      "relationName": "AccountToUser",
+      "relationFromFields": [
+        "userId"
+      ],
+      "relationToFields": [
+        "id"
+      ],
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "accessToken": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "refreshToken": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "idToken": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "accessTokenExpiresAt": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "DateTime",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "refreshTokenExpiresAt": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "DateTime",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "scope": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "password": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "createdAt": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": true,
+      "type": "DateTime",
+      "default": {
+        "name": "now",
+        "args": []
+      },
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "updatedAt": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "DateTime",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    }
+  },
+  "Verification": {
+    "id": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": true,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "identifier": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "value": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "expiresAt": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "DateTime",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "createdAt": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": true,
+      "type": "DateTime",
+      "default": {
+        "name": "now",
+        "args": []
+      },
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "updatedAt": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": true,
+      "type": "DateTime",
+      "default": {
+        "name": "now",
+        "args": []
+      },
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    }
+  },
+  "Member": {
+    "id": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": true,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "organizationId": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": true,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "organization": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Organization",
+      "relationName": "MemberToOrganization",
+      "relationFromFields": [
+        "organizationId"
+      ],
+      "relationToFields": [
+        "id"
+      ],
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "userId": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": true,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "user": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "User",
+      "relationName": "MemberToUser",
+      "relationFromFields": [
+        "userId"
+      ],
+      "relationToFields": [
+        "id"
+      ],
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "role": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "createdAt": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "DateTime",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    }
+  },
+  "Invitation": {
+    "id": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": true,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "organizationId": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": true,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "organization": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Organization",
+      "relationName": "InvitationToOrganization",
+      "relationFromFields": [
+        "organizationId"
+      ],
+      "relationToFields": [
+        "id"
+      ],
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "email": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "role": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "status": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "expiresAt": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "DateTime",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "inviterId": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": true,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    },
+    "user": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "User",
+      "relationName": "InvitationToUser",
+      "relationFromFields": [
+        "inviterId"
+      ],
+      "relationToFields": [
+        "id"
+      ],
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null
+      }
+    }
+  }
+}

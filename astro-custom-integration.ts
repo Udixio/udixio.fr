@@ -3,12 +3,14 @@
 import type {AstroIntegration} from 'astro';
 import {promises as fs} from "fs";
 import matter from 'gray-matter';
-
+import {loadEnv} from "vite";
 import {join} from 'path';
 import puppeteer from "puppeteer";
 import {PuppeteerScreenRecorder} from "puppeteer-screen-recorder";
 import ffmpeg from 'fluent-ffmpeg';
 import path from "node:path";
+// Prisma runtime models export (no DB access needed)
+import {PrismaClient} from "./src/generated/prisma/client";
 
 
 async function getAllMDXFiles(realisationsDir: string) {
@@ -129,11 +131,65 @@ export default function customIntegration(): AstroIntegration {
         name: 'astro-custom-integration',
         hooks: {
             'astro:config:setup': async ({logger}) => {
+                // ============ Prisma runtime models → JSON (dev & build) ============
+                try {
+
+
+                    const {DATABASE_URL} = loadEnv(process.env.DATABASE_URL, process.cwd(), "");
+                    console.log('regegregrgrgr', DATABASE_URL)
+                    const prisma = new PrismaClient({
+                        datasources: {db: {url: DATABASE_URL}}
+                    } as any);
+                    const runtimeModels: any = (prisma as any)?._runtimeDataModel?.models ?? {};
+                    // Write to a PRIVATE path (not publicly served)
+                    const outDir = path.join(process.cwd(), 'src', '__generated__');
+                    const outFile = path.join(outDir, 'prisma-models.json');
+                    await fs.mkdir(outDir, {recursive: true});
+
+                    // Reformat to a serializable Record<model, Record<field, meta>> with UI slots
+                    const formatted: Record<string, Record<string, any>> = {};
+                    for (const [modelName, modelDef] of Object.entries(runtimeModels)) {
+                        const fields = (modelDef as any).fields as any[];
+                        const rec: Record<string, any> = {};
+                        for (const f of fields) {
+                            rec[f.name] = {
+                                isList: !!f.isList,
+                                isRequired: !!f.isRequired,
+                                isUnique: !!f.isUnique,
+                                isId: !!f.isId,
+                                isReadOnly: !!f.isReadOnly,
+                                hasDefaultValue: !!f.hasDefaultValue,
+                                type: String(f.type),
+                                default: typeof f.default === 'function' ? undefined : f.default,
+                                relationName: f.relationName ?? null,
+                                relationFromFields: f.relationFromFields ?? null,
+                                relationToFields: f.relationToFields ?? null,
+                                documentation: f.documentation ?? null,
+                                // UI customization placeholder to allow per-field overrides later
+                                ui: {
+                                    hidden: false,
+                                    label: null as string | null,
+                                    placeholder: null as string | null,
+                                },
+                            };
+                        }
+                        formatted[modelName] = rec;
+                    }
+
+                    await fs.writeFile(outFile, JSON.stringify(formatted, null, 2), 'utf8');
+                    logger.info(`🧩 Prisma model metadata generated (private) at ${path.relative(process.cwd(), outFile)}`);
+                    try {
+                        await (prisma as any).$disconnect?.();
+                    } catch {
+                    }
+                } catch (e) {
+                    logger.warn(`⚠️ Failed to generate Prisma model metadata JSON: ${String((e as any)?.message || e)}`);
+                }
 
                 const realisationsDir = join('src', 'data', 'realisation');
                 const mdxFiles = await getAllMDXFiles(realisationsDir);
                 const realisationsData: any = await getMDXMetadata(realisationsDir, mdxFiles);
-                
+
                 const validRealisations = realisationsData.filter(({website}) => website);
                 const totalCount = validRealisations.length;
                 logger.info(`🎬 Starting video processing for ${totalCount} projects`);
@@ -159,10 +215,10 @@ export default function customIntegration(): AstroIntegration {
 
                     const videoPath = join('public', 'videos', 'renders', `${slug}.mp4`);
                     const maltVideoPath = join('public', 'videos', 'renders', `${slug}-malt.mp4`);
-                    
+
                     let recordingsNeeded = 0;
                     let optimizationsNeeded = 0;
-                    
+
                     try {
                         await fs.access(videoPath);
                         logger.info(`✅ Standard video exists: ${slug}`);
@@ -171,7 +227,7 @@ export default function customIntegration(): AstroIntegration {
                         logger.info(`🎬 Recording standard video (1920x1080): ${slug}`);
                         await recordPageScrollWithAnimations(url, videoPath, 1080);
                         logger.info(`✅ Standard recording complete: ${slug}`);
-                        
+
                         optimizationsNeeded += 3;
                         extractFirstFrameAsWebP(videoPath, `./src/assets/renders/${slug}.webp`, slug)
                             .then(() => console.log(`✅ Thumbnail created: ${slug}`))
@@ -193,7 +249,7 @@ export default function customIntegration(): AstroIntegration {
                         logger.info(`🎬 Recording Malt video (1920x1380): ${slug}`);
                         await recordPageScrollWithAnimations(url, maltVideoPath, 1380);
                         logger.info(`✅ Malt recording complete: ${slug}`);
-                        
+
                         optimizationsNeeded += 2;
                         ffmpeg(maltVideoPath)
                             .screenshots({
@@ -205,12 +261,12 @@ export default function customIntegration(): AstroIntegration {
                             .toFormat('webp')
                             .on('end', () => console.log(`✅ Malt preview created: ${slug}`))
                             .on('error', (err) => console.error(`❌ Malt preview error: ${slug}`, err));
-                        
+
                         videoOptimizer(maltVideoPath.replace('.mp4', '.webm'), maltVideoPath)
                             .size('1920x1380')
                             .run();
                     }
-                    
+
                     const remaining = totalCount - current;
                     if (recordingsNeeded > 0 || optimizationsNeeded > 0) {
                         logger.info(`📈 ${slug}: ${recordingsNeeded} recordings, ${optimizationsNeeded} optimizations queued`);
