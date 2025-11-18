@@ -323,17 +323,12 @@ model Deal {
   client   Client? @relation(fields: [clientId], references: [id])
   clientId String?
 
-  // Deprecated: keep for backward compatibility during migration
-  user   User?   @relation(fields: [userId], references: [id])
-  userId String?
-
   metadata  Json?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([organizationId])
   @@index([projectId])
-  @@index([userId])
   @@index([clientId])
   @@index([status])
 }

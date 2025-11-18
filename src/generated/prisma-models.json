@@ -1885,25 +1885,6 @@
         "default": null
       }
     },
-    "notes": {
-      "isList": false,
-      "isRequired": false,
-      "isUnique": false,
-      "isId": false,
-      "isReadOnly": false,
-      "hasDefaultValue": false,
-      "type": "String",
-      "relationName": null,
-      "relationFromFields": null,
-      "relationToFields": null,
-      "documentation": null,
-      "ui": {
-        "hidden": false,
-        "label": null,
-        "placeholder": null,
-        "default": null
-      }
-    },
     "contacts": {
       "isList": true,
       "isRequired": true,
@@ -1913,25 +1894,6 @@
       "hasDefaultValue": false,
       "type": "Contact",
       "relationName": "UserContacts",
-      "relationFromFields": [],
-      "relationToFields": [],
-      "documentation": null,
-      "ui": {
-        "hidden": false,
-        "label": null,
-        "placeholder": null,
-        "default": null
-      }
-    },
-    "deals": {
-      "isList": true,
-      "isRequired": true,
-      "isUnique": false,
-      "isId": false,
-      "isReadOnly": false,
-      "hasDefaultValue": false,
-      "type": "Deal",
-      "relationName": "DealToUser",
       "relationFromFields": [],
       "relationToFields": [],
       "documentation": null,
@@ -2030,7 +1992,7 @@
         "default": null
       }
     },
-    "commercialNotes": {
+    "notes": {
       "isList": false,
       "isRequired": false,
       "isUnique": false,
@@ -2436,48 +2398,6 @@
       }
     },
     "clientId": {
-      "isList": false,
-      "isRequired": false,
-      "isUnique": false,
-      "isId": false,
-      "isReadOnly": true,
-      "hasDefaultValue": false,
-      "type": "String",
-      "relationName": null,
-      "relationFromFields": null,
-      "relationToFields": null,
-      "documentation": null,
-      "ui": {
-        "hidden": false,
-        "label": null,
-        "placeholder": null,
-        "default": null
-      }
-    },
-    "user": {
-      "isList": false,
-      "isRequired": false,
-      "isUnique": false,
-      "isId": false,
-      "isReadOnly": false,
-      "hasDefaultValue": false,
-      "type": "User",
-      "relationName": "DealToUser",
-      "relationFromFields": [
-        "userId"
-      ],
-      "relationToFields": [
-        "id"
-      ],
-      "documentation": null,
-      "ui": {
-        "hidden": false,
-        "label": null,
-        "placeholder": null,
-        "default": null
-      }
-    },
-    "userId": {
       "isList": false,
       "isRequired": false,
       "isUnique": false,
