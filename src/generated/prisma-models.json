@@ -2005,7 +2005,7 @@
       "relationToFields": null,
       "documentation": null,
       "ui": {
-        "hidden": false,
+        "hidden": true,
         "label": null,
         "placeholder": null,
         "default": null

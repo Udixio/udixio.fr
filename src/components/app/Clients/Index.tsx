@@ -1,6 +1,8 @@
 import React, {useEffect, useRef, useState, useTransition} from "react";
 import {appService} from "@/stores/appStore";
 import DynamicModelForm from "@components/app/DynamicModelForm.tsx";
+import {actions} from 'astro:actions';
+import {useActionState} from "react";
 
 type Client = {
     id: string;
@@ -10,26 +12,15 @@ type Client = {
 
 type ListState = { items: Client[]; total: number } | undefined;
 
-async function callAction<T = any>(name: string, payload?: any): Promise<T> {
-    const res = await fetch(`/_actions/${name}/`, {
-        method: 'POST',
-        headers: {'content-type': 'application/json'},
-        body: JSON.stringify(payload ?? {}),
-    });
-    if (!res.ok) {
-        const text = await res.text();
-        throw new Error(text || `Action ${name} failed (${res.status})`);
-    }
-    return res.json();
-}
-
 export default function ClientsIndex() {
     const [q, setQ] = useState("");
     const [showCreate, setShowCreate] = useState(false);
     const [showImport, setShowImport] = useState(false);
     const formRef = useRef<HTMLFormElement | null>(null);
 
-    const [listState, setListState] = useState<ListState>(undefined);
+    // Actions via useActionState (React 19)
+    const [listRes, listAction, listPending] = useActionState(actions.listClients as any, undefined);
+    const [createRes, createAction] = useActionState(actions.createEntity as any, undefined);
     const [pending, startTransition] = useTransition();
     const [busyImport, setBusyImport] = useState(false);
     const [createError, setCreateError] = useState<string | undefined>(undefined);
@@ -46,18 +37,17 @@ export default function ClientsIndex() {
 
     // Charger une première fois la liste
     useEffect(() => {
-        if (!listState && !pending) reloadList();
+        if (!listRes?.data && !listPending) reloadList();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const reloadList = () => {
         startTransition(async () => {
-            const data = await callAction<ListState extends infer U ? any : any>('listClients', q ? {q} : {});
-            setListState(data);
+            await listAction(q ? {q} : {});
         });
     };
 
-    const items = listState?.items ?? [];
+    const items = (listRes?.data as any)?.items ?? [];
 
     return (
         <div className="p-4 space-y-4">
@@ -114,14 +104,14 @@ export default function ClientsIndex() {
                             submitLabel={'Créer'}
                             onSubmit={async (vals) => {
                                 setCreateError(undefined);
-                                await startTransition(async () => {
+                                startTransition(async () => {
                                     try {
-                                        await callAction('createEntity', {
+                                        await createAction({
                                             model: 'Client',
                                             dataJson: JSON.stringify(vals || {})
-                                        });
+                                        } as any);
                                         setShowCreate(false);
-                                        reloadList();
+                                        await listAction(q ? {q} : {});
                                     } catch (e: any) {
                                         setCreateError(String(e?.message || e));
                                     }
@@ -146,34 +136,34 @@ export default function ClientsIndex() {
                     <p className="text-sm mb-2">Colonnes requises: <code>userId</code>.
                         Optionnel: <code>commercialNotes</code>.</p>
                     <ImportCsvBlock onClose={() => setShowImport(false)}
-                                    doImport={(csv) => {
-                                        setBusyImport(true);
-                                        return callAction('importClientsCsv', {csv}).then(() => {
-                                            setShowImport(false);
-                                            reloadList();
-                                        }).finally(() => setBusyImport(false));
-                                    }} pending={busyImport}/>
+                                    onImported={async () => {
+                                        setShowImport(false);
+                                        await listAction(q ? {q} : {});
+                                    }}/>
                 </div>
             )}
         </div>
     );
 }
 
-function ImportCsvBlock({onClose, doImport, pending}: {
-    onClose: () => void;
-    doImport: (csv: string) => Promise<any>;
-    pending: boolean
-}) {
+function ImportCsvBlock({onClose, onImported}: { onClose: () => void; onImported: () => void; }) {
+    const [res, importAction, importPending] = useActionState(actions.importClientsCsv as any, undefined);
     const [csv, setCsv] = useState("");
+    useEffect(() => {
+        if (res?.data) {
+            onImported();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [res]);
     return (
         <form onSubmit={(e) => {
             e.preventDefault();
-            doImport(csv);
+            importAction({csv});
         }} className="space-y-2">
             <textarea value={csv} onChange={(e) => setCsv(e.target.value)} className="border w-full h-32"
                       placeholder={"userId,commercialNotes\nuser_123,VIP"}/>
             <div className="flex gap-2">
-                <button type="submit" className="border px-3 py-1">{pending ? 'Import...' : 'Importer'}</button>
+                <button type="submit" className="border px-3 py-1">{importPending ? 'Import...' : 'Importer'}</button>
                 <button type="button" className="border px-3 py-1" onClick={onClose}>Annuler</button>
             </div>
         </form>

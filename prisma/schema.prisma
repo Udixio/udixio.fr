@@ -68,11 +68,42 @@ enum AuditType {
   OTHER
 }
 
-// Contact record kind
+// NOUVEAU : On définit précisément le type de canal pour l'interface UI
+enum ContactChannel {
+  EMAIL
+  PHONE_MOBILE
+  PHONE_LANDLINE
+  LINKEDIN
+  WHATSAPP
+  SLACK
+  TELEGRAM
+  WEBSITE
+  OTHER
+}
 
-enum ContactKind {
-  PERSON
-  GENERIC
+// NOUVEAU : Remplace l'ancien modèle Contact.
+// Ce modèle ne stocke que le "moyen" de contacter, pas l'identité de la personne.
+model ContactPoint {
+  id        String         @id @default(cuid())
+  channel   ContactChannel @default(EMAIL)
+  value     String         // ex: "+33612345678" ou "bob@example.com"
+  label     String?        // ex: "Bureau", "Perso", "Urgence", "Comptabilité"
+  isPrimary Boolean        @default(false)
+
+  // Relations polymorphes (optionnelles)
+  // Un moyen de contact peut appartenir à une Organisation
+  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId String?
+
+  // OU appartenir à un Client (qui est une Personne/User)
+  client   Client? @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  clientId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([organizationId])
+  @@index([clientId])
 }
 
 model Organization {
@@ -89,8 +120,8 @@ model Organization {
   // Members are managed via Member model
   projects Project[]
   deals    Deal[]
-  // Generic or shared contacts for the organization (many-to-many to allow reuse)
-  contacts Contact[] @relation("OrganizationContacts")
+  // NOUVEAU : Liste directe des moyens de contacter l'organisation (Standard, Email générique...)
+  contactPoints ContactPoint[]
 
   // Optional structured info
   addresses Json? // { billing: {...}, office: [...] }
@@ -133,9 +164,6 @@ model Project {
 
   // Audits for this project (multiple over time)
   audits Audit[]
-
-  // Project-specific contacts (stakeholders, tech contacts, etc.)
-  contacts Contact[] @relation("ProjectContacts")
 
   // Related deals (optional back-reference)
   deals Deal[]
@@ -203,33 +231,6 @@ model Audit {
   @@index([runAt])
 }
 
-model Contact {
-  id   String      @id @default(cuid())
-  kind ContactKind @default(PERSON)
-
-  // Person fields (used when kind == PERSON)
-  firstName String?
-  lastName  String?
-  jobTitle  String?
-  company   String?
-
-  // Generic contact channels; keep flexible via JSON
-  channels  Json? // { emails: [..], phones: [..], slack: ..., whatsapp: ..., url: ... }
-  isPrimary Boolean? // can mark primary per usage context in UI
-  notes     String?
-
-  // Many-to-many relations to allow sharing the same contact across orgs/clients/projects
-  organizations Organization[] @relation("OrganizationContacts")
-  users         User[]         @relation("UserContacts")
-  projects      Project[]      @relation("ProjectContacts")
-  clients       Client[]       @relation("ClientContacts")
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([lastName, firstName])
-}
-
 model User {
   id            String    @id @default(cuid())
   name          String
@@ -249,7 +250,7 @@ model User {
   banReason  String?
   banExpires DateTime?
   // Relations
-  contacts   Contact[] @relation("UserContacts")
+  // contacts supprimés au profit des ContactPoint liés à Client/Organization
 
   // A User is a Client by default (1-1). The Client record stores CRM-specific info.
   client Client?
@@ -280,7 +281,8 @@ model Client {
   // Relations
   deals    Deal[]
   projects Project[]
-  contacts Contact[] @relation("ClientContacts")
+  // NOUVEAU : Les moyens de contacter ce client spécifiquement
+  contactPoints ContactPoint[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
