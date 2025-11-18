@@ -1,6 +1,8 @@
 import React, {useActionState, useEffect, useMemo, useRef, useState, useTransition} from "react";
 import {useFormik} from 'formik';
 import {actions} from 'astro:actions';
+import {useStore} from "@nanostores/react";
+import {modelsService, modelsStore} from "@/stores/modelsStore";
 
 type Props = {
     model: string;
@@ -30,32 +32,37 @@ export default function DynamicModelForm({
                                              mode = 'create',
                                              relationsDepth = 1
                                          }: Props) {
-    const [models, action, pending] = useActionState(
-        actions.getModels,
-        undefined, // initial likes and errors
-    )
+    // Centralize models loading through Nano-store
+
+    const $models = useStore(modelsStore);
 
     useEffect(() => {
-        action()
+        if (!$models.models) {
+            modelsService.load()
+        }
     }, []);
 
 
     const formRef = useRef<HTMLFormElement | null>(null);
 
 
+    // Additional actions used by the dynamic relations (React 19 useActionState)
+    const [listEntitiesRes, listEntitiesAction] = useActionState(actions.listEntities as any, undefined);
+    const [createEntityRes, createEntityAction] = useActionState(actions.createEntity as any, undefined);
+
     const [initial, setInitial] = useState<Record<string, any>>(value ?? {});
     useEffect(() => setInitial(value ?? {}), [value]);
 
-    // Build fields & relation definitions from model metadata JSON
+    // Build fields & relation definitions from model metadata JSON (from store)
     const {scalarFields, relationFields, listRelationFields, defs} = useMemo(() => {
-        const defs = models?.data as Record<string, Record<string, any>> | undefined;
+        const defs = $models.models as Record<string, Record<string, any>> | null | undefined;
         if (!defs) return {
             scalarFields: [] as any[],
             relationFields: [] as any[],
             listRelationFields: [] as any[],
             defs: undefined as any
         };
-        const rec = defs[model] || {};
+        const rec = (defs as any)[model] || {};
         let list = Object.entries(rec).map(([name, meta]) => ({name, ...(meta as any)}));
         // occasional sorting / filtering logic (can be extended by mode: create/update)
         list = list.filter(f => !(f.ui?.hidden === true) && !(exclude?.includes(f.name)));
@@ -77,58 +84,42 @@ export default function DynamicModelForm({
         // hide scalar FK fields that are handled by relation sections
         const fkNames = new Set(rels.map(r => r.fk).filter(Boolean) as string[]);
         scalars = scalars.filter(s => !fkNames.has(s.name));
-        // if depth 0, hide relations
-
+        // Apply relationsDepth: when <= 0, do not expose relations
+        if ((relationsDepth ?? 0) <= 0) {
+            return {scalarFields: scalars, relationFields: [] as any[], listRelationFields: [] as any[], defs};
+        }
         return {scalarFields: scalars, relationFields: rels, listRelationFields: listRels, defs};
-    }, [models, exclude, pending, model, mode, relationsDepth]);
+    }, [$models.models, exclude, model, mode, relationsDepth]);
 
 
-    console.log(scalarFields, relationFields, defs);
-
-    // Appliquer les valeurs par défaut issues de ui.default lorsque absentes
-    useEffect(() => {
-        if (!scalarFields || scalarFields.length === 0) return;
-        const next: Record<string, any> = {...(value ?? {})};
+    // Calculer des valeurs par défaut stables (éviter des deps JSON.stringify)
+    const defaultValues = useMemo(() => {
+        const base: Record<string, any> = {...(value ?? {})};
         for (const f of scalarFields) {
             const name = f.name as string;
-            if (next[name] !== undefined && next[name] !== null) continue;
+            if (base[name] !== undefined && base[name] !== null) continue;
             if (f?.ui?.default === undefined) continue;
             let d = f.ui.default;
             const t = String(f.type);
             try {
-                if (t === 'Boolean') {
-                    next[name] = Boolean(d);
-                } else if (t === 'Int' || t === 'BigInt') {
-                    next[name] = d === null || d === '' || d === undefined ? undefined : Number.parseInt(String(d));
-                } else if (t === 'Float' || t === 'Decimal') {
-                    next[name] = d === null || d === '' || d === undefined ? undefined : Number.parseFloat(String(d));
-                } else if (t === 'DateTime') {
-                    // Garder une valeur string compatible avec input datetime-local si déjà au format ISO
-                    // Sinon, tenter de construire un ISO
-                    if (typeof d === 'string') {
-                        next[name] = d;
-                    } else if (d) {
-                        const iso = new Date(d as any).toISOString();
-                        next[name] = iso;
-                    }
-                } else if (t === 'Json') {
-                    // Le textarea attend une string, sérialiser si objet
-                    if (typeof d === 'string') {
-                        next[name] = d;
-                    } else {
-                        next[name] = JSON.stringify(d, null, 2);
-                    }
-                } else {
-                    // String et autres scalaires
-                    next[name] = d as any;
-                }
+                if (t === 'Boolean') base[name] = Boolean(d);
+                else if (t === 'Int' || t === 'BigInt') base[name] = d === null || d === '' || d === undefined ? undefined : Number.parseInt(String(d));
+                else if (t === 'Float' || t === 'Decimal') base[name] = d === null || d === '' || d === undefined ? undefined : Number.parseFloat(String(d));
+                else if (t === 'DateTime') base[name] = typeof d === 'string' ? d : (d ? new Date(d as any).toISOString() : undefined);
+                else if (t === 'Json') base[name] = typeof d === 'string' ? d : JSON.stringify(d, null, 2);
+                else base[name] = d as any;
             } catch {
-                next[name] = d as any;
+                base[name] = d as any;
             }
         }
-        setInitial(next);
+        return base;
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [JSON.stringify(scalarFields), JSON.stringify(value)]);
+    }, [scalarFields, value]);
+
+    // Appliquer au state initial (Formik reinit activé)
+    useEffect(() => {
+        setInitial(defaultValues);
+    }, [defaultValues]);
 
     // Build Formik
     const formik = useFormik({
@@ -178,11 +169,11 @@ export default function DynamicModelForm({
                     if (st.mode === 'associate' && st.selectedId) {
                         normalized[rf.fk] = st.selectedId;
                     } else if (st.mode === 'create' && st.createValues) {
-                        const created = await callAction('createEntity', {
+                        const created = await createEntityAction({
                             model: rf.targetModel,
                             dataJson: JSON.stringify(st.createValues)
-                        });
-                        const newId = created?.created?.id;
+                        } as any);
+                        const newId = (created as any)?.data?.created?.id || (createEntityRes as any)?.data?.created?.id;
                         if (newId) normalized[rf.fk] = newId;
                     }
                 }
@@ -270,37 +261,39 @@ export default function DynamicModelForm({
     const [isFetching, startTransition] = useTransition();
 
 
-    const ensureRelState = (rf: any) => {
-        setRelationUIState((prev) => prev[rf.name] ? prev : ({
-            ...prev,
-            [rf.name]: {mode: 'associate', search: '', options: [], loading: false, selectedIds: [], createItems: []}
-        }));
-    }
+    const updateRelationState = (rf: any, updater: (prev: RelationState) => RelationState) => {
+        setRelationUIState(prev => {
+            const current: RelationState = prev[rf.name] ?? {
+                mode: 'associate',
+                search: '',
+                options: [],
+                loading: false,
+                selectedIds: [],
+                createItems: [],
+            };
+            return {
+                ...prev,
+                [rf.name]: updater(current),
+            };
+        });
+    };
 
     const reloadRelationOptions = (rf: any, q: string) => {
-        setRelationUIState((prev) => ({
-            ...prev,
-            [rf.name]: {...(prev[rf.name] || {mode: 'associate', search: ''}), loading: true}
-        }));
+        updateRelationState(rf, (st) => ({...st, loading: true, search: q}));
         startTransition(async () => {
             try {
-                const data = await callAction('listEntities', {model: rf.targetModel, q, limit: 25});
-                const options = (data?.items || []).map((it: any) => ({
+                const resp = await listEntitiesAction({model: rf.targetModel, q, limit: 25} as any);
+                const payload = (resp as any)?.data || (listEntitiesRes as any)?.data;
+                const options = ((payload?.items) || []).map((it: any) => ({
                     id: it.id,
                     label: it.name || it.title || it.email || it.slug || it.id
                 }));
-                setRelationUIState((prev) => ({
-                    ...prev,
-                    [rf.name]: {...(prev[rf.name] || {} as any), options, loading: false}
-                }));
+                updateRelationState(rf, (st) => ({...st, options, loading: false}));
             } catch {
-                setRelationUIState((prev) => ({
-                    ...prev,
-                    [rf.name]: {...(prev[rf.name] || {} as any), loading: false}
-                }));
+                updateRelationState(rf, (st) => ({...st, loading: false}));
             }
         });
-    }
+    };
 
 
     return (
@@ -322,7 +315,7 @@ export default function DynamicModelForm({
             </div>
 
             {/* Relations */}
-            {(relationFields.length > 0 || listRelationFields.length > 0) && (
+            {(relationsDepth > 0 && (relationFields.length > 0 || listRelationFields.length > 0)) && (
                 <div className="mt-6 space-y-6">
                     {listRelationFields.map((rf: any) => {
                         const st = relationUIState[rf.name];
@@ -344,19 +337,11 @@ export default function DynamicModelForm({
                                                 placeholder={`Rechercher ${rf.targetModel}...`}
                                                 value={st?.search || ''}
                                                 onChange={(e) => {
-                                                    ensureRelState(rf);
                                                     const v = e.target.value;
-                                                    setRelationUIState((prev) => ({
-                                                        ...prev,
-                                                        [rf.name]: {
-                                                            ...(prev[rf.name] || {mode: 'associate'}),
-                                                            search: v
-                                                        }
-                                                    }));
+                                                    updateRelationState(rf, (st) => ({...st, search: v}));
                                                     reloadRelationOptions(rf, v);
                                                 }}
                                                 onFocus={() => {
-                                                    ensureRelState(rf);
                                                     if (!st || (st && st.options?.length === 0)) reloadRelationOptions(rf, st?.search || '');
                                                 }}
                                             />
@@ -367,19 +352,12 @@ export default function DynamicModelForm({
                                                 className="border px-2 py-1 w-full"
                                                 value={''}
                                                 onChange={(e) => {
-                                                    ensureRelState(rf);
                                                     const val = e.target.value;
                                                     if (!val) return;
-                                                    setRelationUIState((prev) => {
-                                                        const arr = new Set([...(prev[rf.name]?.selectedIds || []), val]);
-                                                        return {
-                                                            ...prev,
-                                                            [rf.name]: {
-                                                                ...(prev[rf.name] || {} as any),
-                                                                selectedIds: Array.from(arr)
-                                                            }
-                                                        };
-                                                    });
+                                                    updateRelationState(rf, (st) => ({
+                                                        ...st,
+                                                        selectedIds: Array.from(new Set([...(st.selectedIds || []), val]))
+                                                    }));
                                                 }}
                                             >
                                                 <option value="">— Sélectionner —</option>
@@ -428,17 +406,14 @@ export default function DynamicModelForm({
                                                 />
                                                 <div className="flex justify-end mt-2">
                                                     <button type="button" className="border px-2 py-1 text-sm"
-                                                            onClick={() => setRelationUIState((prev) => {
-                                                                const draft = prev[rf.name]?.createDraft;
-                                                                if (!draft) return prev;
-                                                                const list = [...(prev[rf.name]?.createItems || []), draft];
+                                                            onClick={() => updateRelationState(rf, (st) => {
+                                                                const draft = st.createDraft;
+                                                                if (!draft) return st;
+                                                                const list = [...(st.createItems || []), draft];
                                                                 return {
-                                                                    ...prev,
-                                                                    [rf.name]: {
-                                                                        ...(prev[rf.name] || {} as any),
-                                                                        createItems: list,
-                                                                        createDraft: undefined
-                                                                    }
+                                                                    ...st,
+                                                                    createItems: list,
+                                                                    createDraft: undefined
                                                                 };
                                                             })}
                                                     >Ajouter à la liste
@@ -476,19 +451,11 @@ export default function DynamicModelForm({
                                                 placeholder={`Rechercher ${rf.targetModel}...`}
                                                 value={st?.search || ''}
                                                 onChange={(e) => {
-                                                    ensureRelState(rf);
                                                     const v = e.target.value;
-                                                    setRelationUIState((prev) => ({
-                                                        ...prev,
-                                                        [rf.name]: {
-                                                            ...(prev[rf.name] || {mode: 'associate'}),
-                                                            search: v
-                                                        }
-                                                    }));
+                                                    updateRelationState(rf, (st) => ({...st, search: v}));
                                                     reloadRelationOptions(rf, v);
                                                 }}
                                                 onFocus={() => {
-                                                    ensureRelState(rf);
                                                     if (!st || (st && st.options?.length === 0)) reloadRelationOptions(rf, st?.search || '');
                                                 }}
                                             />
@@ -499,15 +466,11 @@ export default function DynamicModelForm({
                                                 className="border px-2 py-1 w-full"
                                                 value={st?.mode === 'create' ? '__create__' : (st?.selectedId || '')}
                                                 onChange={(e) => {
-                                                    ensureRelState(rf);
                                                     const val = e.target.value;
-                                                    setRelationUIState((prev) => ({
-                                                        ...prev,
-                                                        [rf.name]: {
-                                                            ...(prev[rf.name] || {} as any),
-                                                            mode: val === '__create__' ? 'create' : 'associate',
-                                                            selectedId: val === '__create__' ? undefined : val
-                                                        }
+                                                    updateRelationState(rf, (st) => ({
+                                                        ...st,
+                                                        mode: val === '__create__' ? 'create' : 'associate',
+                                                        selectedId: val === '__create__' ? undefined : val
                                                     }));
                                                 }}
                                             >
@@ -527,9 +490,9 @@ export default function DynamicModelForm({
                                                 hideSubmit
                                                 mode={'create'}
                                                 relationsDepth={Math.max(0, (relationsDepth ?? 1) - 1)}
-                                                onChange={(vals) => setRelationUIState((prev) => ({
-                                                    ...prev,
-                                                    [rf.name]: {...(prev[rf.name] || {} as any), createValues: vals}
+                                                onChange={(vals) => updateRelationState(rf, (st) => ({
+                                                    ...st,
+                                                    createValues: vals
                                                 }))}
                                             />
                                         </div>
