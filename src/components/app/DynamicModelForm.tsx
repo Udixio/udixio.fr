@@ -1,4 +1,4 @@
-import React, {useActionState, useEffect, useMemo, useRef, useState, useTransition} from "react";
+import React, {useActionState, useEffect, useMemo, useRef, useState} from "react";
 import {useFormik} from 'formik';
 import {actions} from 'astro:actions';
 import {useStore} from "@nanostores/react";
@@ -27,10 +27,11 @@ type RelationFieldProps = {
     st?: RelationState;
     updateState: (rf: any, updater: (prev: RelationState) => RelationState) => void;
     reloadOptions: (rf: any, q: string) => void;
-    depth: number;
+    depth: number; // remaining depth (-1 = unlimited)
+    level: number; // 1 = top-level of the current form
 };
 
-function RelationField({rf, st, updateState, reloadOptions, depth}: RelationFieldProps) {
+function RelationField({rf, st, updateState, reloadOptions, depth, level}: RelationFieldProps) {
     const isList = !!rf.isList;
 
     // Normalisation lecture: tableau courant des sélections
@@ -78,6 +79,14 @@ function RelationField({rf, st, updateState, reloadOptions, depth}: RelationFiel
             reloadOptions(rf, st?.search || '');
         }
     };
+
+    // Activer par défaut le mode "create" uniquement au premier niveau
+    useEffect(() => {
+        if (level === 1 && (!st || !st.mode)) {
+            updateState(rf, (prev) => ({...prev, mode: 'create'}));
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <div className="border rounded">
@@ -148,56 +157,77 @@ function RelationField({rf, st, updateState, reloadOptions, depth}: RelationFiel
                     </div>
                 )}
 
-                {/* 3. Zone de création */}
-                <div className="pt-2">
-                    <details className="group" open={st?.mode === 'create' || undefined}>
-                        <summary className="cursor-pointer select-none text-sm text-blue-700">➕ Créer
-                            un(e) {rf.targetModel}</summary>
-                        <div className="mt-2 border rounded bg-gray-50/50 p-3">
-                            <DynamicModelForm
-                                model={rf.targetModel}
-                                hideSubmit
-                                mode={'create'}
-                                relationsDepth={Math.max(0, (depth ?? 1) - 1)}
-                                onChange={(vals) => {
-                                    if (isList) {
-                                        updateState(rf, (prev) => ({
-                                            ...prev,
-                                            createDraft: vals
-                                        }));
-                                    } else {
-                                        updateState(rf, (prev) => ({
-                                            ...prev,
-                                            mode: 'create',
-                                            createValues: vals,
-                                            selectedId: undefined
-                                        }));
-                                    }
-                                }}
-                            />
+                {/* 2.b Toggle vers le mode création quand on est en association */}
+                {st?.mode !== 'create' && (
+                    <div className="flex justify-end">
+                        <button
+                            type="button"
+                            className="text-xs text-blue-700 hover:underline"
+                            onClick={() => updateState(rf, (prev) => ({
+                                ...prev,
+                                mode: 'create',
+                                // Pour un singulier, on libère la sélection en cours
+                                ...(isList ? {} : {selectedId: undefined})
+                            }))}
+                        >
+                            ➕ Créer un(e) {rf.targetModel}
+                        </button>
+                    </div>
+                )}
 
-                            {isList && (
-                                <div className="flex justify-end mt-2">
-                                    <button
-                                        type="button"
-                                        className="border px-2 py-1 text-sm"
-                                        onClick={() => updateState(rf, (prev) => {
-                                            const draft = prev.createDraft;
-                                            if (!draft) return prev;
-                                            const list = [...(prev.createItems || []), draft];
-                                            return {
+                {/* 3. Zone de création - ne pas rendre le sous-formulaire tant que le mode n'est pas 'create' */}
+                {st?.mode === 'create' && (
+                    <div className="pt-2">
+                        <details className="group" open={true}>
+                            <summary className="cursor-pointer select-none text-sm text-blue-700">➕ Créer
+                                un(e) {rf.targetModel}</summary>
+                            <div className="mt-2 border rounded bg-gray-50/50 p-3">
+                                <DynamicModelForm
+                                    model={rf.targetModel}
+                                    hideSubmit
+                                    mode={'create'}
+                                    relationsDepth={depth === -1 ? -1 : Math.max(0, (depth ?? 1) - 1)}
+                                    level={level + 1}
+                                    onChange={(vals) => {
+                                        if (isList) {
+                                            updateState(rf, (prev) => ({
                                                 ...prev,
-                                                createItems: list,
-                                                createDraft: undefined
-                                            };
-                                        })}
-                                    >Ajouter à la liste
-                                    </button>
-                                </div>
-                            )}
-                        </div>
-                    </details>
-                </div>
+                                                createDraft: vals
+                                            }));
+                                        } else {
+                                            updateState(rf, (prev) => ({
+                                                ...prev,
+                                                mode: 'create',
+                                                createValues: vals,
+                                                selectedId: undefined
+                                            }));
+                                        }
+                                    }}
+                                />
+
+                                {isList && (
+                                    <div className="flex justify-end mt-2">
+                                        <button
+                                            type="button"
+                                            className="border px-2 py-1 text-sm"
+                                            onClick={() => updateState(rf, (prev) => {
+                                                const draft = prev.createDraft;
+                                                if (!draft) return prev;
+                                                const list = [...(prev.createItems || []), draft];
+                                                return {
+                                                    ...prev,
+                                                    createItems: list,
+                                                    createDraft: undefined
+                                                };
+                                            })}
+                                        >Ajouter à la liste
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        </details>
+                    </div>
+                )}
 
                 {/* Info items à créer pour listes */}
                 {isList && (st?.createItems && st.createItems.length > 0) && (
@@ -220,7 +250,8 @@ type Props = {
     submitLabel?: string;
     hideSubmit?: boolean;
     mode?: 'create' | 'update';
-    relationsDepth?: number; // how deep relations sections should be rendered (0 = none)
+    relationsDepth?: number; // how deep relations sections should be rendered (0 = none, -1 = unlimited)
+    level?: number; // current nesting level (1 = root); used for default create mode only at first level
 };
 
 export default function DynamicModelForm({
@@ -234,10 +265,10 @@ export default function DynamicModelForm({
                                              submitLabel = "Enregistrer",
                                              hideSubmit,
                                              mode = 'create',
-                                             relationsDepth = 1
+                                             relationsDepth = -1,
+                                             level = 1
                                          }: Props) {
     // Centralize models loading through Nano-store
-
     const $models = useStore(modelsStore);
 
     useEffect(() => {
@@ -271,21 +302,54 @@ export default function DynamicModelForm({
         // separate
         let scalars = list.filter(f => !f.relationName && !f.isList && !f.isId && !(mode === 'update' && f.isReadOnly));
         // sort required first then alpha
+
+
         scalars.sort((a, b) => (Number(b.isRequired) - Number(a.isRequired)) || a.name.localeCompare(b.name));
         // relations unified (singular and list)
-        const relsAll = list.filter(f => !!f.relationName).map(f => ({
+        let relsAll = list.filter(f => !!f.relationName).map(f => ({
             ...f,
             isList: !!f.isList,
             targetModel: String(f.type),
             fk: !f.isList && Array.isArray(f.relationFromFields) && f.relationFromFields.length > 0 ? f.relationFromFields[0] : undefined,
         }));
+        // Ajout des relations synthétiques pour les FK orphelines (ex: userId)
+        try {
+            const defModels = new Set(Object.keys(defs || {}));
+            for (const f of list) {
+                if (f.relationName || f.isList || f.isId) continue;
+                if (String(f.type) !== 'String') continue;
+                const name: string = String(f.name);
+                if (!name.endsWith('Id')) continue;
+                const fk = name;
+                if (relsAll.some(r => r.fk === fk)) continue;
+                const base = name.substring(0, name.length - 2);
+                if (!base) continue;
+                const targetModel = base.charAt(0).toUpperCase() + base.slice(1);
+                if (!defModels.has(targetModel)) continue;
+                relsAll.push({
+                    ...f,
+                    name: base,
+                    isList: false,
+                    targetModel,
+                    fk,
+                    relationName: f.relationName || undefined,
+                    __synthetic: true,
+                } as any);
+            }
+        } catch {
+        }
         // hide scalar FK fields that are handled by relation sections
         const fkNames = new Set(relsAll.filter(r => !r.isList).map(r => r.fk).filter(Boolean) as string[]);
         scalars = scalars.filter(s => !fkNames.has(s.name));
-        // Apply relationsDepth: when <= 0, do not expose relations
-        if ((relationsDepth ?? 0) <= 0) {
+        // Apply relationsDepth: 0 => hide relations, -1 => unlimited
+        if ((relationsDepth ?? 0) === 0) {
             return {scalarFields: scalars, relations: [] as any[], defs};
         }
+
+        if (model == "Client") {
+            console.log(model, {scalarFields: scalars, relations: relsAll, defs});
+        }
+
         return {scalarFields: scalars, relations: relsAll, defs};
     }, [$models.models, exclude, model, mode, relationsDepth]);
 
@@ -423,8 +487,13 @@ export default function DynamicModelForm({
         if (type == 'String' || isNumber) {
             return <TextField variant={"outlined"} {...common} label={label} errorText={formik.errors}
                               placeholder={placeholder} {...(isNumber ? {type: 'number'} : {})}/>;
-        } else {
+        } else if (type === 'Json'
+            || type === 'DateTime'
+            || isEnum
+            || (type === 'Boolean')
+        ) {
             common.className += "border border-outline px-2 py-1 w-full";
+
             return <>
                 <label className="block text-sm mb-1">
                     {f.ui?.label || f.documentation || f.name}
@@ -462,6 +531,9 @@ export default function DynamicModelForm({
                     <div className="text-xs text-red-600 mt-1">{String((formik.errors as any)[f.name])}</div>
                 )}
             </>
+        } else {
+            console.error(`Unknown field type: ${type}`);
+            return null;
         }
 
 
@@ -469,7 +541,6 @@ export default function DynamicModelForm({
 
     // ---------- Relations state & helpers ----------
     const [relationUIState, setRelationUIState] = useState<Record<string, RelationState>>({});
-    const [isFetching, startTransition] = useTransition();
 
 
     const updateRelationState = (rf: any, updater: (prev: RelationState) => RelationState) => {
@@ -521,7 +592,7 @@ export default function DynamicModelForm({
             </div>
 
             {/* Relations */}
-            {(relationsDepth > 0 && (relations.length > 0)) && (
+            {(relationsDepth !== 0 && (relations.length > 0)) && (
                 <div className="mt-6 space-y-6">
                     {relations.map((rf: any) => (
                         <RelationField
@@ -531,6 +602,7 @@ export default function DynamicModelForm({
                             updateState={updateRelationState}
                             reloadOptions={reloadRelationOptions}
                             depth={relationsDepth}
+                            level={level}
                         />
                     ))}
                 </div>
