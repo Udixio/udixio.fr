@@ -2,7 +2,7 @@ import React, {useActionState, useEffect, useRef, useState} from "react";
 import {withState} from '@astrojs/react/actions';
 import {actions} from 'astro:actions';
 import {appService} from "@/stores/appStore";
-import DynamicModelForm from "@components/app/DynamicModelForm.tsx";
+import DynamicForm from "@components/app/DynamicForm.tsx";
 import {Card} from "@udixio/ui-react";
 
 type Deal = {
@@ -145,7 +145,7 @@ export default function DealsIndex() {
                     <div className="space-y-3">
                         <p className="text-sm text-gray-600">Le formulaire est généré depuis le modèle Prisma « Deal
                             ».</p>
-                        <DynamicModelForm
+                        <DynamicForm
                             model="Deal"
                             exclude={["id", "createdAt", "updatedAt"]}
                             submitLabel={'Créer'}

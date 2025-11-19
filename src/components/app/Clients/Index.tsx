@@ -1,8 +1,7 @@
-import React, {useEffect, useRef, useState, useTransition} from "react";
+import React, {useActionState, useEffect, useRef, useState, useTransition} from "react";
 import {appService} from "@/stores/appStore";
-import DynamicModelForm from "@components/app/DynamicModelForm.tsx";
+import DynamicForm from "@components/app/DynamicForm.tsx";
 import {actions} from 'astro:actions';
-import {useActionState} from "react";
 
 type Client = {
     id: string;
@@ -97,7 +96,7 @@ export default function ClientsIndex() {
                     <div className="space-y-3">
                         <p className="text-sm text-gray-600">Le formulaire est 100% généré à partir du modèle Prisma «
                             Client » et s’appuie sur Formik. Renseignez au minimum le champ userId requis.</p>
-                        <DynamicModelForm
+                        <DynamicForm
                             model="Client"
                             // On exclut les champs techniques non éditables
                             exclude={["id", "createdAt", "updatedAt"]}

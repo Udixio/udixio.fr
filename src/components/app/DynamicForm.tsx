@@ -182,7 +182,7 @@ function RelationField({rf, st, updateState, reloadOptions, depth, level}: Relat
                             <summary className="cursor-pointer select-none text-sm text-blue-700">➕ Créer
                                 un(e) {rf.targetModel}</summary>
                             <div className="mt-2 border rounded bg-gray-50/50 p-3">
-                                <DynamicModelForm
+                                <DynamicForm
                                     model={rf.targetModel}
                                     hideSubmit
                                     mode={'create'}
@@ -254,20 +254,20 @@ type Props = {
     level?: number; // current nesting level (1 = root); used for default create mode only at first level
 };
 
-export default function DynamicModelForm({
-                                             model,
-                                             value,
-                                             onChange,
-                                             onSubmit,
-                                             exclude,
-                                             disabledFields,
-                                             className,
-                                             submitLabel = "Enregistrer",
-                                             hideSubmit,
-                                             mode = 'create',
-                                             relationsDepth = -1,
-                                             level = 1
-                                         }: Props) {
+export default function DynamicForm({
+                                        model,
+                                        value,
+                                        onChange,
+                                        onSubmit,
+                                        exclude,
+                                        disabledFields,
+                                        className,
+                                        submitLabel = "Enregistrer",
+                                        hideSubmit,
+                                        mode = 'create',
+                                        relationsDepth = -1,
+                                        level = 1
+                                    }: Props) {
     // Centralize models loading through Nano-store
     const $models = useStore(modelsStore);
 
