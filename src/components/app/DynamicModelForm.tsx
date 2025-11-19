@@ -4,6 +4,207 @@ import {actions} from 'astro:actions';
 import {useStore} from "@nanostores/react";
 import {modelsService, modelsStore} from "@/stores/modelsStore";
 
+// ---------- Relations state (extrait au niveau module pour éviter recréations) ----------
+export type RelationState = {
+    // Common
+    mode?: 'associate' | 'create';
+    search: string;
+    options: { id: string; label: string }[];
+    loading: boolean;
+    // Singular
+    selectedId?: string;
+    createValues?: Record<string, any>;
+    // List
+    selectedIds?: string[];
+    createDraft?: Record<string, any>;
+    createItems?: Record<string, any>[];
+};
+
+// ---------- Composant extrait: RelationField (évite recréation à chaque rendu) ----------
+type RelationFieldProps = {
+    rf: any;
+    st?: RelationState;
+    updateState: (rf: any, updater: (prev: RelationState) => RelationState) => void;
+    reloadOptions: (rf: any, q: string) => void;
+    depth: number;
+};
+
+function RelationField({rf, st, updateState, reloadOptions, depth}: RelationFieldProps) {
+    const isList = !!rf.isList;
+
+    // Normalisation lecture: tableau courant des sélections
+    const currentSelection: string[] = useMemo(() => {
+        if (isList) return st?.selectedIds || [];
+        const one = st?.selectedId ? [st.selectedId] : [];
+        return one;
+    }, [isList, st?.selectedId, st?.selectedIds]);
+
+    // Ajout d'une sélection
+    const handleSelect = (id: string) => {
+        if (!id) return;
+        if (isList) {
+            updateState(rf, (prev) => ({
+                ...prev,
+                selectedIds: Array.from(new Set([...(prev.selectedIds || []), id]))
+            }));
+        } else {
+            updateState(rf, (prev) => ({
+                ...prev,
+                mode: 'associate',
+                selectedId: id
+            }));
+        }
+    };
+
+    // Retrait d'une sélection
+    const handleRemove = (id: string) => {
+        if (isList) {
+            updateState(rf, (prev) => ({
+                ...prev,
+                selectedIds: (prev.selectedIds || []).filter((x) => x !== id)
+            }));
+        } else {
+            updateState(rf, (prev) => ({
+                ...prev,
+                selectedId: undefined
+            }));
+        }
+    };
+
+    // Recherche options à l'ouverture
+    const ensureOptions = () => {
+        if (!st || (st && (st.options?.length || 0) === 0)) {
+            reloadOptions(rf, st?.search || '');
+        }
+    };
+
+    return (
+        <div className="border rounded">
+            <div className="px-3 py-2 border-b bg-gray-50 flex items-center justify-between">
+                <div className="font-medium">{rf.ui?.label || rf.documentation || `${rf.name}`}</div>
+                <div className="text-xs text-gray-500">{`→ ${rf.targetModel}${isList ? ' (multiple)' : ''}`}</div>
+            </div>
+            <div className="p-3 space-y-3">
+                {/* 1. Sélection actuelle sous forme de tags */}
+                <div className="flex flex-wrap gap-2">
+                    {currentSelection.map((id) => (
+                        <span key={id}
+                              className="inline-flex items-center gap-2 px-2 py-0.5 border rounded-full text-xs">
+                            <span className="opacity-70">{id}</span>
+                            <button type="button" className="text-red-600"
+                                    onClick={() => handleRemove(id)}>×</button>
+                        </span>
+                    ))}
+
+                    {/* Cas Création Singulière (Feedback visuel) */}
+                    {(!isList && st?.mode === 'create') && (
+                        <span className="inline-flex items-center gap-2 px-2 py-0.5 border border-green-300 bg-green-50 text-green-700 rounded-full text-xs">
+                            <span>✨ Nouveau (en cours)</span>
+                            <button
+                                type="button"
+                                className="text-green-700"
+                                onClick={() => {
+                                    // Annuler la création et revenir en mode associate
+                                    updateState(rf, prev => ({...prev, mode: 'associate', createValues: undefined }));
+                                }}
+                            >×</button>
+                        </span>
+                    )}
+                </div>
+
+                {/* 2. Barre Recherche / Ajout (cachée si singulier avec déjà une sélection) */}
+                {!(!!(!isList && currentSelection.length > 0)) && (
+                    <div className="flex items-end gap-2">
+                        <div className="flex-1">
+                            <label className="block text-xs text-gray-600">Recherche</label>
+                            <input
+                                className="border px-2 py-1 w-full"
+                                placeholder={`Rechercher ${rf.targetModel}...`}
+                                value={st?.search || ''}
+                                onChange={(e) => {
+                                    const v = e.target.value;
+                                    updateState(rf, (st) => ({...st, search: v}));
+                                    reloadOptions(rf, v);
+                                }}
+                                onFocus={ensureOptions}
+                            />
+                        </div>
+                        <div className="min-w-[260px]">
+                            <label className="block text-xs text-gray-600">{isList ? 'Ajouter' : 'Choisir'}</label>
+                            <select
+                                className="border px-2 py-1 w-full"
+                                value={''}
+                                onChange={(e) => handleSelect(e.target.value)}
+                                onFocus={ensureOptions}
+                            >
+                                <option value="">— {isList ? 'Ajouter…' : 'Choisir…'} —</option>
+                                {(st?.options || []).map((o) => (
+                                    <option key={o.id} value={o.id}>{o.label}</option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+                )}
+
+                {/* 3. Zone de création */}
+                <div className="pt-2">
+                    <details className="group" open={st?.mode === 'create' || undefined}>
+                        <summary className="cursor-pointer select-none text-sm text-blue-700">➕ Créer un(e) {rf.targetModel}</summary>
+                        <div className="mt-2 border rounded bg-gray-50/50 p-3">
+                            <DynamicModelForm
+                                model={rf.targetModel}
+                                hideSubmit
+                                mode={'create'}
+                                relationsDepth={Math.max(0, (depth ?? 1) - 1)}
+                                onChange={(vals) => {
+                                    if (isList) {
+                                        updateState(rf, (prev) => ({
+                                            ...prev,
+                                            createDraft: vals
+                                        }));
+                                    } else {
+                                        updateState(rf, (prev) => ({
+                                            ...prev,
+                                            mode: 'create',
+                                            createValues: vals,
+                                            selectedId: undefined
+                                        }));
+                                    }
+                                }}
+                            />
+
+                            {isList && (
+                                <div className="flex justify-end mt-2">
+                                    <button
+                                        type="button"
+                                        className="border px-2 py-1 text-sm"
+                                        onClick={() => updateState(rf, (prev) => {
+                                            const draft = prev.createDraft;
+                                            if (!draft) return prev;
+                                            const list = [...(prev.createItems || []), draft];
+                                            return {
+                                                ...prev,
+                                                createItems: list,
+                                                createDraft: undefined
+                                            };
+                                        })}
+                                    >Ajouter à la liste
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    </details>
+                </div>
+
+                {/* Info items à créer pour listes */}
+                {isList && (st?.createItems && st.createItems.length > 0) && (
+                    <div className="text-xs text-gray-600">À créer: {st.createItems.length} élément(s)</div>
+                )}
+            </div>
+        </div>
+    );
+}
+
 type Props = {
     model: string;
     value?: Record<string, any>;
@@ -54,12 +255,11 @@ export default function DynamicModelForm({
     useEffect(() => setInitial(value ?? {}), [value]);
 
     // Build fields & relation definitions from model metadata JSON (from store)
-    const {scalarFields, relationFields, listRelationFields, defs} = useMemo(() => {
+    const {scalarFields, relations, defs} = useMemo(() => {
         const defs = $models.models as Record<string, Record<string, any>> | null | undefined;
         if (!defs) return {
             scalarFields: [] as any[],
-            relationFields: [] as any[],
-            listRelationFields: [] as any[],
+            relations: [] as any[],
             defs: undefined as any
         };
         const rec = (defs as any)[model] || {};
@@ -70,25 +270,21 @@ export default function DynamicModelForm({
         let scalars = list.filter(f => !f.relationName && !f.isList && !f.isId && !(mode === 'update' && f.isReadOnly));
         // sort required first then alpha
         scalars.sort((a, b) => (Number(b.isRequired) - Number(a.isRequired)) || a.name.localeCompare(b.name));
-        // relations: non-list (singular)
-        let rels = list.filter(f => !!f.relationName && !f.isList).map(f => ({
+        // relations unified (singular and list)
+        const relsAll = list.filter(f => !!f.relationName).map(f => ({
             ...f,
+            isList: !!f.isList,
             targetModel: String(f.type),
-            fk: Array.isArray(f.relationFromFields) && f.relationFromFields.length > 0 ? f.relationFromFields[0] : undefined,
-        }));
-        // list relations (1:n / n:m from this side)
-        let listRels = list.filter(f => !!f.relationName && !!f.isList).map(f => ({
-            ...f,
-            targetModel: String(f.type),
+            fk: !f.isList && Array.isArray(f.relationFromFields) && f.relationFromFields.length > 0 ? f.relationFromFields[0] : undefined,
         }));
         // hide scalar FK fields that are handled by relation sections
-        const fkNames = new Set(rels.map(r => r.fk).filter(Boolean) as string[]);
+        const fkNames = new Set(relsAll.filter(r => !r.isList).map(r => r.fk).filter(Boolean) as string[]);
         scalars = scalars.filter(s => !fkNames.has(s.name));
         // Apply relationsDepth: when <= 0, do not expose relations
         if ((relationsDepth ?? 0) <= 0) {
-            return {scalarFields: scalars, relationFields: [] as any[], listRelationFields: [] as any[], defs};
+            return {scalarFields: scalars, relations: [] as any[], defs};
         }
-        return {scalarFields: scalars, relationFields: rels, listRelationFields: listRels, defs};
+        return {scalarFields: scalars, relations: relsAll, defs};
     }, [$models.models, exclude, model, mode, relationsDepth]);
 
 
@@ -161,33 +357,32 @@ export default function DynamicModelForm({
                     }
                 }
             }
-            // Relations handling: associate or create and assign for singular relations; for list relations, use nested connect/create
+            // Relations handling unifiée: singulier (fk) ou liste (nested connect/create)
             try {
-                for (const rf of relationFields) {
-                    const st = relationUIState[rf.name];
-                    if (!st || !rf.fk) continue;
-                    if (st.mode === 'associate' && st.selectedId) {
-                        normalized[rf.fk] = st.selectedId;
-                    } else if (st.mode === 'create' && st.createValues) {
-                        const created = await createEntityAction({
-                            model: rf.targetModel,
-                            dataJson: JSON.stringify(st.createValues)
-                        } as any);
-                        const newId = (created as any)?.data?.created?.id || (createEntityRes as any)?.data?.created?.id;
-                        if (newId) normalized[rf.fk] = newId;
-                    }
-                }
-                // Handle list relations using nested writes
-                for (const rf of listRelationFields) {
+                for (const rf of relations) {
                     const st = relationUIState[rf.name];
                     if (!st) continue;
-                    const connectIds = Array.isArray(st.selectedIds) ? st.selectedIds : [];
-                    const createItems = Array.isArray(st.createItems) ? st.createItems : [];
-                    const payload: any = {};
-                    if (connectIds.length > 0) payload.connect = connectIds.map((id: string) => ({id}));
-                    if (createItems.length > 0) payload.create = createItems;
-                    if (payload.connect || payload.create) {
-                        (normalized as any)[rf.name] = payload;
+                    if (!rf.isList) {
+                        if (!rf.fk) continue;
+                        if (st.mode === 'associate' && st.selectedId) {
+                            normalized[rf.fk] = st.selectedId;
+                        } else if (st.mode === 'create' && st.createValues) {
+                            const created = await createEntityAction({
+                                model: rf.targetModel,
+                                dataJson: JSON.stringify(st.createValues)
+                            } as any);
+                            const newId = (created as any)?.data?.created?.id || (createEntityRes as any)?.data?.created?.id;
+                            if (newId) normalized[rf.fk] = newId;
+                        }
+                    } else {
+                        const connectIds = Array.isArray(st.selectedIds) ? st.selectedIds : [];
+                        const createItems = Array.isArray(st.createItems) ? st.createItems : [];
+                        const payload: any = {};
+                        if (connectIds.length > 0) payload.connect = connectIds.map((id: string) => ({id}));
+                        if (createItems.length > 0) payload.create = createItems;
+                        if (payload.connect || payload.create) {
+                            (normalized as any)[rf.name] = payload;
+                        }
                     }
                 }
             } catch (e) {
@@ -243,20 +438,6 @@ export default function DynamicModelForm({
     };
 
     // ---------- Relations state & helpers ----------
-    type RelationState = {
-        // Common
-        mode?: 'associate' | 'create';
-        search: string;
-        options: { id: string; label: string }[];
-        loading: boolean;
-        // Singular
-        selectedId?: string;
-        createValues?: Record<string, any>;
-        // List
-        selectedIds?: string[];
-        createDraft?: Record<string, any>;
-        createItems?: Record<string, any>[];
-    };
     const [relationUIState, setRelationUIState] = useState<Record<string, RelationState>>({});
     const [isFetching, startTransition] = useTransition();
 
@@ -315,192 +496,18 @@ export default function DynamicModelForm({
             </div>
 
             {/* Relations */}
-            {(relationsDepth > 0 && (relationFields.length > 0 || listRelationFields.length > 0)) && (
+            {(relationsDepth > 0 && (relations.length > 0)) && (
                 <div className="mt-6 space-y-6">
-                    {listRelationFields.map((rf: any) => {
-                        const st = relationUIState[rf.name];
-                        const selectedIds = st?.selectedIds || [];
-                        return (
-                            <div key={rf.name} className="border rounded">
-                                <div className="px-3 py-2 border-b bg-gray-50 flex items-center justify-between">
-                                    <div
-                                        className="font-medium">{rf.ui?.label || rf.documentation || `${rf.name}`}</div>
-                                    <div className="text-xs text-gray-500">{`→ ${rf.targetModel} (multiple)`}</div>
-                                </div>
-                                <div className="p-3 space-y-3">
-                                    {/* Search & add existing */}
-                                    <div className="flex items-end gap-2">
-                                        <div className="flex-1">
-                                            <label className="block text-xs text-gray-600">Recherche</label>
-                                            <input
-                                                className="border px-2 py-1 w-full"
-                                                placeholder={`Rechercher ${rf.targetModel}...`}
-                                                value={st?.search || ''}
-                                                onChange={(e) => {
-                                                    const v = e.target.value;
-                                                    updateRelationState(rf, (st) => ({...st, search: v}));
-                                                    reloadRelationOptions(rf, v);
-                                                }}
-                                                onFocus={() => {
-                                                    if (!st || (st && st.options?.length === 0)) reloadRelationOptions(rf, st?.search || '');
-                                                }}
-                                            />
-                                        </div>
-                                        <div className="min-w-[260px]">
-                                            <label className="block text-xs text-gray-600">Associer</label>
-                                            <select
-                                                className="border px-2 py-1 w-full"
-                                                value={''}
-                                                onChange={(e) => {
-                                                    const val = e.target.value;
-                                                    if (!val) return;
-                                                    updateRelationState(rf, (st) => ({
-                                                        ...st,
-                                                        selectedIds: Array.from(new Set([...(st.selectedIds || []), val]))
-                                                    }));
-                                                }}
-                                            >
-                                                <option value="">— Sélectionner —</option>
-                                                {(st?.options || []).map((o) => (
-                                                    <option key={o.id} value={o.id}>{o.label}</option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    {/* Selected chips */}
-                                    {selectedIds.length > 0 && (
-                                        <div className="flex flex-wrap gap-2">
-                                            {selectedIds.map((id: string) => (
-                                                <span key={id}
-                                                      className="inline-flex items-center gap-2 px-2 py-0.5 border rounded-full text-xs">
-                                                    <span className="opacity-70">{id}</span>
-                                                    <button type="button" className="text-red-600"
-                                                            onClick={() => setRelationUIState((prev) => ({
-                                                                ...prev,
-                                                                [rf.name]: {
-                                                                    ...(prev[rf.name] || {} as any),
-                                                                    selectedIds: (prev[rf.name]?.selectedIds || []).filter((x: string) => x !== id)
-                                                                }
-                                                            }))}>×</button>
-                                                </span>
-                                            ))}
-                                        </div>
-                                    )}
-
-                                    {/* Create new inline */}
-                                    <div className="pt-2">
-                                        <details className="group">
-                                            <summary className="cursor-pointer select-none text-sm text-blue-700">➕
-                                                Créer un(e) {rf.targetModel}</summary>
-                                            <div className="mt-2 border rounded bg-gray-50/50 p-3">
-                                                <DynamicModelForm
-                                                    model={rf.targetModel}
-                                                    hideSubmit
-                                                    mode={'create'}
-                                                    relationsDepth={Math.max(0, (relationsDepth ?? 1) - 1)}
-                                                    onChange={(vals) => setRelationUIState((prev) => ({
-                                                        ...prev,
-                                                        [rf.name]: {...(prev[rf.name] || {} as any), createDraft: vals}
-                                                    }))}
-                                                />
-                                                <div className="flex justify-end mt-2">
-                                                    <button type="button" className="border px-2 py-1 text-sm"
-                                                            onClick={() => updateRelationState(rf, (st) => {
-                                                                const draft = st.createDraft;
-                                                                if (!draft) return st;
-                                                                const list = [...(st.createItems || []), draft];
-                                                                return {
-                                                                    ...st,
-                                                                    createItems: list,
-                                                                    createDraft: undefined
-                                                                };
-                                                            })}
-                                                    >Ajouter à la liste
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </details>
-                                    </div>
-
-                                    {/* Pending creations list */}
-                                    {(st?.createItems && st.createItems.length > 0) && (
-                                        <div className="text-xs text-gray-600">
-                                            À créer: {st.createItems.length} élément(s)
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        );
-                    })}
-                    {relationFields.map((rf: any) => {
-                        const st = relationUIState[rf.name];
-                        return (
-                            <div key={rf.name} className="border rounded">
-                                <div className="px-3 py-2 border-b bg-gray-50 flex items-center justify-between">
-                                    <div
-                                        className="font-medium">{rf.ui?.label || rf.documentation || `${rf.name}`}</div>
-                                    <div className="text-xs text-gray-500">{`→ ${rf.targetModel}`}</div>
-                                </div>
-                                <div className="p-3 space-y-3">
-                                    <div className="flex items-end gap-2">
-                                        <div className="flex-1">
-                                            <label className="block text-xs text-gray-600">Recherche</label>
-                                            <input
-                                                className="border px-2 py-1 w-full"
-                                                placeholder={`Rechercher ${rf.targetModel}...`}
-                                                value={st?.search || ''}
-                                                onChange={(e) => {
-                                                    const v = e.target.value;
-                                                    updateRelationState(rf, (st) => ({...st, search: v}));
-                                                    reloadRelationOptions(rf, v);
-                                                }}
-                                                onFocus={() => {
-                                                    if (!st || (st && st.options?.length === 0)) reloadRelationOptions(rf, st?.search || '');
-                                                }}
-                                            />
-                                        </div>
-                                        <div className="min-w-[260px]">
-                                            <label className="block text-xs text-gray-600">Associer / Créer</label>
-                                            <select
-                                                className="border px-2 py-1 w-full"
-                                                value={st?.mode === 'create' ? '__create__' : (st?.selectedId || '')}
-                                                onChange={(e) => {
-                                                    const val = e.target.value;
-                                                    updateRelationState(rf, (st) => ({
-                                                        ...st,
-                                                        mode: val === '__create__' ? 'create' : 'associate',
-                                                        selectedId: val === '__create__' ? undefined : val
-                                                    }));
-                                                }}
-                                            >
-                                                <option value="">— Sélectionner —</option>
-                                                <option value="__create__">➕ Créer un(e) {rf.targetModel}</option>
-                                                {(st?.options || []).map((o) => (
-                                                    <option key={o.id} value={o.id}>{o.label}</option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    {st?.mode === 'create' && (
-                                        <div className="mt-2 border rounded bg-gray-50/50 p-3">
-                                            <DynamicModelForm
-                                                model={rf.targetModel}
-                                                hideSubmit
-                                                mode={'create'}
-                                                relationsDepth={Math.max(0, (relationsDepth ?? 1) - 1)}
-                                                onChange={(vals) => updateRelationState(rf, (st) => ({
-                                                    ...st,
-                                                    createValues: vals
-                                                }))}
-                                            />
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        )
-                    })}
+                    {relations.map((rf: any) => (
+                        <RelationField
+                            key={rf.name}
+                            rf={rf}
+                            st={relationUIState[rf.name]}
+                            updateState={updateRelationState}
+                            reloadOptions={reloadRelationOptions}
+                            depth={relationsDepth}
+                        />
+                    ))}
                 </div>
             )}
 

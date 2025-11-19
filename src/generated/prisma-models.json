@@ -1,4 +1,235 @@
 {
+  "ContactPoint": {
+    "id": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": true,
+      "isReadOnly": false,
+      "hasDefaultValue": true,
+      "type": "String",
+      "default": {
+        "name": "cuid",
+        "args": [
+          1
+        ]
+      },
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null,
+        "default": null
+      }
+    },
+    "channel": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": true,
+      "type": "ContactChannel",
+      "default": "EMAIL",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null,
+        "default": null
+      }
+    },
+    "value": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null,
+        "default": null
+      }
+    },
+    "label": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null,
+        "default": null
+      }
+    },
+    "isPrimary": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": true,
+      "type": "Boolean",
+      "default": false,
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null,
+        "default": null
+      }
+    },
+    "organization": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Organization",
+      "relationName": "ContactPointToOrganization",
+      "relationFromFields": [
+        "organizationId"
+      ],
+      "relationToFields": [
+        "id"
+      ],
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null,
+        "default": null
+      }
+    },
+    "organizationId": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": true,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null,
+        "default": null
+      }
+    },
+    "client": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "Client",
+      "relationName": "ClientToContactPoint",
+      "relationFromFields": [
+        "clientId"
+      ],
+      "relationToFields": [
+        "id"
+      ],
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null,
+        "default": null
+      }
+    },
+    "clientId": {
+      "isList": false,
+      "isRequired": false,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": true,
+      "hasDefaultValue": false,
+      "type": "String",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null,
+        "default": null
+      }
+    },
+    "createdAt": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": true,
+      "type": "DateTime",
+      "default": {
+        "name": "now",
+        "args": []
+      },
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": true,
+        "label": null,
+        "placeholder": null,
+        "default": null
+      }
+    },
+    "updatedAt": {
+      "isList": false,
+      "isRequired": true,
+      "isUnique": false,
+      "isId": false,
+      "isReadOnly": false,
+      "hasDefaultValue": false,
+      "type": "DateTime",
+      "relationName": null,
+      "relationFromFields": null,
+      "relationToFields": null,
+      "documentation": null,
+      "ui": {
+        "hidden": true,
+        "label": null,
+        "placeholder": null,
+        "default": null
+      }
+    }
+  },
   "Organization": {
     "id": {
       "isList": false,
@@ -71,26 +302,6 @@
       "isReadOnly": false,
       "hasDefaultValue": false,
       "type": "String",
-      "relationName": null,
-      "relationFromFields": null,
-      "relationToFields": null,
-      "documentation": null,
-      "ui": {
-        "hidden": false,
-        "label": null,
-        "placeholder": null,
-        "default": null
-      }
-    },
-    "lifecycle": {
-      "isList": false,
-      "isRequired": true,
-      "isUnique": false,
-      "isId": false,
-      "isReadOnly": false,
-      "hasDefaultValue": true,
-      "type": "LifecycleStatus",
-      "default": "POTENTIAL",
       "relationName": null,
       "relationFromFields": null,
       "relationToFields": null,
@@ -178,15 +389,15 @@
         "default": null
       }
     },
-    "contacts": {
+    "contactPoints": {
       "isList": true,
       "isRequired": true,
       "isUnique": false,
       "isId": false,
       "isReadOnly": false,
       "hasDefaultValue": false,
-      "type": "Contact",
-      "relationName": "OrganizationContacts",
+      "type": "ContactPoint",
+      "relationName": "ContactPointToOrganization",
       "relationFromFields": [],
       "relationToFields": [],
       "documentation": null,
@@ -419,26 +630,6 @@
         "default": null
       }
     },
-    "lifecycle": {
-      "isList": false,
-      "isRequired": true,
-      "isUnique": false,
-      "isId": false,
-      "isReadOnly": false,
-      "hasDefaultValue": true,
-      "type": "LifecycleStatus",
-      "default": "POTENTIAL",
-      "relationName": null,
-      "relationFromFields": null,
-      "relationToFields": null,
-      "documentation": null,
-      "ui": {
-        "hidden": false,
-        "label": null,
-        "placeholder": null,
-        "default": null
-      }
-    },
     "priority": {
       "isList": false,
       "isRequired": false,
@@ -627,25 +818,6 @@
       "hasDefaultValue": false,
       "type": "Audit",
       "relationName": "AuditToProject",
-      "relationFromFields": [],
-      "relationToFields": [],
-      "documentation": null,
-      "ui": {
-        "hidden": false,
-        "label": null,
-        "placeholder": null,
-        "default": null
-      }
-    },
-    "contacts": {
-      "isList": true,
-      "isRequired": true,
-      "isUnique": false,
-      "isId": false,
-      "isReadOnly": false,
-      "hasDefaultValue": false,
-      "type": "Contact",
-      "relationName": "ProjectContacts",
       "relationFromFields": [],
       "relationToFields": [],
       "documentation": null,
@@ -1285,304 +1457,6 @@
       }
     }
   },
-  "Contact": {
-    "id": {
-      "isList": false,
-      "isRequired": true,
-      "isUnique": false,
-      "isId": true,
-      "isReadOnly": false,
-      "hasDefaultValue": true,
-      "type": "String",
-      "default": {
-        "name": "cuid",
-        "args": [
-          1
-        ]
-      },
-      "relationName": null,
-      "relationFromFields": null,
-      "relationToFields": null,
-      "documentation": null,
-      "ui": {
-        "hidden": false,
-        "label": null,
-        "placeholder": null,
-        "default": null
-      }
-    },
-    "kind": {
-      "isList": false,
-      "isRequired": true,
-      "isUnique": false,
-      "isId": false,
-      "isReadOnly": false,
-      "hasDefaultValue": true,
-      "type": "ContactKind",
-      "default": "PERSON",
-      "relationName": null,
-      "relationFromFields": null,
-      "relationToFields": null,
-      "documentation": null,
-      "ui": {
-        "hidden": false,
-        "label": null,
-        "placeholder": null,
-        "default": null
-      }
-    },
-    "firstName": {
-      "isList": false,
-      "isRequired": false,
-      "isUnique": false,
-      "isId": false,
-      "isReadOnly": false,
-      "hasDefaultValue": false,
-      "type": "String",
-      "relationName": null,
-      "relationFromFields": null,
-      "relationToFields": null,
-      "documentation": null,
-      "ui": {
-        "hidden": false,
-        "label": null,
-        "placeholder": null,
-        "default": null
-      }
-    },
-    "lastName": {
-      "isList": false,
-      "isRequired": false,
-      "isUnique": false,
-      "isId": false,
-      "isReadOnly": false,
-      "hasDefaultValue": false,
-      "type": "String",
-      "relationName": null,
-      "relationFromFields": null,
-      "relationToFields": null,
-      "documentation": null,
-      "ui": {
-        "hidden": false,
-        "label": null,
-        "placeholder": null,
-        "default": null
-      }
-    },
-    "jobTitle": {
-      "isList": false,
-      "isRequired": false,
-      "isUnique": false,
-      "isId": false,
-      "isReadOnly": false,
-      "hasDefaultValue": false,
-      "type": "String",
-      "relationName": null,
-      "relationFromFields": null,
-      "relationToFields": null,
-      "documentation": null,
-      "ui": {
-        "hidden": false,
-        "label": null,
-        "placeholder": null,
-        "default": null
-      }
-    },
-    "company": {
-      "isList": false,
-      "isRequired": false,
-      "isUnique": false,
-      "isId": false,
-      "isReadOnly": false,
-      "hasDefaultValue": false,
-      "type": "String",
-      "relationName": null,
-      "relationFromFields": null,
-      "relationToFields": null,
-      "documentation": null,
-      "ui": {
-        "hidden": false,
-        "label": null,
-        "placeholder": null,
-        "default": null
-      }
-    },
-    "channels": {
-      "isList": false,
-      "isRequired": false,
-      "isUnique": false,
-      "isId": false,
-      "isReadOnly": false,
-      "hasDefaultValue": false,
-      "type": "Json",
-      "relationName": null,
-      "relationFromFields": null,
-      "relationToFields": null,
-      "documentation": null,
-      "ui": {
-        "hidden": false,
-        "label": null,
-        "placeholder": null,
-        "default": null
-      }
-    },
-    "isPrimary": {
-      "isList": false,
-      "isRequired": false,
-      "isUnique": false,
-      "isId": false,
-      "isReadOnly": false,
-      "hasDefaultValue": false,
-      "type": "Boolean",
-      "relationName": null,
-      "relationFromFields": null,
-      "relationToFields": null,
-      "documentation": null,
-      "ui": {
-        "hidden": false,
-        "label": null,
-        "placeholder": null,
-        "default": null
-      }
-    },
-    "notes": {
-      "isList": false,
-      "isRequired": false,
-      "isUnique": false,
-      "isId": false,
-      "isReadOnly": false,
-      "hasDefaultValue": false,
-      "type": "String",
-      "relationName": null,
-      "relationFromFields": null,
-      "relationToFields": null,
-      "documentation": null,
-      "ui": {
-        "hidden": false,
-        "label": null,
-        "placeholder": null,
-        "default": null
-      }
-    },
-    "organizations": {
-      "isList": true,
-      "isRequired": true,
-      "isUnique": false,
-      "isId": false,
-      "isReadOnly": false,
-      "hasDefaultValue": false,
-      "type": "Organization",
-      "relationName": "OrganizationContacts",
-      "relationFromFields": [],
-      "relationToFields": [],
-      "documentation": null,
-      "ui": {
-        "hidden": false,
-        "label": null,
-        "placeholder": null,
-        "default": null
-      }
-    },
-    "users": {
-      "isList": true,
-      "isRequired": true,
-      "isUnique": false,
-      "isId": false,
-      "isReadOnly": false,
-      "hasDefaultValue": false,
-      "type": "User",
-      "relationName": "UserContacts",
-      "relationFromFields": [],
-      "relationToFields": [],
-      "documentation": null,
-      "ui": {
-        "hidden": false,
-        "label": null,
-        "placeholder": null,
-        "default": null
-      }
-    },
-    "projects": {
-      "isList": true,
-      "isRequired": true,
-      "isUnique": false,
-      "isId": false,
-      "isReadOnly": false,
-      "hasDefaultValue": false,
-      "type": "Project",
-      "relationName": "ProjectContacts",
-      "relationFromFields": [],
-      "relationToFields": [],
-      "documentation": null,
-      "ui": {
-        "hidden": false,
-        "label": null,
-        "placeholder": null,
-        "default": null
-      }
-    },
-    "clients": {
-      "isList": true,
-      "isRequired": true,
-      "isUnique": false,
-      "isId": false,
-      "isReadOnly": false,
-      "hasDefaultValue": false,
-      "type": "Client",
-      "relationName": "ClientContacts",
-      "relationFromFields": [],
-      "relationToFields": [],
-      "documentation": null,
-      "ui": {
-        "hidden": false,
-        "label": null,
-        "placeholder": null,
-        "default": null
-      }
-    },
-    "createdAt": {
-      "isList": false,
-      "isRequired": true,
-      "isUnique": false,
-      "isId": false,
-      "isReadOnly": false,
-      "hasDefaultValue": true,
-      "type": "DateTime",
-      "default": {
-        "name": "now",
-        "args": []
-      },
-      "relationName": null,
-      "relationFromFields": null,
-      "relationToFields": null,
-      "documentation": null,
-      "ui": {
-        "hidden": true,
-        "label": null,
-        "placeholder": null,
-        "default": null
-      }
-    },
-    "updatedAt": {
-      "isList": false,
-      "isRequired": true,
-      "isUnique": false,
-      "isId": false,
-      "isReadOnly": false,
-      "hasDefaultValue": false,
-      "type": "DateTime",
-      "relationName": null,
-      "relationFromFields": null,
-      "relationToFields": null,
-      "documentation": null,
-      "ui": {
-        "hidden": true,
-        "label": null,
-        "placeholder": null,
-        "default": null
-      }
-    }
-  },
   "User": {
     "id": {
       "isList": false,
@@ -1680,7 +1554,7 @@
       "relationToFields": null,
       "documentation": null,
       "ui": {
-        "hidden": false,
+        "hidden": true,
         "label": null,
         "placeholder": null,
         "default": null
@@ -1885,25 +1759,6 @@
         "default": null
       }
     },
-    "contacts": {
-      "isList": true,
-      "isRequired": true,
-      "isUnique": false,
-      "isId": false,
-      "isReadOnly": false,
-      "hasDefaultValue": false,
-      "type": "Contact",
-      "relationName": "UserContacts",
-      "relationFromFields": [],
-      "relationToFields": [],
-      "documentation": null,
-      "ui": {
-        "hidden": false,
-        "label": null,
-        "placeholder": null,
-        "default": null
-      }
-    },
     "client": {
       "isList": false,
       "isRequired": false,
@@ -2043,7 +1898,7 @@
       "relationToFields": [],
       "documentation": null,
       "ui": {
-        "hidden": false,
+        "hidden": true,
         "label": null,
         "placeholder": null,
         "default": null
@@ -2068,21 +1923,21 @@
         "default": null
       }
     },
-    "contacts": {
+    "contactPoints": {
       "isList": true,
       "isRequired": true,
       "isUnique": false,
       "isId": false,
       "isReadOnly": false,
       "hasDefaultValue": false,
-      "type": "Contact",
-      "relationName": "ClientContacts",
+      "type": "ContactPoint",
+      "relationName": "ClientToContactPoint",
       "relationFromFields": [],
       "relationToFields": [],
       "documentation": null,
       "ui": {
         "hidden": false,
-        "label": null,
+        "label": "Contacts",
         "placeholder": null,
         "default": null
       }
