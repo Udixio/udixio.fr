@@ -254,8 +254,7 @@ export default function DynamicModelForm({
     const [listEntitiesRes, listEntitiesAction] = useActionState(actions.listEntities as any, undefined);
     const [createEntityRes, createEntityAction] = useActionState(actions.createEntity as any, undefined);
 
-    const [initial, setInitial] = useState<Record<string, any>>(value ?? {});
-    useEffect(() => setInitial(value ?? {}), [value]);
+    // Les valeurs initiales du formulaire seront directement dérivées de `defaultValues`.
 
     // Build fields & relation definitions from model metadata JSON (from store)
     const {scalarFields, relations, defs} = useMemo(() => {
@@ -297,8 +296,9 @@ export default function DynamicModelForm({
         for (const f of scalarFields) {
             const name = f.name as string;
             if (base[name] !== undefined && base[name] !== null) continue;
-            if (f?.ui?.default === undefined) continue;
-            let d = f.ui.default;
+            // Supporter les valeurs par défaut des enums (définies dans Prisma) et UI
+            // Priorité: UI.default > Prisma default
+            let d = f.ui?.default ?? f.default ?? undefined;
             const t = String(f.type);
             try {
                 if (t === 'Boolean') base[name] = Boolean(d);
@@ -315,15 +315,11 @@ export default function DynamicModelForm({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [scalarFields, value]);
 
-    // Appliquer au state initial (Formik reinit activé)
-    useEffect(() => {
-        setInitial(defaultValues);
-    }, [defaultValues]);
 
     // Build Formik
     const formik = useFormik({
         enableReinitialize: true,
-        initialValues: initial,
+        initialValues: defaultValues,
         validate: (vals) => {
             const errors: Record<string, any> = {};
             for (const f of scalarFields) {
@@ -437,7 +433,6 @@ export default function DynamicModelForm({
                 {
                     isEnum && (() => {
                         const values = Object.values(defs[type].values).map((v: any) => v.name)
-                        console.log(common)
                         return <select  {...common} name={name}
                                         disabled={disabled}>
                             <option value="">Sélectionner...</option>
