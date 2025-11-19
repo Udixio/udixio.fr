@@ -3275,5 +3275,189 @@
         "default": null
       }
     }
+  },
+  "ProjectStatus": {
+    "__isEnum": true,
+    "values": [
+      {
+        "name": "PLANNING",
+        "dbName": null
+      },
+      {
+        "name": "IN_PROGRESS",
+        "dbName": null
+      },
+      {
+        "name": "BLOCKED",
+        "dbName": null
+      },
+      {
+        "name": "REVIEW",
+        "dbName": null
+      },
+      {
+        "name": "MAINTENANCE",
+        "dbName": null
+      },
+      {
+        "name": "COMPLETED",
+        "dbName": null
+      },
+      {
+        "name": "CANCELLED",
+        "dbName": null
+      }
+    ],
+    "ui": {
+      "label": null
+    }
+  },
+  "AuditStatus": {
+    "__isEnum": true,
+    "values": [
+      {
+        "name": "DRAFT",
+        "dbName": null
+      },
+      {
+        "name": "SCHEDULED",
+        "dbName": null
+      },
+      {
+        "name": "RUNNING",
+        "dbName": null
+      },
+      {
+        "name": "NEEDS_REVIEW",
+        "dbName": null
+      },
+      {
+        "name": "PASSED",
+        "dbName": null
+      },
+      {
+        "name": "FAILED",
+        "dbName": null
+      },
+      {
+        "name": "ARCHIVED",
+        "dbName": null
+      }
+    ],
+    "ui": {
+      "label": null
+    }
+  },
+  "AuditType": {
+    "__isEnum": true,
+    "values": [
+      {
+        "name": "LIGHTHOUSE",
+        "dbName": null
+      },
+      {
+        "name": "SEO",
+        "dbName": null
+      },
+      {
+        "name": "PERFORMANCE",
+        "dbName": null
+      },
+      {
+        "name": "ACCESSIBILITY",
+        "dbName": null
+      },
+      {
+        "name": "SECURITY",
+        "dbName": null
+      },
+      {
+        "name": "MANUAL",
+        "dbName": null
+      },
+      {
+        "name": "OTHER",
+        "dbName": null
+      }
+    ],
+    "ui": {
+      "label": null
+    }
+  },
+  "ContactChannel": {
+    "__isEnum": true,
+    "values": [
+      {
+        "name": "EMAIL",
+        "dbName": null
+      },
+      {
+        "name": "PHONE_MOBILE",
+        "dbName": null
+      },
+      {
+        "name": "PHONE_LANDLINE",
+        "dbName": null
+      },
+      {
+        "name": "LINKEDIN",
+        "dbName": null
+      },
+      {
+        "name": "WHATSAPP",
+        "dbName": null
+      },
+      {
+        "name": "SLACK",
+        "dbName": null
+      },
+      {
+        "name": "TELEGRAM",
+        "dbName": null
+      },
+      {
+        "name": "WEBSITE",
+        "dbName": null
+      },
+      {
+        "name": "OTHER",
+        "dbName": null
+      }
+    ],
+    "ui": {
+      "label": null
+    }
+  },
+  "DealStatus": {
+    "__isEnum": true,
+    "values": [
+      {
+        "name": "LEAD",
+        "dbName": null
+      },
+      {
+        "name": "QUALIFIED",
+        "dbName": null
+      },
+      {
+        "name": "PROPOSAL_SENT",
+        "dbName": null
+      },
+      {
+        "name": "WON",
+        "dbName": null
+      },
+      {
+        "name": "LOST",
+        "dbName": null
+      },
+      {
+        "name": "ON_HOLD",
+        "dbName": null
+      }
+    ],
+    "ui": {
+      "label": null
+    }
   }
 }
