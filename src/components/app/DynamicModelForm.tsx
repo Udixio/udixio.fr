@@ -3,6 +3,7 @@ import {useFormik} from 'formik';
 import {actions} from 'astro:actions';
 import {useStore} from "@nanostores/react";
 import {modelsService, modelsStore} from "@/stores/modelsStore";
+import {TextField} from "@udixio/ui-react";
 
 // ---------- Relations state (extrait au niveau module pour éviter recréations) ----------
 export type RelationState = {
@@ -98,14 +99,15 @@ function RelationField({rf, st, updateState, reloadOptions, depth}: RelationFiel
 
                     {/* Cas Création Singulière (Feedback visuel) */}
                     {(!isList && st?.mode === 'create') && (
-                        <span className="inline-flex items-center gap-2 px-2 py-0.5 border border-green-300 bg-green-50 text-green-700 rounded-full text-xs">
+                        <span
+                            className="inline-flex items-center gap-2 px-2 py-0.5 border border-green-300 bg-green-50 text-green-700 rounded-full text-xs">
                             <span>✨ Nouveau (en cours)</span>
                             <button
                                 type="button"
                                 className="text-green-700"
                                 onClick={() => {
                                     // Annuler la création et revenir en mode associate
-                                    updateState(rf, prev => ({...prev, mode: 'associate', createValues: undefined }));
+                                    updateState(rf, prev => ({...prev, mode: 'associate', createValues: undefined}));
                                 }}
                             >×</button>
                         </span>
@@ -149,7 +151,8 @@ function RelationField({rf, st, updateState, reloadOptions, depth}: RelationFiel
                 {/* 3. Zone de création */}
                 <div className="pt-2">
                     <details className="group" open={st?.mode === 'create' || undefined}>
-                        <summary className="cursor-pointer select-none text-sm text-blue-700">➕ Créer un(e) {rf.targetModel}</summary>
+                        <summary className="cursor-pointer select-none text-sm text-blue-700">➕ Créer
+                            un(e) {rf.targetModel}</summary>
                         <div className="mt-2 border rounded bg-gray-50/50 p-3">
                             <DynamicModelForm
                                 model={rf.targetModel}
@@ -407,34 +410,66 @@ export default function DynamicModelForm({
         const name = f.name as string;
         const type = String(f.type);
         const disabled = !!disabledFields?.includes(name);
+        const label = (f.ui?.label || f.documentation || f.name) + (f.isRequired ? '*' : '');
         const common = {
             name,
             disabled,
-            className: "border px-2 py-1 w-full",
+            className: "",
             value: (type === 'Boolean') ? undefined : (formik.values as any)[name] ?? '',
             onChange: formik.handleChange,
             onBlur: formik.handleBlur,
         } as any;
         const placeholder = f.ui?.placeholder || name;
-        if (type === 'String') return <input {...common} placeholder={placeholder}/>;
-        if (type === 'Int' || type === 'BigInt' || type === 'Float' || type === 'Decimal') return <input {...common}
-                                                                                                         type="number"
-                                                                                                         placeholder={placeholder}/>;
-        if (type === 'Boolean') {
-            return (
-                <div className="flex items-center gap-2">
-                    <input type="checkbox" name={name} checked={!!(formik.values as any)[name]}
-                           onChange={(e) => formik.setFieldValue(name, e.target.checked)} disabled={disabled}/>
-                    <span className="text-sm">{f.ui?.label || name}</span>
-                </div>
-            );
+
+        const isNumber = type === 'Int' || type === 'BigInt' || type === 'Float' || type === 'Decimal';
+        const isEnum = defs[type]?.['isEnum'];
+
+        if (type == 'String' || isNumber) {
+            return <TextField variant={"outlined"} {...common} label={label} errorText={formik.errors}
+                              placeholder={placeholder} {...(isNumber ? {type: 'number'} : {})}/>;
+        } else {
+            common.className += "border border-outline px-2 py-1 w-full";
+            return <>
+                <label className="block text-sm mb-1">
+                    {f.ui?.label || f.documentation || f.name}
+                    {f.isRequired && <span className="text-red-500"> *</span>}
+                </label>
+                {
+                    isEnum && (() => {
+                        const values = Object.values(defs[type].values).map((v: any) => v.name)
+                        console.log(common)
+                        return <select  {...common} name={name}
+                                        disabled={disabled}>
+                            <option value="">Sélectionner...</option>
+                            {values.map(val => (
+                                <option key={val} value={val}>{val}</option>
+                            ))}
+                        </select>
+                    })()
+                }
+                {type === 'Boolean' &&
+                    <div className="flex items-center gap-2">
+                        <input type="checkbox" name={name} checked={!!(formik.values as any)[name]}
+                               onChange={(e) => formik.setFieldValue(name, e.target.checked)} disabled={disabled}/>
+                        <span className="text-sm">{f.ui?.label || name}</span>
+                    </div>
+                }
+                {type === 'DateTime' &&
+                    <input {...common} type="datetime-local"/>
+                }
+                {type === 'Json' &&
+                    <textarea className="border w-full px-2 py-1 h-20" name={name}
+                              value={(formik.values as any)[name] ?? ''}
+                              onChange={(e) => formik.setFieldValue(name, e.target.value)}/>
+                }
+
+                {formik.touched[f.name] && (formik.errors as any)[f.name] && (
+                    <div className="text-xs text-red-600 mt-1">{String((formik.errors as any)[f.name])}</div>
+                )}
+            </>
         }
-        if (type === 'DateTime') return <input {...common} type="datetime-local"/>;
-        if (type === 'Json') return <textarea className="border w-full px-2 py-1 h-20" name={name}
-                                              value={(formik.values as any)[name] ?? ''}
-                                              onChange={(e) => formik.setFieldValue(name, e.target.value)}/>;
-        // default to text input
-        return <input {...common} placeholder={placeholder}/>;
+
+
     };
 
     // ---------- Relations state & helpers ----------
@@ -483,14 +518,9 @@ export default function DynamicModelForm({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {scalarFields.map((f: any) => (
                     <div key={f.name} className={(f.type === 'Json' ? 'md:col-span-2' : '') + ''}>
-                        <label className="block text-sm mb-1">
-                            {f.ui?.label || f.documentation || f.name}
-                            {f.isRequired && <span className="text-red-500"> *</span>}
-                        </label>
+
                         {renderField(f)}
-                        {formik.touched[f.name] && (formik.errors as any)[f.name] && (
-                            <div className="text-xs text-red-600 mt-1">{String((formik.errors as any)[f.name])}</div>
-                        )}
+
                     </div>
                 ))}
             </div>
