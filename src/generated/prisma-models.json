@@ -3277,185 +3277,185 @@
     }
   },
   "ProjectStatus": {
-    "__isEnum": true,
-    "values": [
-      {
+    "isEnum": true,
+    "values": {
+      "0": {
         "name": "PLANNING",
         "dbName": null
       },
-      {
+      "1": {
         "name": "IN_PROGRESS",
         "dbName": null
       },
-      {
+      "2": {
         "name": "BLOCKED",
         "dbName": null
       },
-      {
+      "3": {
         "name": "REVIEW",
         "dbName": null
       },
-      {
+      "4": {
         "name": "MAINTENANCE",
         "dbName": null
       },
-      {
+      "5": {
         "name": "COMPLETED",
         "dbName": null
       },
-      {
+      "6": {
         "name": "CANCELLED",
         "dbName": null
       }
-    ],
+    },
     "ui": {
       "label": null
     }
   },
   "AuditStatus": {
-    "__isEnum": true,
-    "values": [
-      {
+    "isEnum": true,
+    "values": {
+      "0": {
         "name": "DRAFT",
         "dbName": null
       },
-      {
+      "1": {
         "name": "SCHEDULED",
         "dbName": null
       },
-      {
+      "2": {
         "name": "RUNNING",
         "dbName": null
       },
-      {
+      "3": {
         "name": "NEEDS_REVIEW",
         "dbName": null
       },
-      {
+      "4": {
         "name": "PASSED",
         "dbName": null
       },
-      {
+      "5": {
         "name": "FAILED",
         "dbName": null
       },
-      {
+      "6": {
         "name": "ARCHIVED",
         "dbName": null
       }
-    ],
+    },
     "ui": {
       "label": null
     }
   },
   "AuditType": {
-    "__isEnum": true,
-    "values": [
-      {
+    "isEnum": true,
+    "values": {
+      "0": {
         "name": "LIGHTHOUSE",
         "dbName": null
       },
-      {
+      "1": {
         "name": "SEO",
         "dbName": null
       },
-      {
+      "2": {
         "name": "PERFORMANCE",
         "dbName": null
       },
-      {
+      "3": {
         "name": "ACCESSIBILITY",
         "dbName": null
       },
-      {
+      "4": {
         "name": "SECURITY",
         "dbName": null
       },
-      {
+      "5": {
         "name": "MANUAL",
         "dbName": null
       },
-      {
+      "6": {
         "name": "OTHER",
         "dbName": null
       }
-    ],
+    },
     "ui": {
       "label": null
     }
   },
   "ContactChannel": {
-    "__isEnum": true,
-    "values": [
-      {
+    "isEnum": true,
+    "values": {
+      "0": {
         "name": "EMAIL",
         "dbName": null
       },
-      {
+      "1": {
         "name": "PHONE_MOBILE",
         "dbName": null
       },
-      {
+      "2": {
         "name": "PHONE_LANDLINE",
         "dbName": null
       },
-      {
+      "3": {
         "name": "LINKEDIN",
         "dbName": null
       },
-      {
+      "4": {
         "name": "WHATSAPP",
         "dbName": null
       },
-      {
+      "5": {
         "name": "SLACK",
         "dbName": null
       },
-      {
+      "6": {
         "name": "TELEGRAM",
         "dbName": null
       },
-      {
+      "7": {
         "name": "WEBSITE",
         "dbName": null
       },
-      {
+      "8": {
         "name": "OTHER",
         "dbName": null
       }
-    ],
+    },
     "ui": {
       "label": null
     }
   },
   "DealStatus": {
-    "__isEnum": true,
-    "values": [
-      {
+    "isEnum": true,
+    "values": {
+      "0": {
         "name": "LEAD",
         "dbName": null
       },
-      {
+      "1": {
         "name": "QUALIFIED",
         "dbName": null
       },
-      {
+      "2": {
         "name": "PROPOSAL_SENT",
         "dbName": null
       },
-      {
+      "3": {
         "name": "WON",
         "dbName": null
       },
-      {
+      "4": {
         "name": "LOST",
         "dbName": null
       },
-      {
+      "5": {
         "name": "ON_HOLD",
         "dbName": null
       }
-    ],
+    },
     "ui": {
       "label": null
     }

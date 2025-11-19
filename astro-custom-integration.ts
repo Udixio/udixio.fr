@@ -187,7 +187,7 @@ export default function customIntegration(): AstroIntegration {
                         // On structure l'enum pour qu'elle ressemble un peu à un modèle,
                         // ou simplement comme une liste de valeurs
                         formatted[enumName] = {
-                            __isEnum: true, // Marqueur pour distinguer des modèles côté front
+                            isEnum: true, // Marqueur pour distinguer des modèles côté front
                             values: values,
                             ui: {
                                 label: null, // Pour permettre de renommer l'enum dans l'UI
