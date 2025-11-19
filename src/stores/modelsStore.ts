@@ -7,8 +7,6 @@ export type ModelsState = {
 
 export const modelsStore = atom<ModelsState>({models: null});
 
-type ModelsActionFn = (payload?: any) => Promise<any>;
-
 export const modelsService = {
     load: async () => {
         const {data, error} = await actions.getModels({ /* ... */});

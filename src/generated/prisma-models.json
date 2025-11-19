@@ -2101,7 +2101,7 @@
       "relationToFields": null,
       "documentation": null,
       "ui": {
-        "hidden": false,
+        "hidden": true,
         "label": null,
         "placeholder": null,
         "default": null
@@ -2120,7 +2120,7 @@
       "relationToFields": null,
       "documentation": null,
       "ui": {
-        "hidden": false,
+        "hidden": true,
         "label": null,
         "placeholder": null,
         "default": null
@@ -2139,7 +2139,7 @@
       "relationToFields": null,
       "documentation": null,
       "ui": {
-        "hidden": false,
+        "hidden": true,
         "label": null,
         "placeholder": null,
         "default": null
@@ -3277,7 +3277,7 @@
     }
   },
   "ProjectStatus": {
-    "isEnum": true,
+    "isEnum": {},
     "values": {
       "0": {
         "name": "PLANNING",
@@ -3313,7 +3313,7 @@
     }
   },
   "AuditStatus": {
-    "isEnum": true,
+    "isEnum": {},
     "values": {
       "0": {
         "name": "DRAFT",
@@ -3349,7 +3349,7 @@
     }
   },
   "AuditType": {
-    "isEnum": true,
+    "isEnum": {},
     "values": {
       "0": {
         "name": "LIGHTHOUSE",
@@ -3385,7 +3385,7 @@
     }
   },
   "ContactChannel": {
-    "isEnum": true,
+    "isEnum": {},
     "values": {
       "0": {
         "name": "EMAIL",
@@ -3429,7 +3429,7 @@
     }
   },
   "DealStatus": {
-    "isEnum": true,
+    "isEnum": {},
     "values": {
       "0": {
         "name": "LEAD",
