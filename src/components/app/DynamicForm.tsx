@@ -89,9 +89,9 @@ function RelationField({rf, st, updateState, reloadOptions, depth, level}: Relat
     }, []);
 
     return (
-        <div className="border rounded">
-            <div className="px-3 py-2 border-b bg-gray-50 flex items-center justify-between">
-                <div className="font-medium">{rf.ui?.label || rf.documentation || `${rf.name}`}</div>
+        <div className="border-l-2 border-secondary pl-3">
+            <div className="px-3 py-2  flex items-center justify-between">
+                <div className="text-title-large">{rf.ui?.label || rf.documentation || `${rf.name}`}</div>
                 <div className="text-xs text-gray-500">{`→ ${rf.targetModel}${isList ? ' (multiple)' : ''}`}</div>
             </div>
             <div className="p-3 space-y-3">
@@ -181,7 +181,7 @@ function RelationField({rf, st, updateState, reloadOptions, depth, level}: Relat
                         <details className="group" open={true}>
                             <summary className="cursor-pointer select-none text-sm text-blue-700">➕ Créer
                                 un(e) {rf.targetModel}</summary>
-                            <div className="mt-2 border rounded bg-gray-50/50 p-3">
+                            <div className="mt-2">
                                 <DynamicForm
                                     model={rf.targetModel}
                                     hideSubmit

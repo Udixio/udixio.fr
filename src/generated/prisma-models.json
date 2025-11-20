@@ -120,7 +120,7 @@
       ],
       "documentation": null,
       "ui": {
-        "hidden": false,
+        "hidden": true,
         "label": null,
         "placeholder": null,
         "default": null
@@ -139,7 +139,7 @@
       "relationToFields": null,
       "documentation": null,
       "ui": {
-        "hidden": false,
+        "hidden": true,
         "label": null,
         "placeholder": null,
         "default": null
@@ -162,7 +162,7 @@
       ],
       "documentation": null,
       "ui": {
-        "hidden": false,
+        "hidden": true,
         "label": null,
         "placeholder": null,
         "default": null
@@ -181,7 +181,7 @@
       "relationToFields": null,
       "documentation": null,
       "ui": {
-        "hidden": false,
+        "hidden": true,
         "label": null,
         "placeholder": null,
         "default": null
@@ -732,48 +732,6 @@
     "organizationId": {
       "isList": false,
       "isRequired": true,
-      "isUnique": false,
-      "isId": false,
-      "isReadOnly": true,
-      "hasDefaultValue": false,
-      "type": "String",
-      "relationName": null,
-      "relationFromFields": null,
-      "relationToFields": null,
-      "documentation": null,
-      "ui": {
-        "hidden": false,
-        "label": null,
-        "placeholder": null,
-        "default": null
-      }
-    },
-    "client": {
-      "isList": false,
-      "isRequired": false,
-      "isUnique": false,
-      "isId": false,
-      "isReadOnly": false,
-      "hasDefaultValue": false,
-      "type": "Client",
-      "relationName": "ClientToProject",
-      "relationFromFields": [
-        "clientId"
-      ],
-      "relationToFields": [
-        "id"
-      ],
-      "documentation": null,
-      "ui": {
-        "hidden": false,
-        "label": null,
-        "placeholder": null,
-        "default": null
-      }
-    },
-    "clientId": {
-      "isList": false,
-      "isRequired": false,
       "isUnique": false,
       "isId": false,
       "isReadOnly": true,
@@ -1619,7 +1577,7 @@
       "relationToFields": [],
       "documentation": null,
       "ui": {
-        "hidden": false,
+        "hidden": true,
         "label": null,
         "placeholder": null,
         "default": null
@@ -1638,7 +1596,7 @@
       "relationToFields": [],
       "documentation": null,
       "ui": {
-        "hidden": false,
+        "hidden": true,
         "label": null,
         "placeholder": null,
         "default": null
@@ -1657,7 +1615,7 @@
       "relationToFields": [],
       "documentation": null,
       "ui": {
-        "hidden": false,
+        "hidden": true,
         "label": null,
         "placeholder": null,
         "default": null
@@ -1676,7 +1634,7 @@
       "relationToFields": [],
       "documentation": null,
       "ui": {
-        "hidden": false,
+        "hidden": true,
         "label": null,
         "placeholder": null,
         "default": null
@@ -1772,7 +1730,7 @@
       "relationToFields": [],
       "documentation": null,
       "ui": {
-        "hidden": false,
+        "hidden": true,
         "label": null,
         "placeholder": null,
         "default": null
@@ -1899,25 +1857,6 @@
       "documentation": null,
       "ui": {
         "hidden": true,
-        "label": null,
-        "placeholder": null,
-        "default": null
-      }
-    },
-    "projects": {
-      "isList": true,
-      "isRequired": true,
-      "isUnique": false,
-      "isId": false,
-      "isReadOnly": false,
-      "hasDefaultValue": false,
-      "type": "Project",
-      "relationName": "ClientToProject",
-      "relationFromFields": [],
-      "relationToFields": [],
-      "documentation": null,
-      "ui": {
-        "hidden": false,
         "label": null,
         "placeholder": null,
         "default": null
@@ -2162,7 +2101,7 @@
       ],
       "documentation": null,
       "ui": {
-        "hidden": false,
+        "hidden": true,
         "label": null,
         "placeholder": null,
         "default": null
@@ -2181,7 +2120,7 @@
       "relationToFields": null,
       "documentation": null,
       "ui": {
-        "hidden": false,
+        "hidden": true,
         "label": null,
         "placeholder": null,
         "default": null
@@ -2204,7 +2143,7 @@
       ],
       "documentation": null,
       "ui": {
-        "hidden": false,
+        "hidden": true,
         "label": null,
         "placeholder": null,
         "default": null
@@ -2223,7 +2162,7 @@
       "relationToFields": null,
       "documentation": null,
       "ui": {
-        "hidden": false,
+        "hidden": true,
         "label": null,
         "placeholder": null,
         "default": null
@@ -3069,7 +3008,7 @@
       "relationToFields": null,
       "documentation": null,
       "ui": {
-        "hidden": false,
+        "hidden": true,
         "label": null,
         "placeholder": null,
         "default": null
