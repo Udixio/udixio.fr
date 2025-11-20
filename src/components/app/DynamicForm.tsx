@@ -3,7 +3,7 @@ import {useFormik} from 'formik';
 import {actions} from 'astro:actions';
 import {useStore} from "@nanostores/react";
 import {modelsService, modelsStore} from "@/stores/modelsStore";
-import {TextField} from "@udixio/ui-react";
+import {Tab, Tabs, TextField} from "@udixio/ui-react";
 
 // ---------- Relations state (extrait au niveau module pour éviter recréations) ----------
 export type RelationState = {
@@ -89,12 +89,19 @@ function RelationField({rf, st, updateState, reloadOptions, depth, level}: Relat
     }, []);
 
     return (
-        <div className="border-l-2 border-secondary pl-3">
-            <div className="px-3 py-2  flex items-center justify-between">
-                <div className="text-title-large">{rf.ui?.label || rf.documentation || `${rf.name}`}</div>
-                <div className="text-xs text-gray-500">{`→ ${rf.targetModel}${isList ? ' (multiple)' : ''}`}</div>
+        <div className="border-l-2 border-secondary  rounded-2xl ">
+            <div className="bg-surface-container-high rounded-xl max-w-xl">
+                <div className="px-3 py-2  flex items-center justify-between">
+                    <div className="text-title-large">{rf.ui?.label || rf.documentation || `${rf.name}`}</div>
+                    <div className="text-xs text-gray-500">{`→ ${rf.targetModel}${isList ? ' (multiple)' : ''}`}</div>
+                </div>
+                <Tabs variant={"secondary"} className={"bg-transparent w-fit"}>
+                    <Tab type="button" label="Créer"/>
+                    <Tab type="button" label="Associer"/>
+                </Tabs>
             </div>
-            <div className="p-3 space-y-3">
+
+            <div className="p-4 space-y-3">
                 {/* 1. Sélection actuelle sous forme de tags */}
                 <div className="flex flex-wrap gap-2">
                     {currentSelection.map((id) => (
@@ -579,7 +586,7 @@ export default function DynamicForm({
 
 
     return (
-        <form ref={formRef} className={className} onSubmit={formik.handleSubmit}>
+        <form ref={formRef} className={"max-w-screen-xl " + className} onSubmit={formik.handleSubmit}>
             {/* Scalars */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {scalarFields.map((f: any) => (
