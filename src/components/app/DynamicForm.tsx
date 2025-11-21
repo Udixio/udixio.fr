@@ -36,9 +36,12 @@ type RelationFieldProps = {
     reloadOptions: (rf: any, q: string) => void;
     depth: number; // remaining depth (-1 = unlimited)
     level: number; // 1 = top-level of the current form
+    // When compact=true, only render the adding UI (tabs + content) without headers/card/add button.
+    // Used for mutex button rows where the header is handled at group level.
+    compact?: boolean;
 };
 
-function RelationField({rf, st, updateState, reloadOptions, depth, level}: RelationFieldProps) {
+function RelationField({rf, st, updateState, reloadOptions, depth, level, compact = false}: RelationFieldProps) {
     const isList = !!rf.isList;
     const isRequired = !!rf.isRequired;
     const forceMode: 'associate' | 'create' | undefined = rf?.ui?.forceMode;
@@ -176,11 +179,112 @@ function RelationField({rf, st, updateState, reloadOptions, depth, level}: Relat
     }
 
     if (!st?.adding) {
+        if (compact) return null;
         return <Button type="button" variant="tonal" onClick={() => updateState(rf, (prev) => ({
             ...prev,
             adding: true,
             mode: (forceMode || (level === 1 ? 'create' : 'associate'))
         }))}>{currentSelection.length > 0 ? 'Modifier' : 'Ajouter un ' + (rf.ui?.label ?? rf.name ?? 'unknow')}</Button>
+    }
+
+    // In compact mode, render only the adding area (tabs + associate/create UI) without header/card/wrappers
+    if (compact) {
+        return (
+            <div className="w-full">
+                {/* Tabs visible uniquement pendant l'ajout, sauf si forceMode impose un mode */}
+                {!forceMode && (
+                    <Tabs variant={"secondary"} className={"bg-transparent w-fit"}
+                          selectedTab={selectedTab}
+                          setSelectedTab={setSelectedTab} scrollable>
+                        <Tab type="button" label="Créer"/>
+                        <Tab type="button" label="Associer"/>
+                    </Tabs>
+                )}
+
+                {/* Association UI */}
+                {((forceMode ? forceMode !== 'create' : st?.mode !== 'create')) && !(!!(!isList && currentSelection.length > 0)) && (
+                    <div className="flex items-end gap-2 mt-2">
+                        <div className="flex-1">
+                            <label className="block text-xs text-gray-600">Recherche</label>
+                            <input
+                                className="border px-2 py-1 w-full"
+                                placeholder={`Rechercher ${rf.targetModel}...`}
+                                value={st?.search || ''}
+                                onChange={(e) => {
+                                    const v = e.target.value;
+                                    updateState(rf, (st) => ({...st, search: v}));
+                                    reloadOptions(rf, v);
+                                }}
+                                onFocus={ensureOptions}
+                            />
+                        </div>
+                        <div className="min-w-[260px]">
+                            <label className="block text-xs text-gray-600">{isList ? 'Ajouter' : 'Choisir'}</label>
+                            <select
+                                className="border px-2 py-1 w-full"
+                                value={''}
+                                onChange={(e) => handleSelect(e.target.value)}
+                                onFocus={ensureOptions}
+                            >
+                                <option value="">— {isList ? 'Ajouter…' : 'Choisir…'} —</option>
+                                {(st?.options || []).map((o) => (
+                                    <option key={o.id} value={o.id}>{o.label}</option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+                )}
+
+                {/* Create UI */}
+                {(forceMode ? forceMode === 'create' : st?.mode === 'create') && (
+                    <div className="pt-2">
+                        <DynamicForm
+                            model={rf.targetModel}
+                            hideSubmit
+                            mode={'create'}
+                            relationsDepth={depth === -1 ? -1 : Math.max(0, (depth ?? 1) - 1)}
+                            level={level + 1}
+                            value={isList ? (st?.createDraft || {}) : (st?.createValues || {})}
+                            onChange={(vals) => {
+                                if (isList) {
+                                    updateState(rf, (prev) => ({
+                                        ...prev,
+                                        createDraft: vals
+                                    }));
+                                } else {
+                                    updateState(rf, (prev) => ({
+                                        ...prev,
+                                        mode: 'create',
+                                        createValues: vals,
+                                        selectedId: undefined
+                                    }));
+                                }
+                            }}
+                        />
+                        {isList && (
+                            <div className="flex justify-end mt-2">
+                                <button
+                                    type="button"
+                                    className="border px-2 py-1 text-sm"
+                                    onClick={() => updateState(rf, (prev) => {
+                                        const draft = prev.createDraft;
+                                        if (!draft) return prev;
+                                        const list = [...(prev.createItems || []), draft];
+                                        return {
+                                            ...prev,
+                                            createItems: list,
+                                            createDraft: undefined,
+                                            adding: false
+                                        };
+                                    })}
+                                >Ajouter à la liste
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                )}
+            </div>
+        );
     }
 
     return (
@@ -435,10 +539,12 @@ type Props = {
     disabledFields?: string[];
     className?: string;
     submitLabel?: string;
+    cancelLabel?: string;
     hideSubmit?: boolean;
     mode?: 'create' | 'update';
     relationsDepth?: number; // how deep relations sections should be rendered (0 = none, -1 = unlimited)
     level?: number; // current nesting level (1 = root); used for default create mode only at first level
+    onCancel?: () => void;
 };
 
 export default function DynamicForm({
@@ -446,10 +552,12 @@ export default function DynamicForm({
                                         value,
                                         onChange,
                                         onSubmit,
+                                        onCancel,
                                         exclude,
                                         disabledFields,
                                         className,
                                         submitLabel = "Enregistrer",
+                                        cancelLabel = "Annuler",
                                         hideSubmit,
                                         mode = 'create',
                                         relationsDepth = -1,
@@ -852,25 +960,116 @@ export default function DynamicForm({
                 }
                 for (const k of order) groups.push({key: k, items: map[k]});
 
+                // Appliquer l'ordre d'affichage via ui.order (client prioritaire par défaut)
+                const getOrder = (rf: any) => {
+                    const base = (rf?.ui?.order ?? 9999);
+                    // Boost pour 'client' afin de le placer en tête si aucun ordre explicite
+                    const boost = rf?.name === 'client' ? -0.5 : 0;
+                    return base + boost;
+                };
+                for (const g of groups) {
+                    g.items.sort((a: any, b: any) => {
+                        const oa = getOrder(a);
+                        const ob = getOrder(b);
+                        if (oa !== ob) return oa - ob;
+                        return String(a?.ui?.label || a?.name).localeCompare(String(b?.ui?.label || b?.name));
+                    });
+                }
+
+                // Auto‑activation par défaut pour les groupes mutex: choisir le premier (client en priorité)
+                // uniquement si aucun élément du groupe n'est actif
+                const isStateActive = (rf: any, st?: RelationState) => {
+                    if (!st) return false;
+                    if (st.adding) return true;
+                    if (rf.isList) {
+                        if (st.selectedIds && st.selectedIds.length > 0) return true;
+                        if (st.createItems && st.createItems.length > 0) return true;
+                        if (st.mode === 'create' && st.createDraft && Object.keys(st.createDraft).length > 0) return true;
+                        return false;
+                    } else {
+                        if (st.selectedId) return true;
+                        if (st.mode === 'create' && st.createValues && Object.keys(st.createValues).length > 0) return true;
+                        return false;
+                    }
+                };
+
+                // Utiliser un effet pour éviter de setState pendant le rendu
+                useEffect(() => {
+                    for (const g of groups) {
+                        const isMutexGroup = g.key.startsWith('mutex:') && g.items.length > 1;
+                        if (!isMutexGroup) continue;
+                        const anyActive = g.items.some((rf: any) => isStateActive(rf, relationUIState[rf.name]));
+                        if (anyActive) continue;
+                        // aucune relation active -> activer la première du groupe (déjà triée)
+                        const first = g.items[0];
+                        if (!first) continue;
+                        // Ne pas réactiver si l'utilisateur a explicitement fermé un ajout récemment
+                        // On se contente de définir adding=true pour offrir un choix par défaut
+                        updateRelationState(first, (prev) => ({
+                            ...prev,
+                            adding: true,
+                            open: true,
+                            mode: (first?.ui?.forceMode || (level === 1 ? 'create' : 'associate'))
+                        }));
+                        // Important: on active une seule fois par rendu pour ce groupe
+                        break;
+                    }
+                    // eslint-disable-next-line react-hooks/exhaustive-deps
+                }, [JSON.stringify(groups.map(g => g.items.map((it: any) => it.name))), relationUIState]);
+
                 return (
                     <div className="mt-6 space-y-6">
                         {groups.map(group => {
                             const isMutexGroup = group.key.startsWith('mutex:') && group.items.length > 1;
                             if (isMutexGroup) {
+                                // Row of toggleable buttons, then render the active relation's fields just below
+                                const active = group.items.find((rf: any) => relationUIState[rf.name]?.adding);
                                 return (
-                                    <div key={group.key} className="flex flex-wrap gap-3 items-start">
-                                        {group.items.map((rf: any) => (
-                                            <div key={rf.name} className="">
+                                    <div key={group.key} className="flex flex-col gap-3">
+                                        <div className="flex flex-wrap gap-3 items-center">
+                                            {group.items.map((rf: any) => {
+                                                const st = relationUIState[rf.name];
+                                                const activated = !!st?.adding;
+                                                const label = rf.ui?.label || rf.documentation || rf.name;
+                                                return (
+                                                    <Button
+                                                        key={rf.name}
+                                                        type="button"
+                                                        variant="tonal"
+                                                        label={label}
+                                                        activated={activated}
+                                                        onToggle={(newState: boolean) => {
+                                                            if (newState) {
+                                                                updateRelationState(rf, (prev) => ({
+                                                                    ...prev,
+                                                                    adding: true,
+                                                                    open: true,
+                                                                    mode: (rf?.ui?.forceMode || (level === 1 ? 'create' : 'associate'))
+                                                                }));
+                                                            } else {
+                                                                updateRelationState(rf, (prev) => ({
+                                                                    ...prev,
+                                                                    adding: false
+                                                                }));
+                                                            }
+                                                        }}
+                                                    />
+                                                );
+                                            })}
+                                        </div>
+                                        {active && (
+                                            <div className="pl-0">
                                                 <RelationField
-                                                    rf={rf}
-                                                    st={relationUIState[rf.name]}
+                                                    rf={active}
+                                                    st={relationUIState[active.name]}
                                                     updateState={updateRelationState}
                                                     reloadOptions={reloadRelationOptions}
                                                     depth={relationsDepth}
                                                     level={level}
+                                                    compact
                                                 />
                                             </div>
-                                        ))}
+                                        )}
                                     </div>
                                 );
                             }
@@ -893,10 +1092,18 @@ export default function DynamicForm({
 
             {!hideSubmit && (
                 <div className="flex items-center justify-end gap-2 mt-3">
-                    <button type="submit" className="border px-3 py-1 bg-black text-white disabled:opacity-50"
-                            disabled={formik.isSubmitting}>
+                    {onCancel && (
+                        <Button
+                            type="button"
+                            variant="outlined"
+                            onClick={() => onCancel?.()}
+                        >
+                            {cancelLabel}
+                        </Button>
+                    )}
+                    <Button type={"submit"} disabled={formik.isSubmitting}>
                         {formik.isSubmitting ? 'Envoi…' : submitLabel}
-                    </button>
+                    </Button>
                 </div>
             )}
         </form>

@@ -2106,7 +2106,8 @@
         "label": null,
         "placeholder": null,
         "default": null,
-        "mutexKey": "target"
+        "mutexKey": "target",
+        "order": 3
       }
     },
     "organizationId": {
@@ -2149,7 +2150,8 @@
         "label": null,
         "placeholder": null,
         "default": null,
-        "mutexKey": "target"
+        "mutexKey": "target",
+        "order": 2
       }
     },
     "projectId": {
@@ -2186,14 +2188,7 @@
       "relationToFields": [
         "id"
       ],
-      "documentation": null,
-      "ui": {
-        "hidden": false,
-        "label": null,
-        "placeholder": null,
-        "default": null,
-        "mutexKey": "target"
-      }
+      "documentation": null
     },
     "clientId": {
       "isList": false,
