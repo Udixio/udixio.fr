@@ -1783,7 +1783,8 @@
         "hidden": false,
         "label": null,
         "placeholder": null,
-        "default": null
+        "default": null,
+        "inlineFields": true
       }
     },
     "userId": {
@@ -2101,10 +2102,11 @@
       ],
       "documentation": null,
       "ui": {
-        "hidden": true,
+        "hidden": false,
         "label": null,
         "placeholder": null,
-        "default": null
+        "default": null,
+        "mutexKey": "target"
       }
     },
     "organizationId": {
@@ -2120,7 +2122,7 @@
       "relationToFields": null,
       "documentation": null,
       "ui": {
-        "hidden": true,
+        "hidden": false,
         "label": null,
         "placeholder": null,
         "default": null
@@ -2143,10 +2145,11 @@
       ],
       "documentation": null,
       "ui": {
-        "hidden": true,
+        "hidden": false,
         "label": null,
         "placeholder": null,
-        "default": null
+        "default": null,
+        "mutexKey": "target"
       }
     },
     "projectId": {
@@ -2162,7 +2165,7 @@
       "relationToFields": null,
       "documentation": null,
       "ui": {
-        "hidden": true,
+        "hidden": false,
         "label": null,
         "placeholder": null,
         "default": null
@@ -2188,7 +2191,8 @@
         "hidden": false,
         "label": null,
         "placeholder": null,
-        "default": null
+        "default": null,
+        "mutexKey": "target"
       }
     },
     "clientId": {

@@ -41,6 +41,8 @@ type RelationFieldProps = {
 function RelationField({rf, st, updateState, reloadOptions, depth, level}: RelationFieldProps) {
     const isList = !!rf.isList;
     const isRequired = !!rf.isRequired;
+    const forceMode: 'associate' | 'create' | undefined = rf?.ui?.forceMode;
+    const inlineFields: boolean = !!rf?.ui?.inlineFields;
 
     // Normalisation lecture: tableau courant des sélections
     const currentSelection: string[] = useMemo(() => {
@@ -94,22 +96,40 @@ function RelationField({rf, st, updateState, reloadOptions, depth, level}: Relat
         }
     };
 
-    // Initialisation ouverture/collapse pour éviter affichage infini
+    // Initialisation ouverture/collapse pour éviter affichage infini + required auto-adding + forceMode
     useEffect(() => {
         if (!st) return;
         // Ouvrir par défaut si (required) OU (premier niveau)
         if (st.open === undefined) {
             updateState(rf, (prev) => ({...prev, open: (isRequired || level === 1)}));
         }
+        // Forcer le mode si demandé par le schéma UI
+        if (forceMode && st.mode !== forceMode) {
+            updateState(rf, (prev) => ({...prev, mode: forceMode}));
+        }
+        // Si la relation est requise, démarrer directement l'ajout
+        const hasSelection = isList
+            ? ((st.selectedIds && st.selectedIds.length > 0) || (st.createItems && st.createItems.length > 0))
+            : (!!st.selectedId || !!st.createValues);
+        // Exception: si la relation fait partie d'un groupe mutex, on NE force PAS l'ajout automatique,
+        // car l'utilisateur doit d'abord choisir quel champ du groupe il souhaite remplir.
+        const inMutexGroup = !!rf?.ui?.mutexKey;
+        if (isRequired && !hasSelection && !st.adding && !inMutexGroup) {
+            updateState(rf, (prev) => ({
+                ...prev,
+                adding: true,
+                mode: (forceMode || (level === 1 ? 'create' : 'associate'))
+            }));
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isRequired, level]);
 
-    // Tabs contrôlés: 0 = Créer, 1 = Associer
-    const selectedTab = (st?.mode || (level === 1 ? 'create' : 'associate')) === 'create' ? 0 : 1;
+    // Tabs contrôlés: 0 = Créer, 1 = Associer (désactivés si forceMode)
+    const selectedTab = ((forceMode || st?.mode || (level === 1 ? 'create' : 'associate')) === 'create') ? 0 : 1;
     const setSelectedTab = (idx: number) => {
+        if (forceMode) return; // mode imposé
         updateState(rf, (prev) => ({
             ...prev,
-
             mode: idx === 0 ? 'create' : 'associate',
             // Si on passe en association, on annule l'ébauche de création en cours
             ...(idx !== 0
@@ -119,11 +139,47 @@ function RelationField({rf, st, updateState, reloadOptions, depth, level}: Relat
         }))
     };
 
+    // Mode inline: on rend directement les champs du sous-formulaire (création forcée, sans en-tête)
+    if (inlineFields) {
+        return (
+            <div className="mt-2">
+                <DynamicForm
+                    model={rf.targetModel}
+                    hideSubmit
+                    mode={'create'}
+                    relationsDepth={depth === -1 ? -1 : Math.max(0, (depth ?? 1) - 1)}
+                    level={level + 1}
+                    value={isList ? (st?.createDraft || {}) : (st?.createValues || {})}
+                    onChange={(vals) => {
+                        if (isList) {
+                            updateState(rf, (prev) => ({
+                                ...prev,
+                                mode: 'create',
+                                createDraft: vals,
+                                adding: true,
+                                open: true,
+                            }));
+                        } else {
+                            updateState(rf, (prev) => ({
+                                ...prev,
+                                mode: 'create',
+                                createValues: vals,
+                                selectedId: undefined,
+                                adding: true,
+                                open: true,
+                            }));
+                        }
+                    }}
+                />
+            </div>
+        );
+    }
+
     if (!st?.adding) {
         return <Button type="button" variant="tonal" onClick={() => updateState(rf, (prev) => ({
             ...prev,
             adding: true,
-            mode: (level === 1 ? 'create' : 'associate')
+            mode: (forceMode || (level === 1 ? 'create' : 'associate'))
         }))}>{currentSelection.length > 0 ? 'Modifier' : 'Ajouter un ' + (rf.ui?.label ?? rf.name ?? 'unknow')}</Button>
     }
 
@@ -263,14 +319,17 @@ function RelationField({rf, st, updateState, reloadOptions, depth, level}: Relat
                         {/* 2. Zone d'ajout: Tabs + contenus */}
                         {st?.adding && (
                             <>
-                                <Tabs variant={"secondary"} className={"bg-transparent w-fit"} selectedTab={selectedTab}
-                                      setSelectedTab={setSelectedTab} scrollable>
-                                    <Tab type="button" label="Créer"/>
-                                    <Tab type="button" label="Associer"/>
-                                </Tabs>
+                                {!forceMode && (
+                                    <Tabs variant={"secondary"} className={"bg-transparent w-fit"}
+                                          selectedTab={selectedTab}
+                                          setSelectedTab={setSelectedTab} scrollable>
+                                        <Tab type="button" label="Créer"/>
+                                        <Tab type="button" label="Associer"/>
+                                    </Tabs>
+                                )}
 
                                 {/* Barre Recherche / Ajout (mode association) */}
-                                {st?.mode !== 'create' && !(!!(!isList && currentSelection.length > 0)) && (
+                                {((forceMode ? forceMode !== 'create' : st?.mode !== 'create')) && !(!!(!isList && currentSelection.length > 0)) && (
                                     <div className="flex items-end gap-2">
                                         <div className="flex-1">
                                             <label className="block text-xs text-gray-600">Recherche</label>
@@ -305,7 +364,7 @@ function RelationField({rf, st, updateState, reloadOptions, depth, level}: Relat
                                 )}
 
                                 {/* 3. Zone de création - ne pas rendre le sous-formulaire tant que le mode n'est pas 'create' */}
-                                {st?.mode === 'create' && (
+                                {(forceMode ? forceMode === 'create' : st?.mode === 'create') && (
                                     <div className="pt-2">
                                         <div className="mt-2">
                                             <DynamicForm
@@ -681,10 +740,62 @@ export default function DynamicForm({
                 selectedIds: [],
                 createItems: [],
             };
-            return {
+
+            const next = updater(current);
+
+            // Gestion de l'exclusivité (mutex) entre relations d'un même groupe
+            const mutexKey = rf?.ui?.mutexKey;
+            let newState: Record<string, RelationState> = {
                 ...prev,
-                [rf.name]: updater(current),
+                [rf.name]: next,
             };
+            const isActive = () => {
+                // actif si une sélection ou une création concrète est présente
+                // ou si l'utilisateur a simplement démarré un ajout (adding=true)
+                if (next.adding) return true;
+                if (rf.isList) {
+                    if ((next.selectedIds && next.selectedIds.length > 0)) return true;
+                    if ((next.createItems && next.createItems.length > 0)) return true;
+                    if (next.mode === 'create' && next.createDraft && Object.keys(next.createDraft).length > 0) return true;
+                    return false;
+                } else {
+                    if (next.selectedId) return true;
+                    if (next.mode === 'create' && next.createValues && Object.keys(next.createValues).length > 0) return true;
+                    return false;
+                }
+            };
+            if (mutexKey) {
+                const becameActive = isActive();
+                if (becameActive) {
+                    for (const other of relations) {
+                        if (other.name === rf.name) continue;
+                        if (other?.ui?.mutexKey && other.ui.mutexKey === mutexKey) {
+                            const prevOther = newState[other.name] ?? {
+                                mode: 'associate',
+                                search: '',
+                                options: [],
+                                loading: false,
+                                selectedIds: [],
+                                createItems: [],
+                            } as RelationState;
+                            newState[other.name] = {
+                                ...prevOther,
+                                // on garde l'état d'ouverture mais on vide les contenus
+                                selectedId: undefined,
+                                selectedIds: [],
+                                selectedLabels: prevOther.selectedLabels, // labels conservés, sans impact
+                                createValues: undefined,
+                                createDraft: undefined,
+                                createItems: [],
+                                // sortir du mode ajout si actif
+                                adding: false,
+                                // mode non imposé laissé tel quel
+                            };
+                        }
+                    }
+                }
+            }
+            return newState;
         });
     };
 
@@ -725,21 +836,60 @@ export default function DynamicForm({
             </div>
 
             {/* Relations */}
-            {(relationsDepth !== 0 && (relations.length > 0)) && (
-                <div className="mt-6 space-y-6">
-                    {relations.map((rf: any) => (
-                        <RelationField
-                            key={rf.name}
-                            rf={rf}
-                            st={relationUIState[rf.name]}
-                            updateState={updateRelationState}
-                            reloadOptions={reloadRelationOptions}
-                            depth={relationsDepth}
-                            level={level}
-                        />
-                    ))}
-                </div>
-            )}
+            {(relationsDepth !== 0 && (relations.length > 0)) && (() => {
+                // Grouper visuellement les relations qui partagent un mutexKey
+                type R = any;
+                const groups: { key: string; items: R[] }[] = [];
+                const order: string[] = [];
+                const map: Record<string, R[]> = {};
+                for (const rf of relations) {
+                    const key = rf?.ui?.mutexKey ? `mutex:${rf.ui.mutexKey}` : `single:${rf.name}`;
+                    if (!map[key]) {
+                        map[key] = [];
+                        order.push(key);
+                    }
+                    map[key].push(rf);
+                }
+                for (const k of order) groups.push({key: k, items: map[k]});
+
+                return (
+                    <div className="mt-6 space-y-6">
+                        {groups.map(group => {
+                            const isMutexGroup = group.key.startsWith('mutex:') && group.items.length > 1;
+                            if (isMutexGroup) {
+                                return (
+                                    <div key={group.key} className="flex flex-wrap gap-3 items-start">
+                                        {group.items.map((rf: any) => (
+                                            <div key={rf.name} className="">
+                                                <RelationField
+                                                    rf={rf}
+                                                    st={relationUIState[rf.name]}
+                                                    updateState={updateRelationState}
+                                                    reloadOptions={reloadRelationOptions}
+                                                    depth={relationsDepth}
+                                                    level={level}
+                                                />
+                                            </div>
+                                        ))}
+                                    </div>
+                                );
+                            }
+                            // Default rendering for single relations or groups of size 1
+                            return group.items.map((rf: any) => (
+                                <RelationField
+                                    key={rf.name}
+                                    rf={rf}
+                                    st={relationUIState[rf.name]}
+                                    updateState={updateRelationState}
+                                    reloadOptions={reloadRelationOptions}
+                                    depth={relationsDepth}
+                                    level={level}
+                                />
+                            ));
+                        })}
+                    </div>
+                );
+            })()}
 
             {!hideSubmit && (
                 <div className="flex items-center justify-end gap-2 mt-3">
