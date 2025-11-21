@@ -1,17 +1,24 @@
-import React, {useActionState, useEffect, useMemo, useRef, useState} from "react";
+import React, {startTransition, useActionState, useEffect, useMemo, useRef, useState} from "react";
 import {useFormik} from 'formik';
 import {actions} from 'astro:actions';
 import {useStore} from "@nanostores/react";
 import {modelsService, modelsStore} from "@/stores/modelsStore";
-import {Tab, Tabs, TextField} from "@udixio/ui-react";
+// IconButton peut ne pas être présent selon la version du design system.
+// S'il est disponible, on l'utilise pour l'action d'édition; sinon on garde un <button> simple.
+// @ts-ignore
+import {Button, Card, IconButton, Tab, Tabs, TextField} from "@udixio/ui-react";
+import {faXmark} from "@fortawesome/pro-regular-svg-icons";
 
 // ---------- Relations state (extrait au niveau module pour éviter recréations) ----------
 export type RelationState = {
     // Common
     mode?: 'associate' | 'create';
+    open?: boolean; // section ouverte/collapsée (pour limiter l'affichage)
+    adding?: boolean; // UI d'ajout en cours (affiche Tabs + contenu)
     search: string;
     options: { id: string; label: string }[];
     loading: boolean;
+    selectedLabels?: Record<string, string>; // id -> label pour affichage (ui.displayFields)
     // Singular
     selectedId?: string;
     createValues?: Record<string, any>;
@@ -33,6 +40,7 @@ type RelationFieldProps = {
 
 function RelationField({rf, st, updateState, reloadOptions, depth, level}: RelationFieldProps) {
     const isList = !!rf.isList;
+    const isRequired = !!rf.isRequired;
 
     // Normalisation lecture: tableau courant des sélections
     const currentSelection: string[] = useMemo(() => {
@@ -44,16 +52,22 @@ function RelationField({rf, st, updateState, reloadOptions, depth, level}: Relat
     // Ajout d'une sélection
     const handleSelect = (id: string) => {
         if (!id) return;
+        const opt = (st?.options || []).find(o => o.id === id);
+        const label = opt?.label || id;
         if (isList) {
             updateState(rf, (prev) => ({
                 ...prev,
-                selectedIds: Array.from(new Set([...(prev.selectedIds || []), id]))
+                selectedIds: Array.from(new Set([...(prev.selectedIds || []), id])),
+                selectedLabels: {...(prev.selectedLabels || {}), [id]: label},
+                adding: false
             }));
         } else {
             updateState(rf, (prev) => ({
                 ...prev,
                 mode: 'associate',
-                selectedId: id
+                selectedId: id,
+                selectedLabels: {...(prev.selectedLabels || {}), [id]: label},
+                adding: false
             }));
         }
     };
@@ -80,168 +94,275 @@ function RelationField({rf, st, updateState, reloadOptions, depth, level}: Relat
         }
     };
 
-    // Activer par défaut le mode "create" uniquement au premier niveau
+    // Initialisation ouverture/collapse pour éviter affichage infini
     useEffect(() => {
-        if (level === 1 && (!st || !st.mode)) {
-            updateState(rf, (prev) => ({...prev, mode: 'create'}));
+        if (!st) return;
+        // Ouvrir par défaut si (required) OU (premier niveau)
+        if (st.open === undefined) {
+            updateState(rf, (prev) => ({...prev, open: (isRequired || level === 1)}));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [isRequired, level]);
+
+    // Tabs contrôlés: 0 = Créer, 1 = Associer
+    const selectedTab = (st?.mode || (level === 1 ? 'create' : 'associate')) === 'create' ? 0 : 1;
+    const setSelectedTab = (idx: number) => {
+        updateState(rf, (prev) => ({
+            ...prev,
+
+            mode: idx === 0 ? 'create' : 'associate',
+            // Si on passe en association, on annule l'ébauche de création en cours
+            ...(idx !== 0
+                ? {createDraft: undefined, createValues: undefined}
+                : // Si singulier et on crée, on libère la sélection courante
+                (isList ? {} : {selectedId: undefined}))
+        }))
+    };
+
+    if (!st?.adding) {
+        return <Button type="button" variant="tonal" onClick={() => updateState(rf, (prev) => ({
+            ...prev,
+            adding: true,
+            mode: (level === 1 ? 'create' : 'associate')
+        }))}>{currentSelection.length > 0 ? 'Modifier' : 'Ajouter un ' + (rf.ui?.label ?? rf.name ?? 'unknow')}</Button>
+    }
 
     return (
-        <div className="border-l-2 border-secondary  rounded-2xl ">
-            <div className="bg-surface-container-high rounded-xl max-w-xl">
-                <div className="px-3 py-2  flex items-center justify-between">
-                    <div className="text-title-large">{rf.ui?.label || rf.documentation || `${rf.name}`}</div>
-                    <div className="text-xs text-gray-500">{`→ ${rf.targetModel}${isList ? ' (multiple)' : ''}`}</div>
-                </div>
-                <Tabs variant={"secondary"} className={"bg-transparent w-fit"}>
-                    <Tab type="button" label="Créer"/>
-                    <Tab type="button" label="Associer"/>
-                </Tabs>
-            </div>
+        <>
 
-            <div className="p-4 space-y-3">
-                {/* 1. Sélection actuelle sous forme de tags */}
-                <div className="flex flex-wrap gap-2">
-                    {currentSelection.map((id) => (
-                        <span key={id}
-                              className="inline-flex items-center gap-2 px-2 py-0.5 border rounded-full text-xs">
-                            <span className="opacity-70">{id}</span>
-                            <button type="button" className="text-red-600"
-                                    onClick={() => handleRemove(id)}>×</button>
-                        </span>
-                    ))}
-
-                    {/* Cas Création Singulière (Feedback visuel) */}
-                    {(!isList && st?.mode === 'create') && (
-                        <span
-                            className="inline-flex items-center gap-2 px-2 py-0.5 border border-green-300 bg-green-50 text-green-700 rounded-full text-xs">
-                            <span>✨ Nouveau (en cours)</span>
-                            <button
-                                type="button"
-                                className="text-green-700"
-                                onClick={() => {
-                                    // Annuler la création et revenir en mode associate
-                                    updateState(rf, prev => ({...prev, mode: 'associate', createValues: undefined}));
-                                }}
-                            >×</button>
-                        </span>
-                    )}
-                </div>
-
-                {/* 2. Barre Recherche / Ajout (cachée si singulier avec déjà une sélection) */}
-                {!(!!(!isList && currentSelection.length > 0)) && (
-                    <div className="flex items-end gap-2">
-                        <div className="flex-1">
-                            <label className="block text-xs text-gray-600">Recherche</label>
-                            <input
-                                className="border px-2 py-1 w-full"
-                                placeholder={`Rechercher ${rf.targetModel}...`}
-                                value={st?.search || ''}
-                                onChange={(e) => {
-                                    const v = e.target.value;
-                                    updateState(rf, (st) => ({...st, search: v}));
-                                    reloadOptions(rf, v);
-                                }}
-                                onFocus={ensureOptions}
-                            />
-                        </div>
-                        <div className="min-w-[260px]">
-                            <label className="block text-xs text-gray-600">{isList ? 'Ajouter' : 'Choisir'}</label>
-                            <select
-                                className="border px-2 py-1 w-full"
-                                value={''}
-                                onChange={(e) => handleSelect(e.target.value)}
-                                onFocus={ensureOptions}
-                            >
-                                <option value="">— {isList ? 'Ajouter…' : 'Choisir…'} —</option>
-                                {(st?.options || []).map((o) => (
-                                    <option key={o.id} value={o.id}>{o.label}</option>
-                                ))}
-                            </select>
-                        </div>
+            <div className="border-l-2 border-secondary  rounded-2xl ">
+                {/* Bouton d'activation pour relations optionnelles et profondes */}
+                {(!isRequired && level > 1 && !st?.open) && (
+                    <div className="my-2">
+                        <Button type="button" variant="tonal"
+                                onClick={() => updateState(rf, (prev) => ({...prev, open: true}))}>
+                            {(rf.ui?.label || rf.documentation || rf.name)}
+                        </Button>
+                        {rf.ui?.description && (
+                            <div className="text-xs text-on-surface-variant mt-1">{rf.ui.description}</div>
+                        )}
                     </div>
                 )}
 
-                {/* 2.b Toggle vers le mode création quand on est en association */}
-                {st?.mode !== 'create' && (
-                    <div className="flex justify-end">
-                        <button
-                            type="button"
-                            className="text-xs text-blue-700 hover:underline"
-                            onClick={() => updateState(rf, (prev) => ({
-                                ...prev,
-                                mode: 'create',
-                                // Pour un singulier, on libère la sélection en cours
-                                ...(isList ? {} : {selectedId: undefined})
-                            }))}
-                        >
-                            ➕ Créer un(e) {rf.targetModel}
-                        </button>
-                    </div>
-                )}
-
-                {/* 3. Zone de création - ne pas rendre le sous-formulaire tant que le mode n'est pas 'create' */}
-                {st?.mode === 'create' && (
-                    <div className="pt-2">
-                        <details className="group" open={true}>
-                            <summary className="cursor-pointer select-none text-sm text-blue-700">➕ Créer
-                                un(e) {rf.targetModel}</summary>
-                            <div className="mt-2">
-                                <DynamicForm
-                                    model={rf.targetModel}
-                                    hideSubmit
-                                    mode={'create'}
-                                    relationsDepth={depth === -1 ? -1 : Math.max(0, (depth ?? 1) - 1)}
-                                    level={level + 1}
-                                    onChange={(vals) => {
-                                        if (isList) {
-                                            updateState(rf, (prev) => ({
-                                                ...prev,
-                                                createDraft: vals
-                                            }));
-                                        } else {
-                                            updateState(rf, (prev) => ({
-                                                ...prev,
-                                                mode: 'create',
-                                                createValues: vals,
-                                                selectedId: undefined
-                                            }));
-                                        }
-                                    }}
-                                />
-
-                                {isList && (
-                                    <div className="flex justify-end mt-2">
-                                        <button
-                                            type="button"
-                                            className="border px-2 py-1 text-sm"
-                                            onClick={() => updateState(rf, (prev) => {
-                                                const draft = prev.createDraft;
-                                                if (!draft) return prev;
-                                                const list = [...(prev.createItems || []), draft];
-                                                return {
-                                                    ...prev,
-                                                    createItems: list,
-                                                    createDraft: undefined
-                                                };
-                                            })}
-                                        >Ajouter à la liste
-                                        </button>
-                                    </div>
+                {(!(!isRequired && level > 1 && !st?.open)) && (
+                    <Card className="bg-surface-container-high rounded-xl max-w-xl">
+                        <div className="px-3 py-2  flex items-center justify-between gap-3">
+                            <div className="flex-1">
+                                <div
+                                    className="text-title-large">{rf.ui?.label || rf.documentation || `${rf.name}`}</div>
+                                {rf.ui?.description && (
+                                    <div className="text-sm text-on-surface-variant">{rf.ui.description}</div>
                                 )}
                             </div>
-                        </details>
-                    </div>
+                            <div
+                                className="text-xs text-gray-500">{`→ ${rf.targetModel}${isList ? ' (multiple)' : ''}`}</div>
+                            <IconButton type={"button"} size={"small"} icon={faXmark} onClick={() => {
+                                // Fermer la section et annuler les créations en cours
+                                updateState(rf, (prev) => ({
+                                    ...prev,
+                                    open: false,
+                                    adding: false,
+                                    mode: undefined,
+                                    createDraft: undefined,
+                                    createValues: undefined,
+                                }));
+                            }}>Annuler</IconButton>
+                        </div>
+                    </Card>
                 )}
 
-                {/* Info items à créer pour listes */}
-                {isList && (st?.createItems && st.createItems.length > 0) && (
-                    <div className="text-xs text-gray-600">À créer: {st.createItems.length} élément(s)</div>
+                {(!(!isRequired && level > 1 && !st?.open)) && (
+                    <div className="p-4 space-y-3">
+                        {/* 1. Liste visible des associations et créations en cours */}
+                        <div className="flex flex-col gap-2">
+                            <div className="flex flex-wrap gap-2">
+                                {currentSelection.map((id) => (
+                                    <span key={id}
+                                          className="inline-flex items-center gap-2 px-2 py-0.5 border rounded-full text-xs">
+                                <span className="opacity-70">{st?.selectedLabels?.[id] || id}</span>
+                                <button type="button" className="text-red-600"
+                                        onClick={() => handleRemove(id)}>×</button>
+                            </span>
+                                ))}
+                            </div>
+
+                            {/* Pour les listes: rendre visibles les brouillons à créer */}
+                            {isList && (st?.createItems && st.createItems.length > 0) && (
+                                <div className="flex flex-col gap-1">
+                                    {st.createItems.map((it, idx) => {
+                                        const display = Array.isArray(rf?.ui?.displayFields) ? rf.ui.displayFields : undefined;
+                                        const label = display && display.length > 0
+                                            ? display.map((k: string) => it?.[k]).filter(Boolean).join(' · ')
+                                            : (it?.name || it?.title || it?.email || it?.slug || `Nouveau ${rf.targetModel}`);
+                                        return (
+                                            <div key={idx}
+                                                 className="flex items-center justify-between gap-2 px-2 py-1 border rounded">
+                                                <div className="text-xs">
+                                                    <span className="font-medium">{label}</span>
+                                                    <span className="opacity-60"> — brouillon à créer</span>
+                                                </div>
+                                                <div className="flex items-center gap-2">
+                                                    {/* Éditer l'élément: le replacer comme ébauche et passer en mode création */}
+                                                    {IconButton ? (
+                                                        <IconButton
+                                                            onClick={() => updateState(rf, (prev) => ({
+                                                                ...prev,
+                                                                adding: true, mode: 'create',
+                                                                createDraft: prev.createItems?.[idx],
+                                                                createItems: (prev.createItems || []).filter((_, i) => i !== idx)
+                                                            }))}
+                                                            label="Éditer"
+                                                            variant="standard"
+                                                        />
+                                                    ) : (
+                                                        <button
+                                                            type="button"
+                                                            className="text-xs underline"
+                                                            onClick={() => updateState(rf, (prev) => ({
+                                                                ...prev,
+                                                                adding: true, mode: 'create',
+                                                                createDraft: prev.createItems?.[idx],
+                                                                createItems: (prev.createItems || []).filter((_, i) => i !== idx)
+                                                            }))}
+                                                        >Éditer</button>
+                                                    )}
+                                                    <button
+                                                        type="button"
+                                                        className="text-xs text-red-600"
+                                                        onClick={() => updateState(rf, (prev) => ({
+                                                            ...prev,
+                                                            createItems: (prev.createItems || []).filter((_, i) => i !== idx)
+                                                        }))}
+                                                    >Retirer
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            )}
+                        </div>
+
+                        {/* 1.b Boutons pour démarrer l'ajout */}
+                        {!st?.adding && (
+                            <div className="flex justify-start">
+                                {isList ? (
+                                    <Button type="button" variant="tonal" onClick={() => updateState(rf, (prev) => ({
+                                        ...prev,
+                                        mode: (level === 1 ? 'create' : 'associate')
+                                    }))}>Ajouter</Button>
+                                ) : (
+                                    <Button type="button" variant="tonal" onClick={() => updateState(rf, (prev) => ({
+                                        ...prev,
+                                        mode: (level === 1 ? 'create' : 'associate')
+                                    }))}>{currentSelection.length > 0 ? 'Modifier' : 'Ajouter'}</Button>
+                                )}
+                            </div>
+                        )}
+
+                        {/* 2. Zone d'ajout: Tabs + contenus */}
+                        {st?.adding && (
+                            <>
+                                <Tabs variant={"secondary"} className={"bg-transparent w-fit"} selectedTab={selectedTab}
+                                      setSelectedTab={setSelectedTab} scrollable>
+                                    <Tab type="button" label="Créer"/>
+                                    <Tab type="button" label="Associer"/>
+                                </Tabs>
+
+                                {/* Barre Recherche / Ajout (mode association) */}
+                                {st?.mode !== 'create' && !(!!(!isList && currentSelection.length > 0)) && (
+                                    <div className="flex items-end gap-2">
+                                        <div className="flex-1">
+                                            <label className="block text-xs text-gray-600">Recherche</label>
+                                            <input
+                                                className="border px-2 py-1 w-full"
+                                                placeholder={`Rechercher ${rf.targetModel}...`}
+                                                value={st?.search || ''}
+                                                onChange={(e) => {
+                                                    const v = e.target.value;
+                                                    updateState(rf, (st) => ({...st, search: v}));
+                                                    reloadOptions(rf, v);
+                                                }}
+                                                onFocus={ensureOptions}
+                                            />
+                                        </div>
+                                        <div className="min-w-[260px]">
+                                            <label
+                                                className="block text-xs text-gray-600">{isList ? 'Ajouter' : 'Choisir'}</label>
+                                            <select
+                                                className="border px-2 py-1 w-full"
+                                                value={''}
+                                                onChange={(e) => handleSelect(e.target.value)}
+                                                onFocus={ensureOptions}
+                                            >
+                                                <option value="">— {isList ? 'Ajouter…' : 'Choisir…'} —</option>
+                                                {(st?.options || []).map((o) => (
+                                                    <option key={o.id} value={o.id}>{o.label}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* 3. Zone de création - ne pas rendre le sous-formulaire tant que le mode n'est pas 'create' */}
+                                {st?.mode === 'create' && (
+                                    <div className="pt-2">
+                                        <div className="mt-2">
+                                            <DynamicForm
+                                                model={rf.targetModel}
+                                                hideSubmit
+                                                mode={'create'}
+                                                relationsDepth={depth === -1 ? -1 : Math.max(0, (depth ?? 1) - 1)}
+                                                level={level + 1}
+                                                value={isList ? (st?.createDraft || {}) : (st?.createValues || {})}
+                                                onChange={(vals) => {
+                                                    if (isList) {
+                                                        updateState(rf, (prev) => ({
+                                                            ...prev,
+                                                            createDraft: vals
+                                                        }));
+                                                    } else {
+                                                        updateState(rf, (prev) => ({
+                                                            ...prev,
+                                                            mode: 'create',
+                                                            createValues: vals,
+                                                            selectedId: undefined
+                                                        }));
+                                                    }
+                                                }}
+                                            />
+
+                                            {isList && (
+                                                <div className="flex justify-end mt-2">
+                                                    <button
+                                                        type="button"
+                                                        className="border px-2 py-1 text-sm"
+                                                        onClick={() => updateState(rf, (prev) => {
+                                                            const draft = prev.createDraft;
+                                                            if (!draft) return prev;
+                                                            const list = [...(prev.createItems || []), draft];
+                                                            return {
+                                                                ...prev,
+                                                                createItems: list,
+                                                                createDraft: undefined,
+                                                                adding: false
+                                                            };
+                                                        })}
+                                                    >Ajouter à la liste
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
+                            </>
+                        )}
+
+                        {/* Info items à créer pour listes - remplacé par la liste détaillée ci-dessus */}
+                    </div>
                 )}
             </div>
-        </div>
+        </>
     );
 }
 
@@ -573,10 +694,15 @@ export default function DynamicForm({
             try {
                 const resp = await listEntitiesAction({model: rf.targetModel, q, limit: 25} as any);
                 const payload = (resp as any)?.data || (listEntitiesRes as any)?.data;
-                const options = ((payload?.items) || []).map((it: any) => ({
-                    id: it.id,
-                    label: it.name || it.title || it.email || it.slug || it.id
-                }));
+                const display = Array.isArray(rf?.ui?.displayFields) ? rf.ui.displayFields : undefined;
+                const options = ((payload?.items) || []).map((it: any) => {
+                    let label: string = '';
+                    if (display && display.length > 0) {
+                        label = display.map((k: string) => it?.[k]).filter(Boolean).join(' · ');
+                    }
+                    if (!label) label = it.name || it.title || it.email || it.slug || it.id;
+                    return {id: it.id, label};
+                });
                 updateRelationState(rf, (st) => ({...st, options, loading: false}));
             } catch {
                 updateRelationState(rf, (st) => ({...st, loading: false}));
