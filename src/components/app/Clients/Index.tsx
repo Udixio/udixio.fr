@@ -101,6 +101,7 @@ export default function ClientsIndex() {
                             // On exclut les champs techniques non éditables
                             exclude={["id", "createdAt", "updatedAt"]}
                             submitLabel={'Créer'}
+                            onCancel={() => setShowCreate(false)}
                             onSubmit={async (vals) => {
                                 setCreateError(undefined);
                                 startTransition(async () => {
@@ -120,11 +121,6 @@ export default function ClientsIndex() {
                         {createError && (
                             <div className="text-sm text-red-600">Erreur: {createError}</div>
                         )}
-                        <div className="flex items-center justify-end gap-2">
-                            <button type="button" className="border px-3 py-1"
-                                    onClick={() => setShowCreate(false)}>Annuler
-                            </button>
-                        </div>
                     </div>
                 </div>
             )}

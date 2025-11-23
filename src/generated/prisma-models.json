@@ -42,7 +42,8 @@
         "hidden": false,
         "label": null,
         "placeholder": null,
-        "default": null
+        "default": null,
+        "order": 1
       }
     },
     "value": {
@@ -61,7 +62,8 @@
         "hidden": false,
         "label": null,
         "placeholder": null,
-        "default": null
+        "default": null,
+        "order": 2
       }
     },
     "label": {
@@ -80,7 +82,8 @@
         "hidden": false,
         "label": null,
         "placeholder": null,
-        "default": null
+        "default": null,
+        "order": 3
       }
     },
     "isPrimary": {
@@ -100,7 +103,8 @@
         "hidden": false,
         "label": null,
         "placeholder": null,
-        "default": null
+        "default": null,
+        "order": 4
       }
     },
     "organization": {
@@ -2188,7 +2192,15 @@
       "relationToFields": [
         "id"
       ],
-      "documentation": null
+      "documentation": null,
+      "ui": {
+        "hidden": false,
+        "label": null,
+        "placeholder": null,
+        "default": null,
+        "mutexKey": "target",
+        "order": 1
+      }
     },
     "clientId": {
       "isList": false,
@@ -2268,6 +2280,14 @@
         "label": null,
         "placeholder": null,
         "default": null
+      }
+    },
+    "ui": {
+      "mutexGroups": {
+        "target": {
+          "label": "Cible",
+          "description": "Permet de rattacher l'affaire au bon contexte commercial."
+        }
       }
     }
   },

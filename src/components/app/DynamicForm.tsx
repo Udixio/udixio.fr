@@ -6,7 +6,7 @@ import {modelsService, modelsStore} from "@/stores/modelsStore";
 // IconButton peut ne pas être présent selon la version du design system.
 // S'il est disponible, on l'utilise pour l'action d'édition; sinon on garde un <button> simple.
 // @ts-ignore
-import {Button, Card, IconButton, Tab, Tabs, TextField} from "@udixio/ui-react";
+import {Button, Card, classnames, Divider, IconButton, Tab, Tabs, TextField} from "@udixio/ui-react";
 import {faXmark} from "@fortawesome/pro-regular-svg-icons";
 
 // ---------- Relations state (extrait au niveau module pour éviter recréations) ----------
@@ -187,344 +187,241 @@ function RelationField({rf, st, updateState, reloadOptions, depth, level, compac
         }))}>{currentSelection.length > 0 ? 'Modifier' : 'Ajouter un ' + (rf.ui?.label ?? rf.name ?? 'unknow')}</Button>
     }
 
-    // In compact mode, render only the adding area (tabs + associate/create UI) without header/card/wrappers
-    if (compact) {
-        return (
-            <div className="w-full">
-                {/* Tabs visible uniquement pendant l'ajout, sauf si forceMode impose un mode */}
-                {!forceMode && (
-                    <Tabs variant={"secondary"} className={"bg-transparent w-fit"}
-                          selectedTab={selectedTab}
-                          setSelectedTab={setSelectedTab} scrollable>
-                        <Tab type="button" label="Créer"/>
-                        <Tab type="button" label="Associer"/>
-                    </Tabs>
-                )}
-
-                {/* Association UI */}
-                {((forceMode ? forceMode !== 'create' : st?.mode !== 'create')) && !(!!(!isList && currentSelection.length > 0)) && (
-                    <div className="flex items-end gap-2 mt-2">
-                        <div className="flex-1">
-                            <label className="block text-xs text-gray-600">Recherche</label>
-                            <input
-                                className="border px-2 py-1 w-full"
-                                placeholder={`Rechercher ${rf.targetModel}...`}
-                                value={st?.search || ''}
-                                onChange={(e) => {
-                                    const v = e.target.value;
-                                    updateState(rf, (st) => ({...st, search: v}));
-                                    reloadOptions(rf, v);
-                                }}
-                                onFocus={ensureOptions}
-                            />
-                        </div>
-                        <div className="min-w-[260px]">
-                            <label className="block text-xs text-gray-600">{isList ? 'Ajouter' : 'Choisir'}</label>
-                            <select
-                                className="border px-2 py-1 w-full"
-                                value={''}
-                                onChange={(e) => handleSelect(e.target.value)}
-                                onFocus={ensureOptions}
-                            >
-                                <option value="">— {isList ? 'Ajouter…' : 'Choisir…'} —</option>
-                                {(st?.options || []).map((o) => (
-                                    <option key={o.id} value={o.id}>{o.label}</option>
-                                ))}
-                            </select>
-                        </div>
-                    </div>
-                )}
-
-                {/* Create UI */}
-                {(forceMode ? forceMode === 'create' : st?.mode === 'create') && (
-                    <div className="pt-2">
-                        <DynamicForm
-                            model={rf.targetModel}
-                            hideSubmit
-                            mode={'create'}
-                            relationsDepth={depth === -1 ? -1 : Math.max(0, (depth ?? 1) - 1)}
-                            level={level + 1}
-                            value={isList ? (st?.createDraft || {}) : (st?.createValues || {})}
-                            onChange={(vals) => {
-                                if (isList) {
-                                    updateState(rf, (prev) => ({
-                                        ...prev,
-                                        createDraft: vals
-                                    }));
-                                } else {
-                                    updateState(rf, (prev) => ({
-                                        ...prev,
-                                        mode: 'create',
-                                        createValues: vals,
-                                        selectedId: undefined
-                                    }));
-                                }
-                            }}
-                        />
-                        {isList && (
-                            <div className="flex justify-end mt-2">
-                                <button
-                                    type="button"
-                                    className="border px-2 py-1 text-sm"
-                                    onClick={() => updateState(rf, (prev) => {
-                                        const draft = prev.createDraft;
-                                        if (!draft) return prev;
-                                        const list = [...(prev.createItems || []), draft];
-                                        return {
-                                            ...prev,
-                                            createItems: list,
-                                            createDraft: undefined,
-                                            adding: false
-                                        };
-                                    })}
-                                >Ajouter à la liste
-                                </button>
-                            </div>
-                        )}
-                    </div>
-                )}
-            </div>
-        );
-    }
 
     return (
         <>
 
-            <div className="border-l-2 border-secondary  rounded-2xl ">
-                {/* Bouton d'activation pour relations optionnelles et profondes */}
-                {(!isRequired && level > 1 && !st?.open) && (
-                    <div className="my-2">
-                        <Button type="button" variant="tonal"
-                                onClick={() => updateState(rf, (prev) => ({...prev, open: true}))}>
-                            {(rf.ui?.label || rf.documentation || rf.name)}
-                        </Button>
-                        {rf.ui?.description && (
-                            <div className="text-xs text-on-surface-variant mt-1">{rf.ui.description}</div>
-                        )}
-                    </div>
-                )}
-
-                {(!(!isRequired && level > 1 && !st?.open)) && (
-                    <Card className="bg-surface-container-high rounded-xl max-w-xl">
-                        <div className="px-3 py-2  flex items-center justify-between gap-3">
-                            <div className="flex-1">
-                                <div
-                                    className="text-title-large">{rf.ui?.label || rf.documentation || `${rf.name}`}</div>
-                                {rf.ui?.description && (
-                                    <div className="text-sm text-on-surface-variant">{rf.ui.description}</div>
-                                )}
-                            </div>
-                            <div
-                                className="text-xs text-gray-500">{`→ ${rf.targetModel}${isList ? ' (multiple)' : ''}`}</div>
-                            <IconButton type={"button"} size={"small"} icon={faXmark} onClick={() => {
-                                // Fermer la section et annuler les créations en cours
-                                updateState(rf, (prev) => ({
-                                    ...prev,
-                                    open: false,
-                                    adding: false,
-                                    mode: undefined,
-                                    createDraft: undefined,
-                                    createValues: undefined,
-                                }));
-                            }}>Annuler</IconButton>
+            <Card variant={"filled"} className={classnames({
+                " border-0  border-l-2 border-secondary ": !compact
+            })}>
+                <div className="border border-outline rounded-xl overflow-hidden">
+                    {/* Bouton d'activation pour relations optionnelles et profondes */}
+                    {(!isRequired && level > 1 && !st?.open) && (
+                        <div className="my-2">
+                            <Button type="button" variant="tonal"
+                                    onClick={() => updateState(rf, (prev) => ({...prev, open: true}))}>
+                                {(rf.ui?.label || rf.documentation || rf.name)}
+                            </Button>
+                            {rf.ui?.description && (
+                                <div className="text-xs text-on-surface-variant mt-1">{rf.ui.description}</div>
+                            )}
                         </div>
-                    </Card>
-                )}
+                    )}
 
-                {(!(!isRequired && level > 1 && !st?.open)) && (
-                    <div className="p-4 space-y-3">
-                        {/* 1. Liste visible des associations et créations en cours */}
-                        <div className="flex flex-col gap-2">
-                            <div className="flex flex-wrap gap-2">
-                                {currentSelection.map((id) => (
-                                    <span key={id}
-                                          className="inline-flex items-center gap-2 px-2 py-0.5 border rounded-full text-xs">
+                    {(!(!isRequired && level > 1 && !st?.open)) && !compact && (
+                        <div className=" rounded-xl">
+                            <div className="px-3 py-2  flex items-center justify-between gap-3">
+                                <div className="flex-1">
+                                    <div
+                                        className="text-title-large">{rf.ui?.label || rf.documentation || `${rf.name}`}</div>
+                                    {rf.ui?.description && (
+                                        <div className="text-sm text-on-surface-variant">{rf.ui.description}</div>
+                                    )}
+                                </div>
+                                <div
+                                    className="text-xs text-gray-500">{`→ ${rf.targetModel}${isList ? ' (multiple)' : ''}`}</div>
+                                <IconButton type={"button"} size={"small"} icon={faXmark} onClick={() => {
+                                    // Fermer la section et annuler les créations en cours
+                                    updateState(rf, (prev) => ({
+                                        ...prev,
+                                        open: false,
+                                        adding: false,
+                                        mode: undefined,
+                                        createDraft: undefined,
+                                        createValues: undefined,
+                                    }));
+                                }}>Annuler</IconButton>
+                            </div>
+                        </div>
+                    )}
+
+                    {(!(!isRequired && level > 1 && !st?.open)) && (
+                        <div
+                            className={classnames('')}>
+                            {/* 1. Liste visible des associations et créations en cours */}
+                            <div className="flex flex-col gap-2 my-2">
+                                <div className="flex flex-wrap gap-2">
+                                    {currentSelection.map((id) => (
+                                        <span key={id}
+                                              className="inline-flex items-center gap-2 px-2 py-0.5 border rounded-full text-xs">
                                 <span className="opacity-70">{st?.selectedLabels?.[id] || id}</span>
                                 <button type="button" className="text-red-600"
                                         onClick={() => handleRemove(id)}>×</button>
                             </span>
-                                ))}
-                            </div>
+                                    ))}
+                                </div>
 
-                            {/* Pour les listes: rendre visibles les brouillons à créer */}
-                            {isList && (st?.createItems && st.createItems.length > 0) && (
-                                <div className="flex flex-col gap-1">
-                                    {st.createItems.map((it, idx) => {
-                                        const display = Array.isArray(rf?.ui?.displayFields) ? rf.ui.displayFields : undefined;
-                                        const label = display && display.length > 0
-                                            ? display.map((k: string) => it?.[k]).filter(Boolean).join(' · ')
-                                            : (it?.name || it?.title || it?.email || it?.slug || `Nouveau ${rf.targetModel}`);
-                                        return (
-                                            <div key={idx}
-                                                 className="flex items-center justify-between gap-2 px-2 py-1 border rounded">
-                                                <div className="text-xs">
-                                                    <span className="font-medium">{label}</span>
-                                                    <span className="opacity-60"> — brouillon à créer</span>
-                                                </div>
-                                                <div className="flex items-center gap-2">
-                                                    {/* Éditer l'élément: le replacer comme ébauche et passer en mode création */}
-                                                    {IconButton ? (
-                                                        <IconButton
-                                                            onClick={() => updateState(rf, (prev) => ({
-                                                                ...prev,
-                                                                adding: true, mode: 'create',
-                                                                createDraft: prev.createItems?.[idx],
-                                                                createItems: (prev.createItems || []).filter((_, i) => i !== idx)
-                                                            }))}
-                                                            label="Éditer"
-                                                            variant="standard"
-                                                        />
-                                                    ) : (
+                                {/* Pour les listes: rendre visibles les brouillons à créer */}
+                                {isList && (st?.createItems && st.createItems.length > 0) && (
+                                    <div className="flex flex-col gap-1">
+                                        {st.createItems.map((it, idx) => {
+                                            const display = Array.isArray(rf?.ui?.displayFields) ? rf.ui.displayFields : undefined;
+                                            const label = display && display.length > 0
+                                                ? display.map((k: string) => it?.[k]).filter(Boolean).join(' · ')
+                                                : (it?.name || it?.title || it?.email || it?.slug || `Nouveau ${rf.targetModel}`);
+                                            return (
+                                                <div key={idx}
+                                                     className="flex items-center justify-between gap-2 px-2 py-1 border rounded">
+                                                    <div className="text-xs">
+                                                        <span className="font-medium">{label}</span>
+                                                        <span className="opacity-60"> — brouillon à créer</span>
+                                                    </div>
+                                                    <div className="flex items-center gap-2">
+                                                        {/* Éditer l'élément: le replacer comme ébauche et passer en mode création */}
+                                                        {IconButton ? (
+                                                            <IconButton
+                                                                onClick={() => updateState(rf, (prev) => ({
+                                                                    ...prev,
+                                                                    adding: true, mode: 'create',
+                                                                    createDraft: prev.createItems?.[idx],
+                                                                    createItems: (prev.createItems || []).filter((_, i) => i !== idx)
+                                                                }))}
+                                                                label="Éditer"
+                                                                variant="standard"
+                                                            />
+                                                        ) : (
+                                                            <button
+                                                                type="button"
+                                                                className="text-xs underline"
+                                                                onClick={() => updateState(rf, (prev) => ({
+                                                                    ...prev,
+                                                                    adding: true, mode: 'create',
+                                                                    createDraft: prev.createItems?.[idx],
+                                                                    createItems: (prev.createItems || []).filter((_, i) => i !== idx)
+                                                                }))}
+                                                            >Éditer</button>
+                                                        )}
                                                         <button
                                                             type="button"
-                                                            className="text-xs underline"
+                                                            className="text-xs text-red-600"
                                                             onClick={() => updateState(rf, (prev) => ({
                                                                 ...prev,
-                                                                adding: true, mode: 'create',
-                                                                createDraft: prev.createItems?.[idx],
                                                                 createItems: (prev.createItems || []).filter((_, i) => i !== idx)
                                                             }))}
-                                                        >Éditer</button>
-                                                    )}
-                                                    <button
-                                                        type="button"
-                                                        className="text-xs text-red-600"
-                                                        onClick={() => updateState(rf, (prev) => ({
-                                                            ...prev,
-                                                            createItems: (prev.createItems || []).filter((_, i) => i !== idx)
-                                                        }))}
-                                                    >Retirer
-                                                    </button>
+                                                        >Retirer
+                                                        </button>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            )}
-                        </div>
-
-                        {/* 1.b Boutons pour démarrer l'ajout */}
-                        {!st?.adding && (
-                            <div className="flex justify-start">
-                                {isList ? (
-                                    <Button type="button" variant="tonal" onClick={() => updateState(rf, (prev) => ({
-                                        ...prev,
-                                        mode: (level === 1 ? 'create' : 'associate')
-                                    }))}>Ajouter</Button>
-                                ) : (
-                                    <Button type="button" variant="tonal" onClick={() => updateState(rf, (prev) => ({
-                                        ...prev,
-                                        mode: (level === 1 ? 'create' : 'associate')
-                                    }))}>{currentSelection.length > 0 ? 'Modifier' : 'Ajouter'}</Button>
+                                            );
+                                        })}
+                                    </div>
                                 )}
                             </div>
-                        )}
 
-                        {/* 2. Zone d'ajout: Tabs + contenus */}
-                        {st?.adding && (
-                            <>
-                                {!forceMode && (
-                                    <Tabs variant={"secondary"} className={"bg-transparent w-fit"}
-                                          selectedTab={selectedTab}
-                                          setSelectedTab={setSelectedTab} scrollable>
-                                        <Tab type="button" label="Créer"/>
-                                        <Tab type="button" label="Associer"/>
-                                    </Tabs>
-                                )}
 
-                                {/* Barre Recherche / Ajout (mode association) */}
-                                {((forceMode ? forceMode !== 'create' : st?.mode !== 'create')) && !(!!(!isList && currentSelection.length > 0)) && (
-                                    <div className="flex items-end gap-2">
-                                        <div className="flex-1">
-                                            <label className="block text-xs text-gray-600">Recherche</label>
-                                            <input
-                                                className="border px-2 py-1 w-full"
-                                                placeholder={`Rechercher ${rf.targetModel}...`}
-                                                value={st?.search || ''}
-                                                onChange={(e) => {
-                                                    const v = e.target.value;
-                                                    updateState(rf, (st) => ({...st, search: v}));
-                                                    reloadOptions(rf, v);
-                                                }}
-                                                onFocus={ensureOptions}
-                                            />
-                                        </div>
-                                        <div className="min-w-[260px]">
-                                            <label
-                                                className="block text-xs text-gray-600">{isList ? 'Ajouter' : 'Choisir'}</label>
-                                            <select
-                                                className="border px-2 py-1 w-full"
-                                                value={''}
-                                                onChange={(e) => handleSelect(e.target.value)}
-                                                onFocus={ensureOptions}
-                                            >
-                                                <option value="">— {isList ? 'Ajouter…' : 'Choisir…'} —</option>
-                                                {(st?.options || []).map((o) => (
-                                                    <option key={o.id} value={o.id}>{o.label}</option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                    </div>
-                                )}
-
-                                {/* 3. Zone de création - ne pas rendre le sous-formulaire tant que le mode n'est pas 'create' */}
-                                {(forceMode ? forceMode === 'create' : st?.mode === 'create') && (
-                                    <div className="pt-2">
-                                        <div className="mt-2">
-                                            <DynamicForm
-                                                model={rf.targetModel}
-                                                hideSubmit
-                                                mode={'create'}
-                                                relationsDepth={depth === -1 ? -1 : Math.max(0, (depth ?? 1) - 1)}
-                                                level={level + 1}
-                                                value={isList ? (st?.createDraft || {}) : (st?.createValues || {})}
-                                                onChange={(vals) => {
-                                                    if (isList) {
-                                                        updateState(rf, (prev) => ({
-                                                            ...prev,
-                                                            createDraft: vals
-                                                        }));
-                                                    } else {
-                                                        updateState(rf, (prev) => ({
-                                                            ...prev,
-                                                            mode: 'create',
-                                                            createValues: vals,
-                                                            selectedId: undefined
-                                                        }));
-                                                    }
-                                                }}
-                                            />
-
-                                            {isList && (
-                                                <div className="flex justify-end mt-2">
-                                                    <button
-                                                        type="button"
-                                                        className="border px-2 py-1 text-sm"
-                                                        onClick={() => updateState(rf, (prev) => {
-                                                            const draft = prev.createDraft;
-                                                            if (!draft) return prev;
-                                                            const list = [...(prev.createItems || []), draft];
-                                                            return {
-                                                                ...prev,
-                                                                createItems: list,
-                                                                createDraft: undefined,
-                                                                adding: false
-                                                            };
-                                                        })}
-                                                    >Ajouter à la liste
-                                                    </button>
+                            {/* 2. Zone d'ajout: Tabs + contenus */}
+                            {st?.adding && (
+                                <>
+                                    {!forceMode && (
+                                        <Tabs variant={"secondary"} className={"bg-transparent w-fit mb-0"}
+                                              selectedTab={selectedTab}
+                                              setSelectedTab={setSelectedTab} scrollable>
+                                            <Tab type="button" label="Créer"/>
+                                            <Tab type="button" label="Associer"/>
+                                        </Tabs>
+                                    )}
+                                    <div
+                                        className={"content p-4  bg-surface-container-low"}>
+                                        {/* Barre Recherche / Ajout (mode association) */}
+                                        {((forceMode ? forceMode !== 'create' : st?.mode !== 'create')) && !(!!(!isList && currentSelection.length > 0)) && (
+                                            <div className="flex items-end gap-2">
+                                                <div className="flex-1">
+                                                    <label className="block text-xs text-gray-600">Recherche</label>
+                                                    <input
+                                                        className="border px-2 py-1 w-full"
+                                                        placeholder={`Rechercher ${rf.targetModel}...`}
+                                                        value={st?.search || ''}
+                                                        onChange={(e) => {
+                                                            const v = e.target.value;
+                                                            updateState(rf, (st) => ({...st, search: v}));
+                                                            reloadOptions(rf, v);
+                                                        }}
+                                                        onFocus={ensureOptions}
+                                                    />
                                                 </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                )}
-                            </>
-                        )}
+                                                <div className="min-w-[260px]">
+                                                    <label
+                                                        className="block text-xs text-gray-600">{isList ? 'Ajouter' : 'Choisir'}</label>
+                                                    <select
+                                                        className="border px-2 py-1 w-full"
+                                                        value={''}
+                                                        onChange={(e) => handleSelect(e.target.value)}
+                                                        onFocus={ensureOptions}
+                                                    >
+                                                        <option value="">— {isList ? 'Ajouter…' : 'Choisir…'} —</option>
+                                                        {(st?.options || []).map((o) => (
+                                                            <option key={o.id} value={o.id}>{o.label}</option>
+                                                        ))}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        )}
 
-                        {/* Info items à créer pour listes - remplacé par la liste détaillée ci-dessus */}
-                    </div>
-                )}
-            </div>
+                                        {/* 3. Zone de création - ne pas rendre le sous-formulaire tant que le mode n'est pas 'create' */}
+                                        {(forceMode ? forceMode === 'create' : st?.mode === 'create') && (
+
+                                            <div className="mt-2">
+                                                <DynamicForm
+                                                    model={rf.targetModel}
+                                                    hideSubmit
+                                                    mode={'create'}
+                                                    relationsDepth={depth === -1 ? -1 : Math.max(0, (depth ?? 1) - 1)}
+                                                    level={level + 1}
+                                                    value={isList ? (st?.createDraft || {}) : (st?.createValues || {})}
+                                                    onChange={(vals) => {
+                                                        if (isList) {
+                                                            updateState(rf, (prev) => ({
+                                                                ...prev,
+                                                                createDraft: vals
+                                                            }));
+                                                        } else {
+                                                            updateState(rf, (prev) => ({
+                                                                ...prev,
+                                                                mode: 'create',
+                                                                createValues: vals,
+                                                                selectedId: undefined
+                                                            }));
+                                                        }
+                                                    }}
+                                                />
+
+                                                {isList && (
+                                                    <div className="flex justify-end mt-2">
+                                                        <button
+                                                            type="button"
+                                                            className="border px-2 py-1 text-sm"
+                                                            onClick={() => {
+                                                                updateState(rf, (prev) => {
+                                                                    const draft = prev.createDraft;
+                                                                    if (!draft) return prev;
+                                                                    const list = [...(prev.createItems || []), draft];
+                                                                    return {
+                                                                        ...prev,
+                                                                        createItems: list,
+                                                                        createDraft: undefined,
+                                                                        adding: false
+                                                                    };
+                                                                })
+                                                            }}
+                                                        >Ajouter à la liste
+                                                        </button>
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                        )}
+                                    </div>
+
+
+                                </>
+                            )}
+
+                            {/* Info items à créer pour listes - remplacé par la liste détaillée ci-dessus */}
+                        </div>
+                    )}
+                </div>
+
+            </Card>
         </>
     );
 }
@@ -583,15 +480,22 @@ export default function DynamicForm({
     // Les valeurs initiales du formulaire seront directement dérivées de `defaultValues`.
 
     // Build fields & relation definitions from model metadata JSON (from store)
-    const {scalarFields, relations, defs} = useMemo(() => {
+    const {scalarFields, relations, defs, modelUI} = useMemo(() => {
         const defs = $models.models as Record<string, Record<string, any>> | null | undefined;
         if (!defs) return {
             scalarFields: [] as any[],
             relations: [] as any[],
-            defs: undefined as any
+            defs: undefined as any,
+            modelUI: undefined as any
         };
         const rec = (defs as any)[model] || {};
-        let list = Object.entries(rec).map(([name, meta]) => ({name, ...(meta as any)}));
+        // Extraire l'UI du modèle au niveau racine si présent
+        const modelUI = (rec as any)?.ui;
+
+        // Construire la liste des champs en ignorant la clé spéciale 'ui'
+        let list = Object.entries(rec)
+            .filter(([name]) => name !== 'ui')
+            .map(([name, meta]) => ({name, ...(meta as any)}));
         // occasional sorting / filtering logic (can be extended by mode: create/update)
         list = list.filter(f => !(f.ui?.hidden === true) && !(exclude?.includes(f.name)));
         // separate
@@ -638,14 +542,14 @@ export default function DynamicForm({
         scalars = scalars.filter(s => !fkNames.has(s.name));
         // Apply relationsDepth: 0 => hide relations, -1 => unlimited
         if ((relationsDepth ?? 0) === 0) {
-            return {scalarFields: scalars, relations: [] as any[], defs};
+            return {scalarFields: scalars, relations: [] as any[], defs, modelUI};
         }
 
         if (model == "Client") {
             console.log(model, {scalarFields: scalars, relations: relsAll, defs});
         }
 
-        return {scalarFields: scalars, relations: relsAll, defs};
+        return {scalarFields: scalars, relations: relsAll, defs, modelUI};
     }, [$models.models, exclude, model, mode, relationsDepth]);
 
 
@@ -930,113 +834,129 @@ export default function DynamicForm({
     };
 
 
+    // ------- Grouping and ordering of relations (memoized) -------
+    type R = any;
+    const relationGroups = useMemo(() => {
+        const groups: { key: string; items: R[] }[] = [];
+        const orderKeys: string[] = [];
+        const map: Record<string, R[]> = {};
+        for (const rf of relations) {
+            const key = rf?.ui?.mutexKey ? `mutex:${rf.ui.mutexKey}` : `single:${rf.name}`;
+            if (!map[key]) {
+                map[key] = [];
+                orderKeys.push(key);
+            }
+            map[key].push(rf);
+        }
+        for (const k of orderKeys) groups.push({key: k, items: map[k]});
+
+        // Sort items within each group by ui.order then label/name
+        const getOrder = (rf: any) => {
+            const base = (rf?.ui?.order ?? 9999);
+            const boost = rf?.name === 'client' ? -0.5 : 0;
+            return base + boost;
+        };
+        for (const g of groups) {
+            g.items.sort((a: any, b: any) => {
+                const oa = getOrder(a);
+                const ob = getOrder(b);
+                if (oa !== ob) return oa - ob;
+                return String(a?.ui?.label || a?.name).localeCompare(String(b?.ui?.label || b?.name));
+            });
+        }
+        return groups;
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [JSON.stringify(relations.map(r => ({n: r.name, k: r?.ui?.mutexKey, o: r?.ui?.order})))]);
+
+    // Helper to check if a relation has active state
+    const isStateActive = (rf: any, st?: RelationState) => {
+        if (!st) return false;
+        if (st.adding) return true;
+        if (rf.isList) {
+            if (st.selectedIds && st.selectedIds.length > 0) return true;
+            if (st.createItems && st.createItems.length > 0) return true;
+            if (st.mode === 'create' && st.createDraft && Object.keys(st.createDraft).length > 0) return true;
+            return false;
+        } else {
+            if (st.selectedId) return true;
+            if (st.mode === 'create' && st.createValues && Object.keys(st.createValues).length > 0) return true;
+            return false;
+        }
+    };
+
+    // Auto-activate first item in mutex groups when none is active
+    useEffect(() => {
+        for (const g of relationGroups) {
+            const isMutexGroup = g.key.startsWith('mutex:') && g.items.length > 1;
+            if (!isMutexGroup) continue;
+            const anyActive = g.items.some((rf: any) => isStateActive(rf, relationUIState[rf.name]));
+            if (anyActive) continue;
+            const first = g.items[0];
+            if (!first) continue;
+            updateRelationState(first, (prev) => ({
+                ...prev,
+                adding: true,
+                open: true,
+                mode: (first?.ui?.forceMode || (level === 1 ? 'create' : 'associate'))
+            }));
+            // only one activation per effect pass is sufficient
+            break;
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [JSON.stringify(relationGroups.map(g => g.items.map((it: any) => it.name))), relationUIState]);
+
     return (
-        <form ref={formRef} className={"max-w-screen-xl " + className} onSubmit={formik.handleSubmit}>
+        <form ref={formRef} className={"max-w-screen-xl space-y-4 " + className} onSubmit={formik.handleSubmit}>
             {/* Scalars */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {scalarFields.map((f: any) => (
-                    <div key={f.name} className={(f.type === 'Json' ? 'md:col-span-2' : '') + ''}>
+            {
+                !!scalarFields.length && <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {scalarFields.map((f: any) => (
+                        <div key={f.name} className={(f.type === 'Json' ? 'md:col-span-2' : '') + ''}>
+                            {renderField(f)}
+                        </div>
+                    ))}
+                </div>
+            }
 
-                        {renderField(f)}
-
-                    </div>
-                ))}
-            </div>
 
             {/* Relations */}
-            {(relationsDepth !== 0 && (relations.length > 0)) && (() => {
-                // Grouper visuellement les relations qui partagent un mutexKey
-                type R = any;
-                const groups: { key: string; items: R[] }[] = [];
-                const order: string[] = [];
-                const map: Record<string, R[]> = {};
-                for (const rf of relations) {
-                    const key = rf?.ui?.mutexKey ? `mutex:${rf.ui.mutexKey}` : `single:${rf.name}`;
-                    if (!map[key]) {
-                        map[key] = [];
-                        order.push(key);
-                    }
-                    map[key].push(rf);
-                }
-                for (const k of order) groups.push({key: k, items: map[k]});
+            {(relationsDepth !== 0 && (relations.length > 0)) && (
+                <>
+                    {relationGroups.map(group => {
+                        const isMutexGroup = group.key.startsWith('mutex:') && group.items.length > 1;
+                        if (isMutexGroup) {
+                            const mutexKey = group.key.substring('mutex:'.length);
+                            const groupInfo = (modelUI as any)?.mutexGroups?.[mutexKey];
+                            console.log('mutex group', mutexKey, groupInfo, modelUI);
 
-                // Appliquer l'ordre d'affichage via ui.order (client prioritaire par défaut)
-                const getOrder = (rf: any) => {
-                    const base = (rf?.ui?.order ?? 9999);
-                    // Boost pour 'client' afin de le placer en tête si aucun ordre explicite
-                    const boost = rf?.name === 'client' ? -0.5 : 0;
-                    return base + boost;
-                };
-                for (const g of groups) {
-                    g.items.sort((a: any, b: any) => {
-                        const oa = getOrder(a);
-                        const ob = getOrder(b);
-                        if (oa !== ob) return oa - ob;
-                        return String(a?.ui?.label || a?.name).localeCompare(String(b?.ui?.label || b?.name));
-                    });
-                }
-
-                // Auto‑activation par défaut pour les groupes mutex: choisir le premier (client en priorité)
-                // uniquement si aucun élément du groupe n'est actif
-                const isStateActive = (rf: any, st?: RelationState) => {
-                    if (!st) return false;
-                    if (st.adding) return true;
-                    if (rf.isList) {
-                        if (st.selectedIds && st.selectedIds.length > 0) return true;
-                        if (st.createItems && st.createItems.length > 0) return true;
-                        if (st.mode === 'create' && st.createDraft && Object.keys(st.createDraft).length > 0) return true;
-                        return false;
-                    } else {
-                        if (st.selectedId) return true;
-                        if (st.mode === 'create' && st.createValues && Object.keys(st.createValues).length > 0) return true;
-                        return false;
-                    }
-                };
-
-                // Utiliser un effet pour éviter de setState pendant le rendu
-                useEffect(() => {
-                    for (const g of groups) {
-                        const isMutexGroup = g.key.startsWith('mutex:') && g.items.length > 1;
-                        if (!isMutexGroup) continue;
-                        const anyActive = g.items.some((rf: any) => isStateActive(rf, relationUIState[rf.name]));
-                        if (anyActive) continue;
-                        // aucune relation active -> activer la première du groupe (déjà triée)
-                        const first = g.items[0];
-                        if (!first) continue;
-                        // Ne pas réactiver si l'utilisateur a explicitement fermé un ajout récemment
-                        // On se contente de définir adding=true pour offrir un choix par défaut
-                        updateRelationState(first, (prev) => ({
-                            ...prev,
-                            adding: true,
-                            open: true,
-                            mode: (first?.ui?.forceMode || (level === 1 ? 'create' : 'associate'))
-                        }));
-                        // Important: on active une seule fois par rendu pour ce groupe
-                        break;
-                    }
-                    // eslint-disable-next-line react-hooks/exhaustive-deps
-                }, [JSON.stringify(groups.map(g => g.items.map((it: any) => it.name))), relationUIState]);
-
-                return (
-                    <div className="mt-6 space-y-6">
-                        {groups.map(group => {
-                            const isMutexGroup = group.key.startsWith('mutex:') && group.items.length > 1;
-                            if (isMutexGroup) {
-                                // Row of toggleable buttons, then render the active relation's fields just below
-                                const active = group.items.find((rf: any) => relationUIState[rf.name]?.adding);
-                                return (
-                                    <div key={group.key} className="flex flex-col gap-3">
+                            const active = group.items.find((rf: any) => relationUIState[rf.name]?.adding);
+                            return (
+                                <div key={group.key} className="flex flex-col gap-3">
+                                    <div className="space-y-4 mt-8 mb-4">
+                                        <Divider/>
+                                        {groupInfo && (
+                                            <div className="flex flex-col">
+                                                {groupInfo.label && (
+                                                    <div className="text-title-medium">{groupInfo.label}</div>
+                                                )}
+                                                {groupInfo.description && (
+                                                    <div
+                                                        className="text-sm text-on-surface-variant">{groupInfo.description}</div>
+                                                )}
+                                            </div>
+                                        )}
                                         <div className="flex flex-wrap gap-3 items-center">
                                             {group.items.map((rf: any) => {
                                                 const st = relationUIState[rf.name];
                                                 const activated = !!st?.adding;
-                                                const label = rf.ui?.label || rf.documentation || rf.name;
+                                                const btnLabel = (groupInfo?.items && groupInfo.items[rf.name]?.label)
+                                                    || rf.ui?.label || rf.documentation || rf.name;
                                                 return (
                                                     <Button
                                                         key={rf.name}
                                                         type="button"
                                                         variant="tonal"
-                                                        label={label}
+                                                        label={btnLabel}
                                                         activated={activated}
                                                         onToggle={(newState: boolean) => {
                                                             if (newState) {
@@ -1057,38 +977,39 @@ export default function DynamicForm({
                                                 );
                                             })}
                                         </div>
-                                        {active && (
-                                            <div className="pl-0">
-                                                <RelationField
-                                                    rf={active}
-                                                    st={relationUIState[active.name]}
-                                                    updateState={updateRelationState}
-                                                    reloadOptions={reloadRelationOptions}
-                                                    depth={relationsDepth}
-                                                    level={level}
-                                                    compact
-                                                />
-                                            </div>
-                                        )}
                                     </div>
-                                );
-                            }
-                            // Default rendering for single relations or groups of size 1
-                            return group.items.map((rf: any) => (
-                                <RelationField
-                                    key={rf.name}
-                                    rf={rf}
-                                    st={relationUIState[rf.name]}
-                                    updateState={updateRelationState}
-                                    reloadOptions={reloadRelationOptions}
-                                    depth={relationsDepth}
-                                    level={level}
-                                />
-                            ));
-                        })}
-                    </div>
-                );
-            })()}
+
+                                    {active && (
+                                        <div className="pl-0">
+                                            <RelationField
+                                                rf={active}
+                                                st={relationUIState[active.name]}
+                                                updateState={updateRelationState}
+                                                reloadOptions={reloadRelationOptions}
+                                                depth={relationsDepth}
+                                                level={level}
+                                                compact
+                                            />
+                                        </div>
+                                    )}
+                                </div>
+                            );
+                        }
+                        // Default rendering for single relations or groups of size 1
+                        return group.items.map((rf: any) => (
+                            <RelationField
+                                key={rf.name}
+                                rf={rf}
+                                st={relationUIState[rf.name]}
+                                updateState={updateRelationState}
+                                reloadOptions={reloadRelationOptions}
+                                depth={relationsDepth}
+                                level={level}
+                            />
+                        ));
+                    })}
+                </>
+            )}
 
             {!hideSubmit && (
                 <div className="flex items-center justify-end gap-2 mt-3">

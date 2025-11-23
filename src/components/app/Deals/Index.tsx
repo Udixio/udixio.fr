@@ -148,7 +148,7 @@ export default function DealsIndex() {
                         <DynamicForm
                             model="Deal"
                             exclude={["id", "createdAt", "updatedAt"]}
-                            submitLabel={'Créer'}
+                            onCancel={() => setShowCreate(false)}
                             onSubmit={async (vals) => {
                                 setCreateError(undefined);
                                 try {
@@ -167,11 +167,6 @@ export default function DealsIndex() {
                         {createError && (
                             <div className="text-sm text-red-600">Erreur: {createError}</div>
                         )}
-                        <div className="flex items-center justify-end gap-2">
-                            <button type="button" className="border px-3 py-1"
-                                    onClick={() => setShowCreate(false)}>Annuler
-                            </button>
-                        </div>
                     </div>
                 </Card>
             )}
