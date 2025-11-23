@@ -198,6 +198,8 @@ export default function customIntegration(): AstroIntegration {
 
                     // Merge with existing JSON if present: replace models/fields to match current schema
                     // while preserving any custom props (like `ui`) from the previous file.
+                    // Also keep any custom fields that existed previously but are not part of the Prisma runtime
+                    // for the same model. Drop data for models that no longer exist in the runtime (model removed).
                     let merged: Record<string, Record<string, any>> = {};
                     const CORE_KEYS = new Set([
                         'isList', 'isRequired', 'isUnique', 'isId', 'isReadOnly', 'hasDefaultValue',
@@ -235,7 +237,17 @@ export default function customIntegration(): AstroIntegration {
                                     nextFields[fieldName] = combined;
                                 }
                             }
-                            merged[modelName] = nextFields;
+                            // Re-add any custom fields that existed previously but are not present in the new schema
+                            // These are considered custom additions at the JSON level and should be preserved.
+                            for (const [oldFieldName, oldMeta] of Object.entries(oldFields)) {
+                                if ((newFields as any)[oldFieldName] === undefined) {
+                                    // Keep as-is (including its own ui or any extra keys)
+                                    nextFields[oldFieldName] = oldMeta;
+                                }
+                            }
+                            // Preserve model-level UI block if it existed previously (and model still exists)
+                            const prevModelUI = (previous as any)[modelName]?.ui;
+                            merged[modelName] = prevModelUI ? {...nextFields, ui: prevModelUI} : nextFields;
                         }
                     } catch {
                         // No previous file: use freshly formatted structure
