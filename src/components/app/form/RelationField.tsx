@@ -7,125 +7,75 @@ import {faXmark} from "@fortawesome/pro-regular-svg-icons";
 import {faPencil, faTrash} from "@fortawesome/pro-light-svg-icons";
 import DynamicForm, {type RelationState} from "@components/app/form/DynamicForm.tsx";
 
-// --- Sous-composants privés (non exportés) pour alléger le JSX principal ---
-type RelationSelectedListProps = {
-    isList: boolean;
-    ids: string[];
-    selectedLabels: Record<string, string>;
-    selectedItems: Record<string, any>;
+// --- Sous-composant privé unifié pour l'affichage des éléments (sélectionnés ou brouillons) ---
+type RelationItemsListProps = {
+    items: Array<{ id?: string; data: any }>;
     previewKeys: string[];
-    onEdit: () => void;
-    onRemove: (id: string) => void;
+    variant: 'rows' | 'tags';
+    // Callbacks optionnelles
+    onEdit?: (index: number, item: { id?: string; data: any }) => void;
+    onRemove?: (index: number, item: { id?: string; data: any }) => void;
+    // Labels fallback (utilisé pour tags lorsqu'aucune previewKey n'est définie)
+    labelsMap?: Record<string, string>;
 };
 
-function RelationSelectedList({
-                                  isList,
-                                  ids,
-                                  selectedLabels,
-                                  selectedItems,
-                                  previewKeys,
-                                  onEdit,
-                                  onRemove,
-                              }: RelationSelectedListProps) {
-    if (isList) {
+function RelationItemsList({items, previewKeys, variant, onEdit, onRemove, labelsMap}: RelationItemsListProps) {
+    if (variant === 'tags') {
         return (
-            <div className="flex flex-col gap-1">
-                {ids.map((id) => {
-                    const data = selectedItems?.[id];
-                    return (
-                        <div key={id}
-                             className="flex items-center justify-between gap-2 px-2 py-1 border rounded text-xs">
-                            <div className="flex-1">
-                                {Array.isArray(previewKeys) && previewKeys.length > 0 ? (
-                                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                                        {previewKeys.map((k) => (
-                                            <div key={k} className="truncate">
-                                                {data && data[k] !== undefined && data[k] !== null && data[k] !== ''
-                                                    ? String(data[k])
-                                                    : <span className="opacity-50">—</span>}
-                                            </div>
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <div className="opacity-80">{selectedLabels?.[id] || id}</div>
-                                )}
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <IconButton
-                                    onClick={onEdit}
-                                    label="Éditer"
-                                    variant="standard"
-                                />
-                                <IconButton
-                                    onClick={() => onRemove(id)}
-                                    label="Supprimer"
-                                    variant="standard"
-                                />
-                            </div>
-                        </div>
-                    );
-                })}
+            <div className="flex flex-wrap gap-2">
+                {items.map((it, idx) => (
+                    <span key={it.id || idx}
+                          className="inline-flex items-center gap-2 px-2 py-0.5 border rounded-full text-xs">
+                        <span className="opacity-70">{(it.id && labelsMap?.[it.id]) || it.id || '—'}</span>
+                        {onRemove && (
+                            <button type="button" className="text-red-600" onClick={() => onRemove(idx, it)}>×</button>
+                        )}
+                    </span>
+                ))}
             </div>
         );
     }
 
-    // Singulier: rendu des tags simples avec bouton retirer
+    // rows
     return (
-        <div className="flex flex-wrap gap-2">
-            {ids.map((id) => (
-                <span key={id}
-                      className="inline-flex items-center gap-2 px-2 py-0.5 border rounded-full text-xs">
-                    <span className="opacity-70">{selectedLabels?.[id] || id}</span>
-                    <button type="button" className="text-red-600" onClick={() => onRemove(id)}>×</button>
-                </span>
-            ))}
-        </div>
-    );
-}
-
-type RelationDraftsListProps = {
-    items: any[];
-    previewKeys: string[];
-    onEdit: (index: number) => void;
-    onRemove: (index: number) => void;
-};
-
-function RelationDraftsList({items, previewKeys, onEdit, onRemove}: RelationDraftsListProps) {
-    return (
-        <div className="flex flex-col gap-1 px-2">
+        <div className="flex flex-col gap-1">
             {items.map((it, idx) => (
-                <div key={idx}
-                     className="flex items-center justify-between gap-2 px-2 py-1 border border-outline rounded">
-                    <div className="flex-1 text-xs">
+                <div key={it.id || idx}
+                     className="flex items-center justify-between gap-2 px-2 py-1 border rounded text-xs">
+                    <div className="flex-1">
                         {Array.isArray(previewKeys) && previewKeys.length > 0 ? (
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                                 {previewKeys.map((k) => (
                                     <div key={k} className="truncate">
-                                        {it && it[k] !== undefined && it[k] !== null && it[k] !== ''
-                                            ? String(it[k])
+                                        {it.data && it.data[k] !== undefined && it.data[k] !== null && it.data[k] !== ''
+                                            ? String(it.data[k])
                                             : <span className="opacity-50">—</span>}
                                     </div>
                                 ))}
                             </div>
                         ) : (
-                            <span className="opacity-80">Brouillon</span>
+                            <div className="opacity-80">{(it.id && labelsMap?.[it.id]) || it.id || '—'}</div>
                         )}
                     </div>
                     <div className="flex items-center gap-2">
-                        <IconButton
-                            onClick={() => onEdit(idx)}
-                            icon={faPencil}
-                            size={"xSmall"}
-                            label="Éditer"
-                            variant="standard"
-                        />
-                        <IconButton
-                            onClick={() => onRemove(idx)}
-                            size={"xSmall"}
-                            icon={faTrash}
-                            label="Supprimer"
-                            variant="standard"
-                        />
+                        {onEdit && (
+                            <IconButton
+                                onClick={() => onEdit(idx, it)}
+                                icon={faPencil}
+                                size={"xSmall"}
+                                label="Éditer"
+                                variant="standard"
+                            />
+                        )}
+                        {onRemove && (
+                            <IconButton
+                                onClick={() => onRemove(idx, it)}
+                                size={"xSmall"}
+                                icon={faTrash}
+                                label="Supprimer"
+                                variant="standard"
+                            />
+                        )}
                     </div>
                 </div>
             ))}
@@ -431,25 +381,37 @@ export function RelationField({
                             {/* 1. Liste visible des associations et créations en cours */}
                             {hasAnyContent && (
                                 <div className="flex flex-col gap-2 my-2">
-                                    <RelationSelectedList
-                                        isList={isList}
-                                        ids={currentSelection}
-                                        selectedLabels={st?.selectedLabels || {}}
-                                        selectedItems={st?.selectedItems || {}}
-                                        previewKeys={previewKeys(rf.targetModel)}
-                                        onEdit={() => updateState(rf, (prev) => ({
-                                            ...prev,
-                                            adding: true,
-                                            mode: 'associate',
-                                            open: true,
-                                        }))}
-                                        onRemove={handleRemove}
-                                    />
+                                    {(() => {
+                                        // Normaliser les éléments sélectionnés en items {id, data}
+                                        const selectionItems = currentSelection.map((id) => ({
+                                            id,
+                                            data: (st?.selectedItems || {})[id]
+                                        }));
+                                        const variant = isList ? 'rows' as const : 'tags' as const;
+                                        return (
+                                            <RelationItemsList
+                                                items={selectionItems}
+                                                variant={variant}
+                                                previewKeys={previewKeys(rf.targetModel)}
+                                                labelsMap={st?.selectedLabels || {}}
+                                                onEdit={isList ? () => updateState(rf, (prev) => ({
+                                                    ...prev,
+                                                    adding: true,
+                                                    mode: 'associate',
+                                                    open: true,
+                                                })) : undefined}
+                                                onRemove={(idx, item) => {
+                                                    if (item?.id) handleRemove(item.id);
+                                                }}
+                                            />
+                                        );
+                                    })()}
 
                                     {/* Pour les listes: rendre visibles les brouillons à créer */}
                                     {isList && (st?.createItems && st.createItems.length > 0) && (
-                                        <RelationDraftsList
-                                            items={st.createItems}
+                                        <RelationItemsList
+                                            items={(st.createItems || []).map((it: any) => ({data: it}))}
+                                            variant={'rows'}
                                             previewKeys={previewKeys(rf.targetModel)}
                                             onEdit={(idx) => updateState(rf, (prev) => ({
                                                 ...prev,
