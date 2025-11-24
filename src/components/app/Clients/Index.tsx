@@ -1,6 +1,6 @@
 import React, {useActionState, useEffect, useRef, useState, useTransition} from "react";
 import {appService} from "@/stores/appStore";
-import DynamicForm from "@components/app/DynamicForm.tsx";
+import DynamicForm from "@components/app/form/DynamicForm.tsx";
 import {actions} from 'astro:actions';
 
 type Client = {

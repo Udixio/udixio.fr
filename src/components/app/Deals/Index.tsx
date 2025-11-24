@@ -2,7 +2,7 @@ import React, {useActionState, useEffect, useRef, useState} from "react";
 import {withState} from '@astrojs/react/actions';
 import {actions} from 'astro:actions';
 import {appService} from "@/stores/appStore";
-import DynamicForm from "@components/app/DynamicForm.tsx";
+import DynamicForm from "@components/app/form/DynamicForm.tsx";
 import {Card} from "@udixio/ui-react";
 
 type Deal = {
