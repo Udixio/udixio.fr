@@ -43,7 +43,8 @@
         "label": null,
         "placeholder": null,
         "default": null,
-        "order": 1
+        "order": 1,
+        "preview": true
       }
     },
     "value": {
@@ -63,7 +64,8 @@
         "label": null,
         "placeholder": null,
         "default": null,
-        "order": 2
+        "order": 2,
+        "preview": true
       }
     },
     "label": {
@@ -83,7 +85,8 @@
         "label": null,
         "placeholder": null,
         "default": null,
-        "order": 3
+        "order": 3,
+        "preview": true
       }
     },
     "isPrimary": {
@@ -1500,7 +1503,8 @@
         "hidden": false,
         "label": null,
         "placeholder": null,
-        "default": true
+        "default": true,
+        "description": "Si l’utilisateur a vérifié son adresse e-mail"
       }
     },
     "image": {

@@ -8,6 +8,7 @@ import {modelsService, modelsStore} from "@/stores/modelsStore";
 // @ts-ignore
 import {Button, Card, classnames, Divider, IconButton, Tab, Tabs, TextField} from "@udixio/ui-react";
 import {faXmark} from "@fortawesome/pro-regular-svg-icons";
+import {faPencil, faTrash} from "@fortawesome/pro-light-svg-icons";
 
 // ---------- Relations state (extrait au niveau module pour éviter recréations) ----------
 export type RelationState = {
@@ -16,9 +17,10 @@ export type RelationState = {
     open?: boolean; // section ouverte/collapsée (pour limiter l'affichage)
     adding?: boolean; // UI d'ajout en cours (affiche Tabs + contenu)
     search: string;
-    options: { id: string; label: string }[];
+    options: { id: string; label: string; data?: any }[];
     loading: boolean;
     selectedLabels?: Record<string, string>; // id -> label pour affichage (ui.displayFields)
+    selectedItems?: Record<string, any>; // id -> full item (for preview rows)
     // Singular
     selectedId?: string;
     createValues?: Record<string, any>;
@@ -43,11 +45,24 @@ type RelationFieldProps = {
     ancestors: string[];
     // Current parent model name
     parentModel: string;
+    // Get preview keys (fields) for a given target model
+    previewKeys: (targetModel: string) => string[];
 };
 
-function RelationField({rf, st, updateState, reloadOptions, depth, level, compact = false, ancestors, parentModel}: RelationFieldProps) {
+function RelationField({
+                           rf,
+                           st,
+                           updateState,
+                           reloadOptions,
+                           depth,
+                           level,
+                           compact = false,
+                           ancestors,
+                           parentModel,
+                           previewKeys
+                       }: RelationFieldProps) {
     const isList = !!rf.isList;
-    const isRequired = !!rf.isRequired;
+    const isRequired = (!!rf.isRequired && !isList) || (rf.ui.required);
     const forceMode: 'associate' | 'create' | undefined = rf?.ui?.forceMode;
     const inlineFields: boolean = !!rf?.ui?.inlineFields;
 
@@ -68,6 +83,7 @@ function RelationField({rf, st, updateState, reloadOptions, depth, level, compac
                 ...prev,
                 selectedIds: Array.from(new Set([...(prev.selectedIds || []), id])),
                 selectedLabels: {...(prev.selectedLabels || {}), [id]: label},
+                selectedItems: {...(prev.selectedItems || {}), [id]: (opt as any)?.data},
                 adding: false
             }));
         } else {
@@ -86,7 +102,17 @@ function RelationField({rf, st, updateState, reloadOptions, depth, level, compac
         if (isList) {
             updateState(rf, (prev) => ({
                 ...prev,
-                selectedIds: (prev.selectedIds || []).filter((x) => x !== id)
+                selectedIds: (prev.selectedIds || []).filter((x) => x !== id),
+                selectedItems: (() => {
+                    const obj = {...(prev.selectedItems || {})};
+                    delete obj[id];
+                    return obj;
+                })(),
+                selectedLabels: (() => {
+                    const obj = {...(prev.selectedLabels || {})};
+                    delete obj[id];
+                    return obj;
+                })(),
             }));
         } else {
             updateState(rf, (prev) => ({
@@ -187,101 +213,24 @@ function RelationField({rf, st, updateState, reloadOptions, depth, level, compac
     const hasAnyContent = useMemo(() => {
         if (!st) return false;
         if (isList) {
+
             const hasSel = (st.selectedIds && st.selectedIds.length > 0);
             const hasCreates = (st.createItems && st.createItems.length > 0);
+            console.log('hasAnyContent', rf.ui?.label ?? rf.name ?? 'unknow', hasSel, hasCreates);
+
             return !!(hasSel || hasCreates);
         }
         return !!st.selectedId;
     }, [st?.selectedId, st?.selectedIds, st?.createItems, isList]);
 
     if (!st?.adding) {
-        if (compact) {
-            // En mode compact (groupes mutex), si du contenu existe déjà, on affiche la liste
-            // directement sous la ligne de boutons. Sinon, rien (le bouton d'ajout est géré au niveau groupe).
-            if (hasAnyContent) {
-                return (
-                    <div className={classnames('')}>
-                        <div className="flex flex-col gap-2 my-2">
-                            {/* Sélections associées */}
-                            <div className="flex flex-wrap gap-2">
-                                {currentSelection.map((id) => (
-                                    <span key={id}
-                                          className="inline-flex items-center gap-2 px-2 py-0.5 border rounded-full text-xs">
-                                        <span className="opacity-70">{st?.selectedLabels?.[id] || id}</span>
-                                        <button type="button" className="text-red-600"
-                                                onClick={() => handleRemove(id)}>×</button>
-                                    </span>
-                                ))}
-                            </div>
-                            {/* Brouillons à créer (listes) */}
-                            {isList && (st?.createItems && st.createItems.length > 0) && (
-                                <div className="flex flex-col gap-1">
-                                    {st.createItems.map((it, idx) => {
-                                        const listDisplay = Array.isArray(rf?.ui?.listDisplayFields) ? rf.ui.listDisplayFields : undefined;
-                                        const display = listDisplay && listDisplay.length > 0
-                                            ? listDisplay
-                                            : (Array.isArray(rf?.ui?.displayFields) ? rf.ui.displayFields : undefined);
-                                        const label = display && display.length > 0
-                                            ? display.map((k: string) => it?.[k]).filter(Boolean).join(' · ')
-                                            : (it?.name || it?.title || it?.email || it?.slug || `Nouveau ${rf.targetModel}`);
-                                        return (
-                                            <div key={idx}
-                                                 className="flex items-center justify-between gap-2 px-2 py-1 border rounded">
-                                                <div className="text-xs">
-                                                    <span className="font-medium">{label}</span>
-                                                    <span className="opacity-60"> — brouillon à créer</span>
-                                                </div>
-                                                <div className="flex items-center gap-2">
-                                                    {IconButton ? (
-                                                        <IconButton
-                                                            onClick={() => updateState(rf, (prev) => ({
-                                                                ...prev,
-                                                                adding: true, mode: 'create',
-                                                                createDraft: prev.createItems?.[idx],
-                                                                createItems: (prev.createItems || []).filter((_, i) => i !== idx)
-                                                            }))}
-                                                            label="Éditer"
-                                                            variant="standard"
-                                                        />
-                                                    ) : (
-                                                        <button
-                                                            type="button"
-                                                            className="text-xs underline"
-                                                            onClick={() => updateState(rf, (prev) => ({
-                                                                ...prev,
-                                                                adding: true, mode: 'create',
-                                                                createDraft: prev.createItems?.[idx],
-                                                                createItems: (prev.createItems || []).filter((_, i) => i !== idx)
-                                                            }))}
-                                                        >Éditer</button>
-                                                    )}
-                                                    <button
-                                                        type="button"
-                                                        className="text-xs text-red-600"
-                                                        onClick={() => updateState(rf, (prev) => ({
-                                                            ...prev,
-                                                            createItems: (prev.createItems || []).filter((_, i) => i !== idx)
-                                                        }))}
-                                                    >Retirer
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                );
-            }
-            return null;
-        }
         // Si aucun contenu pour une relation optionnelle → afficher seulement le bouton "Ajouter".
         // Sinon, rendre la carte avec la liste (sans zone d'ajout) afin de ne pas cacher l'existant.
         if (!isRequired && !hasAnyContent) {
             return <Button type="button" variant="tonal" onClick={() => updateState(rf, (prev) => ({
                 ...prev,
                 adding: true,
+                open: true,
                 mode: (forceMode || (level === 1 ? 'create' : 'associate'))
             }))}>Ajouter un {rf.ui?.label ?? rf.name ?? 'unknow'}</Button>
         }
@@ -295,19 +244,6 @@ function RelationField({rf, st, updateState, reloadOptions, depth, level, compac
                 " border-0  border-l-2 border-secondary ": !compact
             })}>
                 <div className="border border-outline rounded-xl overflow-hidden">
-                    {/* Bouton d'activation pour relations optionnelles et profondes */}
-                    {(!isRequired && level > 1 && !st?.open) && (
-                        <div className="my-2">
-                            <Button type="button" variant="tonal"
-                                    onClick={() => updateState(rf, (prev) => ({...prev, open: true}))}>
-                                {(rf.ui?.label || rf.documentation || rf.name)}
-                            </Button>
-                            {rf.ui?.description && (
-                                <div className="text-xs text-on-surface-variant mt-1">{rf.ui.description}</div>
-                            )}
-                        </div>
-                    )}
-
                     {/* Afficher l'en-tête si la section est ouverte OU si du contenu existe (même si normalement repliée) */}
                     {(!(!isRequired && level > 1 && !st?.open) || hasAnyContent) && !compact && (
                         <div className=" rounded-xl">
@@ -342,78 +278,145 @@ function RelationField({rf, st, updateState, reloadOptions, depth, level, compac
                         <div
                             className={classnames('')}>
                             {/* 1. Liste visible des associations et créations en cours */}
-                            <div className="flex flex-col gap-2 my-2">
-                                <div className="flex flex-wrap gap-2">
-                                    {currentSelection.map((id) => (
-                                        <span key={id}
-                                              className="inline-flex items-center gap-2 px-2 py-0.5 border rounded-full text-xs">
-                                <span className="opacity-70">{st?.selectedLabels?.[id] || id}</span>
-                                <button type="button" className="text-red-600"
-                                        onClick={() => handleRemove(id)}>×</button>
-                            </span>
-                                    ))}
-                                </div>
-
-                                {/* Pour les listes: rendre visibles les brouillons à créer */}
-                                {isList && (st?.createItems && st.createItems.length > 0) && (
+                            {hasAnyContent &&
+                                <div className="flex flex-col gap-2 my-2">
                                     <div className="flex flex-col gap-1">
-                                        {st.createItems.map((it, idx) => {
-                                            const listDisplay = Array.isArray(rf?.ui?.listDisplayFields) ? rf.ui.listDisplayFields : undefined;
-                                            const display = listDisplay && listDisplay.length > 0
-                                                ? listDisplay
-                                                : (Array.isArray(rf?.ui?.displayFields) ? rf.ui.displayFields : undefined);
-                                            const label = display && display.length > 0
-                                                ? display.map((k: string) => it?.[k]).filter(Boolean).join(' · ')
-                                                : (it?.name || it?.title || it?.email || it?.slug || `Nouveau ${rf.targetModel}`);
-                                            return (
-                                                <div key={idx}
-                                                     className="flex items-center justify-between gap-2 px-2 py-1 border rounded">
-                                                    <div className="text-xs">
-                                                        <span className="font-medium">{label}</span>
-                                                        <span className="opacity-60"> — brouillon à créer</span>
-                                                    </div>
-                                                    <div className="flex items-center gap-2">
-                                                        {/* Éditer l'élément: le replacer comme ébauche et passer en mode création */}
-                                                        {IconButton ? (
+                                        {isList ? (
+                                            currentSelection.map((id) => {
+                                                const keys = previewKeys(rf.targetModel);
+                                                const data = st?.selectedItems?.[id];
+                                                return (
+                                                    <div key={id}
+                                                         className="flex items-center justify-between gap-2 px-2 py-1 border rounded text-xs">
+                                                        <div className="flex-1">
+                                                            {keys && keys.length > 0 ? (
+                                                                <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                                                                    {keys.map((k) => (
+                                                                        <div key={k} className="truncate">
+                                                                            {data && data[k] !== undefined && data[k] !== null && data[k] !== ''
+                                                                                ? String(data[k])
+                                                                                : <span className="opacity-50">—</span>}
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                            ) : (
+                                                                <div
+                                                                    className="opacity-80">{st?.selectedLabels?.[id] || id}</div>
+                                                            )}
+                                                        </div>
+                                                        <div className="flex items-center gap-2">
+
                                                             <IconButton
                                                                 onClick={() => updateState(rf, (prev) => ({
                                                                     ...prev,
-                                                                    adding: true, mode: 'create',
-                                                                    createDraft: prev.createItems?.[idx],
-                                                                    createItems: (prev.createItems || []).filter((_, i) => i !== idx)
+                                                                    adding: true,
+                                                                    mode: 'associate',
+                                                                    open: true,
                                                                 }))}
                                                                 label="Éditer"
                                                                 variant="standard"
                                                             />
-                                                        ) : (
-                                                            <button
-                                                                type="button"
-                                                                className="text-xs underline"
-                                                                onClick={() => updateState(rf, (prev) => ({
-                                                                    ...prev,
-                                                                    adding: true, mode: 'create',
-                                                                    createDraft: prev.createItems?.[idx],
-                                                                    createItems: (prev.createItems || []).filter((_, i) => i !== idx)
-                                                                }))}
-                                                            >Éditer</button>
-                                                        )}
-                                                        <button
-                                                            type="button"
-                                                            className="text-xs text-red-600"
-                                                            onClick={() => updateState(rf, (prev) => ({
-                                                                ...prev,
-                                                                createItems: (prev.createItems || []).filter((_, i) => i !== idx)
-                                                            }))}
-                                                        >Retirer
-                                                        </button>
+                                                            <IconButton
+                                                                onClick={() => handleRemove(id)}
+                                                                label="Supprimer"
+                                                                variant="standard"
+                                                            />
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            );
-                                        })}
+                                                );
+                                            })
+                                        ) : (
+                                            <div className="flex flex-wrap gap-2">
+                                                {currentSelection.map((id) => (
+                                                    <span key={id}
+                                                          className="inline-flex items-center gap-2 px-2 py-0.5 border rounded-full text-xs">
+                                                    <span className="opacity-70">{st?.selectedLabels?.[id] || id}</span>
+                                                    <button type="button" className="text-red-600"
+                                                            onClick={() => handleRemove(id)}>×</button>
+                                                </span>
+                                                ))}
+                                            </div>
+                                        )}
                                     </div>
-                                )}
-                            </div>
 
+                                    {/* Pour les listes: rendre visibles les brouillons à créer */}
+                                    {isList && (st?.createItems && st.createItems.length > 0) && (
+                                        <>
+                                            <div className="flex flex-col gap-1 px-2">
+                                                {st.createItems.map((it, idx) => {
+                                                    const keys = previewKeys(rf.targetModel);
+                                                    return (
+                                                        <div key={idx}
+                                                             className="flex items-center justify-between gap-2 px-2 py-1 border border-outline rounded">
+                                                            <div className="flex-1 text-xs">
+                                                                {keys && keys.length > 0 ? (
+                                                                    <div
+                                                                        className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                                                                        {keys.map((k) => {
+                                                                            console.log(k, st.createItems);
+                                                                            return (
+                                                                                <div key={k} className="truncate">
+                                                                                    {it && it[k] !== undefined && it[k] !== null && it[k] !== ''
+                                                                                        ? String(it[k])
+                                                                                        : <span
+                                                                                            className="opacity-50">—</span>}
+                                                                                </div>
+                                                                            )
+                                                                        })}
+                                                                    </div>
+                                                                ) : (
+                                                                    <span
+                                                                        className="opacity-80">Brouillon {rf.targetModel}</span>
+                                                                )}
+                                                            </div>
+                                                            <div className="flex items-center gap-2">
+                                                                {/* Éditer l'élément: le replacer comme ébauche et passer en mode création */}
+                                                                <IconButton
+                                                                    onClick={() => updateState(rf, (prev) => ({
+                                                                        ...prev,
+                                                                        adding: true, mode: 'create',
+                                                                        createDraft: prev.createItems?.[idx],
+                                                                        createItems: (prev.createItems || []).filter((_, i) => i !== idx)
+                                                                    }))}
+                                                                    icon={faPencil}
+                                                                    size={"xSmall"}
+                                                                    label="Éditer"
+                                                                    variant="standard"
+                                                                />
+                                                                <IconButton
+                                                                    onClick={() => updateState(rf, (prev) => ({
+                                                                        ...prev,
+                                                                        createItems: (prev.createItems || []).filter((_, i) => i !== idx)
+                                                                    }))}
+                                                                    size={"xSmall"}
+                                                                    icon={faTrash}
+                                                                    label="Supprimer"
+                                                                    variant="standard"
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                            {
+                                                !st.adding &&
+                                                <Button size={"small"} className={"w-fit ml-auto mr-2 mt-4 mb-4"}
+                                                        type="button"
+                                                        variant="tonal"
+                                                        onClick={() => updateState(rf, (prev) => ({
+                                                            ...prev,
+                                                            adding: true,
+                                                            open: true,
+                                                            mode: (forceMode || (level === 1 ? 'create' : 'associate'))
+                                                        }))}>Ajouter
+                                                    un {rf.ui?.label ?? rf.name ?? 'unknow'}</Button>
+                                            }
+
+                                        </>
+                                    )}
+                                </div>
+
+                            }
 
                             {/* 2. Zone d'ajout: Tabs + contenus */}
                             {st?.adding && (
@@ -493,10 +496,26 @@ function RelationField({rf, st, updateState, reloadOptions, depth, level, compac
                                                 />
 
                                                 {isList && (
-                                                    <div className="flex justify-end mt-2">
-                                                        <button
+                                                    <div className="flex justify-end mt-2 gap-2">
+                                                        <Button
+                                                            size={"small"}
+                                                            variant={"outlined"}
                                                             type="button"
-                                                            className="border px-2 py-1 text-sm"
+                                                            onClick={() => {
+                                                                updateState(rf, (prev) => {
+                                                                    return {
+                                                                        ...prev,
+                                                                        createDraft: undefined,
+                                                                        adding: false
+                                                                    };
+                                                                })
+                                                            }}
+                                                        >Annuler
+                                                        </Button>
+                                                        <Button
+                                                            size={"small"}
+                                                            variant={"tonal"}
+                                                            type="button"
                                                             onClick={() => {
                                                                 updateState(rf, (prev) => {
                                                                     const draft = prev.createDraft;
@@ -511,7 +530,7 @@ function RelationField({rf, st, updateState, reloadOptions, depth, level, compac
                                                                 })
                                                             }}
                                                         >Ajouter à la liste
-                                                        </button>
+                                                        </Button>
                                                     </div>
                                                 )}
                                             </div>
@@ -667,15 +686,12 @@ export default function DynamicForm({
         try {
             const ancestorSet = new Set((ancestors || []).map(String));
             relsAll = relsAll.filter(r => !ancestorSet.has(String(r.targetModel)));
-        } catch {}
+        } catch {
+        }
 
         // Apply relationsDepth: 0 => hide relations, -1 => unlimited
         if ((relationsDepth ?? 0) === 0) {
             return {scalarFields: scalars, relations: [] as any[], defs, modelUI};
-        }
-
-        if (model == "Client") {
-            console.log(model, {scalarFields: scalars, relations: relsAll, defs});
         }
 
         return {scalarFields: scalars, relations: relsAll, defs, modelUI};
@@ -880,6 +896,7 @@ export default function DynamicForm({
                 loading: false,
                 selectedIds: [],
                 createItems: [],
+                selectedItems: {},
             };
 
             const next = updater(current);
@@ -928,6 +945,7 @@ export default function DynamicForm({
                                 createValues: undefined,
                                 createDraft: undefined,
                                 createItems: [],
+                                selectedItems: {},
                                 // sortir du mode ajout si actif
                                 adding: false,
                                 // mode non imposé laissé tel quel
@@ -940,23 +958,54 @@ export default function DynamicForm({
         });
     };
 
+    // Helper: build preview field list for a given target model from defs using ui.preview === true
+    const getPreviewKeys = (targetModel: string): string[] => {
+        try {
+            const modelDef = (defs as any)?.[targetModel];
+            if (!modelDef) return [];
+            const keys = Object.entries(modelDef)
+                .filter(([k, v]: any) => k !== 'ui')
+                .map(([k, v]: any) => ({name: k, meta: v}))
+                .filter((f: any) => !f.meta?.relationName && typeof f.meta?.type === 'string')
+                .filter((f: any) => !(f.meta?.ui?.hidden))
+                .filter((f: any) => !!f.meta?.ui?.preview)
+                .map((f: any) => f.name as string);
+
+            return keys as string[];
+        } catch {
+            return [];
+        }
+    };
+
+    const makePreviewLabel = (targetModel: string, it: any): string => {
+        const keys = getPreviewKeys(targetModel);
+        let label = '';
+        if (keys.length > 0) {
+            label = keys.map((k) => it?.[k]).filter(Boolean).join(' · ');
+        }
+        if (!label) label = it?.name || it?.title || it?.email || it?.slug || it?.id || '';
+        return label;
+    };
+
     const reloadRelationOptions = (rf: any, q: string) => {
         updateRelationState(rf, (st) => ({...st, loading: true, search: q}));
         startTransition(async () => {
             try {
                 const resp = await listEntitiesAction({model: rf.targetModel, q, limit: 25} as any);
                 const payload = (resp as any)?.data || (listEntitiesRes as any)?.data;
-                const listDisplay = Array.isArray(rf?.ui?.listDisplayFields) ? rf.ui.listDisplayFields : undefined;
-                const display = (listDisplay && listDisplay.length > 0 && rf?.isList)
-                    ? listDisplay
-                    : (Array.isArray(rf?.ui?.displayFields) ? rf.ui.displayFields : undefined);
                 const options = ((payload?.items) || []).map((it: any) => {
-                    let label: string = '';
-                    if (display && display.length > 0) {
-                        label = display.map((k: string) => it?.[k]).filter(Boolean).join(' · ');
-                    }
-                    if (!label) label = it.name || it.title || it.email || it.slug || it.id;
-                    return {id: it.id, label};
+                    // Pour les relations listes, utiliser les champs marqués ui.preview au niveau du modèle cible
+                    const label = rf?.isList
+                        ? makePreviewLabel(rf.targetModel, it)
+                        : (() => {
+                            // fallback historique pour les singuliers (affichage de recherche)
+                            const display = Array.isArray(rf?.ui?.displayFields) ? rf.ui.displayFields : undefined;
+                            let l = '';
+                            if (display && display.length > 0) l = display.map((k: string) => it?.[k]).filter(Boolean).join(' · ');
+                            if (!l) l = it.name || it.title || it.email || it.slug || it.id;
+                            return l;
+                        })();
+                    return {id: it.id, label, data: it};
                 });
                 updateRelationState(rf, (st) => ({...st, options, loading: false}));
             } catch {
@@ -1084,7 +1133,6 @@ export default function DynamicForm({
                         if (isMutexGroup) {
                             const mutexKey = group.key.substring('mutex:'.length);
                             const groupInfo = (modelUI as any)?.mutexGroups?.[mutexKey];
-                            console.log('mutex group', mutexKey, groupInfo, modelUI);
 
                             const active = group.items.find((rf: any) => relationUIState[rf.name]?.adding);
                             return (
@@ -1102,7 +1150,7 @@ export default function DynamicForm({
                                                 )}
                                             </div>
                                         )}
-                                        <div className="flex flex-wrap gap-3 items-center">
+                                        <div className="flex flex-wrap gap-2 items-center">
                                             {group.items.map((rf: any) => {
                                                 const st = relationUIState[rf.name];
                                                 const activated = !!st?.adding;
@@ -1148,6 +1196,7 @@ export default function DynamicForm({
                                                 compact
                                                 ancestors={ancestors}
                                                 parentModel={model}
+                                                previewKeys={getPreviewKeys}
                                             />
                                         </div>
                                     )}
@@ -1166,6 +1215,7 @@ export default function DynamicForm({
                                 level={level}
                                 ancestors={ancestors}
                                 parentModel={model}
+                                previewKeys={getPreviewKeys}
                             />
                         ));
                     })}
