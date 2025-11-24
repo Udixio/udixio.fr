@@ -1807,7 +1807,8 @@
         "hidden": false,
         "label": null,
         "placeholder": null,
-        "default": null
+        "default": null,
+        "order": 1
       }
     },
     "notes": {
@@ -1861,7 +1862,7 @@
       "relationToFields": [],
       "documentation": null,
       "ui": {
-        "hidden": true,
+        "hidden": false,
         "label": null,
         "placeholder": null,
         "default": null
@@ -1883,7 +1884,8 @@
         "hidden": false,
         "label": "Contacts",
         "placeholder": null,
-        "default": null
+        "default": null,
+        "forceMode": "create"
       }
     },
     "createdAt": {
