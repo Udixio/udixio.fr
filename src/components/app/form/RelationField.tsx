@@ -5,7 +5,182 @@ import React, {useEffect, useMemo} from "react";
 import {Button, Card, classnames, Divider, IconButton, Tab, Tabs, TextField} from "@udixio/ui-react";
 import {faXmark} from "@fortawesome/pro-regular-svg-icons";
 import {faPencil, faTrash} from "@fortawesome/pro-light-svg-icons";
-import DynamicForm from "@components/app/form/DynamicForm.tsx";
+import DynamicForm, {type RelationState} from "@components/app/form/DynamicForm.tsx";
+
+// --- Sous-composants privés (non exportés) pour alléger le JSX principal ---
+type RelationSelectedListProps = {
+    isList: boolean;
+    ids: string[];
+    selectedLabels: Record<string, string>;
+    selectedItems: Record<string, any>;
+    previewKeys: string[];
+    onEdit: () => void;
+    onRemove: (id: string) => void;
+};
+
+function RelationSelectedList({
+                                  isList,
+                                  ids,
+                                  selectedLabels,
+                                  selectedItems,
+                                  previewKeys,
+                                  onEdit,
+                                  onRemove,
+                              }: RelationSelectedListProps) {
+    if (isList) {
+        return (
+            <div className="flex flex-col gap-1">
+                {ids.map((id) => {
+                    const data = selectedItems?.[id];
+                    return (
+                        <div key={id}
+                             className="flex items-center justify-between gap-2 px-2 py-1 border rounded text-xs">
+                            <div className="flex-1">
+                                {Array.isArray(previewKeys) && previewKeys.length > 0 ? (
+                                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                                        {previewKeys.map((k) => (
+                                            <div key={k} className="truncate">
+                                                {data && data[k] !== undefined && data[k] !== null && data[k] !== ''
+                                                    ? String(data[k])
+                                                    : <span className="opacity-50">—</span>}
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className="opacity-80">{selectedLabels?.[id] || id}</div>
+                                )}
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <IconButton
+                                    onClick={onEdit}
+                                    label="Éditer"
+                                    variant="standard"
+                                />
+                                <IconButton
+                                    onClick={() => onRemove(id)}
+                                    label="Supprimer"
+                                    variant="standard"
+                                />
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+        );
+    }
+
+    // Singulier: rendu des tags simples avec bouton retirer
+    return (
+        <div className="flex flex-wrap gap-2">
+            {ids.map((id) => (
+                <span key={id}
+                      className="inline-flex items-center gap-2 px-2 py-0.5 border rounded-full text-xs">
+                    <span className="opacity-70">{selectedLabels?.[id] || id}</span>
+                    <button type="button" className="text-red-600" onClick={() => onRemove(id)}>×</button>
+                </span>
+            ))}
+        </div>
+    );
+}
+
+type RelationDraftsListProps = {
+    items: any[];
+    previewKeys: string[];
+    onEdit: (index: number) => void;
+    onRemove: (index: number) => void;
+};
+
+function RelationDraftsList({items, previewKeys, onEdit, onRemove}: RelationDraftsListProps) {
+    return (
+        <div className="flex flex-col gap-1 px-2">
+            {items.map((it, idx) => (
+                <div key={idx}
+                     className="flex items-center justify-between gap-2 px-2 py-1 border border-outline rounded">
+                    <div className="flex-1 text-xs">
+                        {Array.isArray(previewKeys) && previewKeys.length > 0 ? (
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                                {previewKeys.map((k) => (
+                                    <div key={k} className="truncate">
+                                        {it && it[k] !== undefined && it[k] !== null && it[k] !== ''
+                                            ? String(it[k])
+                                            : <span className="opacity-50">—</span>}
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <span className="opacity-80">Brouillon</span>
+                        )}
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <IconButton
+                            onClick={() => onEdit(idx)}
+                            icon={faPencil}
+                            size={"xSmall"}
+                            label="Éditer"
+                            variant="standard"
+                        />
+                        <IconButton
+                            onClick={() => onRemove(idx)}
+                            size={"xSmall"}
+                            icon={faTrash}
+                            label="Supprimer"
+                            variant="standard"
+                        />
+                    </div>
+                </div>
+            ))}
+        </div>
+    );
+}
+
+type RelationSearchBarProps = {
+    targetModel: string;
+    isList: boolean;
+    search: string;
+    options: { id: string; label: string }[];
+    onSearchChange: (v: string) => void;
+    onSelect: (id: string) => void;
+    onFocusOptions: () => void;
+};
+
+function RelationSearchBar({
+                               targetModel,
+                               isList,
+                               search,
+                               options,
+                               onSearchChange,
+                               onSelect,
+                               onFocusOptions,
+                           }: RelationSearchBarProps) {
+    return (
+        <div className="flex items-end gap-2">
+            <div className="flex-1">
+                <label className="block text-xs text-gray-600">Recherche</label>
+                <input
+                    className="border px-2 py-1 w-full"
+                    placeholder={`Rechercher ${targetModel}...`}
+                    value={search}
+                    onChange={(e) => onSearchChange(e.target.value)}
+                    onFocus={onFocusOptions}
+                />
+            </div>
+            <div className="min-w-[260px]">
+                <label className="block text-xs text-gray-600">{isList ? 'Ajouter' : 'Choisir'}</label>
+                <select
+                    className="border px-2 py-1 w-full"
+                    value={''}
+                    onChange={(e) => onSelect(e.target.value)}
+                    onFocus={onFocusOptions}
+                >
+                    <option value="">— {isList ? 'Ajouter…' : 'Choisir…'} —</option>
+                    {(options || []).map((o) => (
+                        <option key={o.id} value={o.id}>{o.label}</option>
+                    ))}
+                </select>
+            </div>
+        </div>
+    );
+}
 
 type RelationFieldProps = {
     rf: any;
@@ -254,145 +429,57 @@ export function RelationField({
                         <div
                             className={classnames('')}>
                             {/* 1. Liste visible des associations et créations en cours */}
-                            {hasAnyContent &&
+                            {hasAnyContent && (
                                 <div className="flex flex-col gap-2 my-2">
-                                    <div className="flex flex-col gap-1">
-                                        {isList ? (
-                                            currentSelection.map((id) => {
-                                                const keys = previewKeys(rf.targetModel);
-                                                const data = st?.selectedItems?.[id];
-                                                return (
-                                                    <div key={id}
-                                                         className="flex items-center justify-between gap-2 px-2 py-1 border rounded text-xs">
-                                                        <div className="flex-1">
-                                                            {keys && keys.length > 0 ? (
-                                                                <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                                                                    {keys.map((k) => (
-                                                                        <div key={k} className="truncate">
-                                                                            {data && data[k] !== undefined && data[k] !== null && data[k] !== ''
-                                                                                ? String(data[k])
-                                                                                : <span className="opacity-50">—</span>}
-                                                                        </div>
-                                                                    ))}
-                                                                </div>
-                                                            ) : (
-                                                                <div
-                                                                    className="opacity-80">{st?.selectedLabels?.[id] || id}</div>
-                                                            )}
-                                                        </div>
-                                                        <div className="flex items-center gap-2">
-
-                                                            <IconButton
-                                                                onClick={() => updateState(rf, (prev) => ({
-                                                                    ...prev,
-                                                                    adding: true,
-                                                                    mode: 'associate',
-                                                                    open: true,
-                                                                }))}
-                                                                label="Éditer"
-                                                                variant="standard"
-                                                            />
-                                                            <IconButton
-                                                                onClick={() => handleRemove(id)}
-                                                                label="Supprimer"
-                                                                variant="standard"
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                );
-                                            })
-                                        ) : (
-                                            <div className="flex flex-wrap gap-2">
-                                                {currentSelection.map((id) => (
-                                                    <span key={id}
-                                                          className="inline-flex items-center gap-2 px-2 py-0.5 border rounded-full text-xs">
-                                                    <span className="opacity-70">{st?.selectedLabels?.[id] || id}</span>
-                                                    <button type="button" className="text-red-600"
-                                                            onClick={() => handleRemove(id)}>×</button>
-                                                </span>
-                                                ))}
-                                            </div>
-                                        )}
-                                    </div>
+                                    <RelationSelectedList
+                                        isList={isList}
+                                        ids={currentSelection}
+                                        selectedLabels={st?.selectedLabels || {}}
+                                        selectedItems={st?.selectedItems || {}}
+                                        previewKeys={previewKeys(rf.targetModel)}
+                                        onEdit={() => updateState(rf, (prev) => ({
+                                            ...prev,
+                                            adding: true,
+                                            mode: 'associate',
+                                            open: true,
+                                        }))}
+                                        onRemove={handleRemove}
+                                    />
 
                                     {/* Pour les listes: rendre visibles les brouillons à créer */}
                                     {isList && (st?.createItems && st.createItems.length > 0) && (
-                                        <>
-                                            <div className="flex flex-col gap-1 px-2">
-                                                {st.createItems.map((it, idx) => {
-                                                    const keys = previewKeys(rf.targetModel);
-                                                    return (
-                                                        <div key={idx}
-                                                             className="flex items-center justify-between gap-2 px-2 py-1 border border-outline rounded">
-                                                            <div className="flex-1 text-xs">
-                                                                {keys && keys.length > 0 ? (
-                                                                    <div
-                                                                        className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                                                                        {keys.map((k) => {
-                                                                            console.log(k, st.createItems);
-                                                                            return (
-                                                                                <div key={k} className="truncate">
-                                                                                    {it && it[k] !== undefined && it[k] !== null && it[k] !== ''
-                                                                                        ? String(it[k])
-                                                                                        : <span
-                                                                                            className="opacity-50">—</span>}
-                                                                                </div>
-                                                                            )
-                                                                        })}
-                                                                    </div>
-                                                                ) : (
-                                                                    <span
-                                                                        className="opacity-80">Brouillon {rf.targetModel}</span>
-                                                                )}
-                                                            </div>
-                                                            <div className="flex items-center gap-2">
-                                                                {/* Éditer l'élément: le replacer comme ébauche et passer en mode création */}
-                                                                <IconButton
-                                                                    onClick={() => updateState(rf, (prev) => ({
-                                                                        ...prev,
-                                                                        adding: true, mode: 'create',
-                                                                        createDraft: prev.createItems?.[idx],
-                                                                        createItems: (prev.createItems || []).filter((_, i) => i !== idx)
-                                                                    }))}
-                                                                    icon={faPencil}
-                                                                    size={"xSmall"}
-                                                                    label="Éditer"
-                                                                    variant="standard"
-                                                                />
-                                                                <IconButton
-                                                                    onClick={() => updateState(rf, (prev) => ({
-                                                                        ...prev,
-                                                                        createItems: (prev.createItems || []).filter((_, i) => i !== idx)
-                                                                    }))}
-                                                                    size={"xSmall"}
-                                                                    icon={faTrash}
-                                                                    label="Supprimer"
-                                                                    variant="standard"
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                    );
-                                                })}
-                                            </div>
-                                            {
-                                                !st.adding &&
-                                                <Button size={"small"} className={"w-fit ml-auto mr-2 mt-4 mb-4"}
-                                                        type="button"
-                                                        variant="tonal"
-                                                        onClick={() => updateState(rf, (prev) => ({
-                                                            ...prev,
-                                                            adding: true,
-                                                            open: true,
-                                                            mode: (forceMode || (level === 1 ? 'create' : 'associate'))
-                                                        }))}>Ajouter
-                                                    un {rf.ui?.label ?? rf.name ?? 'unknow'}</Button>
-                                            }
+                                        <RelationDraftsList
+                                            items={st.createItems}
+                                            previewKeys={previewKeys(rf.targetModel)}
+                                            onEdit={(idx) => updateState(rf, (prev) => ({
+                                                ...prev,
+                                                adding: true, mode: 'create',
+                                                createDraft: prev.createItems?.[idx],
+                                                createItems: (prev.createItems || []).filter((_, i) => i !== idx)
+                                            }))}
+                                            onRemove={(idx) => updateState(rf, (prev) => ({
+                                                ...prev,
+                                                createItems: (prev.createItems || []).filter((_, i) => i !== idx)
+                                            }))}
+                                        />
+                                    )}
 
-                                        </>
+                                    {isList && (st?.createItems?.length || 0) > 0 && !st.adding && (
+                                        <Button
+                                            size={"small"}
+                                            className={"w-fit ml-auto mr-2 mt-4 mb-4"}
+                                            type="button"
+                                            variant="tonal"
+                                            onClick={() => updateState(rf, (prev) => ({
+                                                ...prev,
+                                                adding: true,
+                                                open: true,
+                                                mode: (forceMode || (level === 1 ? 'create' : 'associate'))
+                                            }))}
+                                        >Ajouter un {rf.ui?.label ?? rf.name ?? 'unknow'}</Button>
                                     )}
                                 </div>
-
-                            }
+                            )}
 
                             {/* 2. Zone d'ajout: Tabs + contenus */}
                             {st?.adding && (
@@ -409,37 +496,18 @@ export function RelationField({
                                         className={"content p-4  bg-surface-container-low"}>
                                         {/* Barre Recherche / Ajout (mode association) */}
                                         {((forceMode ? forceMode !== 'create' : st?.mode !== 'create')) && !(!!(!isList && currentSelection.length > 0)) && (
-                                            <div className="flex items-end gap-2">
-                                                <div className="flex-1">
-                                                    <label className="block text-xs text-gray-600">Recherche</label>
-                                                    <input
-                                                        className="border px-2 py-1 w-full"
-                                                        placeholder={`Rechercher ${rf.targetModel}...`}
-                                                        value={st?.search || ''}
-                                                        onChange={(e) => {
-                                                            const v = e.target.value;
-                                                            updateState(rf, (st) => ({...st, search: v}));
-                                                            reloadOptions(rf, v);
-                                                        }}
-                                                        onFocus={ensureOptions}
-                                                    />
-                                                </div>
-                                                <div className="min-w-[260px]">
-                                                    <label
-                                                        className="block text-xs text-gray-600">{isList ? 'Ajouter' : 'Choisir'}</label>
-                                                    <select
-                                                        className="border px-2 py-1 w-full"
-                                                        value={''}
-                                                        onChange={(e) => handleSelect(e.target.value)}
-                                                        onFocus={ensureOptions}
-                                                    >
-                                                        <option value="">— {isList ? 'Ajouter…' : 'Choisir…'} —</option>
-                                                        {(st?.options || []).map((o) => (
-                                                            <option key={o.id} value={o.id}>{o.label}</option>
-                                                        ))}
-                                                    </select>
-                                                </div>
-                                            </div>
+                                            <RelationSearchBar
+                                                targetModel={rf.targetModel}
+                                                isList={isList}
+                                                search={st?.search || ''}
+                                                options={st?.options || []}
+                                                onSearchChange={(v) => {
+                                                    updateState(rf, (st) => ({...st, search: v}));
+                                                    reloadOptions(rf, v);
+                                                }}
+                                                onSelect={handleSelect}
+                                                onFocusOptions={ensureOptions}
+                                            />
                                         )}
 
                                         {/* 3. Zone de création - ne pas rendre le sous-formulaire tant que le mode n'est pas 'create' */}
