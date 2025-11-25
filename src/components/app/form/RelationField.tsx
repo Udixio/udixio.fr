@@ -4,8 +4,9 @@ import React, {useEffect, useMemo} from "react";
 // @ts-ignore
 import {Button, Card, classnames, Divider, IconButton, Tab, Tabs, TextField} from "@udixio/ui-react";
 import {faXmark} from "@fortawesome/pro-regular-svg-icons";
-import {faPencil, faTrash} from "@fortawesome/pro-light-svg-icons";
+import {faPencil, faPlus, faTrash} from "@fortawesome/pro-light-svg-icons";
 import DynamicForm, {type RelationState} from "@components/app/form/DynamicForm.tsx";
+import {motion} from "motion/react";
 
 // --- Sous-composant privé unifié pour l'affichage des éléments (sélectionnés ou brouillons) ---
 type RelationItemsListProps = {
@@ -60,6 +61,7 @@ function RelationItemsList({items, previewKeys, variant, onEdit, onRemove, label
                     <div className="flex items-center gap-2">
                         {onEdit && (
                             <IconButton
+                                type="button"
                                 onClick={() => onEdit(idx, it)}
                                 icon={faPencil}
                                 size={"xSmall"}
@@ -69,6 +71,7 @@ function RelationItemsList({items, previewKeys, variant, onEdit, onRemove, label
                         )}
                         {onRemove && (
                             <IconButton
+                                type="button"
                                 onClick={() => onRemove(idx, it)}
                                 size={"xSmall"}
                                 icon={faTrash}
@@ -328,12 +331,15 @@ export function RelationField({
         // Si aucun contenu pour une relation optionnelle → afficher seulement le bouton "Ajouter".
         // Sinon, rendre la carte avec la liste (sans zone d'ajout) afin de ne pas cacher l'existant.
         if (!isRequired && !hasAnyContent) {
-            return <Button type="button" variant="tonal" onClick={() => updateState(rf, (prev) => ({
-                ...prev,
-                adding: true,
-                open: true,
-                mode: (forceMode || (level === 1 ? 'create' : 'associate'))
-            }))}>Ajouter un {rf.ui?.label ?? rf.name ?? 'unknow'}</Button>
+            return <motion.div layoutId={rf.name}
+                               className={"min-h-32 flex items-center justify-center bg-surface-container-high rounded-2xl "}>
+                <Button icon={faPlus} type="button" variant={"tonal"} onClick={() => updateState(rf, (prev) => ({
+                    ...prev,
+                    adding: true,
+                    open: true,
+                    mode: (forceMode || (level === 1 ? 'create' : 'associate'))
+                }))}>Ajouter {isList ? "des" : "un"} {rf.ui?.label ?? rf.name ?? 'unknow'}</Button>
+            </motion.div>
         }
     }
 
@@ -341,8 +347,8 @@ export function RelationField({
     return (
         <>
 
-            <Card variant={"filled"} className={classnames({
-                " border-0  border-l-2 border-secondary ": !compact
+            <motion.div layoutId={rf.name} className={classnames({
+                " border-0  border-l-2 border-secondary bg-surface-container-high rounded-2xl ": !compact
             })}>
                 <div className="border border-outline rounded-xl overflow-hidden">
                     {/* Afficher l'en-tête si la section est ouverte OU si du contenu existe (même si normalement repliée) */}
@@ -375,7 +381,7 @@ export function RelationField({
                     )}
 
                     {/* Même logique: rendre le contenu si ouvert OU si du contenu existe */}
-                    {(!(!isRequired && level > 1 && !st?.open) || hasAnyContent) && (
+                    {(hasAnyContent || isRequired || st?.open) && (
                         <div
                             className={classnames('')}>
                             {/* 1. Liste visible des associations et créations en cours */}
@@ -444,7 +450,7 @@ export function RelationField({
                             )}
 
                             {/* 2. Zone d'ajout: Tabs + contenus */}
-                            {st?.adding && (
+                            {(st?.adding || isRequired) && (
                                 <>
                                     {!forceMode && (
                                         <Tabs variant={"secondary"} className={"bg-transparent w-fit mb-0"}
@@ -553,7 +559,7 @@ export function RelationField({
                     )}
                 </div>
 
-            </Card>
+            </motion.div>
         </>
     );
 }
