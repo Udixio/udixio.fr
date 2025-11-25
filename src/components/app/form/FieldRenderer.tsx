@@ -30,8 +30,11 @@ export function FieldRenderer({meta, formik, defs, disabledFields}: FieldRendere
     const isEnum = (defs as any)?.[type]?.['isEnum'];
 
     if (type === 'String' || isNumber) {
-        return <TextField variant="outlined" {...common} label={label} errorText={formik.errors}
-                          placeholder={placeholder} {...(isNumber ? {type: 'number'} : {})}/>;
+        return <TextField  {...common} onChange={(e) =>
+            formik.setFieldValue(name, e)
+        } variant="outlined" label={label}
+                           errorText={formik.errors}
+                           placeholder={placeholder} {...(isNumber ? {type: 'number'} : {})}/>;
     }
     if (isEnum || type === 'Boolean' || type === 'DateTime' || type === 'Json') {
         (common as any).className += "border border-outline px-2 py-1 w-full";
