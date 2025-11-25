@@ -141,11 +141,13 @@ export const server = {
         }
     }),
     createEntity: defineAction({
+        accept: "json",
         input: z.object({
             model: z.enum(["User", "Organization", "Project", "Deal", "Contact", "Client"]),
             dataJson: z.string(),
         }),
         handler: async (input) => {
+            console.log(input);
             const data = JSON.parse(input.dataJson);
             // Guard against writing read-only/id fields will be handled at Prisma level too
             const clientAny = prisma as any;

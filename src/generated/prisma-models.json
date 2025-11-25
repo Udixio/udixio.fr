@@ -2016,7 +2016,8 @@
         "hidden": false,
         "label": null,
         "placeholder": null,
-        "default": null
+        "default": null,
+        "suffix": "€"
       }
     },
     "probability": {
@@ -2097,7 +2098,7 @@
     },
     "organization": {
       "isList": false,
-      "isRequired": true,
+      "isRequired": false,
       "isUnique": false,
       "isId": false,
       "isReadOnly": false,
@@ -2122,7 +2123,7 @@
     },
     "organizationId": {
       "isList": false,
-      "isRequired": true,
+      "isRequired": false,
       "isUnique": false,
       "isId": false,
       "isReadOnly": true,

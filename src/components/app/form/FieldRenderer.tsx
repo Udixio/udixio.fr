@@ -26,14 +26,21 @@ export function FieldRenderer({meta, formik, defs, disabledFields}: FieldRendere
         onBlur: formik.handleBlur,
     } as any;
     const placeholder = f.ui?.placeholder || name;
+    const description = f.ui?.description || f.documentation;
+    const suffix = f.ui?.suffix;
+    const prefix = f.ui?.prefix;
     const isNumber = type === 'Int' || type === 'BigInt' || type === 'Float' || type === 'Decimal';
     const isEnum = (defs as any)?.[type]?.['isEnum'];
+    const fieldError = (formik.touched?.[name] && (formik.errors as any)?.[name]) ? String((formik.errors as any)[name]) : undefined;
+
+    console.log(name, fieldError);
 
     if (type === 'String' || isNumber) {
         return <TextField  {...common} onChange={(e) =>
             formik.setFieldValue(name, e)
         } variant="outlined" label={label}
-                           errorText={formik.errors}
+                           suffix={suffix} prefix={prefix}
+                           errorText={fieldError || null} supportingText={fieldError ? " " : description}
                            placeholder={placeholder} {...(isNumber ? {type: 'number'} : {})}/>;
     }
     if (isEnum || type === 'Boolean' || type === 'DateTime' || type === 'Json') {

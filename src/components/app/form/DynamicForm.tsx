@@ -6,7 +6,7 @@ import {modelsService, modelsStore} from "@/stores/modelsStore.ts";
 // IconButton peut ne pas être présent selon la version du design system.
 // S'il est disponible, on l'utilise pour l'action d'édition; sinon on garde un <button> simple.
 // @ts-ignore
-import {Button, Card, classnames, Divider, IconButton, Tab, Tabs, TextField} from "@udixio/ui-react";
+import {Button, Card, classnames, Divider, IconButton, Snackbar, Tab, Tabs, TextField} from "@udixio/ui-react";
 import {getPreviewKeysFromDefs, makePreviewLabelFromDefs, useModelDefinition} from "../hooks/useModelDefinition.ts";
 import {computeDefaultValues} from "../utils/defaults.ts";
 import {buildRelationPayload, normalizeScalarValues} from "../utils/normalize.ts";
@@ -184,9 +184,38 @@ export default function DynamicForm({
         validate: (vals) => {
             const errors: Record<string, any> = {};
             for (const f of scalarFields) {
-                if (f.isRequired && (vals[f.name] === undefined || vals[f.name] === null || vals[f.name] === '')) {
+                if (f.isRequired && !f.list && (vals[f.name] === undefined || vals[f.name] === null || vals[f.name] === '')) {
                     errors[f.name] = 'Requis';
                 }
+            }
+            // Validation des relations (au niveau UI, non liées à un champ scalaire précis)
+            const globalErrs: string[] = [];
+            try {
+                for (const rf of relations) {
+                    const required = (!!rf.isRequired && !rf.isList) || !!rf?.ui?.required;
+                    console.log('validating relation', rf.name, required);
+                    if (!required) continue;
+                    const st = (relationUIState as any)[rf.name] as RelationState | undefined;
+                    let ok = false;
+                    if (rf.isList) {
+                        const hasSel = !!(st?.selectedIds && st.selectedIds.length > 0);
+                        const hasCreate = !!(st?.createItems && st.createItems.length > 0);
+                        ok = hasSel || hasCreate;
+                    } else {
+                        const hasSel = !!st?.selectedId;
+                        const hasCreate = !!(st?.createValues && Object.keys(st.createValues || {}).length > 0);
+                        ok = hasSel || hasCreate;
+                    }
+                    if (!ok) {
+                        const label = rf?.ui?.label || rf?.documentation || rf?.name;
+                        globalErrs.push(`Le champ relation « ${label} » est requis.`);
+                    }
+                }
+            } catch {
+                // ignore
+            }
+            if (globalErrs.length > 0) {
+                (errors as any).__global = globalErrs;
             }
             return errors;
         },
@@ -194,6 +223,7 @@ export default function DynamicForm({
             const normalized = normalizeScalarValues(vals, scalarFields);
             try {
                 const withRelations = await buildRelationPayload(normalized, relations, relationUIState, createEntityAction, createEntityRes);
+
                 await onSubmit?.(withRelations);
                 helpers.setSubmitting(false);
             } catch (e) {
@@ -287,6 +317,15 @@ export default function DynamicForm({
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [JSON.stringify(relationGroups.map(g => g.items.map((it: any) => it.name))), relationUIState]);
+
+    // Revalider quand l'état des relations change (utile pour règles required côté UI)
+    useEffect(() => {
+        // Éviter de spammer les erreurs avant interaction; on revalide surtout après une tentative de submit
+        if ((formik as any).submitCount > 0) {
+            formik.validateForm();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [JSON.stringify(relationUIState)]);
 
     return (
         <form ref={formRef} className={"max-w-screen-xl space-y-4 " + className} onSubmit={formik.handleSubmit}>
@@ -399,7 +438,18 @@ export default function DynamicForm({
                 </>
             )}
 
+            {((formik as any).submitCount > 0) && Array.isArray((formik.errors as any)?.__global) && (formik.errors as any).__global.length > 0 && (
+                <div className="rounded-lg border border-error bg-error text-on-error p-3 text-sm">
+                    <ul className="list-disc pl-5 space-y-1">
+                        {(formik.errors as any).__global.map((msg: string, i: number) => (
+                            <li key={i}>{msg}</li>
+                        ))}
+                    </ul>
+                </div>
+            )}
+
             {!hideSubmit && (
+
                 <div className="flex items-center justify-end gap-2 mt-3">
                     {onCancel && (
                         <Button
