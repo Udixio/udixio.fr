@@ -320,7 +320,6 @@ export function RelationField({
 
             const hasSel = (st.selectedIds && st.selectedIds.length > 0);
             const hasCreates = (st.createItems && st.createItems.length > 0);
-            console.log('hasAnyContent', rf.ui?.label ?? rf.name ?? 'unknow', hasSel, hasCreates);
 
             return !!(hasSel || hasCreates);
         }

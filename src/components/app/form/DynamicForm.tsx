@@ -193,7 +193,6 @@ export default function DynamicForm({
             try {
                 for (const rf of relations) {
                     const required = (!!rf.isRequired && !rf.isList) || !!rf?.ui?.required;
-                    console.log('validating relation', rf.name, required);
                     if (!required) continue;
                     const st = (relationUIState as any)[rf.name] as RelationState | undefined;
                     let ok = false;
