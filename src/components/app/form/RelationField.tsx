@@ -5,7 +5,7 @@ import React, {useEffect, useMemo} from "react";
 import {Button, Card, classnames, Divider, IconButton, Tab, Tabs, TextField} from "@udixio/ui-react";
 import {faXmark} from "@fortawesome/pro-regular-svg-icons";
 import {faPencil, faPlus, faTrash} from "@fortawesome/pro-light-svg-icons";
-import DynamicForm, {type RelationState} from "@components/app/form/DynamicForm.tsx";
+import DynamicFormController, {type RelationState} from "@components/app/form/DynamicFormController.tsx";
 import {motion} from "motion/react";
 
 // --- Sous-composant privé unifié pour l'affichage des éléments (sélectionnés ou brouillons) ---
@@ -280,9 +280,9 @@ export function RelationField({
     if (inlineFields) {
         return (
             <div className="mt-2">
-                <DynamicForm
+                <DynamicFormController
                     model={rf.targetModel}
-                    hideSubmit
+                    embedded
                     mode={'create'}
                     relationsDepth={depth === -1 ? -1 : Math.max(0, (depth ?? 1) - 1)}
                     level={level + 1}
@@ -481,9 +481,9 @@ export function RelationField({
                                         {(forceMode ? forceMode === 'create' : st?.mode === 'create') && (
 
                                             <div className="mt-2">
-                                                <DynamicForm
+                                                <DynamicFormController
                                                     model={rf.targetModel}
-                                                    hideSubmit
+                                                    embedded
                                                     mode={'create'}
                                                     relationsDepth={depth === -1 ? -1 : Math.max(0, (depth ?? 1) - 1)}
                                                     level={level + 1}

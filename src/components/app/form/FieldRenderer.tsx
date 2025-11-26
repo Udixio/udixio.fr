@@ -33,8 +33,6 @@ export function FieldRenderer({meta, formik, defs, disabledFields}: FieldRendere
     const isEnum = (defs as any)?.[type]?.['isEnum'];
     const fieldError = (formik.touched?.[name] && (formik.errors as any)?.[name]) ? String((formik.errors as any)[name]) : undefined;
 
-    console.log(name, fieldError);
-
     if (type === 'String' || isNumber) {
         return <TextField  {...common} onChange={(e) =>
             formik.setFieldValue(name, e)
