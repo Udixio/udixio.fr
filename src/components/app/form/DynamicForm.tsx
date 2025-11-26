@@ -8,6 +8,8 @@ type Props = {
   value?: Record<string, any>;
   onChange?: (value: Record<string, any>) => void;
   onSubmit?: (value: Record<string, any>) => Promise<any> | any;
+  // Handler de soumission optionnel injecté par les wrappers (DynamicDataCreate/Update)
+  submissionHandler?: (args: any) => Promise<any>;
   exclude?: string[];
   disabledFields?: string[];
   className?: string;

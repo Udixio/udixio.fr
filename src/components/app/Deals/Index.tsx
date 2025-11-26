@@ -2,7 +2,7 @@ import React, {useActionState, useEffect, useRef, useState} from "react";
 import {withState} from '@astrojs/react/actions';
 import {actions} from 'astro:actions';
 import {appService} from "@/stores/appStore";
-import DynamicForm from "@components/app/form/DynamicForm.tsx";
+import DynamicDataCreate from "@components/app/form/DynamicDataCreate.tsx";
 import {Card} from "@udixio/ui-react";
 
 type Deal = {
@@ -35,8 +35,6 @@ export default function DealsIndex() {
 
     const [listState, listAction, listPending] = useActionState<ListState, FormData>(listDeals, undefined);
     const [createState, createAction, createPending] = useActionState<any, FormData>(createDeal, undefined);
-    const [createRes, createEntityAction] = useActionState(actions.createEntity as any, undefined);
-    const [createError, setCreateError] = useState<string | undefined>(undefined);
     const [importState, importAction, importPending] = useActionState<any, FormData>(importDealsCsv, undefined);
 
     useEffect(() => {
@@ -145,28 +143,17 @@ export default function DealsIndex() {
                     <div className="space-y-3">
                         <p className="text-sm text-gray-600">Le formulaire est généré depuis le modèle Prisma « Deal
                             ».</p>
-                        <DynamicForm
-                            model="Deal"
-                            exclude={["id", "createdAt", "updatedAt"]}
-                            onCancel={() => setShowCreate(false)}
-                            onSubmit={async (vals) => {
-                                setCreateError(undefined);
-                                try {
-                                    await createEntityAction({
-                                        model: 'Deal',
-                                        dataJson: JSON.stringify(vals || {})
-                                    } as any);
-                                    setShowCreate(false);
-                                    // Rafraîchir la liste en réutilisant le formulaire de filtre
-                                    formRef.current?.requestSubmit();
-                                } catch (e: any) {
-                                    setCreateError(String(e?.message || e));
-                                }
-                            }}
+                        <DynamicDataCreate
+                          model="Deal"
+                          exclude={["id", "createdAt", "updatedAt"]}
+                          onCancel={() => setShowCreate(false)}
+                          onSuccess={() => {
+                            setShowCreate(false);
+                            // Rafraîchir la liste en réutilisant le formulaire de filtre
+                            formRef.current?.requestSubmit();
+                          }}
                         />
-                        {createError && (
-                            <div className="text-sm text-red-600">Erreur: {createError}</div>
-                        )}
+                        {/* Erreurs de création gérées par le wrapper ou l'action */}
                     </div>
                 </Card>
             )}
