@@ -107,6 +107,7 @@ export const server = {
     }),
     // ===== Generic entities (whitelisted) =====
     listEntities: defineAction({
+        json: true,
         input: z.object({
             model: z.enum(["User", "Organization", "Project", "Deal", "Contact", "Client"]),
             q: z.string().optional(),
@@ -147,12 +148,16 @@ export const server = {
             dataJson: z.string(),
         }),
         handler: async (input) => {
+
             console.log(input);
             const data = JSON.parse(input.dataJson);
             // Guard against writing read-only/id fields will be handled at Prisma level too
             const clientAny = prisma as any;
             const created = await clientAny[input.model.toLowerCase()].create({data});
+
+            console.log(created);
             return {created};
+
         }
     }),
 
@@ -296,6 +301,7 @@ export const server = {
 
     // ===== Deals =====
     listDeals: defineAction({
+        accept: "json",
         input: z.object({
             organizationId: z.string().optional(),
             projectId: z.string().optional(),
@@ -331,7 +337,7 @@ export const server = {
             return {items, total};
         }
     }),
-  
+
 
     // ===== Audits (read-only minimal) =====
     listAudits: defineAction({

@@ -100,7 +100,6 @@ export default function ClientsIndex() {
                             model="Client"
                             // On exclut les champs techniques non éditables
                             exclude={["id", "createdAt", "updatedAt"]}
-                            submitLabel={'Créer'}
                             onCancel={() => setShowCreate(false)}
                             onSubmit={async (vals) => {
                                 setCreateError(undefined);

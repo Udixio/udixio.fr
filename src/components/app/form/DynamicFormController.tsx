@@ -1,4 +1,4 @@
-import React, {startTransition, useActionState, useEffect, useMemo, useReducer} from "react";
+import React, {startTransition, useActionState, useEffect, useMemo, useReducer, useRef} from "react";
 import {useFormik} from 'formik';
 import {actions} from 'astro:actions';
 import {useStore} from "@nanostores/react";
@@ -8,6 +8,7 @@ import {getPreviewKeysFromDefs, makePreviewLabelFromDefs, useModelDefinition} fr
 import {computeDefaultValues} from "../utils/defaults.ts";
 import {buildRelationPayload, normalizeScalarValues} from "../utils/normalize.ts";
 import {draftsService} from "@/stores/draftsStore.ts";
+import {FormContext, useFormContext} from "@components/app/form/FormContext.tsx";
 
 export type RelationState = {
     // Common
@@ -147,6 +148,15 @@ export default function DynamicFormController({
                                                   ancestors = [],
                                                   embedded = false,
                                               }: Props) {
+    // --- Registry (children validators) ---
+    const registryRef = useRef<Map<string, () => Promise<void | boolean>>>(new Map());
+    const register = (id: string, validate: () => Promise<void | boolean>) => {
+        registryRef.current.set(id, validate);
+    };
+    const unregister = (id: string) => {
+        registryRef.current.delete(id);
+    };
+    const parentForm = useFormContext();
     const $models = useStore(modelsStore);
     useEffect(() => {
         if (!$models.models) {
@@ -223,6 +233,15 @@ export default function DynamicFormController({
         onSubmit: async (vals, helpers) => {
             const normalized = normalizeScalarValues(vals, scalarFields);
             try {
+                // 1) Demander la validation de tous les sous-formulaires enregistrés
+                const validators = Array.from(registryRef.current.values());
+                if (validators.length > 0) {
+                    for (const v of validators) {
+                        // Chaque validateur doit soit résoudre à true/void, soit throw pour indiquer l'échec
+                        const ok = await v();
+                        if (ok === false) throw new Error('Invalid child form');
+                    }
+                }
                 if (submissionHandler) {
                     await submissionHandler({
                         values: normalized,
@@ -315,30 +334,67 @@ export default function DynamicFormController({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [JSON.stringify(relationUIState)]);
 
+    // 2) Si ce formulaire est embarqué (sous-formulaire), s'enregistrer auprès du parent
+    useEffect(() => {
+        // s'enregistrer uniquement si on est imbriqué
+        if (!embedded) return;
+        const validateSelf = async () => {
+            try {
+                // Valider d'abord les sous-formulaires de ce formulaire (profondeur arbitraire)
+                const childValidators = Array.from(registryRef.current.values());
+                if (childValidators.length > 0) {
+                    for (const v of childValidators) {
+                        const ok = await v();
+                        if (ok === false) throw new Error('Invalid nested child form');
+                    }
+                }
+                // Marquer tous les champs comme touchés pour afficher les erreurs
+                const touchedAll: Record<string, any> = {};
+                for (const k of Object.keys(formik.values || {})) touchedAll[k] = true;
+                formik.setTouched(touchedAll, true);
+                const errs = await formik.validateForm();
+                // Il y a erreur si des clés existent (hors __global) ou si __global contient des messages
+                const keys = Object.keys(errs || {}).filter(k => k !== '__global');
+                const hasGlobal = Array.isArray((errs as any).__global) && (errs as any).__global.length > 0;
+                if (keys.length > 0 || hasGlobal) throw new Error('Invalid child form');
+                return true;
+            } catch (e) {
+                throw e;
+            }
+        };
+        parentForm.register(formId, validateSelf);
+        return () => {
+            parentForm.unregister(formId);
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [embedded, formId]);
+
     return (
-        <div className={"max-w-screen-xl space-y-4 " + (className || '')}>
-            <DynamicFormFields
-                formik={formik}
-                scalarFields={scalarFields}
-                relations={relations}
-                relationGroups={relationGroups}
-                defs={defs}
-                modelUI={modelUI}
-                relationUIState={relationUIState}
-                updateRelationState={updateRelationState}
-                reloadRelationOptions={reloadRelationOptions}
-                model={model}
-                parentFormId={formId}
-                disabledFields={disabledFields}
-                relationsDepth={relationsDepth}
-                level={level}
-                ancestors={ancestors}
-                getPreviewKeys={getPreviewKeys}
-                showActions={!embedded}
-                submitLabel={submitLabel}
-                cancelLabel={cancelLabel}
-                onCancel={onCancel}
-            />
-        </div>
+        <FormContext.Provider value={{register, unregister}}>
+            <div className={"max-w-screen-xl space-y-4 " + (className || '')}>
+                <DynamicFormFields
+                    formik={formik}
+                    scalarFields={scalarFields}
+                    relations={relations}
+                    relationGroups={relationGroups}
+                    defs={defs}
+                    modelUI={modelUI}
+                    relationUIState={relationUIState}
+                    updateRelationState={updateRelationState}
+                    reloadRelationOptions={reloadRelationOptions}
+                    model={model}
+                    parentFormId={formId}
+                    disabledFields={disabledFields}
+                    relationsDepth={relationsDepth}
+                    level={level}
+                    ancestors={ancestors}
+                    getPreviewKeys={getPreviewKeys}
+                    showActions={!embedded}
+                    submitLabel={submitLabel}
+                    cancelLabel={cancelLabel}
+                    onCancel={onCancel}
+                />
+            </div>
+        </FormContext.Provider>
     );
 }
