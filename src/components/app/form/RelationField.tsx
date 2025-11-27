@@ -6,6 +6,7 @@ import {Button, Card, classnames, Divider, IconButton, Tab, Tabs, TextField} fro
 import {faXmark} from "@fortawesome/pro-regular-svg-icons";
 import {faPencil, faPlus, faTrash} from "@fortawesome/pro-light-svg-icons";
 import DynamicFormController, {type RelationState} from "@components/app/form/DynamicFormController.tsx";
+import {draftsService} from "@/stores/draftsStore.ts";
 import {motion} from "motion/react";
 
 // --- Sous-composant privé unifié pour l'affichage des éléments (sélectionnés ou brouillons) ---
@@ -151,6 +152,8 @@ type RelationFieldProps = {
     parentModel: string;
     // Current parent form id (for drafts store path)
     parentFormId: string;
+    // Permet de modifier les valeurs du parent (ex: renseigner/vider la FK)
+    setParentFieldValue: (name: string, value: any) => void;
     // Get preview keys (fields) for a given target model
     previewKeys: (targetModel: string) => string[];
 };
@@ -166,6 +169,7 @@ export function RelationField({
                                   ancestors,
                                   parentModel,
                                   parentFormId,
+                                  setParentFieldValue,
                                   previewKeys
                               }: RelationFieldProps) {
     const isList = !!rf.isList;
@@ -201,6 +205,11 @@ export function RelationField({
                 selectedLabels: {...(prev.selectedLabels || {}), [id]: label},
                 adding: false
             }));
+            // Cohérence d'état: en association, on supprime le brouillon enfant et on renseigne la FK du parent
+            if (rf.fk) {
+                try { setParentFieldValue(rf.fk, id); } catch {}
+            }
+            draftsService.clear(`${parentFormId}.${rf.name}`, true);
         }
     };
 
@@ -226,6 +235,10 @@ export function RelationField({
                 ...prev,
                 selectedId: undefined
             }));
+            // Si on retire la sélection d'un singulier, vider la FK du parent
+            if (rf.fk) {
+                try { setParentFieldValue(rf.fk, null); } catch {}
+            }
         }
     };
 
@@ -277,6 +290,17 @@ export function RelationField({
                 : // Si singulier et on crée, on libère la sélection courante
                 (isList ? {} : {selectedId: undefined}))
         }))
+        // Cohérence de données entre parent/enfant
+        const childId = `${parentFormId}.${rf.name}`;
+        if (idx !== 0) {
+            // Passage à Associer → supprimer le brouillon enfant
+            draftsService.clear(childId, true);
+        } else {
+            // Passage à Créer → vider la FK du parent (singulier)
+            if (!isList && rf.fk) {
+                try { setParentFieldValue(rf.fk, null); } catch {}
+            }
+        }
     };
 
     // Mode inline: on rend directement les champs du sous-formulaire (création forcée, sans en-tête)

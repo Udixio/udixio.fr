@@ -33,8 +33,8 @@ export default function DynamicDataCreate({model, onSuccess, formId = 'root', ..
             formId={formId}
             submitLabel={rest.submitLabel ?? 'Créer'}
             // submissionHandler fournit par le wrapper pour gérer la deep creation
-            submissionHandler={async ({relations, relationState}) => {
-                const createdData = await draftsService.save({ formId, model, relations, relationState });
+            submissionHandler={async () => {
+                const createdData = await draftsService.save({ formId, model });
                 if (createdData) onSuccess?.(createdData);
             }}
         />

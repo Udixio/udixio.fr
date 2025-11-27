@@ -384,6 +384,7 @@ export default function DynamicFormController({
                     reloadRelationOptions={reloadRelationOptions}
                     model={model}
                     parentFormId={formId}
+                    setParentFieldValue={formik.setFieldValue}
                     disabledFields={disabledFields}
                     relationsDepth={relationsDepth}
                     level={level}
