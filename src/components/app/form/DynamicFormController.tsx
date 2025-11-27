@@ -4,7 +4,7 @@ import {actions} from 'astro:actions';
 import {useStore} from "@nanostores/react";
 import {modelsService, modelsStore} from "@/stores/modelsStore.ts";
 import DynamicFormFields from "@components/app/form/DynamicFormFields.tsx";
-import {getPreviewKeysFromDefs, makePreviewLabelFromDefs, useModelDefinition} from "../hooks/useModelDefinition.ts";
+import {getPreviewKeysFromDefs, makePreviewLabelFromDefs, useModelDefinition} from "./useModelDefinition.ts";
 import {computeDefaultValues} from "../utils/defaults.ts";
 import {buildRelationPayload, normalizeScalarValues} from "../utils/normalize.ts";
 
@@ -100,24 +100,24 @@ function relationReducer(state: RelationMap, action: RelationAction): RelationMa
 }
 
 type Props = {
-  model: string;
-  value?: Record<string, any>;
-  onChange?: (value: Record<string, any>) => void;
-  onSubmit?: (value: Record<string, any>) => Promise<any> | any;
-  // Si fourni, remplace la logique interne de soumission (utilisé par les wrappers DynamicData*)
-  submissionHandler?: (args: {
-    values: Record<string, any>;
-    scalarFields: any[];
-    relations: any[];
-    relationState: Record<string, RelationState>;
-    createEntityAction: (payload: any) => Promise<any>;
-    createEntityRes: any;
-  }) => Promise<any>;
-  // Optionally filter fields
-  exclude?: string[];
-  disabledFields?: string[];
-  className?: string;
-  submitLabel?: string;
+    model: string;
+    value?: Record<string, any>;
+    onChange?: (value: Record<string, any>) => void;
+    onSubmit?: (value: Record<string, any>) => Promise<any> | any;
+    // Si fourni, remplace la logique interne de soumission (utilisé par les wrappers DynamicData*)
+    submissionHandler?: (args: {
+        values: Record<string, any>;
+        scalarFields: any[];
+        relations: any[];
+        relationState: Record<string, RelationState>;
+        createEntityAction: (payload: any) => Promise<any>;
+        createEntityRes: any;
+    }) => Promise<any>;
+    // Optionally filter fields
+    exclude?: string[];
+    disabledFields?: string[];
+    className?: string;
+    submitLabel?: string;
     cancelLabel?: string;
     mode?: 'create' | 'update';
     relationsDepth?: number;
@@ -128,16 +128,16 @@ type Props = {
 };
 
 export default function DynamicFormController({
-  model,
-  value,
-  onChange,
-  onSubmit,
-  submissionHandler,
-  onCancel,
-  exclude,
-  disabledFields,
-  className,
-  submitLabel = 'Enregistrer',
+                                                  model,
+                                                  value,
+                                                  onChange,
+                                                  onSubmit,
+                                                  submissionHandler,
+                                                  onCancel,
+                                                  exclude,
+                                                  disabledFields,
+                                                  className,
+                                                  submitLabel = 'Enregistrer',
                                                   cancelLabel = 'Annuler',
                                                   mode = 'create',
                                                   relationsDepth = -1,
@@ -215,27 +215,27 @@ export default function DynamicFormController({
             return errors;
         },
         onSubmit: async (vals, helpers) => {
-      const normalized = normalizeScalarValues(vals, scalarFields);
-      try {
-        if (submissionHandler) {
-          await submissionHandler({
-            values: normalized,
-            scalarFields,
-            relations,
-            relationState: relationUIState,
-            createEntityAction: createEntityAction as any,
-            createEntityRes,
-          });
-        } else {
-          const withRelations = await buildRelationPayload(normalized, relations, relationUIState, createEntityAction, createEntityRes);
-          await onSubmit?.(withRelations);
+            const normalized = normalizeScalarValues(vals, scalarFields);
+            try {
+                if (submissionHandler) {
+                    await submissionHandler({
+                        values: normalized,
+                        scalarFields,
+                        relations,
+                        relationState: relationUIState,
+                        createEntityAction: createEntityAction as any,
+                        createEntityRes,
+                    });
+                } else {
+                    const withRelations = await buildRelationPayload(normalized, relations, relationUIState, createEntityAction, createEntityRes);
+                    await onSubmit?.(withRelations);
+                }
+                helpers.setSubmitting(false);
+            } catch (e) {
+                helpers.setSubmitting(false);
+            }
         }
-        helpers.setSubmitting(false);
-      } catch (e) {
-        helpers.setSubmitting(false);
-      }
-    }
-  });
+    });
 
     useEffect(() => {
         onChange?.(formik.values);

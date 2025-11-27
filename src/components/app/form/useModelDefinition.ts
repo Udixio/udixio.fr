@@ -10,13 +10,13 @@ type UseModelDefinitionParams = {
 };
 
 export function useModelDefinition({
-    model,
-    defs,
-    exclude,
-    mode = 'create',
-    relationsDepth = -1,
-    ancestors = []
-}: UseModelDefinitionParams) {
+                                       model,
+                                       defs,
+                                       exclude,
+                                       mode = 'create',
+                                       relationsDepth = -1,
+                                       ancestors = []
+                                   }: UseModelDefinitionParams) {
     return useMemo(() => {
         if (!defs) return {
             scalarFields: [] as any[],
@@ -59,6 +59,7 @@ export function useModelDefinition({
             targetModel: String(f.type),
             fk: !f.isList && Array.isArray(f.relationFromFields) && f.relationFromFields.length > 0 ? f.relationFromFields[0] : undefined,
         }));
+
 
         // Add synthetic relations for orphan scalar FKs (like userId)
         try {
