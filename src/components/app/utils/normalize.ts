@@ -45,6 +45,7 @@ export async function buildRelationPayload(
 
     // Préférer la valeur du store si un formId est fourni
     const rootVals = formId ? (draftsService.get<Record<string, any>>(formId) ?? base) : base;
+
     const normalized = {...(rootVals || {})};
     for (const rf of relations) {
         const st = relationState[rf.name];
