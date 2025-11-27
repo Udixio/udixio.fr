@@ -19,6 +19,7 @@ type DynamicFormFieldsProps = {
   reloadRelationOptions: (rf: any, q: string) => void;
   // Context
   model: string;
+  parentFormId: string;
   disabledFields?: string[];
   relationsDepth: number;
   level: number;
@@ -42,6 +43,7 @@ export default function DynamicFormFields({
   updateRelationState,
   reloadRelationOptions,
   model,
+  parentFormId,
   disabledFields,
   relationsDepth,
   level,
@@ -145,6 +147,7 @@ export default function DynamicFormFields({
                         compact
                         ancestors={ancestors}
                         parentModel={model}
+                        parentFormId={parentFormId}
                         previewKeys={getPreviewKeys}
                       />
                     </div>
@@ -164,6 +167,7 @@ export default function DynamicFormFields({
                 level={level}
                 ancestors={ancestors}
                 parentModel={model}
+                parentFormId={parentFormId}
                 previewKeys={getPreviewKeys}
               />
             ));

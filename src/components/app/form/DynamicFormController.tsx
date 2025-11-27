@@ -7,6 +7,7 @@ import DynamicFormFields from "@components/app/form/DynamicFormFields.tsx";
 import {getPreviewKeysFromDefs, makePreviewLabelFromDefs, useModelDefinition} from "./useModelDefinition.ts";
 import {computeDefaultValues} from "../utils/defaults.ts";
 import {buildRelationPayload, normalizeScalarValues} from "../utils/normalize.ts";
+import {draftsService} from "@/stores/draftsStore.ts";
 
 export type RelationState = {
     // Common
@@ -104,6 +105,8 @@ type Props = {
     value?: Record<string, any>;
     onChange?: (value: Record<string, any>) => void;
     onSubmit?: (value: Record<string, any>) => Promise<any> | any;
+    // Identifiant du formulaire pour le store global
+    formId?: string;
     // Si fourni, remplace la logique interne de soumission (utilisé par les wrappers DynamicData*)
     submissionHandler?: (args: {
         values: Record<string, any>;
@@ -130,6 +133,7 @@ export default function DynamicFormController({
                                                   value,
                                                   onChange,
                                                   onSubmit,
+                                                  formId = 'root',
                                                   submissionHandler,
                                                   onCancel,
                                                   exclude,
@@ -163,7 +167,11 @@ export default function DynamicFormController({
         ancestors,
     });
 
-    const defaultValues = useMemo(() => computeDefaultValues(scalarFields, value), [scalarFields, value]);
+    const defaultValues = useMemo(() => {
+        // Préférer la valeur du store si présente, sinon la prop value
+        const existing = draftsService.get<Record<string, any>>(formId);
+        return computeDefaultValues(scalarFields, existing ?? value);
+    }, [scalarFields, value, formId]);
 
     const [relationUIState, dispatch] = useReducer(relationReducer, {} as Record<string, RelationState>);
     const updateRelationState = (rf: any, updater: (prev: RelationState) => RelationState) => {
@@ -223,7 +231,7 @@ export default function DynamicFormController({
                         relationState: relationUIState,
                     });
                 } else {
-                    const withRelations = await buildRelationPayload(normalized, relations, relationUIState);
+                    const withRelations = await buildRelationPayload(normalized, relations, relationUIState, undefined, formId);
                     await onSubmit?.(withRelations);
                 }
                 helpers.setSubmitting(false);
@@ -232,11 +240,13 @@ export default function DynamicFormController({
             }
         }
     });
-
+    // Synchronisation: écrire les valeurs dans le store global des brouillons
     useEffect(() => {
+        draftsService.update(formId, formik.values);
+        // Optionnel: on peut encore propager onChange si fourni
         onChange?.(formik.values);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [formik.values]);
+    }, [formId, formik.values]);
 
     const reloadRelationOptions = (rf: any, q: string) => {
         updateRelationState(rf, (st) => ({...st, loading: true, search: q}));
@@ -318,6 +328,7 @@ export default function DynamicFormController({
                 updateRelationState={updateRelationState}
                 reloadRelationOptions={reloadRelationOptions}
                 model={model}
+                parentFormId={formId}
                 disabledFields={disabledFields}
                 relationsDepth={relationsDepth}
                 level={level}

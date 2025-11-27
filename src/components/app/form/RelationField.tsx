@@ -149,6 +149,8 @@ type RelationFieldProps = {
     ancestors: string[];
     // Current parent model name
     parentModel: string;
+    // Current parent form id (for drafts store path)
+    parentFormId: string;
     // Get preview keys (fields) for a given target model
     previewKeys: (targetModel: string) => string[];
 };
@@ -163,6 +165,7 @@ export function RelationField({
                                   compact = false,
                                   ancestors,
                                   parentModel,
+                                  parentFormId,
                                   previewKeys
                               }: RelationFieldProps) {
     const isList = !!rf.isList;
@@ -283,6 +286,7 @@ export function RelationField({
                 <DynamicFormController
                     model={rf.targetModel}
                     embedded
+                    formId={`${parentFormId}.${rf.name}`}
                     mode={'create'}
                     relationsDepth={depth === -1 ? -1 : Math.max(0, (depth ?? 1) - 1)}
                     level={level + 1}
@@ -484,6 +488,7 @@ export function RelationField({
                                                 <DynamicFormController
                                                     model={rf.targetModel}
                                                     embedded
+                                                    formId={`${parentFormId}.${rf.name}`}
                                                     mode={'create'}
                                                     relationsDepth={depth === -1 ? -1 : Math.max(0, (depth ?? 1) - 1)}
                                                     level={level + 1}
