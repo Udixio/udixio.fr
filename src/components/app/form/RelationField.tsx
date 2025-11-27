@@ -490,7 +490,6 @@ export function RelationField({
                                                     ancestors={[...ancestors, parentModel]}
                                                     value={isList ? (st?.createDraft || {}) : (st?.createValues || {})}
                                                     onChange={(vals) => {
-                                                        console.log('create change', vals);
                                                         if (isList) {
                                                             updateState(rf, (prev) => ({
                                                                 ...prev,

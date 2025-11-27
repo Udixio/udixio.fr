@@ -1,3 +1,5 @@
+import {actions} from 'astro:actions';
+
 // Normalize scalar values based on field types
 export function normalizeScalarValues(values: Record<string, any>, scalarFields: any[]) {
     const normalized: Record<string, any> = {...(values || {})};
@@ -30,21 +32,16 @@ export function normalizeScalarValues(values: Record<string, any>, scalarFields:
 }
 
 // Build relation payload (connect/create) and assign FK for singular relations
+// Important: uses direct Astro actions invocation (await) to avoid React useActionState timing issues
 export async function buildRelationPayload(
     base: Record<string, any>,
     relations: any[],
     relationState: Record<string, any>,
-    createEntityAction: (payload: any) => Promise<any>,
-    createEntityRes: any,
+    // optional override for testing/injection
+    createFn?: (payload: any) => Promise<any>,
 ) {
 
-    console.log('relationState', {
-        base,
-        relations,
-        relationState,
-        createEntityAction,
-        createEntityRes
-    });
+    console.log('relationState', { base, relations, relationState });
     const normalized = {...(base || {})};
     for (const rf of relations) {
         const st = relationState[rf.name];
@@ -55,11 +52,12 @@ export async function buildRelationPayload(
                 normalized[rf.fk] = st.selectedId;
             } else if (st.mode === 'create' && st.createValues) {
                 try {
-                    const created = await createEntityAction({
+                    const doCreate = createFn || (actions as any).createEntity;
+                    const created = await doCreate({
                         model: rf.targetModel,
                         dataJson: JSON.stringify(st.createValues)
                     } as any);
-                    const newId = (created as any)?.data?.created?.id || (createEntityRes as any)?.data?.created?.id;
+                    const newId = (created as any)?.data?.created?.id || (created as any)?.data?.id || (created as any)?.created?.id;
                     if (newId) normalized[rf.fk] = newId;
                 } catch {
                     // swallow – let parent submit handler deal with errors

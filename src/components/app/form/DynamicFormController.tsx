@@ -110,8 +110,6 @@ type Props = {
         scalarFields: any[];
         relations: any[];
         relationState: Record<string, RelationState>;
-        createEntityAction: (payload: any) => Promise<any>;
-        createEntityRes: any;
     }) => Promise<any>;
     // Optionally filter fields
     exclude?: string[];
@@ -223,11 +221,9 @@ export default function DynamicFormController({
                         scalarFields,
                         relations,
                         relationState: relationUIState,
-                        createEntityAction: createEntityAction as any,
-                        createEntityRes,
                     });
                 } else {
-                    const withRelations = await buildRelationPayload(normalized, relations, relationUIState, createEntityAction, createEntityRes);
+                    const withRelations = await buildRelationPayload(normalized, relations, relationUIState);
                     await onSubmit?.(withRelations);
                 }
                 helpers.setSubmitting(false);
