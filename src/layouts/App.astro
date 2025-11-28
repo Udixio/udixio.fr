@@ -3,7 +3,7 @@ import Layout from "@layouts/Layout.astro";
 import {Navigation} from "@/components/app/Navigation"
 import {Actions} from "@/components/app/Actions.tsx"
 ---
-<Layout menu={false} footer={false} seo={{noindex: true}}>
+<Layout menu={false} footer={false} seo={{noindex: true}} background={false}>
     <div class="h-[100vh] flex">
         <Navigation client:load/>
         <slot/>
@@ -12,29 +12,29 @@ import {Actions} from "@/components/app/Actions.tsx"
     <script>
         import {actions} from 'astro:actions';
 
-            (async () => {
-                const isLoginPage = window.location.pathname === '/login';
-                if (isLoginPage) {
-                    const {data, error} = await actions.checkAuth({})
-                    if (error) {
-                        window.location.replace('/500');
-                        }
-                    if (data?.authenticated) {
-                        window.location.replace('/app');
-                        }
-                    }
-                try {
-                    const {data, error} = await actions.checkAuth({})
-                    if (error) {
-                        window.location.replace('/500');
-                        }
-                    if (!data?.authenticated) {
-                        window.location.replace('/login');
-                        }
-                    } catch (e) {
+        (async () => {
+            const isLoginPage = window.location.pathname === '/login';
+            if (isLoginPage) {
+                const {data, error} = await actions.checkAuth({})
+                if (error) {
                     window.location.replace('/500');
-                    }
-                })();
+                }
+                if (data?.authenticated) {
+                    window.location.replace('/app');
+                }
+            }
+            try {
+                const {data, error} = await actions.checkAuth({})
+                if (error) {
+                    window.location.replace('/500');
+                }
+                if (!data?.authenticated) {
+                    window.location.replace('/login');
+                }
+            } catch (e) {
+                window.location.replace('/500');
+            }
+        })();
     </script>
 
     <noscript>

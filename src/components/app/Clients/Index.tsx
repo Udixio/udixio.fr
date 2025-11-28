@@ -2,9 +2,9 @@ import React, {useEffect, useState} from "react";
 
 import {appService} from "@/stores/appStore";
 import DynamicDataCreate from "@components/app/form/DynamicDataCreate.tsx";
-import {Card} from "@udixio/ui-react";
+import {Card, IconButton} from "@udixio/ui-react";
 import DynamicDatatable from "@components/app/preview/DynamicDatatable.tsx";
-import {faFolderOpen} from "@fortawesome/pro-regular-svg-icons";
+import {faFolderOpen, faXmark} from "@fortawesome/pro-regular-svg-icons";
 
 
 export default function ClientsIndex() {
@@ -27,8 +27,8 @@ export default function ClientsIndex() {
     }, []);
 
     return (
-        <div className="p-4 space-y-4">
-            <h1 className="text-xl font-semibold">Clients</h1>
+        <div className="space-y-4 section w-full">
+            <h1 className="text-display-large">Prospect</h1>
             {
                 !showCreate &&
                 <DynamicDatatable
@@ -51,7 +51,11 @@ export default function ClientsIndex() {
 
             {showCreate && (
                 <Card className="p-4">
-                    <h2 className="font-medium mb-2">Créer un client</h2>
+                    <div className={"flex justify-between items-center mb-4"}>
+                        <h2 className="font-medium mb-2">Créer un prospect</h2>
+                        <IconButton icon={faXmark} onClick={() => setShowCreate(false)}>Fermer</IconButton>
+                    </div>
+
                     <div className="space-y-3">
                         <p className="text-sm text-gray-600">Le formulaire est généré depuis le modèle Prisma « Client
                             ».</p>

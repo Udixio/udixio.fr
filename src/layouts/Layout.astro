@@ -94,10 +94,11 @@ export interface SEOProps {
 interface Props {
     seo: SEOProps;
     footer: boolean;
+    background: boolean;
     menu: boolean;
 }
 
-const {seo, footer = true, menu = true}: Props = Astro.props;
+const {seo, footer = true, menu = true, background = true}: Props = Astro.props;
 
 // const currentPath = Astro.url.pathname.replace("/fr", "");
 // const domain = Astro.url.origin;
@@ -157,9 +158,10 @@ const seoDefault: SEOProps = {
 
 <main>
 
-    <BackgroundColor size="max(50vw, 800px)" className="fixed -z-30 opacity-55 top-0 h-screen w-screen "
-                     transition:name="background-color"
-                     transition:persist client:only="react"/>
+    {
+        background &&
+            <BackgroundColor/>
+    }
 
     <div class="-z-10 h-[75vh] w-full absolute top-0 bg-gradient-to-b from-surface via-surface-60 to-transparent"/>
     <slot/>

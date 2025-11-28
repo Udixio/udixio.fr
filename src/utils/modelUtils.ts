@@ -147,3 +147,153 @@ function fallbackPreview(obj: any): string | undefined {
     const v = obj?.name ?? obj?.title ?? obj?.email ?? obj?.slug ?? obj?.label ?? obj?.id;
     return v != null ? String(v) : undefined;
 }
+
+// ================= CSV Import helpers =================
+
+export type ImportField = {
+    key: string; // ex: "title" or "user.email"
+    label: string; // user-friendly
+    required: boolean;
+    kind: 'scalar' | 'fk' | 'inline';
+};
+
+const AUTO_EXCLUDE = new Set(['id', 'createdAt', 'updatedAt']);
+
+/**
+ * Retourne la liste des champs attendus pour un import CSV d'un modèle donné.
+ * - Inclut les champs scalaires simples non auto-générés.
+ * - Pour les relations singulières:
+ *   - si ui.inlineFields === true OU isRequired === true => aplatit récursivement les champs scalaires requis de l'enfant via dot-path (ex: user.email)
+ *   - sinon, inclut la FK `${name}Id` (ou relationFromFields[0])
+ */
+export function getImportFields(modelName: string, defs: Record<string, any>, maxDepth: number = 3): ImportField[] {
+    const out: ImportField[] = [];
+    const visited = new Set<string>();
+
+    function isModel(name: string) {
+        return !!(defs as any)[name];
+    }
+
+    function pushScalar(fieldKey: string, meta: any) {
+        if (AUTO_EXCLUDE.has(fieldKey)) return;
+        if (meta?.isReadOnly) return;
+        out.push({key: fieldKey, label: meta?.ui?.label || fieldKey, required: !!meta?.isRequired, kind: 'scalar'});
+    }
+
+    function walk(model: string, basePath: string | null, depth: number) {
+        if (depth > maxDepth) return;
+        const modelDef: Record<string, any> = (defs as any)[model];
+        if (!modelDef) return;
+        const entries = Object.entries(modelDef).filter(([k]) => k !== 'ui');
+        for (const [fname, fmetaAny] of entries) {
+            const fmeta: any = fmetaAny as any;
+            const isRelation = !!fmeta?.relationName || (isModel(String(fmeta?.type)) && !fmeta?.isList);
+
+            if (!isRelation) {
+                if (!basePath) {
+                    // top-level scalar
+                    if (!fmeta?.hasDefaultValue && !AUTO_EXCLUDE.has(fname)) {
+                        pushScalar(fname, fmeta);
+                    }
+                } else {
+                    // child scalar when in inline relation context (basePath not null)
+                    if (fmeta?.isRequired) {
+                        const k = `${basePath}.${fname}`;
+                        out.push({key: k, label: fmeta?.ui?.label || k, required: true, kind: 'inline'});
+                    }
+                }
+                continue;
+            }
+
+            // Relation singulière
+            if (fmeta?.isList) continue; // ignore lists for CSV import
+
+            const childModel = String(fmeta?.type);
+            const inline = fmeta?.ui?.inlineFields === true;
+            const required = !!fmeta?.isRequired;
+            if (inline || (required && !basePath)) {
+                // Aplatissement des champs requis de l'enfant
+                const childPath = basePath ? `${basePath}.${fname}` : fname;
+                if (!visited.has(`${model}>${childPath}`)) {
+                    visited.add(`${model}>${childPath}`);
+                    // Collect only required scalar fields from child
+                    const childDef: Record<string, any> = (defs as any)[childModel] || {};
+                    for (const [cname, cmetaAny] of Object.entries(childDef)) {
+                        if (cname === 'ui') continue;
+                        const cmeta: any = cmetaAny as any;
+                        const cIsRelation = !!cmeta?.relationName || (isModel(String(cmeta?.type)) && !cmeta?.isList);
+                        if (!cIsRelation) {
+                            if (cmeta?.isRequired && !AUTO_EXCLUDE.has(cname)) {
+                                const k = `${childPath}.${cname}`;
+                                out.push({key: k, label: cmeta?.ui?.label || k, required: true, kind: 'inline'});
+                            }
+                        } else if (cmeta?.isRequired && !cmeta?.isList && depth < maxDepth) {
+                            // recurse for required child relations
+                            walk(childModel, childPath, depth + 1);
+                        }
+                    }
+                }
+            } else if (!basePath) {
+                // Utilise la FK au niveau parent (uniquement top-level)
+                const fk = Array.isArray(fmeta?.relationFromFields) && fmeta.relationFromFields.length > 0
+                    ? String(fmeta.relationFromFields[0])
+                    : `${fname}Id`;
+                const fkMeta = (defs as any)[model]?.[fk] || {ui: {}};
+                if (!AUTO_EXCLUDE.has(fk)) {
+                    out.push({key: fk, label: fkMeta?.ui?.label || fk, required: required, kind: 'fk'});
+                }
+            }
+        }
+    }
+
+    walk(modelName, null, 0);
+
+    // Dédupliquer par clé
+    const map = new Map<string, ImportField>();
+    for (const f of out) {
+        if (!map.has(f.key)) map.set(f.key, f);
+        else {
+            // merge required flag
+            const prev = map.get(f.key)!;
+            prev.required = prev.required || f.required;
+        }
+    }
+    return Array.from(map.values());
+}
+
+/** Convertit un objet plat (avec des keys en dot-path) vers une structure Prisma create imbriquée.
+ * Pour les segments correspondant à des relations requises/inline, enveloppe dans { create: { ... } }.
+ */
+export function unflattenToPrismaCreate(modelName: string, flat: Record<string, any>, defs: Record<string, any>): any {
+    const root: any = {};
+    const isModel = (n: string) => !!(defs as any)[n];
+
+    function ensurePath(obj: any, path: string[], currentModel: string): any {
+        if (path.length === 1) return obj;
+        const [head, ...rest] = path;
+        const currentDef: any = (defs as any)[currentModel] || {};
+        const meta: any = currentDef?.[head];
+        const isRel = meta && (!meta.isList) && (meta.relationName || isModel(String(meta?.type)));
+        if (isRel) {
+            if (!obj[head]) obj[head] = {};
+            if (!obj[head].create) obj[head].create = {};
+            const nextModel = String(meta.type);
+            return ensurePath(obj[head].create, rest, nextModel);
+        } else {
+            if (!obj[head]) obj[head] = {};
+            return ensurePath(obj[head], rest, currentModel);
+        }
+    }
+
+    for (const [k, v] of Object.entries(flat)) {
+        if (!k.includes('.')) {
+            root[k] = v;
+            continue;
+        }
+        const parts = k.split('.');
+        const parent = ensurePath(root, parts, modelName);
+        const leaf = parts[parts.length - 1];
+        parent[leaf] = v;
+    }
+    return root;
+}

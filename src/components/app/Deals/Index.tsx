@@ -28,7 +28,7 @@ export default function DealsIndex() {
 
     return (
         <div className="p-4 space-y-4">
-            <h1 className="text-xl font-semibold">Deals</h1>
+            <h1 className="text-display-large">Deals</h1>
             <DynamicDatatable
                 key={refreshKey}
                 model="Deal"
@@ -81,6 +81,7 @@ export default function DealsIndex() {
             {showCreate && (
                 <Card className="p-4">
                     <h2 className="font-medium mb-2">Créer un deal</h2>
+
                     <div className="space-y-3">
                         <p className="text-sm text-gray-600">Le formulaire est généré depuis le modèle Prisma « Deal
                             ».</p>
