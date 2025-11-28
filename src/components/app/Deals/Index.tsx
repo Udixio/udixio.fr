@@ -43,13 +43,38 @@ export default function DealsIndex() {
                     }
                 ]}
                 presets={[
-                    {label: "Tous", filter: {}},
-                    {label: "Lead", filter: {status: "LEAD"}},
-                    {label: "Qualified", filter: {status: "QUALIFIED"}},
-                    {label: "Proposal sent", filter: {status: "PROPOSAL_SENT"}},
-                    {label: "Won", filter: {status: "WON"}},
-                    {label: "Lost", filter: {status: "LOST"}},
-                    {label: "On hold", filter: {status: "ON_HOLD"}},
+                    {label: "Tout voir", filter: {}},
+                    {
+                        label: "🔥 Hot Deals (>60%)",
+                        filter: {
+                            // Ici on ne veut que les certitudes, donc gt: 60 exclut les nulls
+                            status: {in: ["QUALIFIED", "PROPOSAL_SENT"]},
+                            probability: {gt: 60}
+                        }
+                    },
+                    {
+                        label: "💰 Gros Volumes (>10k€)",
+                        filter: {
+                            // On inclut gt 10k. Les montants nulls (0 ou inconnus) sont exclus
+                            amount: {gt: 10000},
+                            status: {notIn: ["WON", "LOST", "ON_HOLD"]}
+                        }
+                    },
+                    {
+                        label: "🏁 Devis envoyés",
+                        filter: {status: "PROPOSAL_SENT"}
+                    },
+                    {
+                        label: "⚠️ Faible proba ou Inconnue",
+                        filter: {
+                            status: {notIn: ["WON", "LOST"]},
+                            // On utilise OR pour attraper les <20 ET les nulls
+                            OR: [
+                                {probability: {lt: 20}},
+                                {probability: {equals: null}}
+                            ]
+                        }
+                    }
                 ]}
             />
 

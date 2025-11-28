@@ -38,7 +38,8 @@ function isScalarField(f: ModelField) {
 
 type ColumnDefField = { key: string; label: string; kind: 'field'; field: ModelField; order: number };
 type ColumnDefMutex = { key: string; label: string; kind: 'mutex'; members: string[]; order: number; mutexKey: string };
-type ColumnDef = ColumnDefField | ColumnDefMutex;
+type ColumnDefInline = { key: string; label: string; kind: 'inline'; order: number; parent: string; childKey: string; childField: ModelField; };
+type ColumnDef = ColumnDefField | ColumnDefMutex | ColumnDefInline;
 
 export default function DynamicDatatable({model, presets, pageSize = 25, rowActions}: Props) {
     const list = useDynamicList<any>(model, {limit: pageSize});
@@ -90,8 +91,46 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
             for (const [n] of g.members) mutexMemberNames.add(n);
         }
 
+        // Detect inlineFields relations and compute inline columns
+        const inlineCols: ColumnDefInline[] = [];
+        const allModels = models as any;
+        const modelNames = allModels ? new Set(Object.keys(allModels)) : new Set<string>();
+        for (const [name, fAny] of entries) {
+            const f = fAny as ModelField;
+            const isRelation = !!f.relationName || (!isScalarField(f) && modelNames.has(String(f.type)) && !f.isList);
+            const wantsInline = isRelation && (f.ui as any)?.inlineFields === true;
+            if (!wantsInline) continue;
+            const targetModel = String(f.type);
+            const targetDef: any = (allModels as any)?.[targetModel];
+            if (!targetDef) continue;
+            const targetEntries = Object.entries(targetDef).filter(([n]) => n !== 'ui') as Array<[string, any]>;
+            const targetHasPreview = targetEntries.some(([, mf]) => (mf as any)?.ui?.preview === true);
+            const pickChild = targetEntries.filter(([childKey, childMeta]) => {
+                const mf = childMeta as any as ModelField;
+                const childIsScalar = !mf.isList && !mf.relationName;
+                if (!childIsScalar) return false; // n'imbrique pas les relations des enfants
+                if (hasPreview) return mf.ui?.preview === true; // mode preview strict
+                return true; // sinon, tous les scalaires de l'enfant
+            });
+            for (const [childKey, childMeta] of pickChild) {
+                const childField = childMeta as any as ModelField;
+                inlineCols.push({
+                    key: `${name}.${childKey}`,
+                    label: childField.ui?.label ?? childKey,
+                    kind: 'inline',
+                    order: (childField.ui?.order ?? 9999),
+                    parent: name,
+                    childKey,
+                    childField,
+                });
+            }
+        }
+
         let chosenFieldEntries = entries.filter(([name, fAny]) => {
             if (mutexMemberNames.has(name)) return false; // absorbed by mutex column
+            // exclude inlineFields relation itself (it will be replaced by inline columns)
+            const f0 = fAny as ModelField;
+            if ((f0.ui as any)?.inlineFields === true) return false;
             const f = fAny as ModelField;
             if (hasPreview) return f.ui?.preview === true; // n'inclut pas l'ID si non marqué preview
             return f.isId || isScalarField(f);
@@ -138,7 +177,7 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
         }
 
         // Merge and sort
-        let all: ColumnDef[] = [...fieldCols, ...mutexCols];
+        let all: ColumnDef[] = [...fieldCols, ...mutexCols, ...inlineCols];
         all.sort((a, b) => (a.order - b.order) || a.label.localeCompare(b.label));
 
         // Force the ID column to be first if present among chosen columns
@@ -167,7 +206,7 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
 
     function toggleSort(fieldKey: string) {
         const col = columns.find(c => c.key === fieldKey);
-        if (col && col.kind === 'mutex') return; // disabled on mutex column
+        if (col && (col.kind === 'mutex' || col.kind === 'inline')) return; // disabled on mutex & inline
         if (sortField !== fieldKey) {
             setSortField(fieldKey);
             setSortDir('asc');
@@ -229,6 +268,42 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
                 }
                 if (orConds.length > 0) return {OR: orConds};
                 return undefined as any;
+            }
+
+            // Cas colonne inline: clé au format parent.child
+            if (key.includes('.')) {
+                const [parentKey, childKey] = key.split('.', 2);
+                const parentMeta: any = defs?.[parentKey];
+                const targetModel = String(parentMeta?.type ?? '');
+                const childDef: any = (models as any)?.[targetModel]?.[childKey];
+                const childType = String(childDef?.type ?? 'String');
+
+                // Build nested condition for relation: { parentKey: { is: { childKey: {operator} } } }
+                const buildChildCond = () => {
+                    // Boolean strict
+                    if (childType === 'Boolean') {
+                        if (typeof valAny === 'boolean') return {[childKey]: {equals: valAny}};
+                        const low = String(valAny).toLowerCase();
+                        const truthy = ['true', '1', 'yes', 'y', 'on'];
+                        const falsy = ['false', '0', 'no', 'n', 'off'];
+                        if (truthy.includes(low)) return {[childKey]: {equals: true}};
+                        if (falsy.includes(low)) return {[childKey]: {equals: false}};
+                        return undefined;
+                    }
+                    if (childType === 'String') {
+                        return {[childKey]: {contains: String(valAny), mode: 'insensitive'}};
+                    }
+                    if (['Int', 'BigInt', 'Float', 'Decimal'].includes(childType)) {
+                        const n = typeof valAny === 'number' ? valAny : Number(String(valAny));
+                        if (!Number.isNaN(n)) return {[childKey]: {equals: n}};
+                        return undefined;
+                    }
+                    // Date/Enum/others
+                    return {[childKey]: {equals: valAny}};
+                };
+                const inner = buildChildCond();
+                if (!inner) return undefined as any;
+                return {[parentKey]: {is: inner}};
             }
 
             // Booléen strict
@@ -325,6 +400,26 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
                                     </th>
                                 );
                             }
+                            if (c.kind === 'inline') {
+                                const inline = c as ColumnDefInline;
+                                return (
+                                    <th key={inline.key} className="border border-outline text-left align-top p-2">
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-gray-800">{inline.label}</span>
+                                        </div>
+                                        <div className="mt-1">
+                                            {/* Filtre typé pour la colonne inline, basé sur le type du champ enfant */}
+                                            {/* @ts-ignore */}
+                                            <FieldRenderer
+                                                meta={{...inline.childField, name: inline.key}}
+                                                defs={models as any}
+                                                value={pendingFilters[inline.key] ?? ''}
+                                                onChange={(v: any) => onChangeColFilter(inline.key, v)}
+                                            />
+                                        </div>
+                                    </th>
+                                );
+                            }
                             return (
                                 <th key={c.key} className="border border-outline text-left align-top p-2">
                                     <div className="flex items-center gap-2">
@@ -349,6 +444,7 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
                                 </th>
                             );
                         })}
+                        {columns.filter(c => c.kind === 'inline').map(() => null) /* no-op to satisfy TS */}
                         {actionsCol === 1 && (
                             <th className="border border-outline text-left align-top p-2 w-[1%] whitespace-nowrap">Actions</th>
                         )}
@@ -394,6 +490,8 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
                                                 models={models as any}
                                                 onSaved={() => list.reload()}
                                             />
+                                            : c.kind === 'inline'
+                                                ? renderInlineCell(row, c as ColumnDefInline)
                                             : (isEditableRelationField((c as ColumnDefField).field)
                                                 ? <EditableRelationCell
                                                     row={row}
@@ -488,7 +586,7 @@ function renderCell(
     if (relDisplay != null) {
         return (
             <ToolTip content={
-                <pre className="text-xs overflow-auto ">{safeStringify(relObj)}</pre>
+                <pre className="text-xs overflow-auto ">{safeStringify(value)}</pre>
             }>
                 <span className="underline decoration-dotted cursor-help">{relDisplay}</span>
             </ToolTip>
@@ -554,6 +652,23 @@ function renderMutexCell(
         }
     }
     return <span className="text-gray-500">—</span>;
+}
+
+// Rendu d'une colonne inlineFields: affiche row[parent][childKey] directement
+function renderInlineCell(row: any, col: ColumnDefInline) {
+    const parentVal = row?.[col.parent];
+    if (parentVal == null) {
+        // Pas de relation chargée: tente un fallback minimal
+        return <span className="text-gray-500">—</span>;
+    }
+    const v = parentVal?.[col.childKey];
+    if (v == null) return <span className="text-gray-500">—</span>;
+    try {
+        if (typeof v === 'object') return JSON.stringify(v);
+        return String(v);
+    } catch {
+        return String(v);
+    }
 }
 
 // ===== Inline editable cell =====
