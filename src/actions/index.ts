@@ -33,7 +33,8 @@ export async function loadRuntimeDefinitions(): Promise<Record<string, Record<st
                     };
                 }
             }
-        } catch { /* no overrides */ }
+        } catch { /* no overrides */
+        }
     } catch {
         // Fallback to Prisma runtime
         runtimeModels = (prisma as any)?._runtimeDataModel?.models ?? {};
@@ -98,7 +99,7 @@ function buildSmartInclude(modelName: string, defs: Record<string, any>, depth =
 
         // Recurse one level deeper to prepare nested include
         const nested = buildSmartInclude(targetModel, defs, depth + 1, maxDepth);
-        include[fieldName] = nested ? { include: nested } : true;
+        include[fieldName] = nested ? {include: nested} : true;
     }
 
     return Object.keys(include).length > 0 ? include : undefined;
@@ -196,6 +197,7 @@ export const server = {
                     const smart = buildSmartInclude(model, defs);
                     include = deepMergeInclude(include, smart);
                 }
+                console.log(include)
                 const clientAny = prisma as any;
                 const [items, total] = await Promise.all([
                     clientAny[model.toLowerCase()].findMany({
@@ -207,6 +209,7 @@ export const server = {
                     }),
                     clientAny[model.toLowerCase()].count({where})
                 ]);
+                console.log(items)
                 return {items, total};
             } catch (e) {
                 console.log(e)
