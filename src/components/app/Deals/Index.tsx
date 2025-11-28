@@ -4,7 +4,7 @@ import {appService} from "@/stores/appStore";
 import DynamicDataCreate from "@components/app/form/DynamicDataCreate.tsx";
 import {Card} from "@udixio/ui-react";
 import DynamicDatatable from "@components/app/preview/DynamicDatatable.tsx";
-import {faEyes} from "@fortawesome/pro-regular-svg-icons";
+import {faFolderOpen} from "@fortawesome/pro-regular-svg-icons";
 
 
 export default function DealsIndex() {
@@ -38,8 +38,8 @@ export default function DealsIndex() {
                         href: (row) => {
                             return "/deals/" + row.id;
                         },
-                        label: "Voir",
-                        icon: faEyes
+                        label: "Ouvrir",
+                        icon: faFolderOpen
                     }
                 ]}
                 presets={[

@@ -353,7 +353,7 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
                                         <div
                                             className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                             {acts.map((a, idx) => (
-                                                <IconButton key={idx} icon={a.icon}
+                                                <IconButton variant={"tonal"} size={"small"} key={idx} icon={a.icon}
                                                             onClick={a.onClick ? a.onClick(row) : undefined}
                                                             href={a.href ? a.href(row) : undefined}>{a.label}</IconButton>
                                             ))}
