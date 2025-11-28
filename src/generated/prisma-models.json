@@ -1461,6 +1461,7 @@
       "relationToFields": null,
       "documentation": null,
       "ui": {
+        "preview": true,
         "hidden": false,
         "label": null,
         "placeholder": null,
@@ -1788,6 +1789,7 @@
       ],
       "documentation": null,
       "ui": {
+        "preview": true,
         "hidden": false,
         "label": null,
         "placeholder": null,
@@ -1808,6 +1810,7 @@
       "relationToFields": null,
       "documentation": null,
       "ui": {
+        "preview": true,
         "hidden": false,
         "label": null,
         "placeholder": null,
@@ -1974,7 +1977,7 @@
       "relationToFields": null,
       "documentation": null,
       "ui": {
-        "preview": false,
+        "preview": true,
         "hidden": false,
         "label": null,
         "placeholder": null,
@@ -2035,6 +2038,7 @@
       "relationToFields": null,
       "documentation": null,
       "ui": {
+        "preview": true,
         "hidden": false,
         "label": null,
         "placeholder": null,
@@ -2295,6 +2299,7 @@
       "mutexGroups": {
         "target": {
           "label": "Cible",
+          "preview": true,
           "description": "Permet de rattacher l'affaire au bon contexte commercial."
         }
       }

@@ -4,7 +4,7 @@ import useDynamicList from './useDynamicList.ts';
 import {useStore} from "@nanostores/react";
 import {modelsService, modelsStore} from '@/stores/modelsStore.ts';
 import {Card} from "@udixio/ui-react";
-import {getModelRelations} from '@/utils/modelUtils.ts';
+import {getModelRelations, resolveEntityPreview} from '@/utils/modelUtils.ts';
 import DynamicPresets from './DynamicPresets.tsx';
 
 type ModelField = {
@@ -329,8 +329,8 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
                                 {columns.map((c) => (
                                     <td className="border border-outline align-top p-2" key={c.key}>
                                         {c.kind === 'mutex'
-                                            ? renderMutexCell(row, c as ColumnDefMutex, models as any)
-                                            : renderCell(row, c.key, (c as ColumnDefField).field, models as any)}
+                                            ? renderMutexCell(row, c as ColumnDefMutex, models as any, model)
+                                            : renderCell(row, c.key, (c as ColumnDefField).field, models as any, model)}
                                     </td>
                                 ))}
                                 {actionsCol === 1 && (
@@ -372,7 +372,13 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
     );
 }
 
-function renderCell(row: any, key: string, field: ModelField, models: Record<string, any> | null) {
+function renderCell(
+    row: any,
+    key: string,
+    field: ModelField,
+    models: Record<string, any> | null,
+    parentModelName: string,
+) {
     const value = row?.[key];
     if (value == null) return '';
 
@@ -381,7 +387,12 @@ function renderCell(row: any, key: string, field: ModelField, models: Record<str
         if (typeof value === 'string' && key.endsWith('Id')) {
             const base = key.slice(0, -2);
             const relObj = row?.[base];
-            const display = readableFromRelation(relObj, models, guessTargetModel(models, base));
+            let target: string | undefined;
+            const parentDef: any = models ? (models as any)[parentModelName] : undefined;
+            const baseMeta: any = parentDef ? parentDef[base] : undefined;
+            if (baseMeta && typeof baseMeta.type === 'string') target = String(baseMeta.type);
+            if (!target) target = guessTargetModel(models, base);
+            const display = resolveEntityPreview(relObj, target, models as any);
             if (display) return <span title={String(value)}>{display}</span>;
             return <span title={String(value)}>{String(value)}</span>;
         }
@@ -389,7 +400,7 @@ function renderCell(row: any, key: string, field: ModelField, models: Record<str
     }
 
     // Relation-like object: use preview fields from related model
-    const relDisplay = readableFromRelation(value, models, String(field.type));
+    const relDisplay = resolveEntityPreview(value, String(field.type), models as any);
     const id = value?.id ?? row?.[`${key}Id`];
     if (relDisplay != null) return <span title={id ? String(id) : undefined}>{relDisplay}</span>;
 
@@ -411,35 +422,23 @@ function guessTargetModel(models: Record<string, any> | null, baseName: string):
     return undefined;
 }
 
-function readableFromRelation(relObj: any, models: Record<string, any> | null, targetModel?: string) {
-    if (!relObj) return undefined;
-    // Prefer preview fields in order
-    if (models && targetModel && (models as any)[targetModel]) {
-        const def: Record<string, any> = (models as any)[targetModel];
-        const entries = Object.entries(def);
-        const previewFields = entries
-            .filter(([, f]) => (f as any)?.ui?.preview === true)
-            .sort((a, b) => ((a[1] as any)?.ui?.order ?? 9999) - ((b[1] as any)?.ui?.order ?? 9999))
-            .map(([k]) => k);
-        for (const k of previewFields) {
-            const v = relObj?.[k];
-            if (v != null) return String(v);
-        }
-    }
-    // Fallback heuristics
-    const fallback = relObj?.name ?? relObj?.title ?? relObj?.email ?? relObj?.slug ?? relObj?.id;
-    if (fallback != null) return String(fallback);
-    return undefined;
-}
-
 // Rendu d'une colonne mutex: affiche la première relation non nulle parmi les membres
-function renderMutexCell(row: any, col: { members: string[]; mutexKey: string; label: string }, models: Record<string, any> | null) {
+function renderMutexCell(
+    row: any,
+    col: { members: string[]; mutexKey: string; label: string },
+    models: Record<string, any> | null,
+    parentModelName: string,
+) {
+    const parentDef: any = models ? (models as any)[parentModelName] : undefined;
     for (const member of col.members) {
         const relObj = row?.[member];
         const idVal = row?.[`${member}Id`];
         if (relObj != null) {
-            const targetModel = guessTargetModel(models, member);
-            const display = readableFromRelation(relObj, models, targetModel ?? String(relObj?.__typename ?? ''));
+            let targetModel: string | undefined;
+            const memberMeta: any = parentDef ? parentDef[member] : undefined;
+            if (memberMeta && typeof memberMeta.type === 'string') targetModel = String(memberMeta.type);
+            if (!targetModel) targetModel = guessTargetModel(models, member);
+            const display = resolveEntityPreview(relObj, targetModel ?? String(relObj?.__typename ?? ''), models as any);
             const title = relObj?.id ?? idVal ? String(relObj?.id ?? idVal) : undefined;
             if (display != null) {
                 return <span title={title}>{display}</span>;

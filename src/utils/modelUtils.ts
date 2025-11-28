@@ -74,3 +74,76 @@ export function getModelRelations(defs: Record<string, any> | undefined, modelNa
 
     return out;
 }
+
+/**
+ * Résout récursivement un libellé lisible (Preview) pour une entité donnée, à partir
+ * des définitions de modèles enrichies (prisma-models.json + overrides).
+ *
+ * Algorithme:
+ * 1. Si le modèle courant possède des champs scalaires marqués ui.preview=true, on
+ *    concatène leurs valeurs (ordre par ui.order) et on retourne.
+ * 2. Sinon, on cherche des champs relationnels marqués ui.preview=true; si la donnée
+ *    relationnelle est présente, on appelle récursivement sur le modèle cible.
+ * 3. Fallback: champs conventionnels (name, title, email, slug, label) puis id.
+ */
+export function resolveEntityPreview(
+    data: any,
+    modelName: string | undefined,
+    defs: Record<string, any> | null | undefined,
+    depth: number = 0
+): string | undefined {
+    if (data == null) return undefined;
+    if (!modelName || !defs || !(defs as any)[modelName]) {
+        // Fallback heuristics when model def missing
+        return fallbackPreview(data);
+    }
+
+    // Prevent pathological cycles
+    if (depth > 5) return fallbackPreview(data);
+
+    const def: Record<string, any> = (defs as any)[modelName];
+    const modelNames = new Set(Object.keys(defs as any));
+
+    // 1) Scalar preview fields
+    const scalarPreview = Object.entries(def)
+        .filter(([k]) => k !== 'ui')
+        .filter(([, f]) => {
+            const meta = f as any;
+            const isRelation = !!meta.relationName || (modelNames.has(String(meta.type)) && !meta.isList);
+            return meta?.ui?.preview === true && !isRelation && !meta.isList;
+        })
+        .sort((a, b) => ((a[1] as any)?.ui?.order ?? 9999) - ((b[1] as any)?.ui?.order ?? 9999));
+    if (scalarPreview.length > 0) {
+        const parts: string[] = [];
+        for (const [fieldName] of scalarPreview) {
+            const v = data?.[fieldName];
+            if (v != null && String(v).length > 0) parts.push(String(v));
+        }
+        if (parts.length > 0) return parts.join(' ');
+    }
+
+    // 2) Relational preview fields (recursive)
+    const relationalPreview = Object.entries(def)
+        .filter(([k]) => k !== 'ui')
+        .filter(([, f]) => {
+            const meta = f as any;
+            const isRelation = !!meta.relationName || (modelNames.has(String(meta.type)) && !meta.isList);
+            return meta?.ui?.preview === true && isRelation && !meta.isList;
+        })
+        .sort((a, b) => ((a[1] as any)?.ui?.order ?? 9999) - ((b[1] as any)?.ui?.order ?? 9999));
+    for (const [fieldName, metaAny] of relationalPreview) {
+        const child = data?.[fieldName];
+        if (child == null) continue;
+        const targetModel = String((metaAny as any)?.type ?? '');
+        const resolved = resolveEntityPreview(child, targetModel, defs, depth + 1);
+        if (resolved && resolved.length > 0) return resolved;
+    }
+
+    // 3) Fallback
+    return fallbackPreview(data);
+}
+
+function fallbackPreview(obj: any): string | undefined {
+    const v = obj?.name ?? obj?.title ?? obj?.email ?? obj?.slug ?? obj?.label ?? obj?.id;
+    return v != null ? String(v) : undefined;
+}
