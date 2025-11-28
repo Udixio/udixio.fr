@@ -114,31 +114,41 @@ export const server = {
             limit: z.number().int().min(1).max(100).default(25),
             offset: z.number().int().min(0).default(0),
             whereJson: z.string().optional(),
+            orderByField: z.string().optional(),
+            orderByDir: z.enum(['asc', 'desc']).optional(),
+            includeJson: z.string().optional(),
         }),
         handler: async (input) => {
-            const {model, q, limit, offset, whereJson} = input;
-            const where: any = whereJson ? JSON.parse(whereJson) : {};
-            // Basic search mapping per model
-            if (q) {
-                const contains = (field: string) => ({[field]: {contains: q, mode: 'insensitive'}});
-                if (model === 'User') where.OR = [contains('name'), contains('email')];
-                if (model === 'Organization') where.OR = [contains('name'), contains('slug')];
-                if (model === 'Project') where.name = {contains: q, mode: 'insensitive'};
-                if (model === 'Deal') where.title = {contains: q, mode: 'insensitive'};
-                if (model === 'Contact') where.OR = [contains('firstName'), contains('lastName'), contains('company')];
-                if (model === 'Client') where.user = {OR: [contains('name'), contains('email')]} as any;
+            try {
+                const {model, q, limit, offset, whereJson, orderByField, orderByDir, includeJson} = input;
+                const where: any = whereJson ? JSON.parse(whereJson) : {};
+                // Basic search mapping per model
+                if (q) {
+                    const contains = (field: string) => ({[field]: {contains: q, mode: 'insensitive'}});
+                    if (model === 'User') where.OR = [contains('name'), contains('email')];
+                    if (model === 'Organization') where.OR = [contains('name'), contains('slug')];
+                    if (model === 'Project') where.name = {contains: q, mode: 'insensitive'};
+                    if (model === 'Deal') where.title = {contains: q, mode: 'insensitive'};
+                    if (model === 'Contact') where.OR = [contains('firstName'), contains('lastName'), contains('company')];
+                    if (model === 'Client') where.user = {OR: [contains('name'), contains('email')]} as any;
+                }
+                const orderBy: any = orderByField ? {[orderByField]: (orderByDir ?? 'asc')} : {createdAt: 'desc'};
+                const include: any = includeJson ? JSON.parse(includeJson) : undefined;
+                const clientAny = prisma as any;
+                const [items, total] = await Promise.all([
+                    clientAny[model.toLowerCase()].findMany({
+                        where,
+                        take: limit,
+                        skip: offset,
+                        orderBy,
+                        include,
+                    }),
+                    clientAny[model.toLowerCase()].count({where})
+                ]);
+                return {items, total};
+            } catch (e) {
+                console.log(e)
             }
-            const clientAny = prisma as any;
-            const [items, total] = await Promise.all([
-                clientAny[model.toLowerCase()].findMany({
-                    where,
-                    take: limit,
-                    skip: offset,
-                    orderBy: {createdAt: 'desc'}
-                }),
-                clientAny[model.toLowerCase()].count({where})
-            ]);
-            return {items, total};
         }
     }),
     createEntity: defineAction({
