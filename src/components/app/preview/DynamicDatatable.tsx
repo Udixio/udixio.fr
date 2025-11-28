@@ -3,9 +3,10 @@ import React, {useEffect, useMemo, useState} from 'react';
 import useDynamicList from './useDynamicList.ts';
 import {useStore} from "@nanostores/react";
 import {modelsService, modelsStore} from '@/stores/modelsStore.ts';
-import {Card} from "@udixio/ui-react";
+import {Card, IconButton} from "@udixio/ui-react";
 import {getModelRelations, resolveEntityPreview} from '@/utils/modelUtils.ts';
 import DynamicPresets from './DynamicPresets.tsx';
+import type {IconDefinition} from "@fortawesome/pro-light-svg-icons";
 
 type ModelField = {
     type: string;
@@ -17,7 +18,7 @@ type ModelField = {
 
 type ModelDefinition = Record<string, ModelField>;
 
-type RowAction = { label: string; icon?: React.ReactNode; onClick: (row: any) => void };
+type RowAction = { label: string; icon?: IconDefinition; onClick?: (row: any) => void, href?: (row: any) => string };
 
 type Props = {
     model: string;
@@ -122,7 +123,14 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
             const membersSorted = g.members
                 .sort((a, b) => ((a[1].ui?.order ?? 9999) - (b[1].ui?.order ?? 9999)))
                 .map(([n]) => n);
-            mutexCols.push({ key: `__mutex__:${mKey}`, label, kind: 'mutex', members: membersSorted, order: g.order ?? 9999, mutexKey: mKey });
+            mutexCols.push({
+                key: `__mutex__:${mKey}`,
+                label,
+                kind: 'mutex',
+                members: membersSorted,
+                order: g.order ?? 9999,
+                mutexKey: mKey
+            });
         }
 
         // Merge and sort
@@ -204,12 +212,12 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
                 else if (falsy.includes(low)) b = false;
                 // Si non reconnu, ne renvoie pas de condition (évite erreurs)
                 if (b === undefined) return undefined as any;
-                return { [key]: { equals: b } };
+                return {[key]: {equals: b}};
             }
 
             // String => contains insensible à la casse
             if (type === 'String') {
-                return { [key]: { contains: val, mode: 'insensitive' } };
+                return {[key]: {contains: val, mode: 'insensitive'}};
             }
 
             // Si le type correspond à un autre modèle, on évite (le filtrage relationnel n'est pas géré ici)
@@ -217,7 +225,7 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
                 // fallback: essaie sur la FK conventionnelle `${key}Id`
                 const fk = `${key}Id`;
                 if (defs?.[fk]?.type === 'String') {
-                    return { [fk]: { contains: val, mode: 'insensitive' } };
+                    return {[fk]: {contains: val, mode: 'insensitive'}};
                 }
                 return undefined as any;
             }
@@ -226,21 +234,21 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
             // Tentative de coercition pour les numériques
             if (type === 'Int' || type === 'BigInt' || type === 'Float' || type === 'Decimal') {
                 const n = Number(val);
-                if (!Number.isNaN(n)) return { [key]: { equals: n } };
+                if (!Number.isNaN(n)) return {[key]: {equals: n}};
                 return undefined as any;
             }
             // DateTime/Date: laissez equals string (Prisma tentera de parser si ISO)
-            return { [key]: { equals: val } };
+            return {[key]: {equals: val}};
         }).filter(Boolean);
 
         // Fusion avec le filtre preset si présent
         let where: any = {};
         if (presetFilter && conds.length > 0) {
-            where = { AND: [presetFilter, ...conds] };
+            where = {AND: [presetFilter, ...conds]};
         } else if (presetFilter) {
             where = presetFilter;
         } else if (conds.length > 0) {
-            where = { AND: conds };
+            where = {AND: conds};
         }
         list.setFilter(where);
     }, [colFilters, models, model, presetFilter]);
@@ -257,7 +265,7 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
     return (
         <div className="space-y-3">
             {Array.isArray(presets) && presets.length > 0 && (
-                <DynamicPresets presets={presets as any} onFilter={(f) => setPresetFilter(f)} />
+                <DynamicPresets presets={presets as any} onFilter={(f) => setPresetFilter(f)}/>
             )}
             <Card variant={"filled"} className="overflow-auto">
                 <table className="min-w-[720px] border border-outline">
@@ -306,12 +314,16 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
                     <tbody>
                     {loading && (
                         <tr>
-                            <td className="border border-outline p-3" colSpan={columns.length + actionsCol}>Chargement…</td>
+                            <td className="border border-outline p-3"
+                                colSpan={columns.length + actionsCol}>Chargement…
+                            </td>
                         </tr>
                     )}
                     {!loading && items.length === 0 && (
                         <tr>
-                            <td className="border border-outline p-3" colSpan={columns.length + actionsCol}>Aucun élément</td>
+                            <td className="border border-outline p-3" colSpan={columns.length + actionsCol}>Aucun
+                                élément
+                            </td>
                         </tr>
                     )}
                     {!loading && items.map((row: any) => {
@@ -322,7 +334,10 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
                                 className="group"
                                 onDoubleClick={() => {
                                     if (acts.length > 0) {
-                                        try { acts[0].onClick(row); } catch {}
+                                        try {
+                                            acts[0].onClick(row);
+                                        } catch {
+                                        }
                                     }
                                 }}
                             >
@@ -335,18 +350,12 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
                                 ))}
                                 {actionsCol === 1 && (
                                     <td className="border border-outline align-top p-2">
-                                        <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <div
+                                            className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                             {acts.map((a, idx) => (
-                                                <button
-                                                    key={idx}
-                                                    type="button"
-                                                    className="px-2 py-1 border border-outline/60 rounded text-sm hover:bg-gray-50"
-                                                    onClick={() => a.onClick(row)}
-                                                    title={a.label}
-                                                >
-                                                    {a.icon ? <span className="mr-1 inline-flex items-center">{a.icon}</span> : null}
-                                                    <span>{a.label}</span>
-                                                </button>
+                                                <IconButton key={idx} icon={a.icon}
+                                                            onClick={a.onClick ? a.onClick(row) : undefined}
+                                                            href={a.href ? a.href(row) : undefined}>{a.label}</IconButton>
                                             ))}
                                         </div>
                                     </td>

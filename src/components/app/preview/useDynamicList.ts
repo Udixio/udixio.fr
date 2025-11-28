@@ -57,6 +57,7 @@ export function useDynamicList<T = any>(model: string, options?: UseDynamicListO
                 orderByField,
                 orderByDir,
                 includeJson,
+                smartPreview: true,
             });
             setItems((data as any).items);
             setTotal((data as any).total ?? 0);
