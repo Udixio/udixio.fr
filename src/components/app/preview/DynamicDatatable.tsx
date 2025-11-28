@@ -5,13 +5,14 @@ import {useStore} from "@nanostores/react";
 import {modelsService, modelsStore} from '@/stores/modelsStore.ts';
 import {Card} from "@udixio/ui-react";
 import {getModelRelations} from '@/utils/modelUtils.ts';
+import DynamicPresets from './DynamicPresets.tsx';
 
 type ModelField = {
     type: string;
     isId?: boolean;
     isList?: boolean;
     relationName?: string | null;
-    ui?: { preview?: boolean; label?: string | null; order?: number };
+    ui?: { preview?: boolean; label?: string | null; order?: number; mutexKey?: string };
 };
 
 type ModelDefinition = Record<string, ModelField>;
@@ -20,8 +21,8 @@ type RowAction = { label: string; icon?: React.ReactNode; onClick: (row: any) =>
 
 type Props = {
     model: string;
-    // presets conservé pour compat, non utilisé depuis la suppression de la recherche globale
-    presets?: Array<{ label: string; filter: object }>; // optional, ignored
+    // Sélecteur de vues rapides (presets) pour appliquer un where JSON complexe
+    presets?: Array<{ label: string; filter: object }>; // optionnel
     pageSize?: number;
     rowActions?: (row: any) => RowAction[];
 };
@@ -30,46 +31,104 @@ function isScalarField(f: ModelField) {
     return !f.isList && !f.relationName; // déduction: pas une relation et non-list => scalaire
 }
 
+type ColumnDefField = { key: string; label: string; kind: 'field'; field: ModelField; order: number };
+type ColumnDefMutex = { key: string; label: string; kind: 'mutex'; members: string[]; order: number; mutexKey: string };
+type ColumnDef = ColumnDefField | ColumnDefMutex;
+
 export default function DynamicDatatable({model, presets, pageSize = 25, rowActions}: Props) {
     const list = useDynamicList<any>(model, {limit: pageSize});
     const {models} = useStore(modelsStore);
     const [colFilters, setColFilters] = useState<Record<string, string>>({});
+    const [presetFilter, setPresetFilter] = useState<Record<string, any> | undefined>(undefined);
     const [sortField, setSortField] = useState<string | undefined>(undefined);
     const [sortDir, setSortDir] = useState<'asc' | 'desc' | undefined>(undefined);
 
     // Compute columns early so effects can safely depend on it
-    const columns = useMemo(() => {
-        const defs: ModelDefinition | undefined = (models as any)?.[model];
-        const fields = defs ?? {};
-        const entries = Object.entries(fields);
-        if (entries.length === 0) return [] as { key: string; label: string; field: ModelField }[];
+    const columns = useMemo<ColumnDef[]>(() => {
+        const defs: any = (models as any)?.[model];
+        if (!defs) return [];
 
-        const idFields = entries.filter(([, f]) => f.isId);
-        const hasPreview = entries.some(([, f]) => f.ui?.preview === true);
-        let chosen = entries.filter(([name, f]) => {
-            if (hasPreview) return f.ui?.preview === true || f.isId;
-            // keep scalar-like fields and id as fallback
-            return f.isId || (isScalarField(f));
-        });
+        const fieldsRec: ModelDefinition = defs as any;
+        const modelUi: any = defs.ui || {};
+        const entries = Object.entries(fieldsRec).filter(([name]) => name !== 'ui');
+        if (entries.length === 0) return [];
 
-        // sort by ui.order then name for stability
-        chosen.sort((a, b) => {
-            const ao = a[1].ui?.order ?? 9999;
-            const bo = b[1].ui?.order ?? 9999;
-            if (ao !== bo) return ao - bo;
-            return a[0].localeCompare(b[0]);
-        });
+        // Identify preview mode
+        const hasPreview = entries.some(([, f]) => (f as ModelField).ui?.preview === true);
 
-        // Ensure at least one id field exists
-        if (!chosen.some(([, f]) => f.isId) && idFields.length > 0) {
-            chosen = [idFields[0], ...chosen];
+        // Group by mutexKey for relation-like fields
+        const groups = new Map<string, { members: Array<[string, ModelField]>; order: number; label?: string }>();
+        for (const [name, fAny] of entries) {
+            const f = fAny as ModelField;
+            const mutexKey = f.ui?.mutexKey;
+            const isRelationLike = !!f.relationName || !isScalarField(f);
+            if (mutexKey && isRelationLike) {
+                if (!groups.has(mutexKey)) {
+                    const cfg = modelUi?.mutexGroups?.[mutexKey] || {};
+                    groups.set(mutexKey, {
+                        members: [],
+                        order: Number.isFinite(cfg.order) ? cfg.order : (f.ui?.order ?? 9999),
+                        label: cfg.label,
+                    });
+                }
+                const g = groups.get(mutexKey)!;
+                g.members.push([name, f]);
+                // order = min of members' ui.order
+                const memberOrder = f.ui?.order ?? 9999;
+                if (memberOrder < g.order) g.order = memberOrder;
+            }
         }
 
-        return chosen.map(([key, field]) => ({
-            key,
-            field,
-            label: field.ui?.label ?? key,
-        }));
+        // Prepare normal fields excluding mutex members
+        const mutexMemberNames = new Set<string>();
+        for (const g of groups.values()) {
+            for (const [n] of g.members) mutexMemberNames.add(n);
+        }
+
+        let chosenFieldEntries = entries.filter(([name, fAny]) => {
+            if (mutexMemberNames.has(name)) return false; // absorbed by mutex column
+            const f = fAny as ModelField;
+            if (hasPreview) return f.ui?.preview === true || f.isId;
+            return f.isId || isScalarField(f);
+        });
+
+        // id fallback
+        const idFields = entries.filter(([, f]) => (f as ModelField).isId);
+        if (!chosenFieldEntries.some(([, f]) => (f as ModelField).isId) && idFields.length > 0) {
+            chosenFieldEntries = [idFields[0], ...chosenFieldEntries];
+        }
+
+        // Build field columns
+        const fieldCols: ColumnDefField[] = chosenFieldEntries
+            .map(([key, fAny]) => {
+                const f = fAny as ModelField;
+                return {
+                    key,
+                    label: f.ui?.label ?? key,
+                    kind: 'field',
+                    field: f,
+                    order: f.ui?.order ?? 9999,
+                };
+            });
+
+        // Build mutex columns: include if any member has preview in preview mode OR group config preview OR not in preview mode but at least one member would've been non-scalar (usually hidden unless preview)
+        const mutexCols: ColumnDefMutex[] = [];
+        for (const [mKey, g] of groups.entries()) {
+            const cfg = modelUi?.mutexGroups?.[mKey] || {};
+            const anyMemberPreview = g.members.some(([, f]) => f.ui?.preview === true);
+            const include = hasPreview ? (cfg.preview === true || anyMemberPreview) : true; // in non-preview mode, allow showing group
+            if (!include) continue;
+            const label = cfg.label || g.label || mKey;
+            const membersSorted = g.members
+                .sort((a, b) => ((a[1].ui?.order ?? 9999) - (b[1].ui?.order ?? 9999)))
+                .map(([n]) => n);
+            mutexCols.push({ key: `__mutex__:${mKey}`, label, kind: 'mutex', members: membersSorted, order: g.order ?? 9999, mutexKey: mKey });
+        }
+
+        // Merge and sort
+        const all: ColumnDef[] = [...fieldCols, ...mutexCols];
+        all.sort((a, b) => (a.order - b.order) || a.label.localeCompare(b.label));
+        return all;
     }, [models, model]);
 
     // debounce column filters (UI local state to avoid triggering API on every keypress)
@@ -88,6 +147,8 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
     }
 
     function toggleSort(fieldKey: string) {
+        const col = columns.find(c => c.key === fieldKey);
+        if (col && col.kind === 'mutex') return; // disabled on mutex column
         if (sortField !== fieldKey) {
             setSortField(fieldKey);
             setSortDir('asc');
@@ -172,9 +233,17 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
             return { [key]: { equals: val } };
         }).filter(Boolean);
 
-        const where = conds.length > 0 ? { AND: conds } : {};
+        // Fusion avec le filtre preset si présent
+        let where: any = {};
+        if (presetFilter && conds.length > 0) {
+            where = { AND: [presetFilter, ...conds] };
+        } else if (presetFilter) {
+            where = presetFilter;
+        } else if (conds.length > 0) {
+            where = { AND: conds };
+        }
         list.setFilter(where);
-    }, [colFilters, models, model]);
+    }, [colFilters, models, model, presetFilter]);
 
     // Apply sorting whenever local sort state changes
     useEffect(() => {
@@ -187,6 +256,9 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
 
     return (
         <div className="space-y-3">
+            {Array.isArray(presets) && presets.length > 0 && (
+                <DynamicPresets presets={presets as any} onFilter={(f) => setPresetFilter(f)} />
+            )}
             <Card variant={"filled"} className="overflow-auto">
                 <table className="min-w-[720px] border border-outline">
                     <thead>
@@ -194,6 +266,16 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
                         {columns.map((c) => {
                             const isSorted = sortField === c.key;
                             const indicator = isSorted ? (sortDir === 'asc' ? ' ▲' : (sortDir === 'desc' ? ' ▼' : '')) : '';
+                            if (c.kind === 'mutex') {
+                                return (
+                                    <th key={c.key} className="border border-outline text-left align-top p-2">
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-gray-800">{c.label}</span>
+                                        </div>
+                                        {/* Tri/filtre désactivés pour la colonne mutex */}
+                                    </th>
+                                );
+                            }
                             return (
                                 <th key={c.key} className="border border-outline text-left align-top p-2">
                                     <div className="flex items-center gap-2">
@@ -246,7 +328,9 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
                             >
                                 {columns.map((c) => (
                                     <td className="border border-outline align-top p-2" key={c.key}>
-                                        {renderCell(row, c.key, c.field, models as any)}
+                                        {c.kind === 'mutex'
+                                            ? renderMutexCell(row, c as ColumnDefMutex, models as any)
+                                            : renderCell(row, c.key, (c as ColumnDefField).field, models as any)}
                                     </td>
                                 ))}
                                 {actionsCol === 1 && (
@@ -346,4 +430,33 @@ function readableFromRelation(relObj: any, models: Record<string, any> | null, t
     const fallback = relObj?.name ?? relObj?.title ?? relObj?.email ?? relObj?.slug ?? relObj?.id;
     if (fallback != null) return String(fallback);
     return undefined;
+}
+
+// Rendu d'une colonne mutex: affiche la première relation non nulle parmi les membres
+function renderMutexCell(row: any, col: { members: string[]; mutexKey: string; label: string }, models: Record<string, any> | null) {
+    for (const member of col.members) {
+        const relObj = row?.[member];
+        const idVal = row?.[`${member}Id`];
+        if (relObj != null) {
+            const targetModel = guessTargetModel(models, member);
+            const display = readableFromRelation(relObj, models, targetModel ?? String(relObj?.__typename ?? ''));
+            const title = relObj?.id ?? idVal ? String(relObj?.id ?? idVal) : undefined;
+            if (display != null) {
+                return <span title={title}>{display}</span>;
+            }
+            if (idVal != null) {
+                return <span title={String(idVal)}>{String(idVal)}</span>;
+            }
+            try {
+                return <span title={title}>{JSON.stringify(relObj)}</span>;
+            } catch {
+                return String(relObj);
+            }
+        }
+        if (idVal != null) {
+            // No included relation object but we have the FK
+            return <span title={String(idVal)}>{String(idVal)}</span>;
+        }
+    }
+    return <span className="text-gray-500">—</span>;
 }
