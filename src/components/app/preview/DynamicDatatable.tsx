@@ -11,6 +11,7 @@ import DynamicPresets from './DynamicPresets.tsx';
 import type {IconDefinition} from "@fortawesome/pro-light-svg-icons";
 import {ToolTip} from "@components/ToolTip.tsx";
 
+
 type ModelField = {
     type: string;
     isId?: boolean;
@@ -42,7 +43,7 @@ type ColumnDef = ColumnDefField | ColumnDefMutex;
 export default function DynamicDatatable({model, presets, pageSize = 25, rowActions}: Props) {
     const list = useDynamicList<any>(model, {limit: pageSize});
     const {models} = useStore(modelsStore);
-    const [colFilters, setColFilters] = useState<Record<string, string>>({});
+    const [colFilters, setColFilters] = useState<Record<string, any>>({});
     const [presetFilter, setPresetFilter] = useState<Record<string, any> | undefined>(undefined);
     const [sortField, setSortField] = useState<string | undefined>(undefined);
     const [sortDir, setSortDir] = useState<'asc' | 'desc' | undefined>(undefined);
@@ -92,13 +93,13 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
         let chosenFieldEntries = entries.filter(([name, fAny]) => {
             if (mutexMemberNames.has(name)) return false; // absorbed by mutex column
             const f = fAny as ModelField;
-            if (hasPreview) return f.ui?.preview === true || f.isId;
+            if (hasPreview) return f.ui?.preview === true; // n'inclut pas l'ID si non marqué preview
             return f.isId || isScalarField(f);
         });
 
-        // id fallback
+        // id fallback UNIQUEMENT si aucun champ preview n'existe dans le modèle
         const idFields = entries.filter(([, f]) => (f as ModelField).isId);
-        if (!chosenFieldEntries.some(([, f]) => (f as ModelField).isId) && idFields.length > 0) {
+        if (!hasPreview && !chosenFieldEntries.some(([, f]) => (f as ModelField).isId) && idFields.length > 0) {
             chosenFieldEntries = [idFields[0], ...chosenFieldEntries];
         }
 
@@ -150,7 +151,7 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
     }, [models, model]);
 
     // debounce column filters (UI local state to avoid triggering API on every keypress)
-    const [pendingFilters, setPendingFilters] = useState(colFilters);
+    const [pendingFilters, setPendingFilters] = useState<Record<string, any>>(colFilters);
     useEffect(() => setPendingFilters(colFilters), [columns.length]);
     useEffect(() => {
         const t = setTimeout(() => {
@@ -160,7 +161,7 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [pendingFilters]);
 
-    function onChangeColFilter(fieldKey: string, value: string) {
+    function onChangeColFilter(fieldKey: string, value: any) {
         setPendingFilters(prev => ({...prev, [fieldKey]: value}));
     }
 
@@ -205,16 +206,37 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
     useEffect(() => {
         const defs: any = (models as any)?.[model];
         const modelNames = models ? new Set(Object.keys(models as any)) : new Set<string>();
-        const entries = Object.entries(colFilters).filter(([, v]) => v && v.trim().length > 0) as [string, string][];
+        const entries = Object.entries(colFilters).filter(([, v]) => v !== undefined && v !== null && String(v).trim().length > 0) as [string, any][];
 
         const conds = entries.map(([key, raw]) => {
             const meta: any = defs?.[key];
             const type: string = String(meta?.type ?? 'String');
-            const val = raw.trim();
+            const valAny = typeof raw === 'string' ? raw.trim() : raw;
+
+            // Cas colonne mutex (clé synthétique: __mutex__:<key>) => OR sur les membres (FK)
+            if (key.startsWith('__mutex__:')) {
+                const col = columns.find(c => c.key === key) as ColumnDefMutex | undefined;
+                if (!col) return undefined as any;
+                const orConds: any[] = [];
+                for (const member of col.members) {
+                    const fk = `${member}Id`;
+                    if (defs?.[fk]?.type === 'String') {
+                        orConds.push({[fk]: {contains: String(valAny), mode: 'insensitive'}});
+                    } else if (defs?.[member]?.type === 'String') {
+                        // fallback member direct string
+                        orConds.push({[member]: {contains: String(valAny), mode: 'insensitive'}});
+                    }
+                }
+                if (orConds.length > 0) return {OR: orConds};
+                return undefined as any;
+            }
 
             // Booléen strict
             if (type === 'Boolean') {
-                const low = val.toLowerCase();
+                if (typeof valAny === 'boolean') {
+                    return {[key]: {equals: valAny}};
+                }
+                const low = String(valAny).toLowerCase();
                 const truthy = ['true', '1', 'yes', 'y', 'on'];
                 const falsy = ['false', '0', 'no', 'n', 'off'];
                 let b: boolean | undefined;
@@ -227,7 +249,7 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
 
             // String => contains insensible à la casse
             if (type === 'String') {
-                return {[key]: {contains: val, mode: 'insensitive'}};
+                return {[key]: {contains: String(valAny), mode: 'insensitive'}};
             }
 
             // Si le type correspond à un autre modèle, on évite (le filtrage relationnel n'est pas géré ici)
@@ -235,7 +257,7 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
                 // fallback: essaie sur la FK conventionnelle `${key}Id`
                 const fk = `${key}Id`;
                 if (defs?.[fk]?.type === 'String') {
-                    return {[fk]: {contains: val, mode: 'insensitive'}};
+                    return {[fk]: {contains: String(valAny), mode: 'insensitive'}};
                 }
                 return undefined as any;
             }
@@ -243,12 +265,12 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
             // Enum ou autres scalaires (Int, Decimal, DateTime, etc.) => equals
             // Tentative de coercition pour les numériques
             if (type === 'Int' || type === 'BigInt' || type === 'Float' || type === 'Decimal') {
-                const n = Number(val);
+                const n = typeof valAny === 'number' ? valAny : Number(String(valAny));
                 if (!Number.isNaN(n)) return {[key]: {equals: n}};
                 return undefined as any;
             }
             // DateTime/Date: laissez equals string (Prisma tentera de parser si ISO)
-            return {[key]: {equals: val}};
+            return {[key]: {equals: valAny}};
         }).filter(Boolean);
 
         // Fusion avec le filtre preset si présent
@@ -261,7 +283,7 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
             where = {AND: conds};
         }
         list.setFilter(where);
-    }, [colFilters, models, model, presetFilter]);
+    }, [colFilters, models, model, presetFilter, columns]);
 
     // Apply sorting whenever local sort state changes
     useEffect(() => {
@@ -290,7 +312,16 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
                                         <div className="flex items-center gap-2">
                                             <span className="text-gray-800">{c.label}</span>
                                         </div>
-                                        {/* Tri/filtre désactivés pour la colonne mutex */}
+                                        {/* Filtre de groupe mutex: champ texte simple via FieldRenderer */}
+                                        <div className="mt-1">
+                                            {/* @ts-ignore */}
+                                            <FieldRenderer
+                                                meta={{name: c.key, type: 'String', ui: {label: 'Filtrer…'}}}
+                                                defs={models as any}
+                                                value={pendingFilters[c.key] ?? ''}
+                                                onChange={(v: any) => onChangeColFilter(c.key, v)}
+                                            />
+                                        </div>
                                     </th>
                                 );
                             }
@@ -306,11 +337,13 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
                                         </button>
                                     </div>
                                     <div className="mt-1">
-                                        <input
-                                            value={colFilters[c.key] ?? ''}
-                                            onChange={(e) => onChangeColFilter(c.key, e.target.value)}
-                                            placeholder="Filtrer…"
-                                            className="w-full border border-outline/60 rounded px-2 py-1 text-sm"
+                                        {/* Utilise FieldRenderer en mode standalone pour un filtre typé */}
+                                        {/* @ts-ignore */}
+                                        <FieldRenderer
+                                            meta={{...((c as any).field), name: c.key}}
+                                            defs={models as any}
+                                            value={pendingFilters[c.key] ?? ''}
+                                            onChange={(v: any) => onChangeColFilter(c.key, v)}
                                         />
                                     </div>
                                 </th>
@@ -354,9 +387,15 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
                                 {columns.map((c) => (
                                     <td className="border border-outline align-top p-2" key={c.key}>
                                         {c.kind === 'mutex'
-                                            ? renderMutexCell(row, c as ColumnDefMutex, models as any, model)
-                                            : (isEditableField((c as ColumnDefField).field)
-                                                ? <EditableCell
+                                            ? <EditableMutexCell
+                                                row={row}
+                                                model={model}
+                                                col={c as ColumnDefMutex}
+                                                models={models as any}
+                                                onSaved={() => list.reload()}
+                                            />
+                                            : (isEditableRelationField((c as ColumnDefField).field)
+                                                ? <EditableRelationCell
                                                     row={row}
                                                     model={model}
                                                     fieldKey={c.key}
@@ -364,7 +403,16 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
                                                     models={models as any}
                                                     onSaved={() => list.reload()}
                                                 />
-                                                : renderCell(row, c.key, (c as ColumnDefField).field, models as any, model))}
+                                                : (isEditableField((c as ColumnDefField).field)
+                                                    ? <EditableCell
+                                                        row={row}
+                                                        model={model}
+                                                        fieldKey={c.key}
+                                                        field={(c as ColumnDefField).field}
+                                                        models={models as any}
+                                                        onSaved={() => list.reload()}
+                                                    />
+                                                    : renderCell(row, c.key, (c as ColumnDefField).field, models as any, model)))}
                                     </td>
                                 ))}
                                 {actionsCol === 1 && (
@@ -424,7 +472,7 @@ function renderCell(
             if (display) {
                 return (
                     <ToolTip content={
-                        <pre className="text-xs overflow-auto max-w-[360px] max-h-[240px]">{safeStringify(relObj)}</pre>
+                        <pre className="text-xs overflow-auto">{safeStringify(relObj)}</pre>
                     }>
                         <span className="underline decoration-dotted cursor-help">{display}</span>
                     </ToolTip>
@@ -440,7 +488,7 @@ function renderCell(
     if (relDisplay != null) {
         return (
             <ToolTip content={
-                <pre className="text-xs overflow-auto max-w-[360px] max-h-[240px]">{safeStringify(value)}</pre>
+                <pre className="text-xs overflow-auto ">{safeStringify(relObj)}</pre>
             }>
                 <span className="underline decoration-dotted cursor-help">{relDisplay}</span>
             </ToolTip>
@@ -485,7 +533,7 @@ function renderMutexCell(
             if (display != null) {
                 return (
                     <ToolTip content={
-                        <pre className="text-xs overflow-auto max-w-[360px] max-h-[240px]">{safeStringify(relObj)}</pre>
+                        <pre className="text-xs overflow-auto">{safeStringify(relObj)}</pre>
                     }>
                         <span className="underline decoration-dotted cursor-help">{display}</span>
                     </ToolTip>
@@ -513,6 +561,11 @@ function isEditableField(field: ModelField) {
     if (!isScalarField(field)) return false;
     if (field.isId) return false;
     return true; // allow String, numbers, Boolean, Enum, DateTime, Json handled upstream if needed
+}
+
+function isEditableRelationField(field: ModelField) {
+    // Éditable si relation singulière (pas list)
+    return !!(field && !field.isList && (field.relationName || true) && !isScalarField(field));
 }
 
 function EditableCell({
@@ -594,6 +647,171 @@ function EditableCell({
             <FieldRenderer meta={metaWithName} formik={formik} defs={defs}/>
         </div>
     );
+}
+
+// ===== Inline editable relation cell (uses FieldRenderer in standalone, saves FK) =====
+function EditableRelationCell({
+                                  row,
+                                  model,
+                                  fieldKey,
+                                  field,
+                                  models,
+                                  onSaved,
+                              }: {
+    row: any;
+    model: string;
+    fieldKey: string;
+    field: ModelField;
+    models: Record<string, any> | null;
+    onSaved: () => void;
+}) {
+    const [isEditing, setIsEditing] = useState(false);
+    // Determine FK name
+    const fk = getForeignKeyForField(models as any, model, fieldKey) || `${fieldKey}Id`;
+    const initial = row?.[fk] ?? row?.[fieldKey]?.id ?? '';
+    const [val, setVal] = useState<any>(initial);
+
+    useEffect(() => {
+        const next = row?.[fk] ?? row?.[fieldKey]?.id ?? '';
+        setVal(next);
+    }, [row?.id, fk, fieldKey]);
+
+    async function save() {
+        try {
+            const payload: any = {[fk]: val};
+            await actions.updateEntity({
+                model: model as any,
+                id: String(row.id),
+                dataJson: JSON.stringify(payload),
+            });
+            setIsEditing(false);
+            onSaved();
+        } catch (e) {
+            console.error(e);
+            setIsEditing(false);
+        }
+    }
+
+    if (!isEditing) {
+        // Read-only: reuse existing relation rendering
+        return (
+            <div onDoubleClick={(e) => {
+                e.stopPropagation();
+                setIsEditing(true);
+            }}>
+                {renderCell(row, fieldKey, field, models as any, model)}
+            </div>
+        );
+    }
+
+    const metaWithName: any = {...field, name: fieldKey};
+    return (
+        <div onKeyDown={async (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                await save();
+            }
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                setIsEditing(false);
+                setVal(initial);
+            }
+        }} onDoubleClick={(e) => e.stopPropagation()}>
+            {/* FieldRenderer standalone for relation: shows TextField for ID */}
+            {/* @ts-ignore */}
+            <FieldRenderer meta={metaWithName} defs={models as any} value={val}
+                           onChange={(v: any) => setVal(v)} onBlur={async () => await save()}/>
+        </div>
+    );
+}
+
+// ===== Editable mutex cell: edits first member's FK via standalone FieldRenderer =====
+function EditableMutexCell({
+                               row,
+                               model,
+                               col,
+                               models,
+                               onSaved,
+                           }: {
+    row: any;
+    model: string;
+    col: ColumnDefMutex;
+    models: Record<string, any> | null;
+    onSaved: () => void;
+}) {
+    const [isEditing, setIsEditing] = useState(false);
+    const first = col.members[0];
+    const fk = getForeignKeyForField(models as any, model, first) || `${first}Id`;
+    const initial = row?.[fk] ?? row?.[first]?.id ?? '';
+    const [val, setVal] = useState<any>(initial);
+
+    useEffect(() => {
+        setVal(row?.[fk] ?? row?.[first]?.id ?? '');
+    }, [row?.id, fk, first]);
+
+    async function save() {
+        try {
+            const payload: any = {[fk]: val};
+            await actions.updateEntity({
+                model: model as any,
+                id: String(row.id),
+                dataJson: JSON.stringify(payload),
+            });
+            setIsEditing(false);
+            onSaved();
+        } catch (e) {
+            console.error(e);
+            setIsEditing(false);
+        }
+    }
+
+    if (!isEditing) {
+        return (
+            <div onDoubleClick={(e) => {
+                e.stopPropagation();
+                setIsEditing(true);
+            }}>
+                {renderMutexCell(row, {
+                    members: col.members,
+                    mutexKey: col.mutexKey,
+                    label: col.label
+                }, models as any, model)}
+            </div>
+        );
+    }
+
+    const meta: any = {name: col.key, type: 'String', ui: {label: col.label}};
+    return (
+        <div onKeyDown={async (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                await save();
+            }
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                setIsEditing(false);
+                setVal(initial);
+            }
+        }} onDoubleClick={(e) => e.stopPropagation()}>
+            {/* @ts-ignore */}
+            <FieldRenderer meta={meta} defs={models as any} value={val}
+                           onChange={(v: any) => setVal(v)} onBlur={async () => await save()}/>
+        </div>
+    );
+}
+
+function getForeignKeyForField(models: Record<string, any> | null, parentModel: string, fieldKey: string): string | undefined {
+    try {
+        const def = (models as any)?.[parentModel]?.[fieldKey];
+        const arr = def?.relationFromFields as string[] | undefined;
+        if (Array.isArray(arr) && arr.length > 0) return arr[0];
+        // Try conventional `${fieldKey}Id`
+        const maybe = `${fieldKey}Id`;
+        if ((models as any)?.[parentModel]?.[maybe]) return maybe;
+        return undefined;
+    } catch {
+        return undefined;
+    }
 }
 
 function coerceValue(v: any, type: string) {

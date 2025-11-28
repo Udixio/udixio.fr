@@ -3,6 +3,7 @@ import React, {useEffect, useMemo} from "react";
 // S'il est disponible, on l'utilise pour l'action d'édition; sinon on garde un <button> simple.
 // @ts-ignore
 import {Button, Card, classnames, Divider, IconButton, Tab, Tabs, TextField} from "@udixio/ui-react";
+import {FieldRenderer} from "@components/app/form/FieldRenderer.tsx";
 import {faXmark} from "@fortawesome/pro-regular-svg-icons";
 import {faPencil, faPlus, faTrash} from "@fortawesome/pro-light-svg-icons";
 import DynamicFormController, {type RelationState} from "@components/app/form/DynamicFormController.tsx";
@@ -106,16 +107,20 @@ function RelationSearchBar({
                                onSelect,
                                onFocusOptions,
                            }: RelationSearchBarProps) {
+    // Utilise FieldRenderer (standalone) pour uniformiser la saisie de recherche
+    // On fournit un faux meta de type String
+    const defs = undefined; // pas nécessaire pour un simple String
     return (
         <div className="flex items-end gap-2">
             <div className="flex-1">
                 <label className="block text-xs text-gray-600">Recherche</label>
-                <input
-                    className="border px-2 py-1 w-full"
-                    placeholder={`Rechercher ${targetModel}...`}
+                {/* @ts-ignore */}
+                <FieldRenderer
+                    meta={{name: 'relationSearch', type: 'String', ui: {label: `Rechercher ${targetModel}...`}}}
+                    defs={defs}
                     value={search}
-                    onChange={(e) => onSearchChange(e.target.value)}
-                    onFocus={onFocusOptions}
+                    onChange={(v: any) => onSearchChange(v)}
+                    onBlur={() => { /* noop */ }}
                 />
             </div>
             <div className="min-w-[260px]">
@@ -491,18 +496,36 @@ export function RelationField({
                                         className={"content p-4  bg-surface-container-low"}>
                                         {/* Barre Recherche / Ajout (mode association) */}
                                         {((forceMode ? forceMode !== 'create' : st?.mode !== 'create')) && !(!!(!isList && currentSelection.length > 0)) && (
-                                            <RelationSearchBar
-                                                targetModel={rf.targetModel}
-                                                isList={isList}
-                                                search={st?.search || ''}
-                                                options={st?.options || []}
-                                                onSearchChange={(v) => {
-                                                    updateState(rf, (st) => ({...st, search: v}));
-                                                    reloadOptions(rf, v);
-                                                }}
-                                                onSelect={handleSelect}
-                                                onFocusOptions={ensureOptions}
-                                            />
+                                            <div className="flex items-end gap-2">
+                                                <div className="flex-1">
+                                                    <label className="block text-xs text-gray-600">Recherche</label>
+                                                    {/* Utilise FieldRenderer en mode standalone */}
+                                                    {/* @ts-ignore */}
+                                                    <FieldRenderer
+                                                        meta={{name: 'relationSearch', type: 'String', ui: {label: `Rechercher ${rf.targetModel}...`}}}
+                                                        value={st?.search || ''}
+                                                        onChange={(v: any) => {
+                                                            updateState(rf, (prev) => ({...prev, search: v}));
+                                                            reloadOptions(rf, v);
+                                                        }}
+                                                        onBlur={() => { /* noop */ }}
+                                                    />
+                                                </div>
+                                                <div className="min-w-[260px]">
+                                                    <label className="block text-xs text-gray-600">{isList ? 'Ajouter' : 'Choisir'}</label>
+                                                    <select
+                                                        className="border px-2 py-1 w-full"
+                                                        value={''}
+                                                        onChange={(e) => handleSelect(e.target.value)}
+                                                        onFocus={ensureOptions}
+                                                    >
+                                                        <option value="">— {isList ? 'Ajouter…' : 'Choisir…'} —</option>
+                                                        {(st?.options || []).map((o) => (
+                                                            <option key={o.id} value={o.id}>{o.label}</option>
+                                                        ))}
+                                                    </select>
+                                                </div>
+                                            </div>
                                         )}
 
                                         {/* 3. Zone de création - ne pas rendre le sous-formulaire tant que le mode n'est pas 'create' */}

@@ -164,7 +164,7 @@ export const server = {
     }),
     // ===== Generic entities (whitelisted) =====
     listEntities: defineAction({
-        json: true,
+        accept: "json",
         input: z.object({
             model: z.enum(["User", "Organization", "Project", "Deal", "Contact", "Client"]),
             q: z.string().optional(),
@@ -180,6 +180,10 @@ export const server = {
             try {
                 const {model, q, limit, offset, whereJson, orderByField, orderByDir, includeJson, smartPreview} = input;
                 const where: any = whereJson ? JSON.parse(whereJson) : {};
+
+
+                console.log('where', where)
+
                 // Basic search mapping per model
                 if (q) {
                     const contains = (field: string) => ({[field]: {contains: q, mode: 'insensitive'}});
@@ -197,7 +201,6 @@ export const server = {
                     const smart = buildSmartInclude(model, defs);
                     include = deepMergeInclude(include, smart);
                 }
-                console.log(include)
                 const clientAny = prisma as any;
                 const [items, total] = await Promise.all([
                     clientAny[model.toLowerCase()].findMany({
@@ -209,7 +212,6 @@ export const server = {
                     }),
                     clientAny[model.toLowerCase()].count({where})
                 ]);
-                console.log(items)
                 return {items, total};
             } catch (e) {
                 console.log(e)
@@ -224,13 +226,11 @@ export const server = {
         }),
         handler: async (input) => {
 
-            console.log(input);
             const data = JSON.parse(input.dataJson);
             // Guard against writing read-only/id fields will be handled at Prisma level too
             const clientAny = prisma as any;
             const created = await clientAny[input.model.toLowerCase()].create({data});
 
-            console.log(created);
             return {created};
 
         }

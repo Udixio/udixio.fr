@@ -1483,9 +1483,9 @@
       "ui": {
         "hidden": false,
         "label": null,
-        "preview": true,
         "placeholder": null,
-        "default": null
+        "default": null,
+        "preview": true
       }
     },
     "emailVerified": {

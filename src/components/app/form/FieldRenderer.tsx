@@ -6,37 +6,92 @@ import {Button, Card, classnames, Divider, IconButton, Tab, Tabs, TextField} fro
 
 type FieldRendererProps = {
     meta: any;
-    formik: any;
-    defs: Record<string, any> | undefined;
+    formik?: any; // optionnel: si absent, fonctionne en mode standalone
+    defs?: Record<string, any> | undefined;
     disabledFields?: string[];
+    // Mode standalone (hors Formik)
+    value?: any;
+    onChange?: (e: any) => void;
+    onBlur?: (e?: any) => void;
 };
 
-export function FieldRenderer({meta, formik, defs, disabledFields}: FieldRendererProps) {
+export function FieldRenderer({meta, formik, defs, disabledFields, value, onChange, onBlur}: FieldRendererProps) {
     const f = meta;
     const name = f.name as string;
     const type = String(f.type);
     const disabled = !!disabledFields?.includes(name);
     const label = (f.ui?.label || f.documentation || f.name) + (f.isRequired ? '*' : '');
+    const hasFormik = !!formik;
+    const modelsMap = defs || {};
+    const isEnum = (defs as any)?.[type]?.['isEnum'];
+    const isModelType = !!(modelsMap && (modelsMap as any)[type]) && !isEnum; // Relation potentielle
+
+    const currentValue = hasFormik
+        ? ((type === 'Boolean') ? undefined : (formik.values as any)[name] ?? '')
+        : (type === 'Boolean' ? undefined : (value ?? ''));
+
+    const handleChange = (e: any) => {
+        if (hasFormik) {
+            if (type === 'Boolean') {
+                formik.setFieldValue(name, e?.target?.checked ?? !!e);
+            } else if (typeof formik.setFieldValue === 'function') {
+                // Autoriser setFieldValue(e) tel qu'utilisé ailleurs
+                if (e && e.target !== undefined) {
+                    formik.setFieldValue(name, e);
+                } else {
+                    formik.setFieldValue(name, e);
+                }
+            } else if (typeof formik.handleChange === 'function') {
+                formik.handleChange(e);
+            }
+        } else if (onChange) {
+            // Mode standalone: passer la valeur simple si possible
+            const v = e && e.target !== undefined ? (e.target.type === 'checkbox' ? e.target.checked : e.target.value) : e;
+            onChange(v);
+        }
+    };
+
+    const handleBlur = (e: any) => {
+        if (hasFormik && typeof formik.handleBlur === 'function') {
+            formik.handleBlur(e);
+        }
+        if (onBlur) onBlur(e);
+    };
+
     const common = {
         name,
         disabled,
         className: "",
-        value: (type === 'Boolean') ? undefined : (formik.values as any)[name] ?? '',
-        onChange: formik.handleChange,
-        onBlur: formik.handleBlur,
+        value: currentValue,
+        onChange: handleChange,
+        onBlur: handleBlur,
     } as any;
     const placeholder = f.ui?.placeholder || name;
     const description = f.ui?.description || f.documentation;
     const suffix = f.ui?.suffix;
     const prefix = f.ui?.prefix;
     const isNumber = type === 'Int' || type === 'BigInt' || type === 'Float' || type === 'Decimal';
-    const isEnum = (defs as any)?.[type]?.['isEnum'];
-    const fieldError = (formik.touched?.[name] && (formik.errors as any)?.[name]) ? String((formik.errors as any)[name]) : undefined;
+    const fieldError = hasFormik && (formik.touched?.[name] && (formik.errors as any)?.[name]) ? String((formik.errors as any)[name]) : undefined;
+
+    // Relations: si le type correspond à un modèle connu (et non un enum), on affiche un TextField simple (saisie d'un ID pour l'instant)
+    if (isModelType) {
+        return (
+            <TextField
+                {...common}
+                variant="outlined"
+                label={label}
+                suffix={suffix}
+                prefix={prefix}
+                errorText={fieldError || null}
+                supportingText={fieldError ? " " : description}
+                placeholder={placeholder}
+            />
+        );
+    }
 
     if (type === 'String' || isNumber) {
-        return <TextField  {...common} onChange={(e) =>
-            formik.setFieldValue(name, e)
-        } variant="outlined" label={label}
+        return <TextField  {...common}
+                           variant="outlined" label={label}
                            suffix={suffix} prefix={prefix}
                            errorText={fieldError || null} supportingText={fieldError ? " " : description}
                            placeholder={placeholder} {...(isNumber ? {type: 'number'} : {})}/>;
@@ -60,18 +115,18 @@ export function FieldRenderer({meta, formik, defs, disabledFields}: FieldRendere
             })()}
             {type === 'Boolean' && (
                 <div className="flex items-center gap-2">
-                    <input type="checkbox" name={name} checked={!!(formik.values as any)[name]}
-                           onChange={(e) => formik.setFieldValue(name, e.target.checked)} disabled={disabled}/>
+                    <input type="checkbox" name={name} checked={!!(hasFormik ? (formik.values as any)[name] : value)}
+                           onChange={(e) => handleChange(e)} disabled={disabled}/>
                     <span className="text-sm">{f.ui?.label || name}</span>
                 </div>
             )}
             {type === 'DateTime' && <input {...common} type="datetime-local"/>}
             {type === 'Json' && (
                 <textarea className="border w-full px-2 py-1 h-20" name={name}
-                          value={(formik.values as any)[name] ?? ''}
-                          onChange={(e) => formik.setFieldValue(name, e.target.value)}/>
+                          value={hasFormik ? (formik.values as any)[name] ?? '' : (value ?? '')}
+                          onChange={(e) => handleChange(e)}/>
             )}
-            {formik.touched[f.name] && (formik.errors as any)[f.name] && (
+            {hasFormik && formik.touched[f.name] && (formik.errors as any)[f.name] && (
                 <div className="text-xs text-red-600 mt-1">{String((formik.errors as any)[f.name])}</div>
             )}
         </>;
