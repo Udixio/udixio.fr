@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import {appService} from "@/stores/appStore";
 import DynamicDataCreate from "@components/app/form/DynamicDataCreate.tsx";
 import {Card} from "@udixio/ui-react";
-import DynamicDatatable from "@/components/preview/DynamicDatatable";
+import DynamicDatatable from "@components/app/preview/DynamicDatatable.tsx";
 
 
 export default function DealsIndex() {

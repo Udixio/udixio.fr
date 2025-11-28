@@ -1,8 +1,8 @@
 import React, {useEffect, useMemo} from 'react';
-import DynamicSearch, {type DynamicPreset} from './DynamicSearch';
-import useDynamicList from './useDynamicList';
+import DynamicSearch, {type DynamicPreset} from './DynamicSearch.tsx';
+import useDynamicList from './useDynamicList.ts';
 import {useStore} from "@nanostores/react";
-import {modelsService, modelsStore} from '@/stores/modelsStore';
+import {modelsService, modelsStore} from '@/stores/modelsStore.ts';
 
 type ModelField = {
     type: string;
