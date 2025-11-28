@@ -29,21 +29,25 @@ export default function ClientsIndex() {
     return (
         <div className="p-4 space-y-4">
             <h1 className="text-xl font-semibold">Clients</h1>
-            <DynamicDatatable
-                key={refreshKey}
-                model="Client"
-                pageSize={25}
-                rowActions={() => [
-                    {
-                        href: (row) => {
-                            return "/clients/" + row.id;
-                        },
-                        label: "Ouvrir",
-                        icon: faFolderOpen
-                    }
-                ]}
-                presets={[]}
-            />
+            {
+                !showCreate &&
+                <DynamicDatatable
+                    key={refreshKey}
+                    model="Client"
+                    pageSize={25}
+                    rowActions={() => [
+                        {
+                            href: (row) => {
+                                return "/clients/" + row.id;
+                            },
+                            label: "Ouvrir",
+                            icon: faFolderOpen
+                        }
+                    ]}
+                    presets={[]}
+                />
+            }
+
 
             {showCreate && (
                 <Card className="p-4">

@@ -1,28 +1,31 @@
 import {NavigationRail, NavigationRailItem} from "@udixio/ui-react"
 // FontAwesome icons (regular/solid pairs)
 import {
+    faBullseye as farBullseye,
     faDiagramProject as farDiagramProject,
-    faHandshake as farHandshake,
     faMagnifyingGlassChart as farMagnifyingGlassChart,
-    faUser as farUser,
+    faUserPlus as farUserPlus,
 } from "@fortawesome/pro-regular-svg-icons";
 import {
+    faBullseye as fasBullseye,
     faDiagramProject as fasDiagramProject,
-    faHandshake as fasHandshake,
     faMagnifyingGlassChart as fasMagnifyingGlassChart,
-    faUser as fasUser,
+    faUserPlus as fasUserPlus,
 } from "@fortawesome/pro-solid-svg-icons";
 
 export const Navigation = () => {
 
     return <NavigationRail className="bg-surface-container-highest" alignment="top">
         {/* Primary: orienté CRM autour du Client */}
-        <NavigationRailItem href={"/app/deals"} icon={farHandshake} iconSelected={fasHandshake}>
-            Pipeline
+        <NavigationRailItem href={"/app/opportunités"} icon={farBullseye} iconSelected={fasBullseye}>
+            Opportunités
         </NavigationRailItem>
-        <NavigationRailItem href={"/app/clients"} icon={farUser} iconSelected={fasUser}>
-            Clients
+
+        <NavigationRailItem href={"/app/prospects"} icon={farUserPlus} iconSelected={fasUserPlus}>
+            Prospects
         </NavigationRailItem>
+
+
         <NavigationRailItem href={"/app/audits"} icon={farMagnifyingGlassChart} iconSelected={fasMagnifyingGlassChart}>
             Audits
         </NavigationRailItem>
