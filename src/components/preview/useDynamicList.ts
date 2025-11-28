@@ -52,7 +52,7 @@ export function useDynamicList<T = any>(model: string, options?: UseDynamicListO
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await actions.server.listEntities({
+      const res = await actions.listEntities({
         model: model as any,
         q: q || undefined,
         limit,
