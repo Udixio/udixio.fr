@@ -235,6 +235,28 @@ export const server = {
 
         }
     }),
+    updateEntity: defineAction({
+        accept: "json",
+        input: z.object({
+            model: z.enum(["User", "Organization", "Project", "Deal", "Contact", "Client"]),
+            id: z.string(),
+            dataJson: z.string(),
+        }),
+        handler: async (input) => {
+            const {model, id, dataJson} = input;
+            const data = JSON.parse(dataJson || '{}');
+            // Never allow updating the primary key
+            if (data && typeof data === 'object' && 'id' in data) {
+                delete (data as any).id;
+            }
+            const clientAny = prisma as any;
+            const updated = await clientAny[model.toLowerCase()].update({
+                where: {id},
+                data,
+            });
+            return {updated};
+        }
+    }),
     checkAuth: defineAction({
         // Aucun input requis, mais on accepte un objet vide
         input: z.object({}).optional(),

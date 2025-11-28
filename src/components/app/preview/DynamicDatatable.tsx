@@ -3,10 +3,13 @@ import React, {useEffect, useMemo, useState} from 'react';
 import useDynamicList from './useDynamicList.ts';
 import {useStore} from "@nanostores/react";
 import {modelsService, modelsStore} from '@/stores/modelsStore.ts';
-import {Card, IconButton} from "@udixio/ui-react";
+import {Card, IconButton,} from "@udixio/ui-react";
+import {FieldRenderer} from "@components/app/form/FieldRenderer.tsx";
+import {actions} from 'astro:actions';
 import {getModelRelations, resolveEntityPreview} from '@/utils/modelUtils.ts';
 import DynamicPresets from './DynamicPresets.tsx';
 import type {IconDefinition} from "@fortawesome/pro-light-svg-icons";
+import {ToolTip} from "@components/ToolTip.tsx";
 
 type ModelField = {
     type: string;
@@ -134,8 +137,15 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
         }
 
         // Merge and sort
-        const all: ColumnDef[] = [...fieldCols, ...mutexCols];
+        let all: ColumnDef[] = [...fieldCols, ...mutexCols];
         all.sort((a, b) => (a.order - b.order) || a.label.localeCompare(b.label));
+
+        // Force the ID column to be first if present among chosen columns
+        const idIdx = all.findIndex(c => c.kind === 'field' && (c as ColumnDefField).field.isId);
+        if (idIdx > 0) {
+            const [idCol] = all.splice(idIdx, 1);
+            all = [idCol, ...all];
+        }
         return all;
     }, [models, model]);
 
@@ -345,7 +355,16 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
                                     <td className="border border-outline align-top p-2" key={c.key}>
                                         {c.kind === 'mutex'
                                             ? renderMutexCell(row, c as ColumnDefMutex, models as any, model)
-                                            : renderCell(row, c.key, (c as ColumnDefField).field, models as any, model)}
+                                            : (isEditableField((c as ColumnDefField).field)
+                                                ? <EditableCell
+                                                    row={row}
+                                                    model={model}
+                                                    fieldKey={c.key}
+                                                    field={(c as ColumnDefField).field}
+                                                    models={models as any}
+                                                    onSaved={() => list.reload()}
+                                                />
+                                                : renderCell(row, c.key, (c as ColumnDefField).field, models as any, model))}
                                     </td>
                                 ))}
                                 {actionsCol === 1 && (
@@ -402,20 +421,35 @@ function renderCell(
             if (baseMeta && typeof baseMeta.type === 'string') target = String(baseMeta.type);
             if (!target) target = guessTargetModel(models, base);
             const display = resolveEntityPreview(relObj, target, models as any);
-            if (display) return <span title={String(value)}>{display}</span>;
-            return <span title={String(value)}>{String(value)}</span>;
+            if (display) {
+                return (
+                    <ToolTip content={
+                        <pre className="text-xs overflow-auto max-w-[360px] max-h-[240px]">{safeStringify(relObj)}</pre>
+                    }>
+                        <span className="underline decoration-dotted cursor-help">{display}</span>
+                    </ToolTip>
+                );
+            }
+            return String(value);
         }
         return String(value);
     }
 
     // Relation-like object: use preview fields from related model
     const relDisplay = resolveEntityPreview(value, String(field.type), models as any);
-    const id = value?.id ?? row?.[`${key}Id`];
-    if (relDisplay != null) return <span title={id ? String(id) : undefined}>{relDisplay}</span>;
+    if (relDisplay != null) {
+        return (
+            <ToolTip content={
+                <pre className="text-xs overflow-auto max-w-[360px] max-h-[240px]">{safeStringify(value)}</pre>
+            }>
+                <span className="underline decoration-dotted cursor-help">{relDisplay}</span>
+            </ToolTip>
+        );
+    }
 
     // if only id exists separately (e.g., organizationId)
     const idKey = key.endsWith('Id') ? key : `${key}Id`;
-    if (row[idKey]) return <span title={String(row[idKey])}>{String(row[idKey])}</span>;
+    if (row[idKey]) return String(row[idKey]);
 
     try {
         return JSON.stringify(value);
@@ -448,23 +482,149 @@ function renderMutexCell(
             if (memberMeta && typeof memberMeta.type === 'string') targetModel = String(memberMeta.type);
             if (!targetModel) targetModel = guessTargetModel(models, member);
             const display = resolveEntityPreview(relObj, targetModel ?? String(relObj?.__typename ?? ''), models as any);
-            const title = relObj?.id ?? idVal ? String(relObj?.id ?? idVal) : undefined;
             if (display != null) {
-                return <span title={title}>{display}</span>;
+                return (
+                    <ToolTip content={
+                        <pre className="text-xs overflow-auto max-w-[360px] max-h-[240px]">{safeStringify(relObj)}</pre>
+                    }>
+                        <span className="underline decoration-dotted cursor-help">{display}</span>
+                    </ToolTip>
+                );
             }
             if (idVal != null) {
-                return <span title={String(idVal)}>{String(idVal)}</span>;
+                return String(idVal);
             }
             try {
-                return <span title={title}>{JSON.stringify(relObj)}</span>;
+                return JSON.stringify(relObj);
             } catch {
                 return String(relObj);
             }
         }
         if (idVal != null) {
             // No included relation object but we have the FK
-            return <span title={String(idVal)}>{String(idVal)}</span>;
+            return String(idVal);
         }
     }
     return <span className="text-gray-500">—</span>;
+}
+
+// ===== Inline editable cell =====
+function isEditableField(field: ModelField) {
+    if (!isScalarField(field)) return false;
+    if (field.isId) return false;
+    return true; // allow String, numbers, Boolean, Enum, DateTime, Json handled upstream if needed
+}
+
+function EditableCell({
+                          row,
+                          model,
+                          fieldKey,
+                          field,
+                          models,
+                          onSaved,
+                      }: {
+    row: any;
+    model: string;
+    fieldKey: string;
+    field: ModelField;
+    models: Record<string, any> | null;
+    onSaved: () => void;
+}) {
+    const [isEditing, setIsEditing] = useState(false);
+    const [val, setVal] = useState<any>(row?.[fieldKey]);
+
+    useEffect(() => {
+        setVal(row?.[fieldKey]);
+    }, [row?.id, fieldKey]);
+
+    async function save() {
+        try {
+            const payload: any = {};
+            payload[fieldKey] = coerceValue(val, field.type as any);
+            const {actions} = await import('astro:actions');
+            await actions.updateEntity({
+                model: model as any,
+                id: String(row.id),
+                dataJson: JSON.stringify(payload),
+            });
+            setIsEditing(false);
+            onSaved();
+        } catch (e) {
+            console.error(e);
+            setIsEditing(false);
+        }
+    }
+
+    if (!isEditing) {
+        return (
+            <div onDoubleClick={(e) => {
+                e.stopPropagation();
+                setIsEditing(true);
+            }} className="min-h-[20px]">{String(row?.[fieldKey] ?? '')}</div>
+        );
+    }
+
+    // Mini Formik-like adapter
+    const metaWithName: any = {...field, name: fieldKey};
+    const defs = models as any;
+    const formik = {
+        values: {[fieldKey]: val},
+        setFieldValue: (name: string, v: any) => setVal(v?.target ? (eIsCheckbox(v) ? v.target.checked : v.target.value) : v),
+        handleChange: (e: any) => setVal(e?.target?.type === 'checkbox' ? e.target.checked : e.target.value),
+        handleBlur: async () => {
+            await save();
+        },
+        touched: {},
+        errors: {},
+    };
+
+    return (
+        <div onKeyDown={async (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                await save();
+            }
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                setIsEditing(false);
+                setVal(row?.[fieldKey]);
+            }
+        }} onDoubleClick={(e) => e.stopPropagation()}>
+            {/* @ts-ignore reuse FieldRenderer */}
+            <FieldRenderer meta={metaWithName} formik={formik} defs={defs}/>
+        </div>
+    );
+}
+
+function coerceValue(v: any, type: string) {
+    if (v == null) return v;
+    switch (type) {
+        case 'Int':
+        case 'BigInt':
+            return parseInt(String(v), 10);
+        case 'Float':
+        case 'Decimal':
+            return Number(v);
+        case 'Boolean':
+            if (typeof v === 'boolean') return v;
+            return ['true', '1', 'yes', 'on'].includes(String(v).toLowerCase());
+        default:
+            return v;
+    }
+}
+
+function safeStringify(obj: any) {
+    try {
+        return JSON.stringify(obj, null, 2);
+    } catch {
+        return String(obj);
+    }
+}
+
+function eIsCheckbox(e: any) {
+    try {
+        return e?.target?.type === 'checkbox';
+    } catch {
+        return false;
+    }
 }
