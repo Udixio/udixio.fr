@@ -1974,6 +1974,7 @@
       "relationToFields": null,
       "documentation": null,
       "ui": {
+        "preview": false,
         "hidden": false,
         "label": null,
         "placeholder": null,
@@ -1994,6 +1995,7 @@
       "relationToFields": null,
       "documentation": null,
       "ui": {
+        "preview": true,
         "hidden": false,
         "label": null,
         "placeholder": null,
