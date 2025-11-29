@@ -3,7 +3,7 @@ import React, {useEffect, useMemo, useState} from 'react';
 import useDynamicList from './useDynamicList.ts';
 import {useStore} from "@nanostores/react";
 import {modelsService, modelsStore} from '@/stores/modelsStore.ts';
-import {Card, IconButton,} from "@udixio/ui-react";
+import {Card, classnames, IconButton,} from "@udixio/ui-react";
 import {FieldRenderer} from "@components/app/form/FieldRenderer.tsx";
 import {actions} from 'astro:actions';
 import {getModelRelations, resolveEntityPreview} from '@/utils/modelUtils.ts';
@@ -38,7 +38,15 @@ function isScalarField(f: ModelField) {
 
 type ColumnDefField = { key: string; label: string; kind: 'field'; field: ModelField; order: number };
 type ColumnDefMutex = { key: string; label: string; kind: 'mutex'; members: string[]; order: number; mutexKey: string };
-type ColumnDefInline = { key: string; label: string; kind: 'inline'; order: number; parent: string; childKey: string; childField: ModelField; };
+type ColumnDefInline = {
+    key: string;
+    label: string;
+    kind: 'inline';
+    order: number;
+    parent: string;
+    childKey: string;
+    childField: ModelField;
+};
 type ColumnDef = ColumnDefField | ColumnDefMutex | ColumnDefInline;
 
 export default function DynamicDatatable({model, presets, pageSize = 25, rowActions}: Props) {
@@ -374,7 +382,7 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
             {Array.isArray(presets) && presets.length > 0 && (
                 <DynamicPresets presets={presets as any} onFilter={(f) => setPresetFilter(f)}/>
             )}
-            <Card variant={"filled"} className="overflow-auto">
+            <Card variant={"filled"} className="overflow-auto bg-surface-container">
                 <table className="min-w-[720px] border border-outline">
                     <thead>
                     <tr>
@@ -492,17 +500,8 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
                                             />
                                             : c.kind === 'inline'
                                                 ? renderInlineCell(row, c as ColumnDefInline)
-                                            : (isEditableRelationField((c as ColumnDefField).field)
-                                                ? <EditableRelationCell
-                                                    row={row}
-                                                    model={model}
-                                                    fieldKey={c.key}
-                                                    field={(c as ColumnDefField).field}
-                                                    models={models as any}
-                                                    onSaved={() => list.reload()}
-                                                />
-                                                : (isEditableField((c as ColumnDefField).field)
-                                                    ? <EditableCell
+                                                : (isEditableRelationField((c as ColumnDefField).field)
+                                                    ? <EditableRelationCell
                                                         row={row}
                                                         model={model}
                                                         fieldKey={c.key}
@@ -510,7 +509,16 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
                                                         models={models as any}
                                                         onSaved={() => list.reload()}
                                                     />
-                                                    : renderCell(row, c.key, (c as ColumnDefField).field, models as any, model)))}
+                                                    : (isEditableField((c as ColumnDefField).field)
+                                                        ? <EditableCell
+                                                            row={row}
+                                                            model={model}
+                                                            fieldKey={c.key}
+                                                            field={(c as ColumnDefField).field}
+                                                            models={models as any}
+                                                            onSaved={() => list.reload()}
+                                                        />
+                                                        : renderCell(row, c.key, (c as ColumnDefField).field, models as any, model)))}
                                     </td>
                                 ))}
                                 {actionsCol === 1 && (
@@ -564,9 +572,12 @@ function renderCell(
             let target: string | undefined;
             const parentDef: any = models ? (models as any)[parentModelName] : undefined;
             const baseMeta: any = parentDef ? parentDef[base] : undefined;
+
             if (baseMeta && typeof baseMeta.type === 'string') target = String(baseMeta.type);
             if (!target) target = guessTargetModel(models, base);
             const display = resolveEntityPreview(relObj, target, models as any);
+
+
             if (display) {
                 return (
                     <ToolTip content={
@@ -698,6 +709,8 @@ function EditableCell({
     models: Record<string, any> | null;
     onSaved: () => void;
 }) {
+
+
     const [isEditing, setIsEditing] = useState(false);
     const [val, setVal] = useState<any>(row?.[fieldKey]);
 
@@ -723,12 +736,36 @@ function EditableCell({
         }
     }
 
+
+    console.log(fieldKey, field, Boolean(models[field.type]?.isEnum));
+    const isEnum = Boolean(models[field.type]?.isEnum)
+
+    const enumValues = isEnum ? Object.values(models[field.type].values).map(value => {
+        if (value.name === val) return value
+    }).filter(Boolean)[0] : undefined;
+
+    const color = isEnum ? enumValues?.ui?.color : undefined;
+    console.log(enumValues)
+
     if (!isEditing) {
         return (
             <div onDoubleClick={(e) => {
                 e.stopPropagation();
                 setIsEditing(true);
-            }} className="min-h-[20px]">{String(row?.[fieldKey] ?? '')}</div>
+            }}
+                 style={{
+                     backgroundColor: color ? `var(--color-${color})` : undefined,
+                     color: color ? `var(--color-on-${color})` : undefined,
+                 }}
+                 className={
+                     classnames("h-full",
+                         isEnum && [
+                             "bg-surface-container-highest text-on-surface-container w-fit px-2 py-1 rounded-lg",
+                         ]
+                     )
+                 }
+            >
+                {String(row?.[fieldKey] ?? '')}</div>
         );
     }
 

@@ -4,9 +4,9 @@ import {defineConfig} from "@udixio/ui-react";
 export default defineConfig({
     sourceColor: '#a2afff',
     palettes: {
-        success: "#2ec038",
-        warning: "#e5bb79",
-
+        success: "#4CAF50",
+        warning: "#FFA726",
+        info: "#2196F3"
     },
     fontStyles: {
         // display: {

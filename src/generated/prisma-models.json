@@ -3405,23 +3405,38 @@
     "values": {
       "0": {
         "name": "LEAD",
-        "dbName": null
+        "dbName": null,
+        "ui": {
+          "color": "info"
+        }
       },
       "1": {
         "name": "QUALIFIED",
-        "dbName": null
+        "dbName": null,
+        "ui": {
+          "color": "warning"
+        }
       },
       "2": {
         "name": "PROPOSAL_SENT",
-        "dbName": null
+        "dbName": null,
+        "ui": {
+          "color": "primary"
+        }
       },
       "3": {
         "name": "WON",
-        "dbName": null
+        "dbName": null,
+        "ui": {
+          "color": "success"
+        }
       },
       "4": {
         "name": "LOST",
-        "dbName": null
+        "dbName": null,
+        "ui": {
+          "color": "error"
+        }
       },
       "5": {
         "name": "ON_HOLD",
