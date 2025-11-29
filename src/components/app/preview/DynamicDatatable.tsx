@@ -252,109 +252,18 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
     // Compose where filter = per-column filters only (global search removed)
     useEffect(() => {
         const defs: any = (models as any)?.[model];
-        const modelNames = models ? new Set(Object.keys(models as any)) : new Set<string>();
-        const entries = Object.entries(colFilters).filter(([, v]) => v !== undefined && v !== null && String(v).trim().length > 0) as [string, any][];
+        const entries = Object.entries(colFilters)
+            .filter(([, v]) => v !== undefined && v !== null && String(v).trim().length > 0) as [string, any][];
 
-        const conds = entries.map(([key, raw]) => {
-            const meta: any = defs?.[key];
-            const type: string = String(meta?.type ?? 'String');
-            const valAny = typeof raw === 'string' ? raw.trim() : raw;
-
-            // Cas colonne mutex (clé synthétique: __mutex__:<key>) => OR sur les membres (FK)
-            if (key.startsWith('__mutex__:')) {
-                const col = columns.find(c => c.key === key) as ColumnDefMutex | undefined;
-                if (!col) return undefined as any;
-                const orConds: any[] = [];
-                for (const member of col.members) {
-                    const fk = `${member}Id`;
-                    if (defs?.[fk]?.type === 'String') {
-                        orConds.push({[fk]: {contains: String(valAny), mode: 'insensitive'}});
-                    } else if (defs?.[member]?.type === 'String') {
-                        // fallback member direct string
-                        orConds.push({[member]: {contains: String(valAny), mode: 'insensitive'}});
-                    }
-                }
-                if (orConds.length > 0) return {OR: orConds};
-                return undefined as any;
-            }
-
-            // Cas colonne inline: clé au format parent.child
-            if (key.includes('.')) {
-                const [parentKey, childKey] = key.split('.', 2);
-                const parentMeta: any = defs?.[parentKey];
-                const targetModel = String(parentMeta?.type ?? '');
-                const childDef: any = (models as any)?.[targetModel]?.[childKey];
-                const childType = String(childDef?.type ?? 'String');
-
-                // Build nested condition for relation: { parentKey: { is: { childKey: {operator} } } }
-                const buildChildCond = () => {
-                    // Boolean strict
-                    if (childType === 'Boolean') {
-                        if (typeof valAny === 'boolean') return {[childKey]: {equals: valAny}};
-                        const low = String(valAny).toLowerCase();
-                        const truthy = ['true', '1', 'yes', 'y', 'on'];
-                        const falsy = ['false', '0', 'no', 'n', 'off'];
-                        if (truthy.includes(low)) return {[childKey]: {equals: true}};
-                        if (falsy.includes(low)) return {[childKey]: {equals: false}};
-                        return undefined;
-                    }
-                    if (childType === 'String') {
-                        return {[childKey]: {contains: String(valAny), mode: 'insensitive'}};
-                    }
-                    if (['Int', 'BigInt', 'Float', 'Decimal'].includes(childType)) {
-                        const n = typeof valAny === 'number' ? valAny : Number(String(valAny));
-                        if (!Number.isNaN(n)) return {[childKey]: {equals: n}};
-                        return undefined;
-                    }
-                    // Date/Enum/others
-                    return {[childKey]: {equals: valAny}};
-                };
-                const inner = buildChildCond();
-                if (!inner) return undefined as any;
-                return {[parentKey]: {is: inner}};
-            }
-
-            // Booléen strict
-            if (type === 'Boolean') {
-                if (typeof valAny === 'boolean') {
-                    return {[key]: {equals: valAny}};
-                }
-                const low = String(valAny).toLowerCase();
-                const truthy = ['true', '1', 'yes', 'y', 'on'];
-                const falsy = ['false', '0', 'no', 'n', 'off'];
-                let b: boolean | undefined;
-                if (truthy.includes(low)) b = true;
-                else if (falsy.includes(low)) b = false;
-                // Si non reconnu, ne renvoie pas de condition (évite erreurs)
-                if (b === undefined) return undefined as any;
-                return {[key]: {equals: b}};
-            }
-
-            // String => contains insensible à la casse
-            if (type === 'String') {
-                return {[key]: {contains: String(valAny), mode: 'insensitive'}};
-            }
-
-            // Si le type correspond à un autre modèle, on évite (le filtrage relationnel n'est pas géré ici)
-            if (modelNames.has(type)) {
-                // fallback: essaie sur la FK conventionnelle `${key}Id`
-                const fk = `${key}Id`;
-                if (defs?.[fk]?.type === 'String') {
-                    return {[fk]: {contains: String(valAny), mode: 'insensitive'}};
-                }
-                return undefined as any;
-            }
-
-            // Enum ou autres scalaires (Int, Decimal, DateTime, etc.) => equals
-            // Tentative de coercition pour les numériques
-            if (type === 'Int' || type === 'BigInt' || type === 'Float' || type === 'Decimal') {
-                const n = typeof valAny === 'number' ? valAny : Number(String(valAny));
-                if (!Number.isNaN(n)) return {[key]: {equals: n}};
-                return undefined as any;
-            }
-            // DateTime/Date: laissez equals string (Prisma tentera de parser si ISO)
-            return {[key]: {equals: valAny}};
-        }).filter(Boolean);
+        const conds = entries
+            .map(([key, raw]) => buildWhereForColumn({
+                key,
+                rawValue: raw,
+                model,
+                models: models as any,
+                columns,
+            }))
+            .filter(Boolean) as any[];
 
         // Fusion avec le filtre preset si présent
         let where: any = {};
@@ -490,35 +399,13 @@ export default function DynamicDatatable({model, presets, pageSize = 25, rowActi
                             >
                                 {columns.map((c) => (
                                     <td className="border border-outline align-top p-2" key={c.key}>
-                                        {c.kind === 'mutex'
-                                            ? <EditableMutexCell
-                                                row={row}
-                                                model={model}
-                                                col={c as ColumnDefMutex}
-                                                models={models as any}
-                                                onSaved={() => list.reload()}
-                                            />
-                                            : c.kind === 'inline'
-                                                ? renderInlineCell(row, c as ColumnDefInline)
-                                                : (isEditableRelationField((c as ColumnDefField).field)
-                                                    ? <EditableRelationCell
-                                                        row={row}
-                                                        model={model}
-                                                        fieldKey={c.key}
-                                                        field={(c as ColumnDefField).field}
-                                                        models={models as any}
-                                                        onSaved={() => list.reload()}
-                                                    />
-                                                    : (isEditableField((c as ColumnDefField).field)
-                                                        ? <EditableCell
-                                                            row={row}
-                                                            model={model}
-                                                            fieldKey={c.key}
-                                                            field={(c as ColumnDefField).field}
-                                                            models={models as any}
-                                                            onSaved={() => list.reload()}
-                                                        />
-                                                        : renderCell(row, c.key, (c as ColumnDefField).field, models as any, model)))}
+                                        <SmartCell
+                                            column={c}
+                                            row={row}
+                                            model={model}
+                                            models={models as any}
+                                            onSaved={() => list.reload()}
+                                        />
                                     </td>
                                 ))}
                                 {actionsCol === 1 && (
@@ -682,6 +569,154 @@ function renderInlineCell(row: any, col: ColumnDefInline) {
     }
 }
 
+// ========= Utilitaires d'abstraction (filtrage et rendu cellule générique) =========
+
+type BuildWhereArgs = {
+    key: string;
+    rawValue: any;
+    model: string;
+    models: Record<string, any> | null;
+    columns: ColumnDef[];
+};
+
+function buildWhereForColumn({key, rawValue, model, models, columns}: BuildWhereArgs): any | undefined {
+    const defs: any = (models as any)?.[model];
+    const modelNames = models ? new Set(Object.keys(models as any)) : new Set<string>();
+    const valAny = typeof rawValue === 'string' ? rawValue.trim() : rawValue;
+
+    // Colonne mutex (clé synthétique: __mutex__:xxx)
+    if (key.startsWith('__mutex__:')) {
+        const col = columns.find(c => c.key === key) as ColumnDefMutex | undefined;
+        if (!col) return undefined;
+        const orConds: any[] = [];
+        for (const member of col.members) {
+            const fk = `${member}Id`;
+            if (defs?.[fk]?.type === 'String') {
+                orConds.push({[fk]: {contains: String(valAny), mode: 'insensitive'}});
+            } else if (defs?.[member]?.type === 'String') {
+                orConds.push({[member]: {contains: String(valAny), mode: 'insensitive'}});
+            }
+        }
+        return orConds.length > 0 ? {OR: orConds} : undefined;
+    }
+
+    // Colonne inline parent.child
+    if (key.includes('.')) {
+        const [parentKey, childKey] = key.split('.', 2);
+        const parentMeta: any = defs?.[parentKey];
+        const targetModel = String(parentMeta?.type ?? '');
+        const childDef: any = (models as any)?.[targetModel]?.[childKey];
+        const childType = String(childDef?.type ?? 'String');
+
+        const buildChildCond = () => {
+            if (childType === 'Boolean') {
+                if (typeof valAny === 'boolean') return {[childKey]: {equals: valAny}};
+                const low = String(valAny).toLowerCase();
+                const truthy = ['true', '1', 'yes', 'y', 'on'];
+                const falsy = ['false', '0', 'no', 'n', 'off'];
+                if (truthy.includes(low)) return {[childKey]: {equals: true}};
+                if (falsy.includes(low)) return {[childKey]: {equals: false}};
+                return undefined;
+            }
+            if (childType === 'String') return {[childKey]: {contains: String(valAny), mode: 'insensitive'}};
+            if (['Int', 'BigInt', 'Float', 'Decimal'].includes(childType)) {
+                const n = typeof valAny === 'number' ? valAny : Number(String(valAny));
+                if (!Number.isNaN(n)) return {[childKey]: {equals: n}};
+                return undefined;
+            }
+            return {[childKey]: {equals: valAny}};
+        };
+        const inner = buildChildCond();
+        if (!inner) return undefined;
+        return {[parentKey]: {is: inner}};
+    }
+
+    // Champ standard
+    const meta: any = defs?.[key];
+    const type: string = String(meta?.type ?? 'String');
+
+    if (type === 'Boolean') {
+        if (typeof valAny === 'boolean') return {[key]: {equals: valAny}};
+        const low = String(valAny).toLowerCase();
+        const truthy = ['true', '1', 'yes', 'y', 'on'];
+        const falsy = ['false', '0', 'no', 'n', 'off'];
+        if (truthy.includes(low)) return {[key]: {equals: true}};
+        if (falsy.includes(low)) return {[key]: {equals: false}};
+        return undefined;
+    }
+    if (type === 'String') return {[key]: {contains: String(valAny), mode: 'insensitive'}};
+
+    if (modelNames.has(type)) {
+        const fk = `${key}Id`;
+        if (defs?.[fk]?.type === 'String') return {[fk]: {contains: String(valAny), mode: 'insensitive'}};
+        return undefined;
+    }
+
+    if (['Int', 'BigInt', 'Float', 'Decimal'].includes(type)) {
+        const n = typeof valAny === 'number' ? valAny : Number(String(valAny));
+        if (!Number.isNaN(n)) return {[key]: {equals: n}};
+        return undefined;
+    }
+
+    return {[key]: {equals: valAny}};
+}
+
+function SmartCell({
+    column,
+    row,
+    model,
+    models,
+    onSaved,
+}: {
+    column: ColumnDef;
+    row: any;
+    model: string;
+    models: Record<string, any> | null;
+    onSaved: () => void;
+}) {
+    if (column.kind === 'inline') {
+        return <>{renderInlineCell(row, column as ColumnDefInline)}</>;
+    }
+    if (column.kind === 'mutex') {
+        return (
+            <EditableMutexCell
+                row={row}
+                model={model}
+                col={column as ColumnDefMutex}
+                models={models}
+                onSaved={onSaved}
+            />
+        );
+    }
+    const fieldCol = column as ColumnDefField;
+    const field = fieldCol.field;
+    if (isEditableRelationField(field)) {
+        return (
+            <EditableRelationCell
+                row={row}
+                model={model}
+                fieldKey={fieldCol.key}
+                field={field}
+                models={models}
+                onSaved={onSaved}
+            />
+        );
+    }
+    if (isEditableField(field)) {
+        return (
+            <EditableCell
+                row={row}
+                model={model}
+                fieldKey={fieldCol.key}
+                field={field}
+                models={models}
+                onSaved={onSaved}
+            />
+        );
+    }
+    return <>{renderCell(row, fieldCol.key, field, models as any, model)}</>;
+}
+
 // ===== Inline editable cell =====
 function isEditableField(field: ModelField) {
     if (!isScalarField(field)) return false;
@@ -737,7 +772,6 @@ function EditableCell({
     }
 
 
-    console.log(fieldKey, field, Boolean(models[field.type]?.isEnum));
     const isEnum = Boolean(models[field.type]?.isEnum)
 
     const enumValues = isEnum ? Object.values(models[field.type].values).map(value => {
@@ -745,7 +779,6 @@ function EditableCell({
     }).filter(Boolean)[0] : undefined;
 
     const color = isEnum ? enumValues?.ui?.color : undefined;
-    console.log(enumValues)
 
     if (!isEditing) {
         return (
