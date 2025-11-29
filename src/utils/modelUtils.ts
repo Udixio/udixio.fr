@@ -295,5 +295,67 @@ export function unflattenToPrismaCreate(modelName: string, flat: Record<string, 
         const leaf = parts[parts.length - 1];
         parent[leaf] = v;
     }
+
+    // Inject UI defaults for missing fields (scalars) and recursively for nested create relations
+    function coerceByType(type: string, value: any) {
+        if (value === null || value === undefined) return value;
+        switch (type) {
+            case 'Boolean': {
+                if (typeof value === 'boolean') return value;
+                const s = String(value).trim().toLowerCase();
+                if (s === 'true' || s === '1' || s === 'yes' || s === 'on') return true;
+                if (s === 'false' || s === '0' || s === 'no' || s === 'off') return false;
+                return Boolean(value);
+            }
+            case 'Int':
+            case 'BigInt': {
+                const n = parseInt(String(value), 10);
+                return Number.isNaN(n) ? value : n;
+            }
+            case 'Float':
+            case 'Decimal': {
+                const n = parseFloat(String(value));
+                return Number.isNaN(n) ? value : n;
+            }
+            case 'DateTime': {
+                // Laisser tel quel si c'est déjà une Date
+                if (value instanceof Date) return value;
+                const d = new Date(String(value));
+                return isNaN(d.getTime()) ? value : d;
+            }
+            // String, Json, Enum or other types: return as-is
+            default:
+                return value;
+        }
+    }
+
+    function applyUiDefaults(obj: any, currentModel: string) {
+        const def: Record<string, any> = (defs as any)[currentModel] || {};
+        for (const [fname, metaAny] of Object.entries(def)) {
+            if (fname === 'ui') continue;
+            const meta: any = metaAny as any;
+            const isRelation = !!meta?.relationName || (isModel(String(meta?.type)) && !meta?.isList);
+
+            if (!isRelation) {
+                // Only inject when the key is missing
+                const hasKey = Object.prototype.hasOwnProperty.call(obj, fname);
+                if (!hasKey) {
+                    const uiDefault = meta?.ui?.default;
+                    if (uiDefault !== undefined) {
+                        obj[fname] = coerceByType(String(meta?.type), uiDefault);
+                    }
+                }
+            } else {
+                // Recurse into nested create objects when present
+                const childModel = String(meta?.type);
+                const relObj = obj?.[fname];
+                if (relObj && typeof relObj === 'object' && relObj.create) {
+                    applyUiDefaults(relObj.create, childModel);
+                }
+            }
+        }
+    }
+
+    applyUiDefaults(root, modelName);
     return root;
 }

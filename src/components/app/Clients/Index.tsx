@@ -5,6 +5,7 @@ import DynamicDataCreate from "@components/app/form/DynamicDataCreate.tsx";
 import {Card, IconButton} from "@udixio/ui-react";
 import DynamicDatatable from "@components/app/preview/DynamicDatatable.tsx";
 import {faFolderOpen, faXmark} from "@fortawesome/pro-regular-svg-icons";
+import DynamicDataImport from "@components/app/import/DynamicDataImport.tsx";
 
 
 export default function ClientsIndex() {
@@ -73,24 +74,22 @@ export default function ClientsIndex() {
                 </Card>
             )}
 
-            {/*{showImport && (*/}
-            {/*    <div className="p-3 border rounded">*/}
-            {/*        <h2 className="font-medium mb-2">Importer CSV</h2>*/}
-            {/*        <p className="text-sm mb-2">Colonnes requises: <code>title,organizationId</code>.*/}
-            {/*            Optionnel: <code>projectId,clientId,userId,amount,probability,status</code>.</p>*/}
-            {/*        <form action={importAction} onSubmit={() => setShowImport(false)} className="space-y-2">*/}
-            {/*            <textarea name="csv" className="border w-full h-32"*/}
-            {/*                      placeholder="title,organizationId,projectId,clientId,userId,amount,probability,status\nRefonte site,org_123,proj_123,client_123,,10000,70,QUALIFIED"/>*/}
-            {/*            <div className="flex gap-2">*/}
-            {/*                <button type="submit"*/}
-            {/*                        className="border px-3 py-1">{importPending ? 'Import...' : 'Importer'}</button>*/}
-            {/*                <button type="button" className="border px-3 py-1"*/}
-            {/*                        onClick={() => setShowImport(false)}>Annuler*/}
-            {/*                </button>*/}
-            {/*            </div>*/}
-            {/*        </form>*/}
-            {/*    </div>*/}
-            {/*)}*/}
+            {showImport && (
+                <Card className="p-4">
+                    <div className="flex justify-between items-center mb-4">
+                        <h2 className="font-medium">Importer des clients (CSV)</h2>
+                        <IconButton icon={faXmark} onClick={() => setShowImport(false)}>Fermer</IconButton>
+                    </div>
+                    <DynamicDataImport
+                        model="Client"
+                        onCancel={() => setShowImport(false)}
+                        onSuccess={(count) => {
+                            setShowImport(false);
+                            setRefreshKey((k) => k + 1);
+                        }}
+                    />
+                </Card>
+            )}
 
         </div>
     );
