@@ -4,12 +4,11 @@ import {appService} from "@/stores/appStore";
 import DynamicDataCreate from "@components/app/form/DynamicDataCreate.tsx";
 import {Card, IconButton} from "@udixio/ui-react";
 import DynamicDatatable from "@components/app/preview/DynamicDatatable.tsx";
-import {faFolderOpen} from "@fortawesome/pro-regular-svg-icons";
-import {faXmark} from "@fortawesome/pro-regular-svg-icons";
+import {faFolderOpen, faXmark} from "@fortawesome/pro-regular-svg-icons";
 import DynamicDataImport from "@components/app/import/DynamicDataImport.tsx";
 
 
-export default function DealsIndex() {
+export default function LeadsIndex() {
     // Clé pour forcer le re-montage du tableau (rafraîchissement)
     const [refreshKey, setRefreshKey] = useState(0);
     const [showCreate, setShowCreate] = useState(false);

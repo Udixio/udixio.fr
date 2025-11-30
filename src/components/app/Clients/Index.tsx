@@ -6,6 +6,7 @@ import {Card, IconButton} from "@udixio/ui-react";
 import DynamicDatatable from "@components/app/preview/DynamicDatatable.tsx";
 import {faFolderOpen, faXmark} from "@fortawesome/pro-regular-svg-icons";
 import DynamicDataImport from "@components/app/import/DynamicDataImport.tsx";
+import DynamicDataView from "@components/app/preview/DynamicDataView.tsx";
 
 
 export default function ClientsIndex() {
@@ -32,7 +33,7 @@ export default function ClientsIndex() {
             <h1 className="text-display-large">Prospect</h1>
             {
                 !showCreate &&
-                <DynamicDatatable
+                <><DynamicDatatable
                     key={refreshKey}
                     model="Client"
                     pageSize={25}
@@ -47,6 +48,64 @@ export default function ClientsIndex() {
                     ]}
                     presets={[]}
                 />
+                    <DynamicDataView
+                        rowRenderer={(row) => {
+                            console.log('rffr', row)
+                            return {
+                                email: {
+                                    value: row.user.email,
+                                },
+                                phone: {
+                                    value: row.user.phone,
+                                }
+                            }
+                        }}
+                        columns={[
+                            {
+                                key: "name",
+                                label: "Entreprise",
+                            },
+                            {
+                                key: "contact",
+                                label: "Contact",
+                            },
+                            {
+                                key: "email",
+                                label: "Email",
+                            },
+                            {
+                                key: "phone",
+                                label: "Téléphone",
+                            },
+                            {
+                                key: "status",
+                                label: "Statut",
+                            },
+                            {
+                                key: "source",
+                                label: "Source",
+                            },
+                            {
+                                key: "createdAt",
+                                label: "Créé le",
+                            },
+                        ]}
+                        key={refreshKey}
+                        model="Client"
+                        pageSize={25}
+                        rowActions={() => [
+                            {
+                                href: (row) => {
+                                    return "/clients/" + row.id;
+                                },
+                                label: "Ouvrir",
+                                icon: faFolderOpen
+                            }
+                        ]}
+                        presets={[]}
+                    />
+                </>
+
             }
 
 
