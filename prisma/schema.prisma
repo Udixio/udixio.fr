@@ -298,6 +298,7 @@ model WebsiteTechnologyLink {
   @@id([websiteId, technologyId])
   @@index([technologyId])
   @@index([websiteId])
+  @@map("website_technology_link")
 }
 
 // =============================
@@ -322,6 +323,7 @@ model WebsiteTagLink {
   @@id([websiteId, tagId])
   @@index([tagId])
   @@index([websiteId])
+  @@map("website_tag_link")
 }
 
 model User {
@@ -653,6 +655,7 @@ model OrganizationTagLink {
   @@id([organizationId, tagId])
   @@index([tagId])
   @@index([organizationId])
+  @@map("organization_tag_link")
 }
 
 model DealTagLink {
@@ -674,6 +677,7 @@ model DealTagLink {
   @@id([dealId, tagId])
   @@index([tagId])
   @@index([dealId])
+  @@map("deal_tag_link")
 }
 
 model TechnologyTagLink {
@@ -695,4 +699,5 @@ model TechnologyTagLink {
   @@id([technologyId, tagId])
   @@index([tagId])
   @@index([technologyId])
+  @@map("technology_tag_link")
 }
