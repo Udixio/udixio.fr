@@ -66,7 +66,7 @@ export const Login: React.FC = () => {
                     return;
                 }
                 setLoading(true);
-                const {error} = await authClient.emailOtp.signInEmailOtp({
+                const {error} = await authClient.signIn.emailOtp({
                     email,
                     otp: otpTrimmed,
                 });
