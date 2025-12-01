@@ -245,6 +245,9 @@ model Website {
   // Projets liés (many-to-many implicite)
   projects Project[]
 
+  // Tags (étiquettes) rattachés au Website via la table Tag (M2M implicite)
+  tags Tag[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -256,11 +259,11 @@ model Website {
 // =============================
 
 model Technology {
-  id        String             @id @default(cuid())
-  name      String
-  // Remplace l'enum category par une liste de tags libres (ex: CMS, HOSTING, ECOMMERCE, etc.)
-  tags      String[]
-  logo      String?
+  id   String   @id @default(cuid())
+  name String
+  // Tags normalisés via la table Tag (M2M) — remplace l'ancien String[] local
+  tags Tag[]
+  logo String?
 
   // Websites utilisant cette technologie (via table de liaison explicite)
   websiteLinks WebsiteTechnology[]
@@ -278,14 +281,14 @@ model Technology {
 // =============================
 model WebsiteTechnology {
   // Clé composite (un lien par couple website/technology)
-  website   Website   @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  website   Website @relation(fields: [websiteId], references: [id], onDelete: Cascade)
   websiteId String
 
   technology   Technology @relation(fields: [technologyId], references: [id], onDelete: Cascade)
   technologyId String
 
   // Métadonnées de la relation
-  version   String?
+  version String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -346,8 +349,6 @@ model Client {
   jobTitle String?
   gender   String?
 
-  // Notes & metadata
-  notes    String?
   metadata Json?
 
   // Relations
@@ -356,7 +357,7 @@ model Client {
   contactPoints ContactPoint[]
 
   // Fil d'historique (notes) rattachées au client
-  notesHistory Note[] @relation("ClientNotes")
+  notes Note[] @relation("ClientNotes")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -529,6 +530,8 @@ model Tag {
   // Relations : Un tag peut être associé à plusieurs entités
   deals         Deal[]
   organizations Organization[]
+  websites      Website[]
+  technologies  Technology[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
