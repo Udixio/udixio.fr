@@ -44,12 +44,6 @@ function clean(val: string | undefined): string | undefined {
     return trimmed;
 }
 
-// Génère un email fictif si absent
-function generatePlaceholderEmail(firstName: string, lastName: string, company: string): string {
-    const cleanName = slugify(`${firstName}-${lastName}-${company}`);
-    return `${cleanName}@placeholder.import`;
-}
-
 function mapDealStatus(csvStatus: string): DealStatus {
     const s = csvStatus?.toLowerCase().trim() || '';
     if (s.includes('gagné')) return DealStatus.WON;
@@ -67,6 +61,21 @@ function getRandomColor() {
 }
 
 // --- Main Import Logic ---
+
+// Crée une note liée à un deal si une note identique (même contenu) n'existe pas déjà
+async function ensureNoteForDeal(params: { dealId: string, content: string, authorId?: string }) {
+    const {dealId, content, authorId} = params;
+    if (!content) return;
+    const exists = await prisma.note.findFirst({ where: { dealId, content } });
+    if (exists) return exists;
+    return prisma.note.create({
+        data: {
+            dealId,
+            content,
+            authorId: authorId,
+        }
+    });
+}
 
 async function main() {
     console.log('🚀 Démarrage de l\'importation Rise...');
@@ -181,7 +190,8 @@ async function main() {
 
         // On a besoin au moins d'un nom ou prénom pour créer un user
         if (user_first_name || user_last_name) {
-            const email = user_email || generatePlaceholderEmail(user_first_name || '', user_last_name || '', company_name || 'unknown');
+            const email = user_email || 'unknown';
+            const isVerified = !!email && email.toLowerCase() !== 'unknown' && email.toLowerCase() !== 'unknkow';
 
             // Upsert User
             // Upsert User (create or update)
@@ -192,12 +202,14 @@ async function main() {
                     name: fullName,
                     firstName: user_first_name ?? undefined,
                     lastName: user_last_name ?? undefined,
+                    emailVerified: isVerified,
                 },
                 create: {
                     email: email,
                     name: fullName,
                     firstName: user_first_name ?? undefined,
                     lastName: user_last_name ?? undefined,
+                    emailVerified: isVerified,
                 }
             });
             userId = user.id;
@@ -274,29 +286,38 @@ async function main() {
         });
 
         const status = mapDealStatus(lead_status_name || '');
-        const notes = lead_status_name ? `Statut import: ${lead_status_name}` : undefined;
+        // Préparer le contenu de note d'import (historique)
+        const importNote = lead_status_name
+            ? `Statut initial détecté lors de l'import : ${lead_status_name}`
+            : undefined;
 
         if (!existingDeal) {
-            await prisma.deal.create({
+            const created = await prisma.deal.create({
                 data: {
                     title: dealTitle,
                     status,
                     organizationId: organizationId,
                     clientId: clientId,
                     tags: {connect: tagConnect}, // Lier les tags au deal
-                    notes
                 }
             });
+            // Créer une note d'import si applicable (idempotent)
+            if (importNote) {
+                await ensureNoteForDeal({dealId: created.id, content: importNote});
+            }
         } else {
-            // Mise à jour du deal existant (statut, notes, tags)
+            // Mise à jour du deal existant (statut, tags)
             await prisma.deal.update({
                 where: {id: existingDeal.id},
                 data: {
                     status,
-                    notes,
                     ...(tagConnect.length > 0 ? {tags: {set: tagConnect}} : {})
                 }
             });
+            // Ajouter une note d'import si applicable (idempotent)
+            if (importNote) {
+                await ensureNoteForDeal({dealId: existingDeal.id, content: importNote});
+            }
         }
 
         process.stdout.write('.'); // Progress dot

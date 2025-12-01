@@ -98,9 +98,7 @@ model Organization {
   id        String  @id @default(cuid())
   name      String
   legalName String? // optional registered name
-  website   String? // e.g., https://example.com
-  notes     String?
-
+  
   address   String?
   city      String?
   zip       String?
@@ -109,6 +107,9 @@ model Organization {
 
   projects Project[]
   deals    Deal[]
+
+  // Fil d'historique (notes) rattachées à l'organisation
+  notes Note[] @relation("OrganizationNotes")
 
   tags Tag[]
 
@@ -121,6 +122,9 @@ model Organization {
   logo        String?
   members     Member[]
   invitations Invitation[]
+
+  // Nouveaux sites Web appartenant à l'organisation
+  websites Website[]
 
   @@unique([slug])
   @@index([name])
@@ -142,10 +146,11 @@ model Project {
   organization   Organization @relation(fields: [organizationId], references: [id])
   organizationId String
 
-  // Domains associated with this project (at least one expected in practice)
-  domains Domain[]
+  // Les projets ne possèdent plus directement des domaines ni des audits
+  // Un projet intervient sur un ou plusieurs sites Web (Website)
+  websites Website[]
 
-  // Audits for this project (multiple over time)
+  // Back‑relation optionnelle: audits réalisés dans le cadre de ce projet
   audits Audit[]
 
   // Related deals (optional back-reference)
@@ -168,15 +173,15 @@ model Domain {
   sslEnabled Boolean? // whether HTTPS/valid cert is enabled
   notes      String?
 
-  // Relation
-  project   Project @relation(fields: [projectId], references: [id])
-  projectId String
+  // Relation: un domaine pointe vers une infrastructure technique (Website)
+  website   Website @relation(fields: [websiteId], references: [id])
+  websiteId String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@unique([host])
-  @@index([projectId])
+  @@index([websiteId])
 }
 
 model Audit {
@@ -195,9 +200,13 @@ model Audit {
   finishedAt  DateTime?
   createdBy   String? // auditor name or user id (if no user model yet)
 
-  // Relation to Project (many audits per project)
-  project   Project @relation(fields: [projectId], references: [id])
-  projectId String
+  // Relation principale: l'audit concerne un Website (obligatoire)
+  website   Website @relation(fields: [websiteId], references: [id])
+  websiteId String
+
+  // Relation optionnelle au Project (cadre d'exécution)
+  project   Project? @relation(fields: [projectId], references: [id])
+  projectId String?
 
   // Additional structured data per audit
   metrics   Json? // normalized KPIs (TTFB, LCP, etc.)
@@ -207,9 +216,39 @@ model Audit {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  @@index([websiteId])
   @@index([projectId])
   @@index([type, status])
   @@index([runAt])
+}
+
+// =============================
+// Website (Site Web)
+// =============================
+
+model Website {
+  id String @id @default(cuid())
+
+  // Propriétaire du site
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId String
+
+  // Infos techniques utiles à la prospection
+  cms        String?     // WordPress, Shopify, …
+  hosting    String?     // Hébergeur
+  techStack  String?     // Stack technique
+
+  // Relations
+  domains Domain[]
+  audits  Audit[]
+
+  // Projets liés (many-to-many implicite)
+  projects Project[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([organizationId])
 }
 
 model User {
@@ -237,6 +276,9 @@ model User {
 
   // A User is a Client by default (1-1). The Client record stores CRM-specific info.
   client Client?
+
+  // Notes écrites par l'utilisateur (auteur)
+  authoredNotes Note[] @relation("AuthoredNotes")
 
   @@unique([email])
   @@map("user")
@@ -269,6 +311,9 @@ model Client {
   // NOUVEAU : Les moyens de contacter ce client spécifiquement
   contactPoints ContactPoint[]
 
+  // Fil d'historique (notes) rattachées au client
+  notesHistory Note[] @relation("ClientNotes")
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -295,7 +340,6 @@ model Deal {
 
   amount      Decimal? @db.Decimal(12, 2) // potential amount
   probability Int? // 0..100
-  notes       String?
 
   tags Tag[]
 
@@ -317,10 +361,45 @@ model Deal {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  // Fil d'historique (notes) rattachées au deal
+  notes Note[] @relation("DealNotes")
+
   @@index([organizationId])
   @@index([projectId])
   @@index([clientId])
   @@index([status])
+}
+
+// =============================
+// Note / Historique
+// =============================
+
+model Note {
+  id        String   @id @default(cuid())
+  content   String   // texte long
+  createdAt DateTime @default(now())
+
+  // Auteur optionnel (messages système sans auteur possible)
+  author   User?   @relation("AuthoredNotes", fields: [authorId], references: [id], onDelete: SetNull)
+  authorId String?
+
+  // Cibles optionnelles (liens polymorphes simples via FKs optionnels)
+  organization   Organization? @relation("OrganizationNotes", fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId String?
+
+  client   Client? @relation("ClientNotes", fields: [clientId], references: [id], onDelete: Cascade)
+  clientId String?
+
+  deal   Deal? @relation("DealNotes", fields: [dealId], references: [id], onDelete: Cascade)
+  dealId String?
+
+  @@index([authorId])
+  @@index([organizationId])
+  @@index([clientId])
+  @@index([dealId])
+  // Empêche les doublons de même contenu pour un même deal (idempotence côté DB)
+  @@unique([dealId, content])
+  @@map("note")
 }
 
 model Session {
