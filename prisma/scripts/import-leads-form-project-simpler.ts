@@ -36,6 +36,62 @@ function slugify(text: string): string {
         .replace(/\-\-+/g, '-');
 }
 
+// Extrait le host depuis une URL quelconque (avec/sans protocole, avec chemins)
+function extractHost(input?: string): string | undefined {
+    if (!input) return undefined;
+    const raw = input.trim();
+    if (!raw) return undefined;
+    // Si plusieurs URLs sont collées (espaces), on prend la première
+    const first = raw.split(/[\s,;]+/).filter(Boolean)[0];
+    if (!first) return undefined;
+    let urlLike = first;
+    // Si pas de protocole, en ajouter un pour l'analyse
+    if (!/^https?:\/\//i.test(urlLike)) {
+        urlLike = `https://${urlLike}`;
+    }
+    try {
+        const u = new URL(urlLike);
+        // Retirer éventuel prefix www.
+        const host = u.host.toLowerCase();
+        return host;
+    } catch (e) {
+        return undefined;
+    }
+}
+
+// Garantit l'existence d'un Website pour une organisation, en essayant de réutiliser
+// celui lié à un domaine existant si possible.
+async function ensureWebsiteForOrganization(params: { organizationId: string, host?: string }) {
+    const { organizationId, host } = params;
+    // 1) Si un host est fourni et qu'un Domain existe déjà, réutiliser son website
+    if (host) {
+        const existingDomain = await prisma.domain.findUnique({ where: { host } });
+        if (existingDomain) {
+            return await prisma.website.findUnique({ where: { id: existingDomain.websiteId } });
+        }
+    }
+    // 2) Sinon, s'il existe déjà un website pour l'organisation, réutiliser le premier
+    const existingWebsite = await prisma.website.findFirst({ where: { organizationId } });
+    if (existingWebsite) return existingWebsite;
+    // 3) Créer un nouveau website
+    return prisma.website.create({ data: { organizationId } });
+}
+
+// Garantit l'existence d'un Domain pour un website, unique par host. Réassigne si nécessaire.
+async function ensureDomainForWebsite(params: { websiteId: string, host: string, isPrimary?: boolean }) {
+    const { websiteId, host } = params;
+    const isPrimary = params.isPrimary ?? true;
+    const existing = await prisma.domain.findUnique({ where: { host } });
+    if (!existing) {
+        return prisma.domain.create({ data: { host, websiteId, isPrimary } });
+    }
+    // Si le domaine existe mais pointe vers un autre website, on le rattache ici
+    if (existing.websiteId !== websiteId || existing.isPrimary !== isPrimary) {
+        return prisma.domain.update({ where: { id: existing.id }, data: { websiteId, isPrimary } });
+    }
+    return existing;
+}
+
 // Nettoie les valeurs nulles ou "NULL" du CSV
 function clean(val: string | undefined): string | undefined {
     if (!val) return undefined;
@@ -186,6 +242,15 @@ async function main() {
                         }
                     });
                 }
+            }
+        }
+
+        // --- 2.b Gestion du Website / Domain à partir de project_url ---
+        if (organizationId && project_url) {
+            const host = extractHost(project_url);
+            if (host) {
+                const website = await ensureWebsiteForOrganization({ organizationId, host });
+                await ensureDomainForWebsite({ websiteId: website.id, host, isPrimary: true });
             }
         }
 
