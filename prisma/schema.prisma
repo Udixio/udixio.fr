@@ -22,15 +22,7 @@ datasource db {
 
 // Project execution status (more operational than lifecycle)
 
-enum ProjectStatus {
-  PLANNING
-  IN_PROGRESS
-  BLOCKED
-  REVIEW
-  MAINTENANCE
-  COMPLETED
-  CANCELLED
-}
+// ProjectStatus supprimé (vision Produit): un projet est une entité vivante sans statut de cycle de vie
 
 // Audit execution status
 
@@ -86,6 +78,7 @@ model ContactPoint {
 
   @@index([organizationId])
   @@index([clientId])
+  @@map("contact_point")
 }
 
 model Organization {
@@ -121,8 +114,7 @@ model Organization {
   members     Member[]
   invitations Invitation[]
 
-  // Nouveaux sites Web appartenant à l'organisation
-  websites Website[]
+  // Les sites web sont désormais rattachés aux Projets de l'organisation (Organization -> Project -> Website)
 
   @@unique([slug])
   @@index([name])
@@ -130,14 +122,10 @@ model Organization {
 }
 
 model Project {
-  id          String        @id @default(cuid())
+  id          String  @id @default(cuid())
   name        String
   description String?
-  status      ProjectStatus @default(PLANNING)
   priority    Int? // 1 (highest) .. n
-  startDate   DateTime?
-  dueDate     DateTime?
-  notes       String?
 
   // Relations
   // Organization that owns this project
@@ -162,6 +150,7 @@ model Project {
 
   @@index([name])
   @@index([organizationId])
+  @@map("project")
 }
 
 model Domain {
@@ -180,6 +169,7 @@ model Domain {
 
   @@unique([host])
   @@index([websiteId])
+  @@map("domain")
 }
 
 model Audit {
@@ -218,6 +208,7 @@ model Audit {
   @@index([projectId])
   @@index([type, status])
   @@index([runAt])
+  @@map("audit")
 }
 
 // =============================
@@ -227,9 +218,9 @@ model Audit {
 model Website {
   id String @id @default(cuid())
 
-  // Propriétaire du site
-  organization   Organization @relation(fields: [organizationId], references: [id])
-  organizationId String
+  // Appartenance obligatoire à un Projet (vision Produit)
+  project   Project @relation(fields: [projectId], references: [id])
+  projectId String
 
   // Technologies utilisées par le site (relation via table explicite, permet de stocker la version)
   technologyLinks WebsiteTechnologyLink[]
@@ -247,13 +238,11 @@ model Website {
   domains Domain[]
   audits  Audit[]
 
-  // Projets liés (many-to-many implicite)
-  projects Project[]
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([organizationId])
+  @@index([projectId])
+  @@map("website")
 }
 
 // =============================
@@ -261,11 +250,11 @@ model Website {
 // =============================
 
 model Technology {
-  id   String  @id @default(cuid())
-  name String
+  id                 String              @id @default(cuid())
+  name               String
   // Tags via table de liaison explicite
   technologyTagLinks TechnologyTagLink[]
-  logo String?
+  logo               String?
 
   // Websites utilisant cette technologie (via table de liaison explicite)
   websiteLinks WebsiteTechnologyLink[]
@@ -275,6 +264,7 @@ model Technology {
 
   // Unicité par nom pour éviter les doublons (ex: "WordPress")
   @@unique([name])
+  @@map("technology")
 }
 
 // =============================
@@ -456,6 +446,7 @@ model Deal {
   @@index([projectId])
   @@index([clientId])
   @@index([status])
+  @@map("deal")
 }
 
 // =============================
@@ -463,9 +454,9 @@ model Deal {
 // =============================
 
 model Comment {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   content   String // texte long
-  createdAt DateTime @default(now())
+  createdAt DateTime  @default(now())
   editedAt  DateTime?
 
   // Auteur optionnel (messages système sans auteur possible)
@@ -473,9 +464,9 @@ model Comment {
   authorId String?
 
   // Fil de discussion: auto‑relation parent/réponses
-  parent     Comment?  @relation("CommentThread", fields: [parentId], references: [id], onDelete: SetNull)
-  parentId   String?
-  replies    Comment[] @relation("CommentThread")
+  parent   Comment?  @relation("CommentThread", fields: [parentId], references: [id], onDelete: SetNull)
+  parentId String?
+  replies  Comment[] @relation("CommentThread")
 
   // Cibles optionnelles (liens polymorphes simples via FKs optionnels)
   organization   Organization? @relation("OrganizationComments", fields: [organizationId], references: [id], onDelete: Cascade)
@@ -506,12 +497,12 @@ model Comment {
 // =============================
 
 model Activity {
-  id          String   @id @default(cuid())
+  id          String @id @default(cuid())
   type        String
   description String
   metadata    Json?
 
-  performer   User?    @relation("ActivityPerformer", fields: [performerId], references: [id], onDelete: SetNull)
+  performer   User?   @relation("ActivityPerformer", fields: [performerId], references: [id], onDelete: SetNull)
   performerId String?
 
   // Cibles optionnelles (polymorphes)
@@ -622,8 +613,8 @@ model Tag {
   dealTagLinks         DealTagLink[]
   organizationTagLinks OrganizationTagLink[]
   // Liaison explicite avec Website via WebsiteTagLink
-  websiteTagLinks WebsiteTagLink[]
-  technologyTagLinks TechnologyTagLink[]
+  websiteTagLinks      WebsiteTagLink[]
+  technologyTagLinks   TechnologyTagLink[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -644,7 +635,7 @@ model OrganizationTagLink {
   tagId String
 
   // Métadonnées optionnelles
-  createdBy   User?    @relation("OrganizationTagLinkCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  createdBy   User?     @relation("OrganizationTagLinkCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
   createdById String?
   source      String?
   detectedAt  DateTime?
@@ -666,7 +657,7 @@ model DealTagLink {
   tagId String
 
   // Métadonnées optionnelles
-  createdBy   User?    @relation("DealTagLinkCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  createdBy   User?     @relation("DealTagLinkCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
   createdById String?
   source      String?
   detectedAt  DateTime?
@@ -688,7 +679,7 @@ model TechnologyTagLink {
   tagId String
 
   // Métadonnées optionnelles
-  createdBy   User?    @relation("TechnologyTagLinkCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  createdBy   User?     @relation("TechnologyTagLinkCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
   createdById String?
   source      String?
   detectedAt  DateTime?
