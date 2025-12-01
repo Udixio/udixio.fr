@@ -238,15 +238,15 @@ model Website {
   // Technologies utilisées par le site (relation via table explicite, permet de stocker la version)
   technologyLinks WebsiteTechnology[]
 
+  // Tags liés via une table de liaison explicite (pas de champ Website.tags direct)
+  websiteTagLinks WebsiteTagLink[]
+
   // Relations
   domains Domain[]
   audits  Audit[]
 
   // Projets liés (many-to-many implicite)
   projects Project[]
-
-  // Tags (étiquettes) rattachés au Website via la table Tag (M2M implicite)
-  tags Tag[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -259,7 +259,7 @@ model Website {
 // =============================
 
 model Technology {
-  id   String   @id @default(cuid())
+  id   String  @id @default(cuid())
   name String
   // Tags normalisés via la table Tag (M2M) — remplace l'ancien String[] local
   tags Tag[]
@@ -295,6 +295,30 @@ model WebsiteTechnology {
 
   @@id([websiteId, technologyId])
   @@index([technologyId])
+  @@index([websiteId])
+}
+
+// =============================
+// Table de liaison explicite Website <-> Tag
+// Permet d'ajouter des métadonnées (source, date de détection, etc.)
+// =============================
+model WebsiteTagLink {
+  // Clé composite (un lien par couple website/tag)
+  website   Website @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  websiteId String
+
+  tag   Tag @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  tagId String
+
+  // Métadonnées optionnelles
+  source     String?   // ex: "crawler", "import", "manual"
+  detectedAt DateTime? // quand le tag a été détecté/assigné
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([websiteId, tagId])
+  @@index([tagId])
   @@index([websiteId])
 }
 
@@ -530,7 +554,8 @@ model Tag {
   // Relations : Un tag peut être associé à plusieurs entités
   deals         Deal[]
   organizations Organization[]
-  websites      Website[]
+  // Liaison explicite avec Website via WebsiteTagLink
+  websiteTagLinks WebsiteTagLink[]
   technologies  Technology[]
 
   createdAt DateTime @default(now())
