@@ -56,14 +56,7 @@ enum AuditType {
   OTHER
 }
 
-// Catégories de technologies utilisées par les Websites
-enum TechnologyCategory {
-  CMS
-  HOSTING
-  FRAMEWORK
-  LANGUAGE
-  ANALYTICS
-}
+// (Supprimé) Catégories fermées remplacées par des tags libres sur Technology
 
 // NOUVEAU : On définit précisément le type de canal pour l'interface UI
 enum ContactChannel {
@@ -242,8 +235,8 @@ model Website {
   organization   Organization @relation(fields: [organizationId], references: [id])
   organizationId String
 
-  // Technologies utilisées par le site (relation M2M vers Technology)
-  technologies Technology[]
+  // Technologies utilisées par le site (relation via table explicite, permet de stocker la version)
+  technologyLinks WebsiteTechnology[]
 
   // Relations
   domains Domain[]
@@ -265,17 +258,41 @@ model Website {
 model Technology {
   id        String             @id @default(cuid())
   name      String
-  category  TechnologyCategory
+  // Remplace l'enum category par une liste de tags libres (ex: CMS, HOSTING, ECOMMERCE, etc.)
+  tags      String[]
   logo      String?
 
-  // Websites utilisant cette technologie (M2M implicite)
-  websites  Website[]
+  // Websites utilisant cette technologie (via table de liaison explicite)
+  websiteLinks WebsiteTechnology[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@unique([name, category])
-  @@index([category])
+  // Unicité par nom pour éviter les doublons (ex: "WordPress")
+  @@unique([name])
+}
+
+// =============================
+// Table de liaison explicite Website <-> Technology
+// Permet d'ajouter un champ version pour tracer la version utilisée
+// =============================
+model WebsiteTechnology {
+  // Clé composite (un lien par couple website/technology)
+  website   Website   @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  websiteId String
+
+  technology   Technology @relation(fields: [technologyId], references: [id], onDelete: Cascade)
+  technologyId String
+
+  // Métadonnées de la relation
+  version   String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([websiteId, technologyId])
+  @@index([technologyId])
+  @@index([websiteId])
 }
 
 model User {
