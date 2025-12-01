@@ -56,9 +56,6 @@ enum AuditType {
   OTHER
 }
 
-// (Supprimé) Catégories fermées remplacées par des tags libres sur Technology
-
-// NOUVEAU : On définit précisément le type de canal pour l'interface UI
 enum ContactChannel {
   EMAIL
   PHONE_MOBILE
@@ -71,8 +68,6 @@ enum ContactChannel {
   OTHER
 }
 
-// NOUVEAU : Remplace l'ancien modèle Contact.
-// Ce modèle ne stocke que le "moyen" de contacter, pas l'identité de la personne.
 model ContactPoint {
   id        String         @id @default(cuid())
   channel   ContactChannel @default(EMAIL)
@@ -80,12 +75,9 @@ model ContactPoint {
   label     String? // ex: "Bureau", "Perso", "Urgence", "Comptabilité"
   isPrimary Boolean        @default(false)
 
-  // Relations polymorphes (optionnelles)
-  // Un moyen de contact peut appartenir à une Organisation
   organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   organizationId String?
 
-  // OU appartenir à un Client (qui est une Personne/User)
   client   Client? @relation(fields: [clientId], references: [id], onDelete: Cascade)
   clientId String?
 
@@ -113,7 +105,8 @@ model Organization {
   // Fil d'historique (notes) rattachées à l'organisation
   notes Note[] @relation("OrganizationNotes")
 
-  tags Tag[]
+  // Tags via table de liaison explicite
+  organizationTagLinks OrganizationTagLink[]
 
   contactPoints ContactPoint[]
 
@@ -236,10 +229,13 @@ model Website {
   organizationId String
 
   // Technologies utilisées par le site (relation via table explicite, permet de stocker la version)
-  technologyLinks WebsiteTechnology[]
+  technologyLinks WebsiteTechnologyLink[]
 
   // Tags liés via une table de liaison explicite (pas de champ Website.tags direct)
   websiteTagLinks WebsiteTagLink[]
+
+  // Fil d'historique (notes) rattachées au site web
+  notes Note[] @relation("WebsiteNotes")
 
   // Relations
   domains Domain[]
@@ -261,12 +257,12 @@ model Website {
 model Technology {
   id   String  @id @default(cuid())
   name String
-  // Tags normalisés via la table Tag (M2M) — remplace l'ancien String[] local
-  tags Tag[]
+  // Tags via table de liaison explicite
+  technologyTagLinks TechnologyTagLink[]
   logo String?
 
   // Websites utilisant cette technologie (via table de liaison explicite)
-  websiteLinks WebsiteTechnology[]
+  websiteLinks WebsiteTechnologyLink[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -279,7 +275,7 @@ model Technology {
 // Table de liaison explicite Website <-> Technology
 // Permet d'ajouter un champ version pour tracer la version utilisée
 // =============================
-model WebsiteTechnology {
+model WebsiteTechnologyLink {
   // Clé composite (un lien par couple website/technology)
   website   Website @relation(fields: [websiteId], references: [id], onDelete: Cascade)
   websiteId String
@@ -307,11 +303,11 @@ model WebsiteTagLink {
   website   Website @relation(fields: [websiteId], references: [id], onDelete: Cascade)
   websiteId String
 
-  tag   Tag @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  tag   Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
   tagId String
 
   // Métadonnées optionnelles
-  source     String?   // ex: "crawler", "import", "manual"
+  source     String? // ex: "crawler", "import", "manual"
   detectedAt DateTime? // quand le tag a été détecté/assigné
 
   createdAt DateTime @default(now())
@@ -350,6 +346,11 @@ model User {
 
   // Notes écrites par l'utilisateur (auteur)
   authoredNotes Note[] @relation("AuthoredNotes")
+
+  // Liens de tags créés par l'utilisateur (back-relations optionnelles)
+  createdOrganizationTagLinks OrganizationTagLink[] @relation("OrganizationTagLinkCreatedBy")
+  createdDealTagLinks         DealTagLink[]         @relation("DealTagLinkCreatedBy")
+  createdTechnologyTagLinks   TechnologyTagLink[]   @relation("TechnologyTagLinkCreatedBy")
 
   @@unique([email])
   @@map("user")
@@ -410,7 +411,8 @@ model Deal {
   amount      Decimal? @db.Decimal(12, 2) // potential amount
   probability Int? // 0..100
 
-  tags Tag[]
+  // Tags via table de liaison explicite
+  dealTagLinks DealTagLink[]
 
   openedAt DateTime? // when the deal started
   closedAt DateTime? // when deal won/lost
@@ -462,12 +464,17 @@ model Note {
   deal   Deal?   @relation("DealNotes", fields: [dealId], references: [id], onDelete: Cascade)
   dealId String?
 
+  // Lien optionnel vers un Website (notes techniques spécifiques au site)
+  website   Website? @relation("WebsiteNotes", fields: [websiteId], references: [id], onDelete: Cascade)
+  websiteId String?
+
   // Empêche les doublons de même contenu pour un même deal (idempotence côté DB)
   @@unique([dealId, content])
   @@index([authorId])
   @@index([organizationId])
   @@index([clientId])
   @@index([dealId])
+  @@index([websiteId])
   @@map("note")
 }
 
@@ -551,16 +558,83 @@ model Tag {
   name  String
   color String? // ex: "#FF5733" ou "blue-500"
 
-  // Relations : Un tag peut être associé à plusieurs entités
-  deals         Deal[]
-  organizations Organization[]
+  // Relations via tables de liaison explicites
+  dealTagLinks         DealTagLink[]
+  organizationTagLinks OrganizationTagLink[]
   // Liaison explicite avec Website via WebsiteTagLink
   websiteTagLinks WebsiteTagLink[]
-  technologies  Technology[]
+  technologyTagLinks TechnologyTagLink[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@unique([name])
   @@map("tag")
+}
+
+// =============================
+// Tables de liaison explicites Tag <-> (Organization | Deal | Technology)
+// =============================
+
+model OrganizationTagLink {
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId String
+
+  tag   Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  tagId String
+
+  // Métadonnées optionnelles
+  createdBy   User?    @relation("OrganizationTagLinkCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  createdById String?
+  source      String?
+  detectedAt  DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([organizationId, tagId])
+  @@index([tagId])
+  @@index([organizationId])
+}
+
+model DealTagLink {
+  deal   Deal   @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  dealId String
+
+  tag   Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  tagId String
+
+  // Métadonnées optionnelles
+  createdBy   User?    @relation("DealTagLinkCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  createdById String?
+  source      String?
+  detectedAt  DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([dealId, tagId])
+  @@index([tagId])
+  @@index([dealId])
+}
+
+model TechnologyTagLink {
+  technology   Technology @relation(fields: [technologyId], references: [id], onDelete: Cascade)
+  technologyId String
+
+  tag   Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  tagId String
+
+  // Métadonnées optionnelles
+  createdBy   User?    @relation("TechnologyTagLinkCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  createdById String?
+  source      String?
+  detectedAt  DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([technologyId, tagId])
+  @@index([tagId])
+  @@index([technologyId])
 }

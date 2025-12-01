@@ -138,14 +138,11 @@ async function main() {
                     data: {
                         name: company_name,
                         slug: orgSlug,
-                        website: project_url,
                         address: company_adress,
                         city: company_city,
                         zip: company_zip,
                         country: company_country,
                         vatNumber: company_vat_number,
-                        // On associe les tags aussi à l'organisation pour info
-                        tags: {connect: tagConnect}
                     }
                 });
             } else {
@@ -153,18 +150,26 @@ async function main() {
                 await prisma.organization.update({
                     where: {id: org.id},
                     data: {
-                        website: project_url ?? org.website,
                         address: company_adress,
                         city: company_city,
                         zip: company_zip,
                         country: company_country,
                         vatNumber: company_vat_number,
-                        // Maintenir les tags à jour (idempotent via set)
-                        ...(tagConnect.length > 0 ? {tags: {set: tagConnect}} : {})
                     }
                 });
             }
             organizationId = org.id;
+
+            // Lier les tags à l'organisation via OrganizationTagLink (idempotent)
+            if (tagConnect.length > 0 && organizationId) {
+                for (const t of tagConnect) {
+                    await prisma.organizationTagLink.upsert({
+                        where: { organizationId_tagId: { organizationId, tagId: t.id } },
+                        create: { organizationId, tagId: t.id, source: 'import' },
+                        update: {}
+                    });
+                }
+            }
 
             // Ajout du téléphone pro de l'entreprise (ContactPoint)
             if (company_phone) {
@@ -298,9 +303,18 @@ async function main() {
                     status,
                     organizationId: organizationId,
                     clientId: clientId,
-                    tags: {connect: tagConnect}, // Lier les tags au deal
                 }
             });
+            // Lier les tags au deal via DealTagLink (idempotent)
+            if (tagConnect.length > 0) {
+                for (const t of tagConnect) {
+                    await prisma.dealTagLink.upsert({
+                        where: { dealId_tagId: { dealId: created.id, tagId: t.id } },
+                        create: { dealId: created.id, tagId: t.id, source: 'import' },
+                        update: {}
+                    });
+                }
+            }
             // Créer une note d'import si applicable (idempotent)
             if (importNote) {
                 await ensureNoteForDeal({dealId: created.id, content: importNote});
@@ -311,9 +325,18 @@ async function main() {
                 where: {id: existingDeal.id},
                 data: {
                     status,
-                    ...(tagConnect.length > 0 ? {tags: {set: tagConnect}} : {})
                 }
             });
+            // Synchroniser les tags via DealTagLink (idempotent : créer manquants)
+            if (tagConnect.length > 0) {
+                for (const t of tagConnect) {
+                    await prisma.dealTagLink.upsert({
+                        where: { dealId_tagId: { dealId: existingDeal.id, tagId: t.id } },
+                        create: { dealId: existingDeal.id, tagId: t.id, source: 'import' },
+                        update: {}
+                    });
+                }
+            }
             // Ajouter une note d'import si applicable (idempotent)
             if (importNote) {
                 await ensureNoteForDeal({dealId: existingDeal.id, content: importNote});
