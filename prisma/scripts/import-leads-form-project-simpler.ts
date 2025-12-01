@@ -1,21 +1,18 @@
 import {ContactChannel, DealStatus} from "@/generated/prisma/enums.ts";
 import fs from 'fs';
 import path from 'path';
-// Charge automatiquement les variables d'environnement depuis .env
-// (tsx n'injecte pas .env par défaut)
 import 'dotenv/config';
 import {PrismaClient} from "@/generated/prisma/client.ts";
 
-// Utilise la DATABASE_URL de l'environnement si disponible
 const prisma = new PrismaClient(
     process.env.DATABASE_URL
         ? ({datasources: {db: {url: process.env.DATABASE_URL}}} as any)
         : ({} as any)
 );
 
-// --- Helpers de Parsing ---
+// --- Helpers ---
 
-// Regex pour parser une ligne CSV en respectant les guillemets (ex: "1,200€", "Nom, Prénom")
+// Regex pour parser le CSV correctement (gère les virgules dans les guillemets)
 function parseCSVLine(text: string): string[] {
     const re_value = /(?!\s*$)\s*(?:'([^']*)'|"([^"]*)"|([^,'"]*))\s*(?:,|$)/g;
     const a: string[] = [];
@@ -25,307 +22,287 @@ function parseCSVLine(text: string): string[] {
         else if (m3 !== undefined) a.push(m3);
         return '';
     });
-    if (/,\s*$/.test(text)) a.push('');
+    // Remove empty element added at the end by the regex often
+    if (a.length > 0 && a[a.length - 1] === '' && !text.endsWith(',')) {
+        a.pop();
+    }
     return a;
 }
 
-function parseDate(dateStr: string): Date | undefined {
-    if (!dateStr || dateStr === '-') return undefined;
-    // Format attendu : DD-MM-YYYY ou DD-MM-YYYY HH:mm
-    const parts = dateStr.split(' ')[0].split('-');
-    if (parts.length !== 3) return undefined;
-    return new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
-}
-
-function parseAmount(amountStr: string): number | undefined {
-    if (!amountStr || amountStr === '-') return undefined;
-    // Nettoie "620,00€" -> 620.00
-    const cleaned = amountStr.replace(/[^0-9,.-]/g, '').replace(',', '.');
-    const val = parseFloat(cleaned);
-    return isNaN(val) ? undefined : val;
-}
-
 function slugify(text: string): string {
-    return text
-        .toString()
-        .toLowerCase()
-        .trim()
+    return text.toString().toLowerCase().trim()
         .replace(/\s+/g, '-')
         .replace(/[^\w\-]+/g, '')
         .replace(/\-\-+/g, '-');
 }
 
-// Génère un email unique basé sur le nom (car vos CSV n'ont pas d'emails)
-function generatePlaceholderEmail(name: string): string {
-    const cleanName = slugify(name);
+// Nettoie les valeurs nulles ou "NULL" du CSV
+function clean(val: string | undefined): string | undefined {
+    if (!val) return undefined;
+    const trimmed = val.trim();
+    if (trimmed === '' || trimmed === 'NULL') return undefined;
+    return trimmed;
+}
+
+// Génère un email fictif si absent
+function generatePlaceholderEmail(firstName: string, lastName: string, company: string): string {
+    const cleanName = slugify(`${firstName}-${lastName}-${company}`);
     return `${cleanName}@placeholder.import`;
 }
 
-// Mappe les statuts français vers l'Enum Prisma
-function mapDealStatus(frenchStatus: string): DealStatus {
-    const s = frenchStatus.toLowerCase().trim();
-    if (s.includes('gagné') || s.includes('accepté')) return DealStatus.WON;
+function mapDealStatus(csvStatus: string): DealStatus {
+    const s = csvStatus?.toLowerCase().trim() || '';
+    if (s.includes('gagné')) return DealStatus.WON;
     if (s.includes('perdu')) return DealStatus.LOST;
     if (s.includes('envoyé') || s.includes('cdc')) return DealStatus.PROPOSAL_SENT;
     if (s.includes('qualifié')) return DealStatus.QUALIFIED;
-    // Default fallback
+    if (s.includes('nouveau') || s.includes('discussion') || s.includes('rappeler')) return DealStatus.LEAD;
     return DealStatus.LEAD;
 }
 
-// --- Helpers de persistance (idempotents) ---
-
-async function ensureOrganization(prisma: PrismaClient, orgName: string) {
-    const baseSlug = slugify(orgName);
-    // 1) Essayer par slug déterministe
-    let org = await prisma.organization.findUnique({where: {slug: baseSlug}});
-    // 2) Sinon par nom exact (au cas où une 1ère import a créé un slug aléatoire)
-    if (!org) {
-        org = await prisma.organization.findFirst({where: {name: orgName}});
-    }
-    // 3) Créer si absent
-    if (!org) {
-        org = await prisma.organization.create({
-            data: {
-                name: orgName,
-                slug: baseSlug,
-                website: orgName.includes('.') ? orgName : undefined,
-            },
-        });
-    }
-    return org;
+// Génère une couleur hex aléatoire pour les tags
+function getRandomColor() {
+    const colors = ['#ef4444', '#f97316', '#f59e0b', '#84cc16', '#10b981', '#06b6d4', '#3b82f6', '#6366f1', '#8b5cf6', '#d946ef'];
+    return colors[Math.floor(Math.random() * colors.length)];
 }
 
-async function ensureUserWithClient(prisma: PrismaClient, name: string, email: string, opts?: { phone?: string, tags?: string }) {
-    // Upsert utilisateur basique
-    const user = await prisma.user.upsert({
-        where: {email},
-        update: {name},
-        create: {name, email},
-    });
-
-    // S'assurer que le Client 1-1 existe
-    let client = await prisma.client.findUnique({where: {userId: user.id}});
-    if (!client) {
-        client = await prisma.client.create({
-            data: {
-                userId: user.id,
-                notes: opts?.tags ? `Importé via script. Tags: ${opts.tags}` : undefined,
-            },
-        });
-    }
-
-    // Optionnel: ajouter le téléphone si non présent
-    if (opts?.phone && opts.phone !== '-') {
-        const existingCP = await prisma.contactPoint.findFirst({
-            where: {clientId: client.id, value: opts.phone},
-        });
-        if (!existingCP) {
-            await prisma.contactPoint.create({
-                data: {
-                    clientId: client.id,
-                    channel: ContactChannel.PHONE_MOBILE,
-                    value: opts.phone,
-                    isPrimary: true,
-                },
-            });
-        }
-    }
-
-    return {user, client};
-}
-
-async function ensureMember(prisma: PrismaClient, organizationId: string, userId: string, role = 'member') {
-    const existing = await prisma.member.findFirst({where: {organizationId, userId}});
-    if (existing) return existing;
-    // id et createdAt sont obligatoires dans le schéma
-    const id = `${organizationId}_${userId}`;
-    return prisma.member.create({
-        data: {
-            id,
-            organizationId,
-            userId,
-            role,
-            createdAt: new Date(),
-        },
-    });
-}
-
-async function upsertDealForLead(prisma: PrismaClient, params: {
-    orgId?: string,
-    clientId?: string,
-    title: string,
-    status: DealStatus,
-    openedAt?: Date,
-    metadata?: any,
-}) {
-    const {orgId, clientId, title, status, openedAt, metadata} = params;
-    const existing = await prisma.deal.findFirst({
-        where: {title, organizationId: orgId ?? undefined, clientId: clientId ?? undefined},
-    });
-    if (existing) {
-        return prisma.deal.update({
-            where: {id: existing.id},
-            data: {status, openedAt, metadata},
-        });
-    }
-    return prisma.deal.create({
-        data: {title, status, organizationId: orgId, clientId, openedAt, metadata},
-    });
-}
-
-async function upsertDealForProposal(prisma: PrismaClient, params: {
-    clientId?: string,
-    title: string,
-    status: DealStatus,
-    amount?: number,
-    openedAt?: Date,
-    notes?: string,
-}) {
-    const {clientId, title, status, amount, openedAt, notes} = params;
-    const existing = await prisma.deal.findFirst({
-        where: {title, clientId: clientId ?? undefined},
-    });
-    if (existing) {
-        return prisma.deal.update({
-            where: {id: existing.id},
-            data: {status, amount, openedAt, notes},
-        });
-    }
-    return prisma.deal.create({
-        data: {title, status, clientId, amount, openedAt, notes},
-    });
-}
+// --- Main Import Logic ---
 
 async function main() {
-    console.log('🚀 Démarrage de l\'importation...');
+    console.log('🚀 Démarrage de l\'importation Rise...');
 
-    // --- 1. IMPORT DES LEADS (Organisations & Clients) ---
-    const leadsPath = path.resolve(process.cwd(), 'prisma', 'csv', 'Leads  Project Simpler.csv');
-    if (fs.existsSync(leadsPath)) {
-        const content = fs.readFileSync(leadsPath, 'utf-8');
-        const lines = content.split('\n').filter((l) => l.trim().length > 0);
+    // Nouveau chemin du CSV selon l'arborescence actuelle
+    const csvPath = path.resolve(process.cwd(), 'prisma', 'csv', 'rise_clients.csv');
 
-        console.log(`📂 Traitement de ${lines.length} leads...`);
-
-        // Skip header (index 0 and 1 based on your file structure having garbage at top)
-        // On cherche la ligne qui commence par "Nom"
-        let startIndex = 0;
-        for (let i = 0; i < lines.length; i++) {
-            if (lines[i].startsWith('Nom,Contact')) {
-                startIndex = i + 1;
-                break;
-            }
-        }
-
-        for (let i = startIndex; i < lines.length; i++) {
-            const cols = parseCSVLine(lines[i]);
-            // Mapping basé sur votre CSV Leads:
-            // 0: Nom (Org), 1: Contact principal (User), 2: Téléphone, 3: Propriétaire, 4: Étiquettes, 5: Créé à, 6: Statut
-            const [orgName, contactName, phone, owner, tags, createdAtStr, statusStr] = cols;
-
-            if (!orgName) continue;
-
-            // 1. Créer/Trouver l'Organisation (déterministe)
-            const organization = await ensureOrganization(prisma, orgName);
-
-            // 2. Créer le User & Client (Si un nom de contact est présent)
-            let clientId: string | undefined;
-            let userIdForMember: string | undefined;
-
-            if (contactName) {
-                const email = generatePlaceholderEmail(contactName);
-                const {user, client} = await ensureUserWithClient(prisma, contactName, email, {phone, tags});
-                clientId = client?.id;
-                userIdForMember = user.id;
-                // Lier le contact (user) à l'organisation via Member si manquant
-                if (userIdForMember) {
-                    await ensureMember(prisma, organization.id, userIdForMember, 'member');
-                }
-            }
-
-            // 3. Créer le Deal (Lead)
-            if (statusStr) {
-                await upsertDealForLead(prisma, {
-                    title: `Lead: ${orgName}`,
-                    status: mapDealStatus(statusStr),
-                    orgId: organization.id,
-                    clientId: clientId,
-                    openedAt: parseDate(createdAtStr) || new Date(),
-                    metadata: {originalOwner: owner, tags},
-                });
-            }
-        }
-    } else {
-        console.warn(`⚠️ Fichier Leads introuvable à l'emplacement: ${leadsPath}`);
+    if (!fs.existsSync(csvPath)) {
+        console.error(`❌ Fichier introuvable : ${csvPath}`);
+        process.exit(1);
     }
 
-    // --- 2. IMPORT DES PROPOSITIONS ---
-    const propsPath = path.resolve(process.cwd(), 'prisma', 'csv', 'Les propositions  Project Simpler.csv');
-    if (fs.existsSync(propsPath)) {
-        const content = fs.readFileSync(propsPath, 'utf-8');
-        const lines = content.split('\n').filter((l) => l.trim().length > 0);
+    const content = fs.readFileSync(csvPath, 'utf-8');
+    const lines = content.split('\n').filter((l) => l.trim().length > 0);
 
-        console.log(`📂 Traitement de ${lines.length} propositions...`);
+    console.log(`📂 Traitement de ${lines.length - 1} lignes...`);
 
-        let startIndex = 0;
-        for (let i = 0; i < lines.length; i++) {
-            if (lines[i].startsWith('Proposition,Client')) {
-                startIndex = i + 1;
-                break;
+    // Skip header (start at 1)
+    for (let i = 1; i < lines.length; i++) {
+        const cols = parseCSVLine(lines[i]);
+
+        // Mapping des colonnes CSV
+        const [
+            id, type, lead_status_name, lead_labels, company_name, company_adress,
+            company_city, company_country, company_zip, company_vat_number,
+            company_phone, project_url, user_first_name, user_last_name,
+            user_email, user_job_title, user_gender, user_phone
+        ] = cols.map(clean);
+
+        // --- 1. Gestion des Tags ---
+        // On prépare la liste des IDs de tags pour les connecter plus tard
+        const tagConnect: { id: string }[] = [];
+
+        if (lead_labels) {
+            const labelList = lead_labels.split(',').map(s => s.trim()).filter(s => s);
+            for (const label of labelList) {
+                // Upsert Tag
+                let tag = await prisma.tag.findUnique({where: {name: label}});
+                if (!tag) {
+                    tag = await prisma.tag.create({
+                        data: {name: label, color: getRandomColor()}
+                    });
+                }
+                tagConnect.push({id: tag.id});
             }
         }
 
-        for (let i = startIndex; i < lines.length; i++) {
-            const cols = parseCSVLine(lines[i]);
-            // 0: Prop, 1: Client, 2: Date, 3: Valable, 4: Email vu, 5: Aperçu vu, 6: Montant, 7: Statut
-            const [propRef, clientName, dateStr, validUntil, emailSeen, previewSeen, amountStr, statusStr] = cols;
+        // --- 2. Gestion de l'Organisation ---
+        let organizationId: string | undefined;
 
-            if (!propRef || propRef === 'Total') continue;
+        if (company_name) {
+            const orgSlug = slugify(company_name);
 
-            // On essaie de lier à un User existant (créé par l'import Leads), sinon on crée un nouveau
-            let clientId: string | undefined;
-            let organizationId: string | undefined;
+            // Upsert Organization
+            // On cherche d'abord par slug pour éviter doublon
+            let org = await prisma.organization.findUnique({where: {slug: orgSlug}});
 
-            if (clientName) {
-                // Stratégie : On cherche si c'est une Org ou un User
-                // Ici on simplifie : on cherche un User par email généré
-                const email = generatePlaceholderEmail(clientName);
-                const existingUser = await prisma.user.findUnique({
-                    where: {email},
-                    include: {client: true}
+            if (!org) {
+                org = await prisma.organization.create({
+                    data: {
+                        name: company_name,
+                        slug: orgSlug,
+                        website: project_url,
+                        address: company_adress,
+                        city: company_city,
+                        zip: company_zip,
+                        country: company_country,
+                        vatNumber: company_vat_number,
+                        // On associe les tags aussi à l'organisation pour info
+                        tags: {connect: tagConnect}
+                    }
                 });
+            } else {
+                // Update si infos manquantes (optionnel, ici on update l'adresse si vide)
+                await prisma.organization.update({
+                    where: {id: org.id},
+                    data: {
+                        website: project_url ?? org.website,
+                        address: company_adress,
+                        city: company_city,
+                        zip: company_zip,
+                        country: company_country,
+                        vatNumber: company_vat_number,
+                        // Maintenir les tags à jour (idempotent via set)
+                        ...(tagConnect.length > 0 ? {tags: {set: tagConnect}} : {})
+                    }
+                });
+            }
+            organizationId = org.id;
 
-                if (existingUser && existingUser.client) {
-                    clientId = existingUser.client.id;
-                } else {
-                    // Création à la volée si n'existait pas dans les leads
-                    const newUser = await prisma.user.create({
+            // Ajout du téléphone pro de l'entreprise (ContactPoint)
+            if (company_phone) {
+                const existingPhone = await prisma.contactPoint.findFirst({
+                    where: {organizationId: org.id, value: company_phone}
+                });
+                if (!existingPhone) {
+                    await prisma.contactPoint.create({
                         data: {
-                            name: clientName,
-                            email: email,
-                            client: {create: {notes: "Créé via import Propositions"}}
-                        },
-                        include: {client: true}
+                            organizationId: org.id,
+                            channel: ContactChannel.PHONE_LANDLINE, // On assume fixe pour une boîte
+                            value: company_phone,
+                            label: "Standard"
+                        }
                     });
-                    clientId = newUser.client?.id;
+                }
+            }
+        }
+
+        // --- 3. Gestion du User et Client ---
+        let clientId: string | undefined;
+        let userId: string | undefined;
+
+        // On a besoin au moins d'un nom ou prénom pour créer un user
+        if (user_first_name || user_last_name) {
+            const email = user_email || generatePlaceholderEmail(user_first_name || '', user_last_name || '', company_name || 'unknown');
+
+            // Upsert User
+            // Upsert User (create or update)
+            const fullName = `${user_first_name || ''} ${user_last_name || ''}`.trim() || email;
+            const user = await prisma.user.upsert({
+                where: {email},
+                update: {
+                    name: fullName,
+                    firstName: user_first_name ?? undefined,
+                    lastName: user_last_name ?? undefined,
+                },
+                create: {
+                    email: email,
+                    name: fullName,
+                    firstName: user_first_name ?? undefined,
+                    lastName: user_last_name ?? undefined,
+                }
+            });
+            userId = user.id;
+
+            // Upsert Client
+            let client = await prisma.client.findUnique({where: {userId: user.id}});
+            if (!client) {
+                client = await prisma.client.create({
+                    data: {
+                        userId: user.id,
+                        jobTitle: user_job_title,
+                        gender: user_gender,
+                    }
+                });
+            } else {
+                // Mettre à jour les infos CRM si fournies
+                await prisma.client.update({
+                    where: {id: client.id},
+                    data: {
+                        jobTitle: user_job_title ?? client.jobTitle,
+                        gender: user_gender ?? client.gender,
+                    }
+                });
+                // re-fetch not strictly needed
+            }
+            clientId = client.id;
+
+            // Ajout du téléphone perso/mobile du client (ContactPoint)
+            if (user_phone) {
+                const existingMobile = await prisma.contactPoint.findFirst({
+                    where: {clientId: client.id, value: user_phone}
+                });
+                if (!existingMobile) {
+                    await prisma.contactPoint.create({
+                        data: {
+                            clientId: client.id,
+                            channel: ContactChannel.PHONE_MOBILE,
+                            value: user_phone,
+                            isPrimary: true
+                        }
+                    });
                 }
             }
 
-            // Création/Mise à jour du Deal (idempotent)
-            await upsertDealForProposal(prisma, {
-                title: propRef, // ex: "PROPOSITION #136"
-                status: mapDealStatus(statusStr),
+            // --- 4. Lier User à l'Organisation (Member) ---
+            if (organizationId) {
+                const memberId = `${organizationId}_${user.id}`;
+                const isMember = await prisma.member.findUnique({where: {id: memberId}});
+                if (!isMember) {
+                    await prisma.member.create({
+                        data: {
+                            id: memberId,
+                            organizationId: organizationId,
+                            userId: user.id,
+                            role: 'ADMIN', // On assume admin par défaut pour le contact principal
+                            createdAt: new Date()
+                        }
+                    });
+                }
+            }
+        }
+
+        // --- 5. Création du Deal ---
+        // On crée un deal si on a un statut ou si c'est une ligne valide
+        const dealTitle = company_name ? `Projet ${company_name}` : (user_last_name ? `Projet ${user_last_name}` : 'Nouveau Deal');
+
+        // On évite de créer des doublons de deals identiques
+        const existingDeal = await prisma.deal.findFirst({
+            where: {
+                organizationId: organizationId,
                 clientId: clientId,
-                amount: parseAmount(amountStr),
-                openedAt: parseDate(dateStr),
-                notes: `Valable jusqu'au: ${validUntil}. Vu le: ${emailSeen}`,
+                title: dealTitle
+            }
+        });
+
+        const status = mapDealStatus(lead_status_name || '');
+        const notes = lead_status_name ? `Statut import: ${lead_status_name}` : undefined;
+
+        if (!existingDeal) {
+            await prisma.deal.create({
+                data: {
+                    title: dealTitle,
+                    status,
+                    organizationId: organizationId,
+                    clientId: clientId,
+                    tags: {connect: tagConnect}, // Lier les tags au deal
+                    notes
+                }
+            });
+        } else {
+            // Mise à jour du deal existant (statut, notes, tags)
+            await prisma.deal.update({
+                where: {id: existingDeal.id},
+                data: {
+                    status,
+                    notes,
+                    ...(tagConnect.length > 0 ? {tags: {set: tagConnect}} : {})
+                }
             });
         }
-    } else {
-        console.warn(`⚠️ Fichier Propositions introuvable à l'emplacement: ${propsPath}`);
+
+        process.stdout.write('.'); // Progress dot
     }
 
-    console.log('✅ Importation terminée avec succès !');
+    console.log('\n✅ Importation terminée !');
 }
 
 main()
