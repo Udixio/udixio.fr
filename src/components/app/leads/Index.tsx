@@ -6,6 +6,7 @@ import {Card, IconButton} from "@udixio/ui-react";
 import DynamicDatatable from "@components/app/preview/DynamicDatatable.tsx";
 import {faFolderOpen, faXmark} from "@fortawesome/pro-regular-svg-icons";
 import DynamicDataImport from "@components/app/import/DynamicDataImport.tsx";
+import DynamicView from "../preview/DynamicView";
 
 
 export default function LeadsIndex() {
@@ -28,8 +29,8 @@ export default function LeadsIndex() {
     }, []);
 
     return (
-        <div className="p-4 space-y-4">
-            <h1 className="text-display-large">Deals</h1>
+        <Card variant={"filled"} className="bg-surface-container-low  space-y-4 section my-8">
+            <h1 className="text-display-large">Leads</h1>
             <DynamicDatatable
                 key={refreshKey}
                 model="Deal"
@@ -78,7 +79,96 @@ export default function LeadsIndex() {
                     }
                 ]}
             />
+            <div className={"my-32"}></div>
+            <DynamicView
+                entityRender={(data) => {
+                    const targetType = data.client ? "Client" : data.project ? "Project" : "Organization";
 
+                    const target = data.client ?? data.project ?? data.organization;
+
+                    let client;
+                    if (targetType === "Client") {
+                        client = target;
+                    }
+
+                    return (
+                        <Card variant={'filled'} className="bg-surface-container p-2 space-y-2 ">
+                            <div className={"px-2"}>
+                                <p className={"text-title-medium"}>{data.title}</p>
+                            </div>
+                            <Card variant={'filled'} className="bg-surface-container-high flex-1  p-2">
+                                <div>
+                                    <p className={"text-title-medium text-on-surface-variant mb-1"}>{client.user.name}</p>
+                                    <div>
+
+                                    </div>
+                                </div>
+                                <div>
+                                    <p className={"text-body-medium text-on-surface-variant"}>{client.user.email}</p>
+                                </div>
+                            </Card>
+                            <div className={"flex  gap-2"}>
+                                <Card variant={'filled'} className="bg-surface-container-high flex-1  p-2">
+                                    <p className={"text-label-medium text-on-surface-variant mb-1"}>Entreprise</p>
+                                    <p className={"text-body-medium"}>{target.name ?? "?"}</p>
+                                </Card>
+                                <Card variant={'filled'} className="bg-surface-container-high flex-1  p-2">
+                                    <p className={"text-label-medium text-on-surface-variant mb-1"}>Entreprise</p>
+                                    <p className={"text-body-medium"}>{target.name ?? "?"}</p>
+                                </Card>
+                                <Card variant={'filled'} className="bg-surface-container-high flex-1  p-2">
+                                    <p className={"text-label-medium text-on-surface-variant mb-1"}>Montant</p>
+                                    <p className={"text-body-medium"}>{target.name ?? "?"} <span
+                                        className={"text-body-small text-on-surface-variant"}>€</span></p>
+                                </Card>
+                            </div>
+                        </Card>
+                    )
+                }}
+                columns={[
+                    {
+                        key: "name",
+                        label: "Entreprise",
+                    },
+                    {
+                        key: "contact",
+                        label: "Contact",
+                    },
+                    {
+                        key: "email",
+                        label: "Email",
+                    },
+                    {
+                        key: "phone",
+                        label: "Téléphone",
+                    },
+                    {
+                        key: "status",
+                        label: "Statut",
+                    },
+                    {
+                        key: "source",
+                        label: "Source",
+                    },
+                    {
+                        key: "createdAt",
+                        label: "Créé le",
+                    },
+                ]}
+                key={refreshKey}
+                model="Deal"
+                pageSize={25}
+                rowActions={() => [
+                    {
+                        href: (row) => {
+                            return "/clients/" + row.id;
+                        },
+                        label: "Ouvrir",
+                        icon: faFolderOpen
+                    }
+                ]}
+                presets={[]}
+            />
             {showCreate && (
                 <Card className="p-4">
                     <h2 className="font-medium mb-2">Créer un deal</h2>
@@ -118,6 +208,6 @@ export default function LeadsIndex() {
                 </Card>
             )}
 
-        </div>
+        </Card>
     );
 }
