@@ -103,7 +103,7 @@ model Organization {
   deals    Deal[]
 
   // Fil d'historique rattaché à l'organisation (Commentaires)
-  notes Comment[] @relation("OrganizationNotes")
+  comments Comment[] @relation("OrganizationComments")
 
   // Historique des activités liées à l'organisation
   activities Activity[] @relation("OrganizationActivities")
@@ -238,7 +238,7 @@ model Website {
   websiteTagLinks WebsiteTagLink[]
 
   // Fil d'historique (commentaires) rattachés au site web
-  notes Comment[] @relation("WebsiteNotes")
+  comments Comment[] @relation("WebsiteComments")
 
   // Historique des activités liées au site web
   activities Activity[] @relation("WebsiteActivities")
@@ -351,7 +351,7 @@ model User {
   client Client?
 
   // Commentaires écrits par l'utilisateur (auteur)
-  authoredNotes Comment[] @relation("AuthoredNotes")
+  authoredComments Comment[] @relation("AuthoredComments")
 
   // Activités effectuées par l'utilisateur (acteur)
   performedActivities Activity[] @relation("ActivityPerformer")
@@ -391,7 +391,7 @@ model Client {
   contactPoints ContactPoint[]
 
   // Fil d'historique (commentaires) rattaché au client
-  notes Comment[] @relation("ClientNotes")
+  comments Comment[] @relation("ClientComments")
 
   // Historique des activités liées au client
   activities Activity[] @relation("ClientActivities")
@@ -445,7 +445,7 @@ model Deal {
   updatedAt DateTime @updatedAt
 
   // Fil d'historique (commentaires) rattaché au deal
-  notes Comment[] @relation("DealNotes")
+  comments Comment[] @relation("DealComments")
 
   // Historique des activités liées au deal
   activities Activity[] @relation("DealActivities")
@@ -467,7 +467,7 @@ model Comment {
   editedAt  DateTime?
 
   // Auteur optionnel (messages système sans auteur possible)
-  author   User?   @relation("AuthoredNotes", fields: [authorId], references: [id], onDelete: SetNull)
+  author   User?   @relation("AuthoredComments", fields: [authorId], references: [id], onDelete: SetNull)
   authorId String?
 
   // Fil de discussion: auto‑relation parent/réponses
@@ -476,17 +476,17 @@ model Comment {
   replies    Comment[] @relation("CommentThread")
 
   // Cibles optionnelles (liens polymorphes simples via FKs optionnels)
-  organization   Organization? @relation("OrganizationNotes", fields: [organizationId], references: [id], onDelete: Cascade)
+  organization   Organization? @relation("OrganizationComments", fields: [organizationId], references: [id], onDelete: Cascade)
   organizationId String?
 
-  client   Client? @relation("ClientNotes", fields: [clientId], references: [id], onDelete: Cascade)
+  client   Client? @relation("ClientComments", fields: [clientId], references: [id], onDelete: Cascade)
   clientId String?
 
-  deal   Deal?   @relation("DealNotes", fields: [dealId], references: [id], onDelete: Cascade)
+  deal   Deal?   @relation("DealComments", fields: [dealId], references: [id], onDelete: Cascade)
   dealId String?
 
   // Lien optionnel vers un Website (commentaires techniques spécifiques au site)
-  website   Website? @relation("WebsiteNotes", fields: [websiteId], references: [id], onDelete: Cascade)
+  website   Website? @relation("WebsiteComments", fields: [websiteId], references: [id], onDelete: Cascade)
   websiteId String?
 
   // Empêche les doublons de même contenu pour un même deal (idempotence côté DB)
