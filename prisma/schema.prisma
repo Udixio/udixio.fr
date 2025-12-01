@@ -56,6 +56,15 @@ enum AuditType {
   OTHER
 }
 
+// Catégories de technologies utilisées par les Websites
+enum TechnologyCategory {
+  CMS
+  HOSTING
+  FRAMEWORK
+  LANGUAGE
+  ANALYTICS
+}
+
 // NOUVEAU : On définit précisément le type de canal pour l'interface UI
 enum ContactChannel {
   EMAIL
@@ -98,7 +107,7 @@ model Organization {
   id        String  @id @default(cuid())
   name      String
   legalName String? // optional registered name
-  
+
   address   String?
   city      String?
   zip       String?
@@ -233,10 +242,8 @@ model Website {
   organization   Organization @relation(fields: [organizationId], references: [id])
   organizationId String
 
-  // Infos techniques utiles à la prospection
-  cms        String?     // WordPress, Shopify, …
-  hosting    String?     // Hébergeur
-  techStack  String?     // Stack technique
+  // Technologies utilisées par le site (relation M2M vers Technology)
+  technologies Technology[]
 
   // Relations
   domains Domain[]
@@ -249,6 +256,26 @@ model Website {
   updatedAt DateTime @updatedAt
 
   @@index([organizationId])
+}
+
+// =============================
+// Technology (dictionnaire unique des techno)
+// =============================
+
+model Technology {
+  id        String             @id @default(cuid())
+  name      String
+  category  TechnologyCategory
+  logo      String?
+
+  // Websites utilisant cette technologie (M2M implicite)
+  websites  Website[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([name, category])
+  @@index([category])
 }
 
 model User {
@@ -376,7 +403,7 @@ model Deal {
 
 model Note {
   id        String   @id @default(cuid())
-  content   String   // texte long
+  content   String // texte long
   createdAt DateTime @default(now())
 
   // Auteur optionnel (messages système sans auteur possible)
@@ -390,15 +417,15 @@ model Note {
   client   Client? @relation("ClientNotes", fields: [clientId], references: [id], onDelete: Cascade)
   clientId String?
 
-  deal   Deal? @relation("DealNotes", fields: [dealId], references: [id], onDelete: Cascade)
+  deal   Deal?   @relation("DealNotes", fields: [dealId], references: [id], onDelete: Cascade)
   dealId String?
 
+  // Empêche les doublons de même contenu pour un même deal (idempotence côté DB)
+  @@unique([dealId, content])
   @@index([authorId])
   @@index([organizationId])
   @@index([clientId])
   @@index([dealId])
-  // Empêche les doublons de même contenu pour un même deal (idempotence côté DB)
-  @@unique([dealId, content])
   @@map("note")
 }
 
