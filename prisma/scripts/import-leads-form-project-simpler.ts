@@ -61,11 +61,11 @@ function extractHost(input?: string): string | undefined {
 
 // Garantit l'existence d'un Project pour une organisation (vision Produit)
 async function ensureProjectForOrganization(params: { organizationId: string, projectName?: string }) {
-    const { organizationId, projectName } = params;
+    const {organizationId, projectName} = params;
     const name = (projectName && projectName.trim()) || 'Projet principal';
-    let project = await prisma.project.findFirst({ where: { organizationId, name } });
+    let project = await prisma.project.findFirst({where: {organizationId, name}});
     if (!project) {
-        project = await prisma.project.create({ data: { organizationId, name } });
+        project = await prisma.project.create({data: {organizationId, name}});
     }
     return project;
 }
@@ -73,32 +73,32 @@ async function ensureProjectForOrganization(params: { organizationId: string, pr
 // Garantit l'existence d'un Website pour un projet, en essayant de réutiliser
 // celui lié à un domaine existant si possible.
 async function ensureWebsiteForProject(params: { projectId: string, host?: string }) {
-    const { projectId, host } = params;
+    const {projectId, host} = params;
     // 1) Si un host est fourni et qu'un Domain existe déjà, réutiliser son website
     if (host) {
-        const existingDomain = await prisma.domain.findUnique({ where: { host } });
+        const existingDomain = await prisma.domain.findUnique({where: {host}});
         if (existingDomain) {
-            return await prisma.website.findUnique({ where: { id: existingDomain.websiteId } });
+            return await prisma.website.findUnique({where: {id: existingDomain.websiteId}});
         }
     }
     // 2) Sinon, s'il existe déjà un website pour le projet, réutiliser le premier
-    const existingWebsite = await prisma.website.findFirst({ where: { projectId } });
+    const existingWebsite = await prisma.website.findFirst({where: {projectId}});
     if (existingWebsite) return existingWebsite;
     // 3) Créer un nouveau website
-    return prisma.website.create({ data: { projectId } });
+    return prisma.website.create({data: {projectId}});
 }
 
 // Garantit l'existence d'un Domain pour un website, unique par host. Réassigne si nécessaire.
 async function ensureDomainForWebsite(params: { websiteId: string, host: string, isPrimary?: boolean }) {
-    const { websiteId, host } = params;
+    const {websiteId, host} = params;
     const isPrimary = params.isPrimary ?? true;
-    const existing = await prisma.domain.findUnique({ where: { host } });
+    const existing = await prisma.domain.findUnique({where: {host}});
     if (!existing) {
-        return prisma.domain.create({ data: { host, websiteId, isPrimary } });
+        return prisma.domain.create({data: {host, websiteId, isPrimary}});
     }
     // Si le domaine existe mais pointe vers un autre website, on le rattache ici
     if (existing.websiteId !== websiteId || existing.isPrimary !== isPrimary) {
-        return prisma.domain.update({ where: { id: existing.id }, data: { websiteId, isPrimary } });
+        return prisma.domain.update({where: {id: existing.id}, data: {websiteId, isPrimary}});
     }
     return existing;
 }
@@ -133,7 +133,7 @@ function getRandomColor() {
 async function ensureNoteForDeal(params: { dealId: string, content: string, authorId?: string }) {
     const {dealId, content, authorId} = params;
     if (!content) return;
-    const exists = await prisma.comment.findFirst({ where: { dealId, content } });
+    const exists = await prisma.comment.findFirst({where: {dealId, content}});
     if (exists) return exists;
     return prisma.comment.create({
         data: {
@@ -231,8 +231,8 @@ async function main() {
             if (tagConnect.length > 0 && organizationId) {
                 for (const t of tagConnect) {
                     await prisma.organizationTagLink.upsert({
-                        where: { organizationId_tagId: { organizationId, tagId: t.id } },
-                        create: { organizationId, tagId: t.id, source: 'import' },
+                        where: {organizationId_tagId: {organizationId, tagId: t.id}},
+                        create: {organizationId, tagId: t.id, source: 'import'},
                         update: {}
                     });
                 }
@@ -259,14 +259,14 @@ async function main() {
         // --- 2.b Gestion du Project, Website & Domain à partir de project_url ---
         if (organizationId && project_url) {
             const host = extractHost(project_url);
-            const defaultProjectName = company_name ? `${company_name} – Produit` : 'Projet principal';
-            const project = await ensureProjectForOrganization({ organizationId, projectName: defaultProjectName });
+            const defaultProjectName = host?.replace('www.', '') ?? company_name ?? 'Projet principal';
+            const project = await ensureProjectForOrganization({organizationId, projectName: defaultProjectName});
             if (host) {
-                const website = await ensureWebsiteForProject({ projectId: project.id, host });
-                await ensureDomainForWebsite({ websiteId: website.id, host, isPrimary: true });
+                const website = await ensureWebsiteForProject({projectId: project.id, host});
+                await ensureDomainForWebsite({websiteId: website.id, host, isPrimary: true});
             } else {
                 // Si pas de host exploitable, s'assurer au moins qu'un website existe pour le projet (idempotent)
-                await ensureWebsiteForProject({ projectId: project.id });
+                await ensureWebsiteForProject({projectId: project.id});
             }
         }
 
@@ -390,8 +390,8 @@ async function main() {
             if (tagConnect.length > 0) {
                 for (const t of tagConnect) {
                     await prisma.dealTagLink.upsert({
-                        where: { dealId_tagId: { dealId: created.id, tagId: t.id } },
-                        create: { dealId: created.id, tagId: t.id, source: 'import' },
+                        where: {dealId_tagId: {dealId: created.id, tagId: t.id}},
+                        create: {dealId: created.id, tagId: t.id, source: 'import'},
                         update: {}
                     });
                 }
@@ -412,8 +412,8 @@ async function main() {
             if (tagConnect.length > 0) {
                 for (const t of tagConnect) {
                     await prisma.dealTagLink.upsert({
-                        where: { dealId_tagId: { dealId: existingDeal.id, tagId: t.id } },
-                        create: { dealId: existingDeal.id, tagId: t.id, source: 'import' },
+                        where: {dealId_tagId: {dealId: existingDeal.id, tagId: t.id}},
+                        create: {dealId: existingDeal.id, tagId: t.id, source: 'import'},
                         update: {}
                     });
                 }
