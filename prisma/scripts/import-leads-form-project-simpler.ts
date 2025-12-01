@@ -62,13 +62,13 @@ function getRandomColor() {
 
 // --- Main Import Logic ---
 
-// Crée une note liée à un deal si une note identique (même contenu) n'existe pas déjà
+// Crée un commentaire lié à un deal si un commentaire identique (même contenu) n'existe pas déjà
 async function ensureNoteForDeal(params: { dealId: string, content: string, authorId?: string }) {
     const {dealId, content, authorId} = params;
     if (!content) return;
-    const exists = await prisma.note.findFirst({ where: { dealId, content } });
+    const exists = await prisma.comment.findFirst({ where: { dealId, content } });
     if (exists) return exists;
-    return prisma.note.create({
+    return prisma.comment.create({
         data: {
             dealId,
             content,

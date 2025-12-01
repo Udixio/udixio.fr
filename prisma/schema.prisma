@@ -102,8 +102,11 @@ model Organization {
   projects Project[]
   deals    Deal[]
 
-  // Fil d'historique (notes) rattachées à l'organisation
-  notes Note[] @relation("OrganizationNotes")
+  // Fil d'historique rattaché à l'organisation (Commentaires)
+  notes Comment[] @relation("OrganizationNotes")
+
+  // Historique des activités liées à l'organisation
+  activities Activity[] @relation("OrganizationActivities")
 
   // Tags via table de liaison explicite
   organizationTagLinks OrganizationTagLink[]
@@ -234,8 +237,11 @@ model Website {
   // Tags liés via une table de liaison explicite (pas de champ Website.tags direct)
   websiteTagLinks WebsiteTagLink[]
 
-  // Fil d'historique (notes) rattachées au site web
-  notes Note[] @relation("WebsiteNotes")
+  // Fil d'historique (commentaires) rattachés au site web
+  notes Comment[] @relation("WebsiteNotes")
+
+  // Historique des activités liées au site web
+  activities Activity[] @relation("WebsiteActivities")
 
   // Relations
   domains Domain[]
@@ -344,8 +350,11 @@ model User {
   // A User is a Client by default (1-1). The Client record stores CRM-specific info.
   client Client?
 
-  // Notes écrites par l'utilisateur (auteur)
-  authoredNotes Note[] @relation("AuthoredNotes")
+  // Commentaires écrits par l'utilisateur (auteur)
+  authoredNotes Comment[] @relation("AuthoredNotes")
+
+  // Activités effectuées par l'utilisateur (acteur)
+  performedActivities Activity[] @relation("ActivityPerformer")
 
   // Liens de tags créés par l'utilisateur (back-relations optionnelles)
   createdOrganizationTagLinks OrganizationTagLink[] @relation("OrganizationTagLinkCreatedBy")
@@ -381,8 +390,11 @@ model Client {
   // NOUVEAU : Les moyens de contacter ce client spécifiquement
   contactPoints ContactPoint[]
 
-  // Fil d'historique (notes) rattachées au client
-  notes Note[] @relation("ClientNotes")
+  // Fil d'historique (commentaires) rattaché au client
+  notes Comment[] @relation("ClientNotes")
+
+  // Historique des activités liées au client
+  activities Activity[] @relation("ClientActivities")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -432,8 +444,11 @@ model Deal {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // Fil d'historique (notes) rattachées au deal
-  notes Note[] @relation("DealNotes")
+  // Fil d'historique (commentaires) rattaché au deal
+  notes Comment[] @relation("DealNotes")
+
+  // Historique des activités liées au deal
+  activities Activity[] @relation("DealActivities")
 
   @@index([organizationId])
   @@index([projectId])
@@ -442,17 +457,23 @@ model Deal {
 }
 
 // =============================
-// Note / Historique
+// Comment / Discussion humaine (avec fils de discussion)
 // =============================
 
-model Note {
+model Comment {
   id        String   @id @default(cuid())
   content   String // texte long
   createdAt DateTime @default(now())
+  editedAt  DateTime?
 
   // Auteur optionnel (messages système sans auteur possible)
   author   User?   @relation("AuthoredNotes", fields: [authorId], references: [id], onDelete: SetNull)
   authorId String?
+
+  // Fil de discussion: auto‑relation parent/réponses
+  parent     Comment?  @relation("CommentThread", fields: [parentId], references: [id], onDelete: SetNull)
+  parentId   String?
+  replies    Comment[] @relation("CommentThread")
 
   // Cibles optionnelles (liens polymorphes simples via FKs optionnels)
   organization   Organization? @relation("OrganizationNotes", fields: [organizationId], references: [id], onDelete: Cascade)
@@ -464,7 +485,7 @@ model Note {
   deal   Deal?   @relation("DealNotes", fields: [dealId], references: [id], onDelete: Cascade)
   dealId String?
 
-  // Lien optionnel vers un Website (notes techniques spécifiques au site)
+  // Lien optionnel vers un Website (commentaires techniques spécifiques au site)
   website   Website? @relation("WebsiteNotes", fields: [websiteId], references: [id], onDelete: Cascade)
   websiteId String?
 
@@ -475,7 +496,44 @@ model Note {
   @@index([clientId])
   @@index([dealId])
   @@index([websiteId])
-  @@map("note")
+  @@map("comment")
+}
+
+// =============================
+// Activity / Journal de bord (historique système)
+// =============================
+
+model Activity {
+  id          String   @id @default(cuid())
+  type        String
+  description String
+  metadata    Json?
+
+  performer   User?    @relation("ActivityPerformer", fields: [performerId], references: [id], onDelete: SetNull)
+  performerId String?
+
+  // Cibles optionnelles (polymorphes)
+  organization   Organization? @relation("OrganizationActivities", fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId String?
+
+  client   Client? @relation("ClientActivities", fields: [clientId], references: [id], onDelete: Cascade)
+  clientId String?
+
+  deal   Deal?   @relation("DealActivities", fields: [dealId], references: [id], onDelete: Cascade)
+  dealId String?
+
+  website   Website? @relation("WebsiteActivities", fields: [websiteId], references: [id], onDelete: Cascade)
+  websiteId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([performerId])
+  @@index([organizationId])
+  @@index([clientId])
+  @@index([dealId])
+  @@index([websiteId])
+  @@map("activity")
 }
 
 model Session {
