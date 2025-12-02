@@ -134,7 +134,7 @@ export default function DynamicView({model, presets, pageSize = 25, rowActions, 
             {Array.isArray(presets) && presets.length > 0 && (
                 <DynamicPresets presets={presets as any} onFilter={(f) => setPresetFilter(f)}/>
             )}
-            <div className="grid grid-cols-2 gap-2 ">
+            <div className="grid grid-cols-2 gap-4 ">
 
                 {!loading && items.map((row: any) => {
                     return entityRender(row)
