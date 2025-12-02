@@ -1,9 +1,6 @@
-import React, {type ReactNode, useEffect, useState} from 'react';
+import React, {type ReactNode, useEffect, useRef, useState} from 'react';
 // Global search bar removed per new requirements
-import useDynamicList from './useDynamicList.ts';
-import {useStore} from "@nanostores/react";
-import {modelsService, modelsStore} from '@/stores/modelsStore.ts';
-import {getModelRelations} from '@/lib/modelUtils.ts';
+import useActionList, {type ActionListParams, type ActionListResult} from './useActionList.ts';
 import DynamicPresets from './DynamicPresets.tsx';
 import type {IconDefinition} from "@fortawesome/pro-light-svg-icons";
 
@@ -21,7 +18,8 @@ type ModelDefinition = Record<string, ModelField>;
 type RowAction = { label: string; icon?: IconDefinition; onClick?: (row: any) => void, href?: (row: any) => string };
 
 type Props = {
-    model: string;
+    // Remplace l'ancien props `model` par une action fetcher
+    action: (params: ActionListParams) => Promise<ActionListResult<any> | undefined>;
     entityRender: (row: any) => ReactNode
     columns: { key: string; label: string }[]
     // Sélecteur de vues rapides (presets) pour appliquer un where JSON complexe
@@ -47,11 +45,10 @@ type ColumnDefInline = {
 };
 type ColumnDef = ColumnDefField | ColumnDefMutex | ColumnDefInline;
 
-export default function DynamicView({model, presets, pageSize = 25, rowActions, columns, entityRender}: Props) {
-    const list = useDynamicList<any>(model, {limit: pageSize});
+export default function DynamicView({action, presets, pageSize = 25, rowActions, columns, entityRender}: Props) {
+    const list = useActionList<any>(action, {limit: pageSize});
 
 
-    const {models} = useStore(modelsStore);
     const [colFilters, setColFilters] = useState<Record<string, any>>({});
     const [presetFilter, setPresetFilter] = useState<Record<string, any> | undefined>(undefined);
     const [sortField, setSortField] = useState<string | undefined>(undefined);
@@ -74,41 +71,16 @@ export default function DynamicView({model, presets, pageSize = 25, rowActions, 
     }
 
 
-    // Charger les modèles une seule fois si absents
-    useEffect(() => {
-        if (!models) {
-            void modelsService.load();
-        }
-    }, [models]);
-
-    // Build include for single relations to improve preview rendering
-    useEffect(() => {
-        const defs = (models as any);
-        if (!defs || !defs[model]) return;
-        const rels = getModelRelations(defs, model).filter(r => !r.isList);
-        if (rels.length === 0) return;
-        const include: Record<string, any> = {};
-        for (const r of rels) include[r.name] = true;
-        list.setInclude(include);
-    }, [models, model]);
+    // Optionnellement, un include custom pourrait être passé via presets côté action.
 
     // Compose where filter = per-column filters only (global search removed)
     useEffect(() => {
-        const defs: any = (models as any)?.[model];
+        // Construction minimaliste d'un where à partir des filtres colonnes
         const entries = Object.entries(colFilters)
-            .filter(([, v]) => v !== undefined && v !== null && String(v).trim().length > 0) as [string, any][];
+            .filter(([, v]) => v !== undefined && v !== null && String(v).toString().trim().length > 0) as [string, any][];
 
-        const conds = entries
-            .map(([key, raw]) => buildWhereForColumn({
-                key,
-                rawValue: raw,
-                model,
-                models: models as any,
-                columns,
-            }))
-            .filter(Boolean) as any[];
+        const conds = entries.map(([key, value]) => ({[key]: value}));
 
-        // Fusion avec le filtre preset si présent
         let where: any = {};
         if (presetFilter && conds.length > 0) {
             where = {AND: [presetFilter, ...conds]};
@@ -118,16 +90,30 @@ export default function DynamicView({model, presets, pageSize = 25, rowActions, 
             where = {AND: conds};
         }
         list.setFilter(where);
-    }, [colFilters, models, model, presetFilter, columns]);
+    }, [colFilters, presetFilter, columns]);
 
     // Apply sorting whenever local sort state changes
     useEffect(() => {
         list.setSort(sortField, sortDir);
     }, [sortField, sortDir]);
 
-    const {items, total, loading, page} = list;
-    const maxPage = Math.max(1, Math.ceil(total / list.limit));
+    const {items, total, loading, page, hasMore} = list;
     const actionsCol = typeof rowActions === 'function' ? 1 : 0;
+
+    // Infinite scroll sentinel
+    const sentinelRef = useRef<HTMLDivElement | null>(null);
+    useEffect(() => {
+        const el = sentinelRef.current;
+        if (!el) return;
+        const io = new IntersectionObserver((entries) => {
+            const first = entries[0];
+            if (first.isIntersecting && hasMore && !loading) {
+                list.loadMore();
+            }
+        }, {root: null, rootMargin: '200px', threshold: 0});
+        io.observe(el);
+        return () => io.disconnect();
+    }, [hasMore, loading, list]);
 
     return (
         <div className="space-y-3">
@@ -142,15 +128,11 @@ export default function DynamicView({model, presets, pageSize = 25, rowActions, 
             </div>
 
             <div className="flex items-center gap-2">
-                <button className="border border-outline px-3 py-1" disabled={page <= 1}
-                        onClick={list.prevPage}>Précédent
-                </button>
-                <span className="text-sm">Page {page} / {maxPage}</span>
-                <button className="border border-outline px-3 py-1" disabled={page >= maxPage}
-                        onClick={list.nextPage}>Suivant
-                </button>
+                <span className="text-sm">Chargement: {loading ? 'oui' : 'non'}</span>
                 <span className="ml-auto text-sm text-gray-600">{total} total</span>
             </div>
+            {/* Sentinel pour le scroll infini */}
+            <div ref={sentinelRef} />
         </div>
     );
 }

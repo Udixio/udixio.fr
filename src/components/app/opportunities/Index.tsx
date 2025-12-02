@@ -7,6 +7,7 @@ import DynamicDatatable from "@components/app/preview/DynamicDatatable.tsx";
 import {faEnvelope, faFolderOpen, faXmark} from "@fortawesome/pro-regular-svg-icons";
 import DynamicDataImport from "@components/app/import/DynamicDataImport.tsx";
 import DynamicView from "../preview/DynamicView";
+import {actions} from 'astro:actions';
 
 
 export default function LeadsIndex() {
@@ -81,55 +82,45 @@ export default function LeadsIndex() {
             />
             <div className={"my-32"}></div>
             <DynamicView
-                entityRender={(data) => {
-                    console.log('rffr', data)
+                action={actions.opportunities.list}
+                entityRender={(item) => {
+                    const deal = item.deal ?? item; // fallback si jamais format brut
+                    const target = item.target?.client ?? item.target?.project ?? item.target?.organization;
+                    const targetType = item.target?.type ?? (deal.client ? 'Client' : deal.project ? 'Project' : 'Organization');
 
-                    const targetType = data.client ? "Client" : data.project ? "Project" : "Organization";
-
-                    const target = data.client ?? data.project ?? data.organization;
-
-                    let client;
-                    if (targetType === "Client") {
-                        client = target;
-                    }
+                    const client = targetType === 'client' || targetType === 'Client' ? (item.target?.client ?? deal.client) : undefined;
 
                     return (
                         <Card variant={'filled'} className="bg-surface-container p-2 space-y-2">
                             <div className={"px-2"}>
-                                <p className={"text-title-medium"}>{data.title}</p>
+                                <p className={"text-title-medium"}>{deal.title}</p>
                             </div>
                             {client && <Card variant={'filled'} className="bg-surface-container-high flex-1  p-2">
                                 <div>
-                                    <p className={"text-title-medium text-on-surface-variant mb-1"}>{client.user.name}</p>
-                                    <div>
-
-                                    </div>
+                                    <p className={"text-title-medium text-on-surface-variant mb-1"}>{client.user?.name}</p>
                                 </div>
                                 <div>
-                                    <div className={"text-body-medium text-on-surface-variant flex gap-2 items-center"}>
-                                        <Icon
-                                            icon={faEnvelope}/>{client.user.email}
-                                    </div>
-                                    <div className={"text-body-medium text-on-surface-variant flex gap-2 items-center"}>
-                                        <Icon
-                                            icon={faEnvelope}/>{client.user.email}
-                                    </div>
+                                    {client.user?.email && (
+                                        <div
+                                            className={"text-body-medium text-on-surface-variant flex gap-2 items-center"}>
+                                            <Icon icon={faEnvelope}/>{client.user.email}
+                                        </div>
+                                    )}
                                 </div>
-                            </Card>
-                            }
+                            </Card>}
 
                             <div className={"flex  gap-2"}>
                                 <Card variant={'filled'} className="bg-surface-container-high flex-1  p-2">
-                                    <p className={"text-label-medium text-on-surface-variant mb-1"}>Entreprise</p>
-                                    <p className={"text-body-medium"}>{target.name ?? "?"}</p>
+                                    <p className={"text-label-medium text-on-surface-variant mb-1"}>Cible</p>
+                                    <p className={"text-body-medium"}>{(target?.name ?? target?.organization?.name ?? target?.project?.name) ?? "?"}</p>
                                 </Card>
                                 <Card variant={'filled'} className="bg-surface-container-high flex-1  p-2">
-                                    <p className={"text-label-medium text-on-surface-variant mb-1"}>Entreprise</p>
-                                    <p className={"text-body-medium"}>{target.name ?? "?"}</p>
+                                    <p className={"text-label-medium text-on-surface-variant mb-1"}>Statut</p>
+                                    <p className={"text-body-medium"}>{deal.status}</p>
                                 </Card>
                                 <Card variant={'filled'} className="bg-surface-container-high flex-1  p-2">
                                     <p className={"text-label-medium text-on-surface-variant mb-1"}>Montant</p>
-                                    <p className={"text-body-medium"}>{target.name ?? "?"} <span
+                                    <p className={"text-body-medium"}>{deal.amount ?? "?"} <span
                                         className={"text-body-small text-on-surface-variant"}>€</span></p>
                                 </Card>
                             </div>
@@ -167,7 +158,6 @@ export default function LeadsIndex() {
                     },
                 ]}
                 key={refreshKey}
-                model="Deal"
                 pageSize={25}
                 rowActions={() => [
                     {
