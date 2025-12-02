@@ -121,8 +121,7 @@ export default function DynamicView({action, presets, pageSize = 25, rowActions,
                 <DynamicPresets presets={presets as any} onFilter={(f) => setPresetFilter(f)}/>
             )}
             <div className="grid grid-cols-2 gap-4 ">
-
-                {!loading && items.map((row: any) => {
+                {items.map((row: any) => {
                     return entityRender(row)
                 })}
             </div>

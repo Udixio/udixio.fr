@@ -84,6 +84,9 @@ export default function LeadsIndex() {
             <DynamicView
                 action={actions.opportunities.list}
                 entityRender={(item) => {
+
+                    console.log('item', item)
+
                     const deal = item.deal ?? item; // fallback si jamais format brut
                     const target = item.target?.client ?? item.target?.project ?? item.target?.organization;
                     const targetType = item.target?.type ?? (deal.client ? 'Client' : deal.project ? 'Project' : 'Organization');
