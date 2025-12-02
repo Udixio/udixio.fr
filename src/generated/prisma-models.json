@@ -3379,11 +3379,11 @@
       "relationToFields": null,
       "documentation": null,
       "ui": {
-        "preview": true,
         "hidden": false,
         "label": null,
         "placeholder": null,
-        "default": null
+        "default": null,
+        "preview": true
       }
     },
     "metadata": {
@@ -3460,11 +3460,11 @@
       "relationToFields": [],
       "documentation": null,
       "ui": {
-        "preview": true,
         "hidden": false,
         "label": null,
         "placeholder": null,
-        "default": null
+        "default": null,
+        "preview": true
       }
     },
     "activities": {

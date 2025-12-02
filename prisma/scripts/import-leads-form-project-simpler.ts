@@ -259,7 +259,7 @@ async function main() {
         // --- 2.b Gestion du Project, Website & Domain à partir de project_url ---
         if (organizationId && project_url) {
             const host = extractHost(project_url);
-            const defaultProjectName = host?.replace('www.', '') ?? company_name ?? 'Projet principal';
+            const defaultProjectName = host?.replace(/\.[a-zA-Z]+$/, '')?.replace('www.', '') ?? company_name ?? 'Projet principal';
             const project = await ensureProjectForOrganization({organizationId, projectName: defaultProjectName});
             if (host) {
                 const website = await ensureWebsiteForProject({projectId: project.id, host});

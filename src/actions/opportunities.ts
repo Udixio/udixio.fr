@@ -40,7 +40,15 @@ export const opportunities = {
                                     include: {
                                         organization: {
                                             include: {
-                                                projects: true,
+                                                projects: {
+                                                    include: {
+                                                        websites: {
+                                                            include: {
+                                                                domains: true,
+                                                            }
+                                                        },
+                                                    }
+                                                },
                                                 contactPoints: true,
                                                 members: {
                                                     include: {
@@ -66,7 +74,15 @@ export const opportunities = {
                     include: {
                         organization: {
                             include: {
-                                projects: true,
+                                projects: {
+                                    include: {
+                                        websites: {
+                                            include: {
+                                                domains: true,
+                                            }
+                                        },
+                                    }
+                                },
                                 contactPoints: true,
                                 members: {
                                     include: {
@@ -85,7 +101,15 @@ export const opportunities = {
                 },
                 organization: {
                     include: {
-                        projects: true,
+                        projects: {
+                            include: {
+                                websites: {
+                                    include: {
+                                        domains: true,
+                                    }
+                                },
+                            }
+                        },
                         contactPoints: true,
                         members: {
                             include: {
@@ -100,6 +124,11 @@ export const opportunities = {
                         },
                     },
                 },
+                dealTagLinks: {
+                    include: {
+                        tag: true,
+                    },
+                }
             } as const;
 
             const [rows, total] = await Promise.all([
