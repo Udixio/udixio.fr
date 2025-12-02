@@ -33,7 +33,32 @@ export const opportunities = {
             const include = {
                 client: {
                     include: {
-                        user: true,
+                        user: {
+                            include: {
+                                // organisations liées via les memberships du user
+                                members: {
+                                    include: {
+                                        organization: {
+                                            include: {
+                                                projects: true,
+                                                contactPoints: true,
+                                                members: {
+                                                    include: {
+                                                        user: {
+                                                            include: {
+                                                                client: {
+                                                                    include: {contactPoints: true},
+                                                                },
+                                                            },
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
                         contactPoints: true,
                     },
                 },
@@ -41,6 +66,8 @@ export const opportunities = {
                     include: {
                         organization: {
                             include: {
+                                projects: true,
+                                contactPoints: true,
                                 members: {
                                     include: {
                                         user: {
@@ -58,6 +85,8 @@ export const opportunities = {
                 },
                 organization: {
                     include: {
+                        projects: true,
+                        contactPoints: true,
                         members: {
                             include: {
                                 user: {
@@ -84,6 +113,19 @@ export const opportunities = {
                 prisma.deal.count({where}),
             ]);
 
+            // Helpers de déduplication par id
+            const uniqById = (arr: any[] = []) => {
+                const seen = new Set<string>();
+                const out: any[] = [];
+                for (const x of arr) {
+                    const id = x?.id;
+                    if (!id || seen.has(id)) continue;
+                    seen.add(id);
+                    out.push(x);
+                }
+                return out;
+            };
+
             // Composer la ligne unifiée par opportunité
             const items = rows.map((deal: any) => {
                 // Déterminer la cible (priorité: client -> project -> organization)
@@ -96,13 +138,44 @@ export const opportunities = {
                     target = {type: 'organization', organization: deal.organization};
                 }
 
-                // Si target = project, remonter l'organisation liée au projet
-                let organization = null as any;
+                // Rassembler toutes les organisations pertinentes
+                const orgsFromDeal: any[] = [];
+                if (deal.organization) orgsFromDeal.push(deal.organization);
+                if (deal.project?.organization) orgsFromDeal.push(deal.project.organization);
+                const orgsFromClientMembers: any[] = (deal.client?.user?.members || [])
+                    .map((m: any) => m.organization)
+                    .filter(Boolean);
+                const organizations = uniqById([...orgsFromDeal, ...orgsFromClientMembers]);
+
+                // Déterminer une organisation « principale » pour compat rétro
+                let organization: any = null;
                 if (target?.type === 'project') {
-                    organization = deal.project?.organization ?? null;
+                    organization = deal.project?.organization ?? organizations[0] ?? null;
                 } else if (target?.type === 'organization') {
-                    organization = deal.organization ?? null;
+                    organization = deal.organization ?? organizations[0] ?? null;
+                } else if (target?.type === 'client') {
+                    organization = organizations[0] ?? null;
                 }
+
+                // Clients associés
+                const explicitClient = deal.client ? [deal.client] : [];
+                const orgMembersClients = organizations.flatMap((org: any) =>
+                    (org?.members || [])
+                        .map((m: any) => m?.user?.client)
+                        .filter(Boolean)
+                );
+                const clients = uniqById([...explicitClient, ...orgMembersClients]);
+
+                // Projets associés
+                const explicitProject = deal.project ? [deal.project] : [];
+                let projects: any[] = [];
+                if (explicitProject.length > 0) {
+                    projects = explicitProject;
+                } else {
+                    const orgProjects = organizations.flatMap((org: any) => org?.projects || []);
+                    projects = orgProjects;
+                }
+                projects = uniqById(projects);
 
                 // Si une organisation est trouvée, on expose aussi ses membres + chaines user -> client -> contactPoints
                 const organizationMembers = organization?.members ?? [];
@@ -110,8 +183,13 @@ export const opportunities = {
                 return {
                     deal,
                     target,
+                    // compat champs existants
                     organization,
                     organizationMembers,
+                    // nouveaux ensembles unifiés
+                    organizations,
+                    projects,
+                    clients,
                 };
             });
 
