@@ -1,7 +1,7 @@
 import {atom} from 'nanostores';
 import {actions} from 'astro:actions';
 import {modelsService, modelsStore} from '@/stores/modelsStore.ts';
-import {getModelRelations} from '@/utils/modelUtils.ts';
+import {getModelRelations} from '@/lib/modelUtils.ts';
 
 // Store plat: clé = formId (ex: "root.client.user"), valeur = objet de brouillon
 export const draftsStore = atom<Record<string, any>>({});

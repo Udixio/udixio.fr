@@ -3,7 +3,7 @@ import {Card, ProgressIndicator} from "@udixio/ui-react";
 import {useStore} from "@nanostores/react";
 import {modelsService, modelsStore} from '@/stores/modelsStore.ts';
 import {actions} from 'astro:actions';
-import {getImportFields, type ImportField, unflattenToPrismaCreate} from '@/utils/modelUtils.ts';
+import {getImportFields, type ImportField, unflattenToPrismaCreate} from '@/lib/modelUtils.ts';
 
 type Props = {
     model: string;

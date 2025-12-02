@@ -6,7 +6,7 @@ import {modelsService, modelsStore} from '@/stores/modelsStore.ts';
 import {Card, classnames, IconButton,} from "@udixio/ui-react";
 import {FieldRenderer} from "@components/app/form/FieldRenderer.tsx";
 import {actions} from 'astro:actions';
-import {getModelRelations, resolveEntityPreview} from '@/utils/modelUtils.ts';
+import {getModelRelations, resolveEntityPreview} from '@/lib/modelUtils.ts';
 import DynamicPresets from './DynamicPresets.tsx';
 import type {IconDefinition} from "@fortawesome/pro-light-svg-icons";
 import {ToolTip} from "@components/ToolTip.tsx";
@@ -662,12 +662,12 @@ function buildWhereForColumn({key, rawValue, model, models, columns}: BuildWhere
 }
 
 function SmartCell({
-    column,
-    row,
-    model,
-    models,
-    onSaved,
-}: {
+                       column,
+                       row,
+                       model,
+                       models,
+                       onSaved,
+                   }: {
     column: ColumnDef;
     row: any;
     model: string;

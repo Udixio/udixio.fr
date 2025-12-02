@@ -3,7 +3,7 @@ import React, {type ReactNode, useEffect, useState} from 'react';
 import useDynamicList from './useDynamicList.ts';
 import {useStore} from "@nanostores/react";
 import {modelsService, modelsStore} from '@/stores/modelsStore.ts';
-import {getModelRelations} from '@/utils/modelUtils.ts';
+import {getModelRelations} from '@/lib/modelUtils.ts';
 import DynamicPresets from './DynamicPresets.tsx';
 import type {IconDefinition} from "@fortawesome/pro-light-svg-icons";
 

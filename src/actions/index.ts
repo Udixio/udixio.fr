@@ -4,6 +4,7 @@ import {defineAction} from 'astro:actions';
 import {z} from 'astro:schema';
 import {readFile} from 'node:fs/promises';
 import path from 'node:path';
+import {opportunities} from "@/actions/opportunities.ts";
 
 // ===== Shared runtime models loader (used by multiple actions) =====
 export async function loadRuntimeDefinitions(): Promise<Record<string, Record<string, any>>> {
@@ -120,6 +121,7 @@ function deepMergeInclude(a?: any, b?: any): any {
 }
 
 export const server = {
+    opportunities,
     getModels: defineAction({
         input: z.object({
             // optional list of model names to include; if omitted, returns all

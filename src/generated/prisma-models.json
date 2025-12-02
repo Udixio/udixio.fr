@@ -2982,7 +2982,8 @@
         "label": "Contacts",
         "placeholder": null,
         "default": null,
-        "forceMode": "create"
+        "forceMode": "create",
+        "preview": true
       }
     },
     "comments": {
@@ -3169,7 +3170,8 @@
         "label": null,
         "placeholder": null,
         "default": null,
-        "suffix": "€"
+        "suffix": "€",
+        "preview": true
       }
     },
     "probability": {
@@ -3208,7 +3210,8 @@
         "hidden": false,
         "label": null,
         "placeholder": null,
-        "default": null
+        "default": null,
+        "preview": true
       }
     },
     "openedAt": {
@@ -3359,7 +3362,8 @@
         "placeholder": null,
         "default": null,
         "mutexKey": "target",
-        "order": 1
+        "order": 1,
+        "preview": true
       }
     },
     "clientId": {
@@ -3375,6 +3379,7 @@
       "relationToFields": null,
       "documentation": null,
       "ui": {
+        "preview": true,
         "hidden": false,
         "label": null,
         "placeholder": null,
@@ -3455,6 +3460,7 @@
       "relationToFields": [],
       "documentation": null,
       "ui": {
+        "preview": true,
         "hidden": false,
         "label": null,
         "placeholder": null,
