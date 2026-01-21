@@ -73,7 +73,7 @@ export const Hero = ({children}) => {
                     <li>+ de prospects qualifiés</li>
                     <li>Une image qui inspire confiance</li>
                 </ul>
-                <p>Basée à [Ville], équipe 100% dédiée, accompagnement personnalisé.</p>
+                <p>Basée dans les Hauts-de-France, avec présence à Amiens et Le Havre. Agence lancée récemment.</p>
             </div>
 
             <div className={classNames("flex flex-wrap gap-4 transition-all duration-300 mt-8", {

@@ -6,16 +6,16 @@ import Faq from "@components/sections/Faq.astro";
 
 const faqItems = [
     {
-        question: "Est-ce que vous gérez aussi le nom de domaine, l'hébergement… ?",
-        answer: "Oui, si vous le souhaitez. Nous pouvons prendre en charge l'achat ou le transfert de votre nom de domaine et nous hébergeons votre site sur des serveurs cloud performants (Amazon AWS). Tout est inclus dans nos offres pour vous simplifier la vie. Mais si vous préférez garder la main sur ces aspects, c'est tout à fait possible aussi : nous nous adaptons.",
+        question: "Comment cadrer le périmètre avant de se lancer ?",
+        answer: "Nous commençons par clarifier les objectifs, les contraintes et les priorités. Cela permet de définir un périmètre cohérent et d'éviter les zones floues. Nous vous partageons ensuite une estimation claire avec des options (périmètre minimal vs périmètre complet).",
     },
     {
-        question: "Proposez-vous la maintenance une fois le site en ligne ?",
-        answer: "Absolument. Nous proposons des contrats de maintenance optionnels pour assurer les mises à jour, la sécurité et les petites évolutions de votre site. Toutefois, aucune obligation : vous pouvez aussi choisir de gérer le site vous-même, notre CMS le permet très bien. Dans tous les cas, on reste disponible en support si vous avez une question ponctuelle.",
+        question: "Proposez-vous un suivi après mise en ligne ?",
+        answer: "Oui, le suivi après mise en ligne est disponible en option, selon vos besoins.",
     },
     {
-        question: "Votre CMS NetSimpler, c'est obligatoire de l'utiliser ? Et si je préfère un autre outil (WordPress, etc.) ?",
-        answer: "Nous recommandons NetSimpler car c'est une solution éprouvée, sans plugins à mettre à jour, et très simple d'usage - ce qui vous fait gagner du temps et de la tranquillité. Mais nous restons 100% flexibles : si vous avez déjà un écosystème ou une préférence, nous pourrons tout à fait travailler avec (par ex. développer sur WordPress ou autre). Notre priorité, c'est que la solution vous convienne et que vous ne soyez pas dépendant de nous.",
+        question: "Les livrables m'appartiennent-ils ?",
+        answer: "Oui. La propriété des livrables est clarifiée dès le départ, et fait partie de notre cadre de travail.",
     },
 ];
 ---
@@ -29,8 +29,8 @@ const faqItems = [
             <h1 class="text-display-small md:text-display-large">Des services digitaux sur-mesure pour vos objectifs</h1>
             <h2 class="text-headline-medium mt-8">Une offre complète pour vous accompagner de A à Z</h2>
             <div class="text-body-large mt-6 max-w-prose space-y-4">
-                <p>Udixio couvre tous les aspects d'un projet web réussi.</p>
-                <p>Sur-mesure, centrés sur votre ROI, et transparents.</p>
+                <p>Udixio couvre les aspects essentiels d'un projet web réussi.</p>
+                <p>Sur-mesure, centré sur vos objectifs, et transparent.</p>
                 <p>Vous ne savez pas par où commencer ? Nous proposons un diagnostic ou un atelier initial pour définir ensemble la meilleure approche.</p>
             </div>
             <Button className="mt-8 w-fit" href="/contact" label="Demander un diagnostic gratuit" />
@@ -41,20 +41,15 @@ const faqItems = [
         <div class="max-width padding-x">
             <h2 class="text-display-small">Création &amp; refonte de sites sur-mesure</h2>
             <div class="text-body-large mt-6 max-w-prose space-y-4">
-                <p>Conception intégrale de sites vitrine, institutionnels ou e-commerce, de la page blanche jusqu'à la mise en ligne.</p>
-                <p>Idéal si vous lancez votre activité ou si votre site actuel a besoin d'un sérieux coup de neuf.</p>
-                <p>Un site qui reflète vraiment votre marque, qui offre une expérience fluide à vos visiteurs et qui transforme vos visiteurs en prospects.</p>
+                <p>Création ou refonte de sites web clairs, performants et durables, conçus en fonction de vos objectifs, de vos contenus et de vos contraintes.</p>
             </div>
             <ul class="mt-6 list-disc pl-6 text-body-large max-w-prose">
-                <li>charte graphique web sur-mesure</li>
-                <li>design responsive</li>
-                <li>optimisation SEO technique</li>
-                <li>hébergement initial offert X mois</li>
-                <li>formation à l'admin</li>
+                <li>cadrage des besoins et priorités</li>
+                <li>architecture de pages et parcours</li>
+                <li>design et intégration front-end</li>
+                <li>développement technique</li>
+                <li>tests et mise en ligne</li>
             </ul>
-            <div class="text-body-large mt-6 max-w-prose">
-                <p>Durée moyenne : 6 à 8 semaines. Budget : sur devis (à partir de XYZ € selon périmètre).</p>
-            </div>
             <Button className="mt-8 w-fit" href="/contact" label="Obtenir un devis pour mon site" />
         </div>
     </section>
@@ -63,28 +58,49 @@ const faqItems = [
         <div class="max-width padding-x">
             <h2 class="text-display-small">Applications web &amp; fonctionnalités personnalisées</h2>
             <div class="text-body-large mt-6 max-w-prose space-y-4">
-                <p>Développement de modules web avancés ou d'applications métier en ligne, entièrement adaptées à vos process.</p>
-                <p>Pour les projets qui sortent du cadre d'un site standard - startups, PME innovantes ou besoins internes spécifiques.</p>
-                <p>Architecture sur-mesure, API, intégrations tierces, respect des standards sécurité…</p>
-                <p>Automatisez vos processus, proposez de nouveaux services en ligne à vos clients, tout en gardant une interface simple.</p>
-                <p>Méthode agile itérative, prototypes rapides. Durée et budget très variables selon la complexité - nous définissons ensemble un MVP puis des phases d'évolution.</p>
-                <p>Notre propre plateforme NetSimpler est un bon exemple : développée from scratch par notre équipe. Ce savoir-faire, nous le mettons au service de vos projets ambitieux.</p>
+                <p>Développement de fonctionnalités spécifiques lorsque les solutions standard ne correspondent pas au contexte.</p>
             </div>
+            <ul class="mt-6 list-disc pl-6 text-body-large max-w-prose">
+                <li>fonctionnalités personnalisées</li>
+                <li>intégrations techniques</li>
+                <li>interfaces métier / back-office</li>
+                <li>évolutions et amélioration continue du produit</li>
+            </ul>
             <Button className="mt-8 w-fit" href="/contact" label="Discutons de votre application sur-mesure" />
         </div>
     </section>
 
     <section class="section">
         <div class="max-width padding-x">
-            <h2 class="text-display-small">Conseil, SEO &amp; optimisation continue</h2>
+            <h2 class="text-display-small">Cadrage, audit et accompagnement</h2>
             <div class="text-body-large mt-6 max-w-prose space-y-4">
-                <p>Au-delà du développement, nous vous aidons à faire vivre et performer votre présence en ligne.</p>
-                <p>Audit SEO de site existant, stratégie de contenu, optimisation UX, ou même formation équipe - selon compétences.</p>
-                <p>Vous profitez d'un regard externe régulier pour améliorer votre site : meilleur référencement, taux de conversion en hausse, site toujours à jour des meilleures pratiques.</p>
-                <p>Forfait mensuel ou interventions ponctuelles sans engagement, en fonction de vos besoins. Vous choisissez la formule la plus adaptée.</p>
-                <p>Transparence totale: rapports mensuels clairs (trafic, conversions), recommandations priorisées. Vous gardez la maîtrise des décisions, nous sommes là en soutien.</p>
+                <p>Intervention en amont pour clarifier, prioriser et sécuriser les décisions avant d'engager un chantier.</p>
             </div>
-            <Button className="mt-8 w-fit" href="/methode" label="En savoir plus sur notre accompagnement" />
+            <ul class="mt-6 list-disc pl-6 text-body-large max-w-prose">
+                <li>analyse de l'existant</li>
+                <li>clarification des objectifs et contraintes</li>
+                <li>recommandations actionnables</li>
+                <li>plan d'action et estimation du périmètre</li>
+            </ul>
+            <Button className="mt-8 w-fit" href="/contact" label="Parlons de votre projet" />
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="max-width padding-x">
+            <h2 class="text-display-small">Dans toutes nos missions</h2>
+            <ul class="mt-6 list-disc pl-6 text-body-large max-w-prose">
+                <li>périmètre et objectifs clarifiés avant démarrage</li>
+                <li>points de validation réguliers</li>
+                <li>transparence sur les choix et arbitrages</li>
+                <li>propriété des livrables</li>
+                <li>documentation à la livraison</li>
+            </ul>
+            <div class="text-body-large mt-6 max-w-prose space-y-4">
+                <p><strong>Hébergement initial offert :</strong> non inclus.</p>
+                <p><strong>Suivi après mise en ligne :</strong> disponible (optionnel), selon vos besoins.</p>
+                <p><strong>Budget :</strong> Un prix n'est jamais “au hasard” : il dépend du périmètre, des contraintes et du niveau de personnalisation. Après un premier échange, nous vous partageons une estimation claire avec les options possibles (périmètre minimal vs périmètre complet).</p>
+            </div>
         </div>
     </section>
 
