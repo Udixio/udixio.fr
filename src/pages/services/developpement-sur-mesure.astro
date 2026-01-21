@@ -1,0 +1,91 @@
+---
+import Layout from "@layouts/Layout.astro";
+import {Button} from "@udixio/ui-react";
+import Faq from "@components/sections/Faq.astro";
+
+const faqItems = [
+    {
+        question: "Quand choisir du sur-mesure ?",
+        answer: "Quand vos besoins dépassent les limites d'un site standard : outils internes, parcours complexes, automatisations, intégrations spécifiques.",
+    },
+    {
+        question: "Comment démarre un projet sur-mesure ?",
+        answer: "Par un cadrage précis pour prioriser un périmètre maîtrisé. Nous définissons d'abord un noyau utile et livrable.",
+    },
+    {
+        question: "Puis-je faire évoluer l'outil ensuite ?",
+        answer: "Oui. Le sur-mesure est pensé pour évoluer par étapes, selon vos priorités.",
+    },
+    {
+        question: "Qui possède le code et les accès ?",
+        answer: "Le client. Les livrables et les accès sont remis à la livraison.",
+    },
+];
+---
+
+<Layout seo={{
+    title: "Développement web sur‑mesure • Udixio",
+    description: "Fonctionnalités et outils métiers sur‑mesure, cadrés pour rester maîtrisables.",
+}}>
+    <section class="section">
+        <div class="max-width padding-x">
+            <h1 class="text-display-small md:text-display-large">Développement web sur‑mesure</h1>
+            <p class="text-body-large mt-6 max-w-prose">Quand un site standard ne suffit pas, nous construisons un outil
+                adapté, sans opacité.</p>
+            <Button className="mt-8 w-fit" href="/contact" label="Demander un diagnostic"/>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="max-width padding-x">
+            <h2 class="text-display-small">Le problème que l'on résout</h2>
+            <div class="text-body-large mt-6 max-w-prose space-y-4">
+                <p>Process métiers mal outillés, données dispersées, automatisations inexistantes.</p>
+                <p>Nous cadrons un périmètre utile et livrable, puis on itère.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="max-width padding-x">
+            <h2 class="text-display-small">Notre approche</h2>
+            <ul class="mt-6 list-disc pl-6 text-body-large max-w-prose">
+                <li>cadrage précis et priorisation</li>
+                <li>conception orientée usage</li>
+                <li>développement par étapes</li>
+                <li>tests et livraison progressive</li>
+            </ul>
+            <Button className="mt-8 w-fit" href="/methode" label="Voir la méthode"/>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="max-width padding-x">
+            <h2 class="text-display-small">Bénéfices</h2>
+            <ul class="mt-6 list-disc pl-6 text-body-large max-w-prose">
+                <li>un outil adapté à vos process</li>
+                <li>des décisions techniques expliquées</li>
+                <li>une solution évolutive sans verrou</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="max-width padding-x">
+            <h2 class="text-display-small">Investissement</h2>
+            <div class="text-body-large mt-6 max-w-prose space-y-4">
+                <p>Le budget dépend du périmètre, des intégrations et des contraintes métier.</p>
+                <p>On commence par un cadrage pour définir un noyau clair, puis on planifie les évolutions.</p>
+            </div>
+        </div>
+    </section>
+
+    <Faq title="Questions fréquentes" items={faqItems}/>
+
+    <section class="section">
+        <div class="max-width padding-x">
+            <p class="text-body-large">Un besoin spécifique ? On en discute simplement.</p>
+            <Button className="mt-6 w-fit" href="/contact" label="Discutons de votre projet"/>
+        </div>
+    </section>
+</Layout>

@@ -1,0 +1,46 @@
+---
+import Layout from "@layouts/Layout.astro";
+import {Button} from "@udixio/ui-react";
+---
+
+<Layout seo={{
+    title: "Ressources & guides — projets web clairs • Udixio",
+    description: "Guides pratiques pour cadrer un projet web, éviter les dérives et garder la maîtrise.",
+}}>
+    <section class="section">
+        <div class="max-width padding-x">
+            <h1 class="text-display-small md:text-display-large">Ressources &amp; guides pour des projets web clairs</h1>
+            <p class="text-body-large mt-6 max-w-prose">Des contenus utiles pour décider, cadrer et avancer sans flou.</p>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="max-width padding-x">
+            <h2 class="text-display-small">Pages piliers</h2>
+            <div class="mt-8 grid gap-4 md:grid-cols-3">
+                <article class="rounded-2xl border border-outline-variant bg-surface-container-low p-6">
+                    <h3 class="text-title-large">Choisir une agence web : critères &amp; checklist</h3>
+                    <p class="text-body-large mt-4">Une grille claire pour comparer, poser les bonnes questions et éviter les pièges.</p>
+                    <Button className="mt-6 w-fit" href="/ressources/choisir-agence-web" label="Lire le guide" />
+                </article>
+                <article class="rounded-2xl border border-outline-variant bg-surface-container-low p-6">
+                    <h3 class="text-title-large">Refonte de site : étapes, délais, risques</h3>
+                    <p class="text-body-large mt-4">Un plan de route réaliste pour remettre un site à niveau sans dérives.</p>
+                    <Button className="mt-6 w-fit" href="/ressources/refonte-site-web" label="Lire le guide" />
+                </article>
+                <article class="rounded-2xl border border-outline-variant bg-surface-container-low p-6">
+                    <h3 class="text-title-large">Cadrage de projet web : méthode simple</h3>
+                    <p class="text-body-large mt-4">Le cadrage, c'est la clé : objectifs, périmètre, validations et maîtrise.</p>
+                    <Button className="mt-6 w-fit" href="/ressources/cadrage-projet-web" label="Lire le guide" />
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="max-width padding-x">
+            <p class="text-body-large">Besoin d'aide pour votre projet ?</p>
+            <Button className="mt-6 w-fit" href="/contact" label="Demander un diagnostic" />
+        </div>
+    </section>
+</Layout>

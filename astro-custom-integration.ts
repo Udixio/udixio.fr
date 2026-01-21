@@ -3,14 +3,13 @@
 import type {AstroIntegration} from 'astro';
 import {promises as fs} from "fs";
 import matter from 'gray-matter';
-import {loadEnv} from "vite";
 import {join} from 'path';
 import puppeteer from "puppeteer";
 import {PuppeteerScreenRecorder} from "puppeteer-screen-recorder";
 import ffmpeg from 'fluent-ffmpeg';
 import path from "node:path";
+
 // Prisma runtime models export (no DB access needed)
-import {PrismaClient} from "./src/generated/prisma/client";
 
 
 async function getAllMDXFiles(realisationsDir: string) {
@@ -131,138 +130,7 @@ export default function customIntegration(): AstroIntegration {
         name: 'astro-custom-integration',
         hooks: {
             'astro:config:setup': async ({logger}) => {
-                // ============ Prisma runtime models → JSON (dev & build) ============
-                try {
 
-
-                    const {DATABASE_URL} = loadEnv(process.env.DATABASE_URL, process.cwd(), "");
-                    const prisma = new PrismaClient({
-                        datasources: {db: {url: DATABASE_URL}}
-                    } as any);
-                    const runtimeModels: any = (prisma as any)?._runtimeDataModel?.models ?? {};
-                    const runtimeEnums: any = (prisma as any)?._runtimeDataModel?.enums ?? {};
-
-                    console.log('rggrgr', (prisma as any)?._runtimeDataModel)
-
-                    // Write to a PRIVATE path (not publicly served)
-                    const outDir = path.join(process.cwd(), 'src', 'generated');
-                    const outFile = path.join(outDir, 'prisma-models.json');
-                    await fs.mkdir(outDir, {recursive: true});
-
-                    // Reformat to a serializable Record<model, Record<field, meta>> with UI slots
-                    const formatted: Record<string, Record<string, any>> = {};
-                    for (const [modelName, modelDef] of Object.entries(runtimeModels)) {
-                        const fields = (modelDef as any).fields as any[];
-                        const rec: Record<string, any> = {};
-                        for (const f of fields) {
-                            rec[f.name] = {
-                                isList: !!f.isList,
-                                isRequired: !!f.isRequired,
-                                isUnique: !!f.isUnique,
-                                isId: !!f.isId,
-                                isReadOnly: !!f.isReadOnly,
-                                hasDefaultValue: !!f.hasDefaultValue,
-                                type: String(f.type),
-                                default: typeof f.default === 'function' ? undefined : f.default,
-                                relationName: f.relationName ?? null,
-                                relationFromFields: f.relationFromFields ?? null,
-                                relationToFields: f.relationToFields ?? null,
-                                documentation: f.documentation ?? null,
-                                // UI customization placeholder to allow per-field overrides later
-                                ui: {
-                                    hidden: false,
-                                    label: null as string | null,
-                                    placeholder: null as string | null,
-                                    // valeur par défaut côté UI (ne change pas la valeur Prisma par défaut)
-                                    // utilisée pour pré-remplir les formulaires générés
-                                    default: null as any,
-                                },
-                            };
-                        }
-                        formatted[modelName] = rec;
-                    }
-
-                    for (const [enumName, enumDef] of Object.entries(runtimeEnums)) {
-                        const values = (enumDef as any).values as string[];
-                        // On structure l'enum pour qu'elle ressemble un peu à un modèle,
-                        // ou simplement comme une liste de valeurs
-                        formatted[enumName] = {
-                            isEnum: true, // Marqueur pour distinguer des modèles côté front
-                            values: values,
-                            ui: {
-                                label: null, // Pour permettre de renommer l'enum dans l'UI
-                            }
-                        };
-                    }
-
-
-                    // Merge with existing JSON if present: replace models/fields to match current schema
-                    // while preserving any custom props (like `ui`) from the previous file.
-                    // Also keep any custom fields that existed previously but are not part of the Prisma runtime
-                    // for the same model. Drop data for models that no longer exist in the runtime (model removed).
-                    let merged: Record<string, Record<string, any>> = {};
-                    const CORE_KEYS = new Set([
-                        'isList', 'isRequired', 'isUnique', 'isId', 'isReadOnly', 'hasDefaultValue',
-                        'type', 'default', 'relationName', 'relationFromFields', 'relationToFields', 'documentation', 'ui'
-                    ]);
-
-                    try {
-                        const prevBuf = await fs.readFile(outFile, 'utf8');
-                        const previous: Record<string, Record<string, any>> = JSON.parse(prevBuf);
-                        // Only keep models that exist now; add new models as needed
-                        for (const [modelName, newFields] of Object.entries(formatted)) {
-                            const oldFields = previous[modelName] || {};
-                            const nextFields: Record<string, any> = {};
-                            for (const [fieldName, newMeta] of Object.entries(newFields)) {
-                                const oldMeta = oldFields[fieldName];
-                                if (!oldMeta) {
-                                    nextFields[fieldName] = newMeta;
-                                } else {
-                                    // Start from new core meta, then re-attach any custom props from old
-                                    const combined: any = {...newMeta};
-                                    // Fusionner les blocs UI: garder les clés du nouveau (dont default),
-                                    // puis surcharger par l'ancien pour préserver les personnalisations
-                                    if (oldMeta.ui !== undefined || (combined as any).ui !== undefined) {
-                                        combined.ui = {
-                                            ...((combined as any).ui || {}),
-                                            ...(oldMeta.ui || {}),
-                                        };
-                                    }
-                                    // Preserve any extra custom keys present in old that are not core
-                                    for (const [k, v] of Object.entries(oldMeta)) {
-                                        if (!CORE_KEYS.has(k)) {
-                                            combined[k] = v;
-                                        }
-                                    }
-                                    nextFields[fieldName] = combined;
-                                }
-                            }
-                            // Re-add any custom fields that existed previously but are not present in the new schema
-                            // These are considered custom additions at the JSON level and should be preserved.
-                            for (const [oldFieldName, oldMeta] of Object.entries(oldFields)) {
-                                if ((newFields as any)[oldFieldName] === undefined) {
-                                    // Keep as-is (including its own ui or any extra keys)
-                                    nextFields[oldFieldName] = oldMeta;
-                                }
-                            }
-                            // Preserve model-level UI block if it existed previously (and model still exists)
-                            const prevModelUI = (previous as any)[modelName]?.ui;
-                            merged[modelName] = prevModelUI ? {...nextFields, ui: prevModelUI} : nextFields;
-                        }
-                    } catch {
-                        // No previous file: use freshly formatted structure
-                        merged = formatted;
-                    }
-
-                    await fs.writeFile(outFile, JSON.stringify(merged, null, 2), 'utf8');
-                    logger.info(`🧩 Prisma model metadata generated (private) at ${path.relative(process.cwd(), outFile)}`);
-                    try {
-                        await (prisma as any).$disconnect?.();
-                    } catch {
-                    }
-                } catch (e) {
-                    logger.warn(`⚠️ Failed to generate Prisma model metadata JSON: ${String((e as any)?.message || e)}`);
-                }
 
                 const realisationsDir = join('src', 'data', 'realisation');
                 const mdxFiles = await getAllMDXFiles(realisationsDir);

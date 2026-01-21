@@ -1,0 +1,83 @@
+---
+import Layout from "@layouts/Layout.astro";
+import {Button} from "@udixio/ui-react";
+import Faq from "@components/sections/Faq.astro";
+
+const faqItems = [
+    {
+        question: "Quels sont les critères essentiels ?",
+        answer: "Clarté du périmètre, transparence des choix, méthode explicite, propriété des livrables, et capacité à expliquer simplement.",
+    },
+    {
+        question: "Comment éviter les dérives ?",
+        answer: "Exiger un cadrage initial, des validations à chaque étape et un planning lisible.",
+    },
+    {
+        question: "Comment juger la crédibilité d'une agence jeune ?",
+        answer: "Par des preuves alternatives : démonstrations, outils internes, exemples concrets et transparence sur le process.",
+    },
+];
+---
+
+<Layout seo={{
+    title: "Choisir une agence web : critères & checklist • Udixio",
+    description: "Une grille claire pour comparer les agences web, éviter les pièges et garder le contrôle du projet.",
+}}>
+    <section class="section">
+        <div class="max-width padding-x">
+            <h1 class="text-display-small md:text-display-large">Choisir une agence web : critères &amp; checklist</h1>
+            <p class="text-body-large mt-6 max-w-prose">L'objectif : éviter le flou, les dérives et la dépendance. Voici une grille simple pour évaluer une agence.</p>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="max-width padding-x">
+            <h2 class="text-display-small">Les signaux de confiance à rechercher</h2>
+            <ul class="mt-6 list-disc pl-6 text-body-large max-w-prose">
+                <li>un cadrage clair avant de démarrer</li>
+                <li>des étapes validées ensemble</li>
+                <li>des choix techniques expliqués simplement</li>
+                <li>la propriété des livrables et des accès</li>
+                <li>un suivi après mise en ligne possible</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="max-width padding-x">
+            <h2 class="text-display-small">Les pièges classiques</h2>
+            <ul class="mt-6 list-disc pl-6 text-body-large max-w-prose">
+                <li>un devis flou ou trop vague</li>
+                <li>des promesses non vérifiables</li>
+                <li>une dépendance technique non assumée</li>
+                <li>des délais sans étapes de validation</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="max-width padding-x">
+            <h2 class="text-display-small">Questions à poser avant de signer</h2>
+            <ul class="mt-6 list-disc pl-6 text-body-large max-w-prose">
+                <li>Quel est le périmètre exact ?</li>
+                <li>Qui décide et valide à chaque étape ?</li>
+                <li>Quels livrables me reviennent ?</li>
+                <li>Comment sont gérées les évolutions ?</li>
+                <li>Quelles options de suivi après mise en ligne ?</li>
+            </ul>
+            <div class="mt-8 flex flex-wrap gap-4">
+                <Button className="w-fit" href="/services" label="Voir nos services" />
+                <Button className="w-fit" variant="outlined" href="/methode" label="Voir la méthode" />
+            </div>
+        </div>
+    </section>
+
+    <Faq title="FAQ" items={faqItems} />
+
+    <section class="section">
+        <div class="max-width padding-x">
+            <p class="text-body-large">Besoin d'un avis sur votre situation ?</p>
+            <Button className="mt-6 w-fit" href="/contact" label="Demander un diagnostic" />
+        </div>
+    </section>
+</Layout>

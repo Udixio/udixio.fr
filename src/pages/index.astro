@@ -3,36 +3,35 @@ import Layout from "@layouts/Layout.astro";
 import {Button} from "@udixio/ui-react";
 import {Hero} from "@components/home/hero";
 import Realisations from "@components/Realisations.astro";
-import ReassuranceBlocks from "@components/sections/ReassuranceBlocks.astro";
 import Faq from "@components/sections/Faq.astro";
 
 const faqItems = [
     {
-        question: "Combien coûte un site avec Udixio ?",
-        answer: "Chaque projet est unique. Pour vous donner une idée, nos sites vitrines sur-mesure représentent généralement un investissement de quelques milliers d'euros. Nous établissons un devis transparent et détaillé après un diagnostic gratuit - sans frais cachés, sans surprise. Vous connaissez dès le départ le budget et ce qu'il comprend.",
+        question: "Quel budget prévoir ?",
+        answer: "Nous ne donnons pas de prix au hasard. Après un cadrage rapide, nous vous proposons une estimation claire avec les options possibles (périmètre minimal vs périmètre complet). Pas de coûts cachés.",
     },
     {
-        question: "Quels sont les délais pour créer mon site ?",
-        answer: "Cela dépend de l'ampleur du projet. Un site vitrine standard prend en moyenne 4 à 8 semaines de la conception au lancement. Un projet plus complexe peut s'étendre sur 3 à 4 mois. Nous vous fournissons un planning clair dès le départ et nous nous engageons à le respecter. Vous saurez à quoi vous attendre à chaque étape.",
+        question: "Quels sont les délais ?",
+        answer: "Tout dépend du périmètre. Nous fixons un planning clair dès le départ, avec des étapes validées ensemble. Vous savez toujours où on en est.",
     },
     {
-        question: "Que devrai-je faire de mon côté pendant le projet ?",
-        answer: "Nous gérons la complexité technique pour vous. Votre implication principale sera de nous fournir quelques contenus (texte, images, logo si vous en avez) et de valider les grandes étapes (maquette, contenu, mise en ligne). Pas d'inquiétude, on vous guide à chaque étape avec des points réguliers. Le processus est pensé pour minimiser le temps que vous aurez à y consacrer, tout en assurant que le résultat correspond parfaitement à vos attentes.",
+        question: "Que devrai-je faire de mon côté ?",
+        answer: "Nous gérons la technique. Vous fournissez les contenus clés et validez les étapes importantes. On vous guide pour que ce soit simple et rapide.",
     },
     {
-        question: "Et après la mise en ligne, que se passe-t-il ?",
-        answer: "Nous ne vous laissons pas tomber ! Après lancement, nous incluons une période de garantie de 30 jours pour corriger d'éventuels soucis. Vous bénéficiez aussi d'une formation courte pour prendre en main votre nouveau site. Ensuite, selon vos besoins, nous proposons des options de maintenance évolutive (ajout de fonctionnalités, mises à jour) ou vous pouvez tout à fait gérer le site en autonomie grâce à notre CMS intuitif. Quoi qu'il en soit, vous restez maître à bord : le site et ses accès sont à vous.",
+        question: "Que se passe-t-il après la mise en ligne ?",
+        answer: "Nous restons disponibles. Vous pouvez opter pour un suivi ou avancer en autonomie. Dans tous les cas, vous gardez la maîtrise.",
     },
     {
-        question: "Je n'ai pas encore de références clients à voir, comment puis-je vous faire confiance ?",
-        answer: "Nous comprenons tout à fait cette question. Udixio est une agence lancée récemment. Nous compensons par la transparence et des démonstrations concrètes : outils internes, projets de démonstration, et processus documenté. Sur la page Réalisations, nous partageons des exemples concrets de ce que nous savons faire. Et surtout, n'hésitez pas à nous poser des questions précises, nous y répondrons honnêtement. Notre objectif est de bâtir une relation de confiance sur la durée.",
+        question: "À qui appartiennent le site et les accès ?",
+        answer: "À vous. Les livrables et les accès restent sous votre contrôle. Pas de dépendance forcée.",
     },
 ];
 ---
 
 <Layout seo={{
-    title: "Votre site web : une mission stratégique pour votre entreprise • Udixio",
-    description: "Agence digitale spécialisée en création de sites sur-mesure pour TPE/PME exigeantes.",
+    title: "Clarté & Maîtrise pour votre site web • Udixio",
+    description: "Udixio est l'agence qui remet de l'ordre dans les projets web : cadrage clair, transparence et maîtrise côté client.",
 }}>
     <Hero client:idle>
         <div class="max-width relative z-0">
@@ -42,126 +41,133 @@ const faqItems = [
 
     <section class="section">
         <div class="max-width padding-x">
-            <h2 class="text-display-small">Vos défis, nos solutions</h2>
+            <h2 class="text-display-small">Les vrais freins des projets web</h2>
             <div class="text-body-large mt-6 max-w-prose space-y-4">
-                <p>Votre site actuel ne génère pas assez de contacts ? Vous manquez de temps ou de savoir-faire pour le faire évoluer ? Vous hésitez sur la bonne stratégie digitale ?</p>
-                <p>Peu de prospects = opportunités manquées, image datée = manque de crédibilité…</p>
-                <p>Déjà adressé grâce à notre approche sur-mesure.</p>
+                <p>Flou sur le périmètre, délais qui glissent, jargon qui embrouille… et parfois une dépendance technique difficile à vivre.</p>
+                <p>Notre rôle est de remettre de l'ordre : clarifier, cadrer et rendre chaque étape lisible.</p>
             </div>
-            <div class="mt-8 grid gap-4 md:grid-cols-3">
+            <div class="mt-8 grid gap-4 md:grid-cols-4">
                 <div class="rounded-2xl border border-outline-variant bg-surface-container-low p-6">
-                    <h3 class="text-title-large">Visibilité en berne</h3>
-                    <p class="text-body-large mt-4">Peu de prospects = opportunités manquées.</p>
+                    <h3 class="text-title-large">Flou &amp; dérives</h3>
+                    <p class="text-body-large mt-4">Objectifs mal définis, délais qui s'étirent.</p>
                 </div>
                 <div class="rounded-2xl border border-outline-variant bg-surface-container-low p-6">
-                    <h3 class="text-title-large">Image datée</h3>
-                    <p class="text-body-large mt-4">Manque de crédibilité auprès de vos clients.</p>
+                    <h3 class="text-title-large">Opacité</h3>
+                    <p class="text-body-large mt-4">Décisions techniques difficiles à comprendre.</p>
                 </div>
                 <div class="rounded-2xl border border-outline-variant bg-surface-container-low p-6">
-                    <h3 class="text-title-large">Site difficile à faire évoluer</h3>
-                    <p class="text-body-large mt-4">Perte de temps et dépendance technique.</p>
+                    <h3 class="text-title-large">Dépendance</h3>
+                    <p class="text-body-large mt-4">Accès bloqués, changements compliqués.</p>
+                </div>
+                <div class="rounded-2xl border border-outline-variant bg-surface-container-low p-6">
+                    <h3 class="text-title-large">Support incertain</h3>
+                    <p class="text-body-large mt-4">Après la mise en ligne, plus personne.</p>
                 </div>
             </div>
-            <Button className="mt-8 w-fit" href="/services" label="Découvrez comment nous pouvons vous aider" />
+            <Button className="mt-8 w-fit" href="/services" label="Découvrir notre approche" />
         </div>
     </section>
 
     <section class="section">
         <div class="max-width padding-x">
-            <h2 class="text-display-small">Notre solution : bien plus qu'un site, un levier de croissance</h2>
-            <div class="text-body-large mt-6 max-w-prose space-y-4">
-                <p>Nous concevons des sites web personnalisés de A à Z - du conseil stratégique initial au développement et à l'optimisation - pour que votre site devienne un outil de croissance (et pas juste une vitrine).</p>
-                <p>Inclus : design UX/UI sur-mesure, développement responsive, optimisation SEO technique, intégration d'un CMS intuitif, formation à la prise en main, et hébergement sécurisé.</p>
-                <p>Chaque site est pensé pour convertir : structure UX optimisée, call-to-action stratégiques, et analytics intégrés - on ne se contente pas de faire beau, on vise vos objectifs business.</p>
-            </div>
-            <Button className="mt-8 w-fit" href="/realisations" label="Voir nos réalisations en détail" />
-        </div>
-    </section>
-
-    <section class="section">
-        <div class="max-width padding-x">
-            <h2 class="text-display-small">Les bénéfices pour vous : visibilité, efficacité et sérénité</h2>
-            <div class="mt-8 grid gap-4 md:grid-cols-3">
-                <div class="rounded-2xl border border-outline-variant bg-surface-container-low p-6">
-                    <h3 class="text-title-large">Visibilité et notoriété accrues</h3>
-                    <p class="text-body-large mt-4">Le site sera optimisé SEO et performant, donc plus de trafic qualifié.</p>
-                </div>
-                <div class="rounded-2xl border border-outline-variant bg-surface-container-low p-6">
-                    <h3 class="text-title-large">Prospects et ventes en hausse</h3>
-                    <p class="text-body-large mt-4">Sites pensés pour convertir les visiteurs en contacts via des CTA, formulaires, tunnels.</p>
-                </div>
-                <div class="rounded-2xl border border-outline-variant bg-surface-container-low p-6">
-                    <h3 class="text-title-large">Gain de temps et autonomie</h3>
-                    <p class="text-body-large mt-4">Site livré avec une interface d'édition simplifiée - aucun code, aucune mise à jour technique à gérer de votre côté.</p>
-                </div>
-            </div>
-            <Button className="mt-8 w-fit" href="/methode" label="Découvrez comment nous travaillons" />
-        </div>
-    </section>
-
-    <section class="section">
-        <div class="max-width padding-x">
-            <h2 class="text-display-small">Un processus clair, de l'idée au site en ligne</h2>
-            <ol class="mt-8 grid gap-4">
-                <li class="rounded-2xl border border-outline-variant bg-surface-container-low p-6 text-body-large">1) Diagnostic &amp; conseils (on fait le point sur vos besoins, audit de l'existant).</li>
-                <li class="rounded-2xl border border-outline-variant bg-surface-container-low p-6 text-body-large">2) Conception sur-mesure (maquettes, contenu, allers-retours jusqu'à validation).</li>
-                <li class="rounded-2xl border border-outline-variant bg-surface-container-low p-6 text-body-large">3) Développement &amp; intégration (site codé sur base solide, kit UI Material Design 3 pour fiabilité).</li>
-                <li class="rounded-2xl border border-outline-variant bg-surface-container-low p-6 text-body-large">4) Tests &amp; mise en ligne (contrôles qualité, formation de votre équipe).</li>
-                <li class="rounded-2xl border border-outline-variant bg-surface-container-low p-6 text-body-large">5) Suivi post-lancement (monitoring, support et évolutions si besoin).</li>
-            </ol>
-            <p class="text-body-large mt-6 max-w-prose">Vous validez chaque étape, pas de surprise.</p>
-            <Button className="mt-8 w-fit" href="/methode" label="Découvrez notre méthode détaillée" />
-        </div>
-    </section>
-
-    <section class="section">
-        <div class="max-width padding-x">
-            <h2 class="text-display-small">Ce qui nous rend uniques</h2>
+            <h2 class="text-display-small">Notre approche Clarté &amp; Maîtrise</h2>
             <div class="mt-8 grid gap-4 md:grid-cols-2">
                 <div class="rounded-2xl border border-outline-variant bg-surface-container-low p-6">
-                    <h3 class="text-title-large">Autonomie &amp; transparence totales</h3>
-                    <p class="text-body-large mt-4">Accès complet aux comptes (CMS, analytics), code propriété du client, pas de verrou technologique propriétaire.</p>
+                    <h3 class="text-title-large">Cadrage</h3>
+                    <p class="text-body-large mt-4">On clarifie objectifs, contraintes et périmètre avant de démarrer.</p>
                 </div>
                 <div class="rounded-2xl border border-outline-variant bg-surface-container-low p-6">
-                    <h3 class="text-title-large">Outils de pointe intégrés</h3>
-                    <p class="text-body-large mt-4">Nos sites sont propulsés par NetSimpler, notre plateforme tout-en-un. Notre librairie UI interne basée sur Material Design 3 garantit une interface moderne et cohérente.</p>
+                    <h3 class="text-title-large">Transparence</h3>
+                    <p class="text-body-large mt-4">Vous savez où on va, ce qui est livré, et pourquoi.</p>
                 </div>
                 <div class="rounded-2xl border border-outline-variant bg-surface-container-low p-6">
-                    <h3 class="text-title-large">Expertise multi-disciplinaire</h3>
-                    <p class="text-body-large mt-4">Designers et développeurs, veille technologique permanente.</p>
+                    <h3 class="text-title-large">Fiabilité</h3>
+                    <p class="text-body-large mt-4">Des livrables clairs, testés, et faciles à reprendre.</p>
                 </div>
                 <div class="rounded-2xl border border-outline-variant bg-surface-container-low p-6">
-                    <h3 class="text-title-large">Accompagnement personnalisé</h3>
-                    <p class="text-body-large mt-4">Un interlocuteur dédié du début à la fin, pédagogie vulgarisée sans jargon, support réactif.</p>
+                    <h3 class="text-title-large">Maîtrise côté client</h3>
+                    <p class="text-body-large mt-4">Vos accès, vos choix, vos décisions. Pas de dépendance.</p>
                 </div>
             </div>
-            <Button className="mt-8 w-fit" href="/contact" label="Parlez-nous de votre projet" />
+            <Button className="mt-8 w-fit" href="/methode" label="Voir notre méthode détaillée" />
         </div>
     </section>
 
-    <ReassuranceBlocks />
+    <section class="section">
+        <div class="max-width padding-x">
+            <h2 class="text-display-small">Preuves alternatives, sans blabla</h2>
+            <div class="text-body-large mt-6 max-w-prose space-y-4">
+                <p>Pas d'avis inventés. À la place, des preuves concrètes : outils internes, démos et réalisations visibles.</p>
+            </div>
+            <div class="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                <div class="rounded-2xl border border-outline-variant bg-surface-container-low p-6">
+                    <h3 class="text-title-large">Udixio UI</h3>
+                    <p class="text-body-large mt-4">Bibliothèque interne de composants pour des interfaces cohérentes.</p>
+                </div>
+                <div class="rounded-2xl border border-outline-variant bg-surface-container-low p-6">
+                    <h3 class="text-title-large">NetSimpler</h3>
+                    <p class="text-body-large mt-4">CMS interne orienté autonomie et simplicité.</p>
+                </div>
+                <div class="rounded-2xl border border-outline-variant bg-surface-container-low p-6">
+                    <h3 class="text-title-large">Template paysagiste</h3>
+                    <p class="text-body-large mt-4">Démo sectorielle pour illustrer notre approche.</p>
+                </div>
+                <div class="rounded-2xl border border-outline-variant bg-surface-container-low p-6">
+                    <h3 class="text-title-large">Portfolio</h3>
+                    <p class="text-body-large mt-4">Projets et démos accessibles dans nos réalisations.</p>
+                </div>
+            </div>
+            <Button className="mt-8 w-fit" href="/realisations" label="Voir ces preuves en détail" />
+        </div>
+    </section>
 
     <section class="section">
         <div class="max-width padding-x">
-            <h2 class="text-display-small">Un aperçu de ce que nous savons faire</h2>
+            <h2 class="text-display-small">Méthode en 5 étapes</h2>
+            <ol class="mt-8 grid gap-4">
+                <li class="rounded-2xl border border-outline-variant bg-surface-container-low p-6 text-body-large">1) Cadrage : objectifs, contraintes et périmètre validés.</li>
+                <li class="rounded-2xl border border-outline-variant bg-surface-container-low p-6 text-body-large">2) Design : parcours et maquettes compréhensibles.</li>
+                <li class="rounded-2xl border border-outline-variant bg-surface-container-low p-6 text-body-large">3) Développement &amp; tests : qualité et fiabilité avant mise en ligne.</li>
+                <li class="rounded-2xl border border-outline-variant bg-surface-container-low p-6 text-body-large">4) Livraison : accès, documentation, passation claire.</li>
+                <li class="rounded-2xl border border-outline-variant bg-surface-container-low p-6 text-body-large">5) Hypercare : on sécurise les premières semaines.</li>
+            </ol>
+            <p class="text-body-large mt-6 max-w-prose">Chaque étape est validée ensemble.</p>
+            <Button className="mt-8 w-fit" href="/methode" label="Voir la méthode complète" />
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="max-width padding-x">
+            <h2 class="text-display-small">Portfolio &amp; démos</h2>
             <div class="text-body-large mt-6 max-w-prose space-y-4">
-                <p>En tant que jeune agence, nous sommes fiers de vous montrer quelques projets sur lesquels nous avons travaillé, que ce soit pour nos premiers clients ou des démonstrations internes qui reflètent notre expertise.</p>
-                <p>Chaque réalisation est l'occasion de mettre en avant une problématique et la solution apportée.</p>
-                <p>Vous trouverez aussi des outils que nous avons développés nous-mêmes - preuve de notre engagement à innover pour mieux vous servir.</p>
+                <p>Nous montrons ce que nous faisons, sans artifices.</p>
             </div>
             <div class="mt-8">
                 <Realisations max={4} />
             </div>
-            <Button className="mt-8 w-fit" href="/realisations" label="Parcourir nos réalisations" />
+            <Button className="mt-8 w-fit" href="/realisations" label="Accéder aux réalisations" />
         </div>
     </section>
 
-    <Faq title="Vos questions, nos réponses" items={faqItems} />
+    <section class="section">
+        <div class="max-width padding-x">
+            <h2 class="text-display-small">Aller plus loin</h2>
+            <div class="text-body-large mt-6 max-w-prose space-y-4">
+                <p>Guides pratiques pour cadrer un projet web, éviter les dérives et garder la maîtrise.</p>
+            </div>
+            <div class="mt-8 flex flex-wrap gap-4">
+                <Button className="w-fit" href="/ressources" label="Voir les ressources" />
+                <Button className="w-fit" variant="outlined" href="/services" label="Explorer nos services" />
+            </div>
+        </div>
+    </section>
+
+    <Faq title="FAQ anti-objections" items={faqItems} />
 
     <section class="section">
         <div class="max-width padding-x">
-            <p class="text-body-large">Une autre question ? Contactez-nous, nous sommes là pour vous éclairer.</p>
-            <Button className="mt-6 w-fit" href="/contact" label="Discutons de votre projet" />
+            <p class="text-body-large">Besoin d'y voir clair ? On vous répond vite et sans jargon.</p>
+            <Button className="mt-6 w-fit" href="/contact" label="Demander un diagnostic" />
         </div>
     </section>
 </Layout>

@@ -28,10 +28,12 @@ export const Menu = ({
             return 3;
         } else if (pathName?.startsWith("/realisations/")) {
             return 3;
-        } else if (pathName === "/agence") {
+        } else if (pathName?.startsWith("/ressources")) {
             return 4;
-        } else if (pathName === "/contact") {
+        } else if (pathName === "/agence") {
             return 5;
+        } else if (pathName === "/contact") {
+            return 6;
         } else {
             return undefined;
         }
@@ -139,12 +141,18 @@ export const Menu = ({
                 <Tab
                     className={"bg-transparent md:h-full"}
                     selected={4 === activeTab}
+                    href={`/ressources`}
+                    label={"Ressources"}
+                ></Tab>
+                <Tab
+                    className={"bg-transparent md:h-full"}
+                    selected={5 === activeTab}
                     href={`/agence`}
                     label={"Agence"}
                 ></Tab>
                 <Tab
                     className={"bg-transparent md:h-full md:hidden block"}
-                    selected={5 === activeTab}
+                    selected={6 === activeTab}
                     href={`/contact`}
                     label={"Contact"}
                 ></Tab>

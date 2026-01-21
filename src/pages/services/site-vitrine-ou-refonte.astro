@@ -1,0 +1,91 @@
+---
+import Layout from "@layouts/Layout.astro";
+import {Button} from "@udixio/ui-react";
+import Faq from "@components/sections/Faq.astro";
+
+const faqItems = [
+    {
+        question: "Que comprend la prestation ?",
+        answer: "Cadrage, architecture de pages, design, intégration, développement, tests et mise en ligne. Le périmètre exact est défini ensemble.",
+    },
+    {
+        question: "Fournissez-vous les contenus ?",
+        answer: "Vous pouvez nous fournir vos contenus. Si besoin, nous vous aidons à les structurer et à les clarifier.",
+    },
+    {
+        question: "Le site m'appartient-il ?",
+        answer: "Oui. Les livrables et les accès sont remis au client.",
+    },
+    {
+        question: "Quid du suivi après mise en ligne ?",
+        answer: "Un suivi est possible en option, selon vos besoins.",
+    },
+];
+---
+
+<Layout seo={{
+    title: "Création & refonte de site web • Udixio",
+    description: "Une offre claire pour un site vitrine ou une refonte maîtrisée : cadrage, design, développement, mise en ligne.",
+}}>
+    <section class="section">
+        <div class="max-width padding-x">
+            <h1 class="text-display-small md:text-display-large">Création &amp; refonte de site web</h1>
+            <p class="text-body-large mt-6 max-w-prose">Un site clair, crédible et simple à faire évoluer, avec un cadre sans flou.</p>
+            <Button className="mt-8 w-fit" href="/contact" label="Demander un diagnostic" />
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="max-width padding-x">
+            <h2 class="text-display-small">Le problème que l'on résout</h2>
+            <div class="text-body-large mt-6 max-w-prose space-y-4">
+                <p>Site confus, messages flous, structure vieillissante : tout cela nuit à la crédibilité et aux demandes entrantes.</p>
+                <p>Notre objectif : remettre de l'ordre et construire une base durable.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="max-width padding-x">
+            <h2 class="text-display-small">Notre approche</h2>
+            <ul class="mt-6 list-disc pl-6 text-body-large max-w-prose">
+                <li>cadrage des objectifs et du périmètre</li>
+                <li>architecture claire des pages et parcours</li>
+                <li>design lisible, aligné avec votre image</li>
+                <li>développement fiable et tests</li>
+                <li>mise en ligne et passation</li>
+            </ul>
+            <Button className="mt-8 w-fit" href="/methode" label="Voir la méthode" />
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="max-width padding-x">
+            <h2 class="text-display-small">Bénéfices</h2>
+            <ul class="mt-6 list-disc pl-6 text-body-large max-w-prose">
+                <li>un site qui inspire confiance</li>
+                <li>une structure pensée pour la conversion</li>
+                <li>un socle durable et maîtrisé</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="max-width padding-x">
+            <h2 class="text-display-small">Investissement</h2>
+            <div class="text-body-large mt-6 max-w-prose space-y-4">
+                <p>Le budget dépend du nombre de pages, du contenu, des intégrations et du niveau de personnalisation.</p>
+                <p>Après un cadrage rapide, nous vous proposons une estimation claire avec des options.</p>
+            </div>
+        </div>
+    </section>
+
+    <Faq title="Questions fréquentes" items={faqItems} />
+
+    <section class="section">
+        <div class="max-width padding-x">
+            <p class="text-body-large">Vous voulez un site clair et maîtrisé ?</p>
+            <Button className="mt-6 w-fit" href="/contact" label="Discutons de votre projet" />
+        </div>
+    </section>
+</Layout>

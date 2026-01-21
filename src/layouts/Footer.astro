@@ -16,9 +16,9 @@ import {FormContact} from "../components/FormContact";
                     <div class="transition-all duration-300 flex items-center  justify-center rounded-lg  h-12 w-12 border border-outline-variant">
                         <Icon className="h-6 w-6 fill-on-surface-variant" icon={faComments}></Icon>
                     </div>
-                    <div><p class="text-title-small mt-0.5">Discuter avec nous</p>
+                    <div><p class="text-title-small mt-0.5">Échange clair, sans jargon</p>
                         <div class="text-on-surface-variant max-w-prose text-body-small">
-                            <p class="mt-1">Nous sommes là pour vous aider.</p>
+                            <p class="mt-1">Expliquez vos objectifs et vos contraintes, on vous aide à cadrer.</p>
                             <Obfuscate
                                     client:visible
                                     className="mt-4 inline-block underline-offset-4 underline !text-bold text-secondary focus-visible:text-primary hover:text-primary"
@@ -58,14 +58,8 @@ import {FormContact} from "../components/FormContact";
             <div class="right padding bg-surface-container-low flex-2 m-2 pt-8 rounded-2xl">
                 <h2 class="text-display-small max-w-prose"><span
                         class="text-gradient">Restons en contact</span><br/>
-                    pour
-                    donner vie à votre projet !</h2>
-                <p class="mt-4 max-w-prose">Partagez les détails de votre projet, vos idées et découvrons
-                    ensemble comment
-                    nous
-                    pouvons vous
-                    accompagner
-                    dans sa réalisation.</p>
+                    pour cadrer votre projet</h2>
+                <p class="mt-4 max-w-prose">Donnez-nous le contexte, on vous propose un cadre clair et la bonne prochaine étape.</p>
                 <FormContact client:only="react"/>
             </div>
 
@@ -85,10 +79,13 @@ import {FormContact} from "../components/FormContact";
         <a class="underline-offset-4 hover:underline" href="/services">Services</a>
         <a class="underline-offset-4 hover:underline" href="/methode">Méthode</a>
         <a class="underline-offset-4 hover:underline" href="/realisations">Réalisations</a>
+        <a class="underline-offset-4 hover:underline" href="/ressources">Ressources</a>
         <a class="underline-offset-4 hover:underline" href="/agence">Agence</a>
         <a class="underline-offset-4 hover:underline" href="/contact">Contact</a>
         <a class="underline-offset-4 hover:underline" href="/mentions-legales">Mentions légales</a>
     </nav>
-    <p class="text-body-small text-on-surface mx-auto text-center mb-4">© 2025 Concu avec ❤️ par
-        Udixio</p>
+    <div class="max-w-screen-2xl mx-auto px-6 pb-6 text-body-small text-center text-on-surface-variant">
+        <p>Basés dans les Hauts-de-France (Amiens &amp; Le Havre). Contact direct : contact@udixio.fr / [téléphone].</p>
+        <p class="mt-2">© 2025 Concu avec ❤️ par Udixio</p>
+    </div>
 </footer>

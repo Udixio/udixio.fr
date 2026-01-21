@@ -13,23 +13,23 @@ const faqItems = [
         answer: "Udixio = vous + digital (UX, UI) + io (référence à l'univers technologique). En somme, on marie l'humain et la tech.",
     },
     {
-        question: "Quelle est votre structure juridique / êtes-vous une agence certifiée ?",
+        question: "Quelle est votre structure juridique ?",
         answer: "Udixio opère via ACCESSWEB LIMITED (Private Company Limited by Shares, Ltd), enregistrée en Irlande. CRN : 760413.",
     },
     {
-        question: "Combien de clients gérez-vous en parallèle ? Serez-vous disponibles pour nous ?",
-        answer: "Nous privilégions la qualité à la quantité. En général, nous ne menons pas plus de 2 à 3 projets clients en même temps, afin de pouvoir être ultra-disponibles et réactifs. En tant que jeune structure, chaque client compte énormément pour nous - vous aurez toute notre attention.",
+        question: "Qui pilote les projets ?",
+        answer: "Les fondateurs restent impliqués et l'équipe s'élargit selon les besoins. Vous savez toujours qui fait quoi.",
     },
 ];
 ---
 
 <Layout seo={{
-    title: "Udixio : une équipe engagée à vos côtés • Udixio",
-    description: "Udixio est née d'un constat : trop de petites entreprises peinent à tirer parti du digital faute de partenaire de confiance.",
+    title: "Udixio — Clarté & Maîtrise, duo fondateur • Udixio",
+    description: "Une agence à taille humaine, fondée par deux frères, pour des projets web cadrés et transparents.",
 }}>
     <section class="section">
         <div class="max-width padding-x">
-            <h1 class="text-display-small md:text-display-large">Udixio : une équipe engagée à vos côtés</h1>
+            <h1 class="text-display-small md:text-display-large">Udixio : clarté, maîtrise et duo fondateur</h1>
         </div>
     </section>
 
@@ -37,22 +37,22 @@ const faqItems = [
         <div class="max-width padding-x">
             <h2 class="text-display-small">Notre mission</h2>
             <div class="text-body-large mt-6 max-w-prose space-y-4">
-                <p>Udixio est née d'un constat : trop de petites entreprises peinent à tirer parti du digital faute de partenaire de confiance. Notre mission est de démocratiser l'accès à des sites web de haute qualité, pensés stratégiquement pour chaque client.</p>
-                <p>Transparence : on dit ce qu'on fait et on fait ce qu'on dit, pas de jargon ni de coûts cachés.</p>
-                <p>Excellence : chaque détail compte, on est perfectionnistes dans le code comme dans le design.</p>
-                <p>Proximité : on travaille avec vous, pas juste pour vous - votre succès est notre réussite.</p>
-                <p>Nous sommes une petite structure, ce qui garantit à nos clients une relation directe avec les experts qui réalisent le projet. Pas d'effet tunnel, pas de perte d'information - vous avez en face de vous les personnes qui conçoivent réellement votre site.</p>
+                <p>Udixio est née d'un constat : trop de projets web avancent dans le flou. Notre mission est d'apporter de la clarté, de la structure et de la maîtrise côté client.</p>
+                <p>Transparence : pas de jargon, des décisions expliquées.</p>
+                <p>Rigueur : un cadre clair, des étapes validées.</p>
+                <p>Pédagogie : on rend la technique compréhensible.</p>
+                <p>Engagement : on s'implique réellement, du cadrage à la livraison.</p>
             </div>
         </div>
     </section>
 
     <section class="section">
         <div class="max-width padding-x">
-            <h2 class="text-display-small">Une équipe d'experts passionnés</h2>
+            <h2 class="text-display-small">Le duo fondateur (et une équipe qui s'élargit)</h2>
             <div class="text-body-large mt-6 max-w-prose space-y-4">
                 <p><strong>Joël Vigreux</strong> — Co-fondateur, Développement full-stack : développement front-end et back-end, architecture technique, performance, qualité et maintenabilité.</p>
                 <p><strong>Florian Vigreux</strong> — Co-fondateur, Développement commercial &amp; pilotage : relation client, cadrage des besoins, suivi de projet, coordination et traduction des enjeux business vers la technique.</p>
-                <p>Un réseau de partenaires de confiance (designers, rédacteurs, photographes…) peut être mobilisé selon vos besoins pour couvrir tous les savoir-faire.</p>
+                <p>Une agence lancée récemment, mais structurée autour d'un binôme complémentaire. L'équipe s'élargit selon les projets, sans perdre la clarté du pilotage.</p>
             </div>
             <Button className="mt-6 w-fit" href="/contact" label="Envie d'en savoir plus ? Discutons ensemble." />
         </div>
@@ -64,7 +64,7 @@ const faqItems = [
             <div class="text-body-large mt-6 max-w-prose space-y-4">
                 <p>Basée dans les Hauts-de-France, avec présence à Amiens et Le Havre.</p>
                 <p>Nous travaillons principalement à distance, ce qui nous permet d'être flexibles. Des rendez-vous physiques sont possibles sur demande.</p>
-                <p>Préférez un contact direct ? Écrivez-nous à [email] ou appelez le [téléphone] (du lundi au vendredi, 9h-18h).</p>
+                <p>Préférez un contact direct ? Écrivez-nous à contact@udixio.fr ou appelez le [téléphone] (du lundi au vendredi, 9h-18h).</p>
             </div>
             <Button className="mt-6 w-fit" href="/contact" label="Contactez-nous" />
         </div>
@@ -72,10 +72,13 @@ const faqItems = [
 
     <section class="section">
         <div class="max-width padding-x">
-            <h2 class="text-display-small">Notre écosystème</h2>
-            <div class="text-body-large mt-6 max-w-prose space-y-4">
-                <p>Nous croyons aux meilleures technologies pour servir vos objectifs : React, Astro, Tailwind, NetSimpler.</p>
-            </div>
+            <h2 class="text-display-small">Nos engagements concrets</h2>
+            <ul class="mt-6 list-disc pl-6 text-body-large max-w-prose">
+                <li>périmètre clarifié avant démarrage</li>
+                <li>validations à chaque étape clé</li>
+                <li>accès et livrables remis au client</li>
+                <li>explications claires des choix techniques</li>
+            </ul>
         </div>
     </section>
 

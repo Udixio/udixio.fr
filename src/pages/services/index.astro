@@ -21,17 +21,16 @@ const faqItems = [
 ---
 
 <Layout seo={{
-    title: "Des services digitaux sur-mesure pour vos objectifs • Udixio",
-    description: "Udixio couvre tous les aspects d'un projet web réussi, avec une approche sur-mesure, centrée sur votre ROI et transparente.",
+    title: "Services web : clarté du cadrage, maîtrise du résultat • Udixio",
+    description: "Un hub clair pour choisir la bonne prestation : site vitrine/refonte, développement sur‑mesure, cadrage & audit.",
 }}>
     <section class="section">
         <div class="max-width padding-x">
-            <h1 class="text-display-small md:text-display-large">Des services digitaux sur-mesure pour vos objectifs</h1>
-            <h2 class="text-headline-medium mt-8">Une offre complète pour vous accompagner de A à Z</h2>
+            <h1 class="text-display-small md:text-display-large">Services web, clairs et maîtrisés</h1>
+            <h2 class="text-headline-medium mt-8">Choisir la bonne prestation sans flou</h2>
             <div class="text-body-large mt-6 max-w-prose space-y-4">
-                <p>Udixio couvre les aspects essentiels d'un projet web réussi.</p>
-                <p>Sur-mesure, centré sur vos objectifs, et transparent.</p>
-                <p>Vous ne savez pas par où commencer ? Nous proposons un diagnostic ou un atelier initial pour définir ensemble la meilleure approche.</p>
+                <p>Chaque service est cadré pour éviter les dérives et garder le contrôle.</p>
+                <p>Vous ne savez pas par où commencer ? Nous faisons un diagnostic rapide et vous orientons vers la bonne option.</p>
             </div>
             <Button className="mt-8 w-fit" href="/contact" label="Demander un diagnostic gratuit" />
         </div>
@@ -39,9 +38,9 @@ const faqItems = [
 
     <section class="section">
         <div class="max-width padding-x">
-            <h2 class="text-display-small">Création &amp; refonte de sites sur-mesure</h2>
+            <h2 class="text-display-small">Création &amp; refonte de sites web</h2>
             <div class="text-body-large mt-6 max-w-prose space-y-4">
-                <p>Création ou refonte de sites web clairs, performants et durables, conçus en fonction de vos objectifs, de vos contenus et de vos contraintes.</p>
+                <p>Pour un site clair, crédible et simple à faire évoluer.</p>
             </div>
             <ul class="mt-6 list-disc pl-6 text-body-large max-w-prose">
                 <li>cadrage des besoins et priorités</li>
@@ -50,15 +49,18 @@ const faqItems = [
                 <li>développement technique</li>
                 <li>tests et mise en ligne</li>
             </ul>
-            <Button className="mt-8 w-fit" href="/contact" label="Obtenir un devis pour mon site" />
+            <div class="mt-8 flex flex-wrap gap-4">
+                <Button className="w-fit" href="/services/site-vitrine-ou-refonte" label="Voir le détail de l'offre" />
+                <Button className="w-fit" variant="outlined" href="/contact" label="Demander un diagnostic" />
+            </div>
         </div>
     </section>
 
     <section class="section">
         <div class="max-width padding-x">
-            <h2 class="text-display-small">Applications web &amp; fonctionnalités personnalisées</h2>
+            <h2 class="text-display-small">Développement web sur‑mesure</h2>
             <div class="text-body-large mt-6 max-w-prose space-y-4">
-                <p>Développement de fonctionnalités spécifiques lorsque les solutions standard ne correspondent pas au contexte.</p>
+                <p>Quand un site standard ne suffit pas : fonctionnalités ou outils métier dédiés.</p>
             </div>
             <ul class="mt-6 list-disc pl-6 text-body-large max-w-prose">
                 <li>fonctionnalités personnalisées</li>
@@ -66,7 +68,10 @@ const faqItems = [
                 <li>interfaces métier / back-office</li>
                 <li>évolutions et amélioration continue du produit</li>
             </ul>
-            <Button className="mt-8 w-fit" href="/contact" label="Discutons de votre application sur-mesure" />
+            <div class="mt-8 flex flex-wrap gap-4">
+                <Button className="w-fit" href="/services/developpement-sur-mesure" label="Voir le détail de l'offre" />
+                <Button className="w-fit" variant="outlined" href="/contact" label="Demander un diagnostic" />
+            </div>
         </div>
     </section>
 
@@ -100,6 +105,16 @@ const faqItems = [
                 <p><strong>Hébergement initial offert :</strong> non inclus.</p>
                 <p><strong>Suivi après mise en ligne :</strong> disponible (optionnel), selon vos besoins.</p>
                 <p><strong>Budget :</strong> Un prix n'est jamais “au hasard” : il dépend du périmètre, des contraintes et du niveau de personnalisation. Après un premier échange, nous vous partageons une estimation claire avec les options possibles (périmètre minimal vs périmètre complet).</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="max-width padding-x">
+            <h2 class="text-display-small">Investissement : transparence d'abord</h2>
+            <div class="text-body-large mt-6 max-w-prose space-y-4">
+                <p>Un prix dépend du périmètre, du contenu et des intégrations. Nous cadrons ces variables avant toute estimation.</p>
+                <p>Vous recevez ensuite une proposition claire avec des options (périmètre minimal vs périmètre complet).</p>
             </div>
         </div>
     </section>
