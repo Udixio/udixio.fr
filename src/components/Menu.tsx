@@ -20,10 +20,18 @@ export const Menu = ({
     const getCurrentTab = () => {
         if (pathName === "/") {
             return 0;
+        } else if (pathName === "/services") {
+            return 1;
+        } else if (pathName === "/methode") {
+            return 2;
         } else if (pathName === "/realisations") {
-            return 1;
+            return 3;
         } else if (pathName?.startsWith("/realisations/")) {
-            return 1;
+            return 3;
+        } else if (pathName === "/agence") {
+            return 4;
+        } else if (pathName === "/contact") {
+            return 5;
         } else {
             return undefined;
         }
@@ -113,13 +121,31 @@ export const Menu = ({
                 <Tab
                     className={"bg-transparent md:h-full"}
                     selected={1 === activeTab}
+                    href={`/services`}
+                    label={"Services"}
+                ></Tab>
+                <Tab
+                    className={"bg-transparent md:h-full"}
+                    selected={2 === activeTab}
+                    href={`/methode`}
+                    label={"Méthode"}
+                ></Tab>
+                <Tab
+                    className={"bg-transparent md:h-full"}
+                    selected={3 === activeTab}
                     href={`/realisations`}
                     label={"Réalisations"}
                 ></Tab>
                 <Tab
-                    className={"bg-transparent md:h-full  md:hidden block"}
-                    selected={1 === activeTab}
-                    href={`#contact`}
+                    className={"bg-transparent md:h-full"}
+                    selected={4 === activeTab}
+                    href={`/agence`}
+                    label={"Agence"}
+                ></Tab>
+                <Tab
+                    className={"bg-transparent md:h-full md:hidden block"}
+                    selected={5 === activeTab}
+                    href={`/contact`}
                     label={"Contact"}
                 ></Tab>
 
@@ -128,7 +154,7 @@ export const Menu = ({
             <Button
                 size={"small"}
                 allowShapeTransformation={false}
-                href={"#contact"}
+                href={"/contact"}
                 className={"m-2 hidden md:block"}
                 label={"Contact"}
             />

@@ -1,0 +1,102 @@
+---
+import Layout from "@layouts/Layout.astro";
+import {Button} from "@udixio/ui-react";
+import Faq from "@components/sections/Faq.astro";
+import ReassuranceTimelines from "@components/sections/ReassuranceTimelines.astro";
+import ReassuranceOwnership from "@components/sections/ReassuranceOwnership.astro";
+import ReassuranceAfterLaunch from "@components/sections/ReassuranceAfterLaunch.astro";
+
+const faqItems = [
+    {
+        question: "Comment assurez-vous que le projet reste dans les délais et le budget prévus ?",
+        answer: "Grâce à notre méthode en étapes et un suivi rigoureux. Chaque phase a des objectifs clairs et des jalons de validation. Nous fonctionnons en mode projet agile : vous avez de la visibilité à tout moment, et on s'ajuste rapidement en cas d'imprévu. Côté budget, tout est détaillé dans le devis initial par poste ; si votre besoin évolue en cours de route, on en discute et on valide ensemble un ajustement éventuel avant de réaliser les tâches supplémentaires. Pas de dépassement sauvage chez nous !",
+    },
+    {
+        question: "Je ne suis pas familier avec les termes techniques, comment vais-je suivre ?",
+        answer: "Pas de souci : nous nous engageons à être pédagogues. On évite le jargon inutile. À chaque livraison (maquette, bêta du site…), on vous expliquera avec des mots simples ce que nous avons fait et on recueillera votre feedback. De plus, nos outils de suivi sont visuels et faciles à utiliser. L'idée, c'est que vous compreniez l'avancée du projet sans effort.",
+    },
+    {
+        question: "Pourrai-je demander des modifications en cours de route ?",
+        answer: "Bien sûr. Votre feedback est précieux tout au long du projet - notamment lors des validations d'étapes. Si en cours de route de nouvelles idées ou besoins émergent, on les examine ensemble. Si c'est un ajustement mineur, on l'intègre dans le planning. Si c'est un changement majeur, on vous conseillera sur la meilleure approche (l'inclure avec révision de planning/budget, ou le planifier en amélioration post-lancement). Dans tous les cas, vous gardez le contrôle : rien n'est développé sans votre accord.",
+    },
+    {
+        question: "Est-ce qu'on peut intervenir sur place / se rencontrer physiquement ?",
+        answer: "Si vous êtes à proximité de [Notre ville] ou en région [X], avec plaisir nous pouvons organiser des ateliers en présentiel. Sinon, nous travaillons efficacement à distance via visio, appels et outils collaboratifs. Notre façon de faire est flexible : ce qui compte c'est d'échanger régulièrement, par le moyen qui vous convient le mieux.",
+    },
+];
+---
+
+<Layout seo={{
+    title: "Notre méthode : transparence, rigueur et résultats • Udixio",
+    description: "Une approche structurée pour sécuriser votre projet, avec des étapes claires, des validations et une transparence totale.",
+}}>
+    <section class="section">
+        <div class="max-width padding-x">
+            <h1 class="text-display-small md:text-display-large">Notre méthode : transparence, rigueur et résultats</h1>
+            <h2 class="text-headline-medium mt-8">Une approche structurée pour sécuriser votre projet</h2>
+            <div class="text-body-large mt-6 max-w-prose space-y-4">
+                <p>Beaucoup de projets web échouent à cause d'un manque de cadrage ou de communication. Chez Udixio, nous avons formalisé une méthode de travail qui élimine les zones d'ombre.</p>
+                <p>Meilleure visibilité sur l'avancement, respect du budget, qualité garantie, pas de mauvaise surprise.</p>
+                <p>Collaboration, validation continue, pédagogie.</p>
+            </div>
+            <Button className="mt-8 w-fit" href="#etapes" label="Découvrez nos 5 étapes clés ci-dessous" />
+        </div>
+    </section>
+
+    <section id="etapes" class="section">
+        <div class="max-width padding-x">
+            <h2 class="text-display-small">Nos 5 étapes clés</h2>
+            <div class="mt-8 grid gap-6">
+                <div class="rounded-2xl border border-outline-variant bg-surface-container-low p-6">
+                    <h3 class="text-title-large">Étape 1 - Diagnostic &amp; Cahier des charges</h3>
+                    <p class="text-body-large mt-4">On commence par vous écouter. Audit de votre existant, recueil de vos objectifs et contraintes. Livrables : un mini cahier des charges rédigé par nos soins + une proposition chiffrée détaillée. Votre rôle : répondre à nos questions lors d'un atelier d'environ 1h. (Coût : offert, sans engagement.)</p>
+                </div>
+                <div class="rounded-2xl border border-outline-variant bg-surface-container-low p-6">
+                    <h3 class="text-title-large">Étape 2 - Conception UX/UI</h3>
+                    <p class="text-body-large mt-4">Nous élaborons l'architecture des pages et des maquettes graphiques. Livrables : zonings ou wireframes validés, puis maquette haute fidélité de la page d'accueil (et pages types). Votre rôle : valider que le design vous plaît et correspond à votre image (allers-retours illimités dans la limite du raisonnable).</p>
+                </div>
+                <div class="rounded-2xl border border-outline-variant bg-surface-container-low p-6">
+                    <h3 class="text-title-large">Étape 3 - Développement &amp; Contenu</h3>
+                    <p class="text-body-large mt-4">On code le site en s'appuyant sur notre librairie UI (qualité et maintenabilité garanties) et on intègre vos contenus. Livrables : un lien vers une version de pré-production du site pour test. Votre rôle : fournir les derniers contenus (textes, images) - si besoin, on peut vous épauler en fournissant un rédacteur ou banque d'images.</p>
+                </div>
+                <div class="rounded-2xl border border-outline-variant bg-surface-container-low p-6">
+                    <h3 class="text-title-large">Étape 4 - Recette &amp; Mise en ligne</h3>
+                    <p class="text-body-large mt-4">Vous testez le site avec nous. On corrige les derniers détails (bugs, ajustements). Livrables : site final en ligne sur votre domaine, + pack de livraison (codes sources, documentation courte, accès au CMS). Votre rôle : faire des retours lors de la phase de recette (on reste disponible autant que nécessaire jusqu'à satisfaction totale).</p>
+                </div>
+                <div class="rounded-2xl border border-outline-variant bg-surface-container-low p-6">
+                    <h3 class="text-title-large">Étape 5 - Suivi &amp; Formation</h3>
+                    <p class="text-body-large mt-4">Après le lancement, nous restons à vos côtés. Livrables : formation d'1h à l'utilisation du site/CMS, guide PDF de prise en main, et rapport final de performance initiale (vitesse, SEO indexation). Votre rôle : prendre en main progressivement l'outil - on est là en support en cas de question.</p>
+                </div>
+            </div>
+            <p class="text-body-large mt-8 max-w-prose">On avance ensemble, pas à pas. Vous validez chaque étape.</p>
+            <Button className="mt-8 w-fit" href="/contact" label="Prêt à démarrer ? Demandez votre diagnostic offert" />
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="max-width padding-x">
+            <h2 class="text-display-small">Nos outils de travail &amp; gages de qualité</h2>
+            <div class="text-body-large mt-6 max-w-prose space-y-4">
+                <p>Gestion de projet : Trello/Asana (partagé avec vous), Design : Figma (vous pouvez commenter directement les maquettes), Développement : Astro/React + librairie Udixio UI (Material Design 3), Dépôt Git privé accessible, Intégration continue pour déploiement rapide…</p>
+                <p>Respect des normes RGPD, accessibilité (WCAG 2.1 AA quand possible), SEO on-page conforme aux guidelines Google, tests de performance (objectif &gt;90/100 Lighthouse).</p>
+                <p>Notre code est documenté, votre site est conçu pour durer : facile à faire évoluer par n'importe quel développeur compétent, ou par nous dans le cadre d'un partenariat long terme.</p>
+            </div>
+        </div>
+    </section>
+
+    <ReassuranceTimelines />
+    <ReassuranceOwnership />
+    <ReassuranceAfterLaunch />
+
+    <Faq
+        title="Questions fréquentes sur notre manière de travailler"
+        items={faqItems}
+    />
+
+    <section class="section">
+        <div class="max-width padding-x">
+            <p class="text-body-large">Vous avez d'autres questions sur notre méthode ? Contactez-nous, nous sommes transparents !</p>
+            <Button className="mt-6 w-fit" href="/contact" label="Demandez un appel découverte" />
+        </div>
+    </section>
+</Layout>

@@ -59,23 +59,28 @@ export const Hero = ({children}) => {
             </div>
 
 
-            <h1 className="text-display-small md:text-display-large  max-w-4xl mt-8">Votre site, pensé comme une
-                mission
-                stratégique</h1>
+            <h1 className="text-display-small md:text-display-large max-w-4xl mt-8">Votre site web : une mission stratégique pour votre entreprise</h1>
+            <h2 className="text-headline-medium mt-6 max-w-3xl">Des sites web sur-mesure pour booster votre visibilité et vos prospects</h2>
 
-            <p
-                className={classNames("text-body-large  max-w-2xl transition-all duration-300 mt-8", {
+            <div
+                className={classNames("text-body-large max-w-2xl transition-all duration-300 mt-6 space-y-4", {
                     "visible opacity-100": isMinimize,
+                })}
+            >
+                <p>Agence digitale spécialisée en création de sites sur-mesure pour TPE/PME exigeantes.</p>
+                <ul className="list-disc pl-6">
+                    <li>+ de visibilité sur le web</li>
+                    <li>+ de prospects qualifiés</li>
+                    <li>Une image qui inspire confiance</li>
+                </ul>
+                <p>Basée à [Ville], équipe 100% dédiée, accompagnement personnalisé.</p>
+            </div>
 
-                })}>Chez Udixio, nous concevons des expériences
-                sur-mesure qui valorisent vos contenus, renforcent votre image, et facilitent votre quotidien.</p>
-            <div className={classNames("flex gap-4 transition-all duration-300 mt-8", {
+            <div className={classNames("flex flex-wrap gap-4 transition-all duration-300 mt-8", {
                 "visible opacity-100": isMinimize,
-
             })}>
-                <Button href="#contact" className="w-fit" label="Contacter un expert"/>
-                {/*<Button variant="outlined" href="#contact" className="bg-surface/30"*/}
-                {/*        label="Découvrir notre méthode"/>*/}
+                <Button href="/contact" className="w-fit" label="Demandez un diagnostic offert"/>
+                <Button variant="outlined" href="/realisations" className="bg-surface/30" label="Parcourir nos réalisations"/>
             </div>
 
 

@@ -1,0 +1,57 @@
+---
+import Layout from "@layouts/Layout.astro";
+import {FormContact} from "@components/FormContact";
+import {Button} from "@udixio/ui-react";
+import Faq from "@components/sections/Faq.astro";
+
+const faqItems = [
+    {
+        question: "Qu'advient-il après l'envoi de ma demande ?",
+        answer: "Vous recevrez un accusé de réception par email. Ensuite, très rapidement (sous 24h en semaine), nous vous contacterons soit par email soit par téléphone (selon votre préférence indiquée) pour convenir d'un premier échange. L'idée de cet échange est de bien comprendre votre besoin et de vous apporter déjà quelques éclairages. Pas de démarche commerciale agressive, juste une discussion constructive autour de votre projet.",
+    },
+    {
+        question: "Le diagnostic est-il vraiment gratuit et sans engagement ?",
+        answer: "Oui, absolument. Le diagnostic initial que nous proposons (par téléphone ou visio ~30 min) est gratuit. C'est notre manière de vous montrer notre expertise et de vous aider à y voir clair. Suite à ça, libre à vous de donner suite ou non. Si vous décidez de travailler avec nous tant mieux, sinon, vous repartez avec quelques conseils utiles - c'est gagnant-gagnant.",
+    },
+    {
+        question: "Je n'aime pas les formulaires. Puis-je vous contacter autrement ?",
+        answer: "Bien sûr. Vous pouvez nous envoyer un email direct à [contact@udixio.fr], ou même nous appeler au [tél]. Le formulaire est là pour vous guider, mais ce n'est pas une obligation. L'important est que vous nous contactiez par le moyen qui vous convient le mieux.",
+    },
+    {
+        question: "Quels sont vos délais de réponse ?",
+        answer: "Nous nous engageons à répondre sous 1 jour ouvré à toute prise de contact. Si votre demande est envoyée le week-end ou pendant un jour férié, nous vous répondrons dès le prochain jour ouvré. Et bien sûr, en cas d'urgence particulière, n'hésitez pas à le préciser - nous ferons au plus vite.",
+    },
+];
+---
+
+<Layout seo={{
+    title: "Contactez-nous pour booster votre projet • Udixio",
+    description: "Une question, un projet en tête ? Remplissez ce formulaire, nous reviendrons vers vous sous 24h.",
+}}>
+    <section class="section">
+        <div class="max-width padding-x">
+            <h1 class="text-display-small md:text-display-large">Contactez-nous pour booster votre projet</h1>
+            <h2 class="text-headline-medium mt-8">Discutons de vos besoins</h2>
+            <div class="text-body-large mt-6 max-w-prose space-y-4">
+                <p>Une question, un projet en tête ? Remplissez ce formulaire, nous reviendrons vers vous sous 24h.</p>
+                <p>Pensez à indiquer quelques infos sur votre projet ou site actuel pour que notre échange soit encore plus efficace.</p>
+                <p>Nous proposons d'ailleurs un mini-diagnostic offert : lors de notre premier échange, nous vous donnerons déjà quelques pistes d'amélioration personnalisées.</p>
+            </div>
+            <div id="contact-form" class="mt-8">
+                <FormContact client:only="react" />
+            </div>
+            <div class="text-body-large mt-8 max-w-prose">
+                <p>Préférez un contact direct ? Écrivez-nous à [contact@udixio.fr] ou appelez le [téléphone] (du lundi au vendredi, 9h-18h).</p>
+            </div>
+        </div>
+    </section>
+
+    <Faq title="Avant de nous écrire, vous vous demandez peut-être…" items={faqItems} />
+
+    <section class="section">
+        <div class="max-width padding-x">
+            <p class="text-body-large">Prêt à vous lancer ? Envoyez-nous un message !</p>
+            <Button className="mt-6 w-fit" href="#contact-form" label="Envoyer ma demande" />
+        </div>
+    </section>
+</Layout>

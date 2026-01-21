@@ -82,7 +82,7 @@ export const Header = () => {
                 title={"Contacter Joël VIGREUX"}
                 icon={faCommentSmile}
                 id={"button-contact"}
-                href={"#contact"}
+                href={"/contact"}
                 label={"Contactez-nous"}
                 className={classNames("!fixed bottom-8 right-8 z-50", {
                     "opacity-0": !fabVisible,

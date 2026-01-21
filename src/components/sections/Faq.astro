@@ -1,0 +1,22 @@
+---
+interface FaqItem {
+    question: string;
+    answer: string;
+}
+
+const {title = "Vos questions, nos réponses", items = []}: {title?: string; items?: FaqItem[]} = Astro.props;
+---
+
+<section class="section">
+    <div class="max-width padding-x">
+        <h2 class="text-display-small">{title}</h2>
+        <div class="mt-8 grid gap-4">
+            {items.map((item) => (
+                <details class="rounded-2xl border border-outline-variant bg-surface-container-low p-6">
+                    <summary class="text-title-medium cursor-pointer">{item.question}</summary>
+                    <p class="text-body-large mt-4 max-w-prose">{item.answer}</p>
+                </details>
+            ))}
+        </div>
+    </div>
+</section>

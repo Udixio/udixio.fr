@@ -1,37 +1,54 @@
 ---
-import {getCollection} from "astro:content";
 import Layout from "@layouts/Layout.astro";
-import {Button, Card, classNames} from "@udixio/ui-react";
-import {BackgroundColor} from "../../components/BackgroundColor";
-import {faArrowRight} from "@fortawesome/pro-regular-svg-icons";
-import Realisations from "../../components/Realisations.astro";
+import {Button} from "@udixio/ui-react";
+import Realisations from "@components/Realisations.astro";
+import Faq from "@components/sections/Faq.astro";
 
-const realisations = await getCollection('realisation');
-realisations.sort((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infinity));
+const faqItems = [
+    {
+        question: "Pourquoi n'y a-t-il pas plus de projets clients affichés ?",
+        answer: "Nous lançons l'agence, et certains projets récents ne sont pas encore en ligne ou sont couverts par des accords de confidentialité temporaires. Nous préférons montrer peu de projets mais qui reflètent vraiment notre savoir-faire, plutôt que d'en lister trop tôt. Dans les mois qui viennent, d'autres réalisations client viendront s'ajouter dès qu'elles seront finalisées et publiables.",
+    },
+    {
+        question: "Puis-je contacter vos premiers clients pour avoir leur avis ?",
+        answer: "Si vous le souhaitez, nous pouvons vous mettre en relation avec l'un de nos premiers clients en privé, une fois qu'ils auront donné leur accord. Comme nous débutons, chaque collaboration est précieuse - nous sommes convaincus qu'un dialogue direct vaut toutes les études de cas du monde. Demandez-nous, et nous organiserons cela.",
+    },
+    {
+        question: "Et si mon secteur d'activité n'apparaît pas ici ?",
+        answer: "Pas d'inquiétude : notre expertise est transversale. Les principes qui marchent (beau design, site rapide, messages clairs, etc.) s'appliquent à tous les secteurs. On adore découvrir de nouveaux domaines ! Par ailleurs, notre méthode consiste toujours à faire une recherche sur votre secteur en amont, pour comprendre vos spécificités. Donc même sans exemple direct à vous montrer, on saura s'adapter à votre univers.",
+    },
+];
 ---
-<Layout seo={{
-    title: `Agence de conseil en stratégie digitale écoresponsable & SEO • udixio.fr`,
-    description: "Udixio est une agence experte dans la création de sites web éco-conçus et optimisés pour le SEO. Optez pour des solutions digitales durables et performantes.",
-}}>
 
-    <section class="relative pt-20 ">
-        <div class="max-width min-h-[75vh] padding-x flex items-center justify-center">
-            <div
-                    class="flex items-center flex-col relative">
-                <h1 class="text-display-small md:text-display-large text-center max-w-4xl mt-4">Nos réalisations</h1>
-                <p class="mt-8 text-body-large mx-auto max-w-prose text-center">Chaque réalisation de notre agence
-                    digitale
-                    Udixio est une rencontre unique entre innovation et créativité, pensée pour atteindre vos objectifs
-                    commerciaux avec succès</p>
-                <Button href="#contact" className="w-fit mt-12" label="Travailler ensemble"/>
-                <div style={{
-                    background: `radial-gradient(rgb(var(--colors-surface)/1) 0%,rgb(var(--colors-surface)/0) 50%) no-repeat`,
-                }} class="absolute top-0 left-0 w-full h-full -z-10 scale-[3]"></div>
+<Layout seo={{
+    title: "Nos réalisations : démonstrations de notre savoir-faire • Udixio",
+    description: "Un aperçu de projets et de démonstrations internes qui reflètent notre expertise.",
+}}>
+    <section class="section">
+        <div class="max-width padding-x">
+            <h1 class="text-display-small md:text-display-large">Nos réalisations : démonstrations de notre savoir-faire</h1>
+            <h2 class="text-headline-medium mt-6">Un aperçu de ce que nous savons faire</h2>
+            <div class="text-body-large mt-6 max-w-prose space-y-4">
+                <p>En tant que jeune agence, nous sommes fiers de vous montrer quelques projets sur lesquels nous avons travaillé, que ce soit pour nos premiers clients ou des démonstrations internes qui reflètent notre expertise.</p>
+                <p>Chaque réalisation est l'occasion de mettre en avant une problématique et la solution apportée.</p>
+                <p>Ici vous trouverez aussi des outils que nous avons développés nous-mêmes - preuve de notre engagement à innover pour mieux vous servir.</p>
             </div>
+            <Button className="mt-8 w-fit" href="/contact" label="Discutons de votre projet" />
         </div>
     </section>
 
-    <section id="" class=" relative">
-        <Realisations/>
+    <section class="section">
+        <div class="max-width padding-x">
+            <Realisations />
+        </div>
+    </section>
+
+    <Faq title="Questions fréquentes sur nos références" items={faqItems} />
+
+    <section class="section">
+        <div class="max-width padding-x">
+            <p class="text-body-large">Votre projet pourrait être le prochain sur la liste et bénéficier de toute notre attention.</p>
+            <Button className="mt-6 w-fit" href="/contact" label="Contactez-nous pour devenir notre prochaine réussite" />
+        </div>
     </section>
 </Layout>
