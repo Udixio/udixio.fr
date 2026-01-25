@@ -42,20 +42,20 @@ export default defineConfig({
         //         fontWeight: 500,
         //     },
         // },
-        body: {
-            large: {
-                fontSize: 1.25,
-                lineHeight: 1.5625,
-            },
-            medium: {
-                fontSize: 1,
-                lineHeight: 1.25,
-            },
-            small: {
-                fontSize: 0.75,
-                lineHeight: 1,
-            },
-        },
+        // body: {
+        //     large: {
+        //         fontSize: 1.25,
+        //         lineHeight: 1.5625,
+        //     },
+        //     medium: {
+        //         fontSize: 1,
+        //         lineHeight: 1.25,
+        //     },
+        //     small: {
+        //         fontSize: 0.75,
+        //         lineHeight: 1,
+        //     },
+        // },
 
     },
     responsiveBreakPoints: {

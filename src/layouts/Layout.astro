@@ -134,8 +134,16 @@ const seoDefault: SEOProps = {
 };
 ---
 <!DOCTYPE html>
-<html class="dark" lang="fr">
+<html lang="fr">
 <head>
+
+    <script>
+        document.addEventListener("astro:page-load", () => {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.documentElement.classList.add('dark');
+            }
+        });
+    </script>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width"/>
     <link rel="icon" type="image/png" href="/favicon.svg"/>
@@ -143,6 +151,8 @@ const seoDefault: SEOProps = {
 
     <SEO {...seoDefault}/>
     <ClientRouter/>
+
+
 </head>
 <body class="bg-surface  transition-all duration-500">
 {menu &&
