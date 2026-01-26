@@ -1,13 +1,6 @@
 import {Button, classNames, Tab, Tabs} from "@udixio/ui-react";
-import React, {useEffect, useLayoutEffect, useRef, useState} from "react";
+import React, {useEffect, useLayoutEffect, useState} from "react";
 
-
-function formatLabel(id) {
-    return id
-        .split("-")
-        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(" ");
-}
 
 export const Menu = ({
                          setFabVisible,
@@ -16,24 +9,34 @@ export const Menu = ({
     fabVisible: boolean;
     setFabVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-    const [pathName, setPathName] = useState<string | null>(null)
+    const [pathName, setPathName] = useState<string | null>(null);
+    const [isScrolled, setIsScrolled] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 50);
+        };
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
     const getCurrentTab = () => {
         if (pathName === "/") {
-            return 0;
+            return null;
         } else if (pathName === "/services") {
-            return 1;
+            return 0;
         } else if (pathName === "/methode") {
-            return 2;
+            return 1;
         } else if (pathName === "/realisations") {
-            return 3;
+            return 2;
         } else if (pathName?.startsWith("/realisations/")) {
-            return 3;
+            return 2;
         } else if (pathName?.startsWith("/ressources")) {
-            return 4;
+            return 3;
         } else if (pathName === "/agence") {
-            return 5;
+            return 4;
         } else if (pathName === "/contact") {
-            return 6;
+            return 5;
         } else {
             return undefined;
         }
@@ -60,30 +63,13 @@ export const Menu = ({
     }, [pathName]);
 
 
-    const isScrolling = useRef(false);
-
-
-    useEffect(() => {
-        const handleHashChange = () => {
-            isScrolling.current = true;
-
-            setTimeout(() => {
-                isScrolling.current = false;
-            }, 750);
-        };
-
-        window.addEventListener("popstate", handleHashChange, false);
-        return () => {
-            window.removeEventListener("popstate", handleHashChange);
-        };
-    }, []);
-
+    // Intersection Observer to hide menu when reaching Footer/Contact
     useEffect(() => {
         const featuresDiv = document.getElementById("contact")!;
 
         const featuresObserver = new IntersectionObserver(
             ([entry]) => {
-                if (entry.isIntersecting) {
+                if (entry && entry.isIntersecting) {
                     setActiveTab(null);
                     setFabVisible(false);
                 } else {
@@ -93,7 +79,8 @@ export const Menu = ({
             },
             {threshold: [0]},
         );
-        featuresObserver.observe(featuresDiv);
+
+        if (featuresDiv) featuresObserver.observe(featuresDiv);
 
         return () => featuresObserver.disconnect();
     }, [pathName]);
@@ -102,57 +89,64 @@ export const Menu = ({
         pathName !== null &&
         <div
             className={classNames(
-                "fixed max-w-full flex transition-opacity left-1/2 duration-300 ease-in-out top-8 z-50 mx-2 backdrop-blur-lg -translate-x-1/2 overflow-hidden rounded-full border border-surface-container-highest bg-surface-container-low/80",
-                {"opacity-0": activeTab === null},
+                "fixed max-w-full flex items-center transition-all duration-500 ease-in-out left-1/2 -translate-x-1/2 z-50 mx-2 overflow-hidden rounded-full",
+                // Dynamic Styles based on Scroll
+                isScrolled
+                    ? "top-6 backdrop-blur-lg border border-surface-container-highest bg-surface-container-low/90 shadow-sm py-1 px-1"
+                    : "top-8 border border-transparent bg-transparent py-2 px-4", // Transparent & slightly lower/larger when at top
+                {"opacity-0": activeTab === null && pathName !== "/"},
             )}
         >
+            {/* VISIBILITY FIX: The original code utilized activeTab === null to hide.
+                 The observer sets activeTab to null.
+                 I need to ensure `getCurrentTab` returns `undefined` (or -1) for Home, NOT `null`.
+             */}
             <Tabs
                 scrollable
-                selectedTab={activeTab}
+                selectedTab={activeTab === undefined ? undefined : activeTab} // explicit
                 setSelectedTab={setActiveTab}
-                className={"max-w-3xl  border-none  md:overflow-hidden"}
-                variant={"secondary"}
+                className={classNames(
+                    "max-w-3xl border-none md:overflow-visible transition-all bg-transparent",
+                    !isScrolled ? "gap-4 hover:bg-surface-container/20 text-on-surface" : "" // Add breathing room when transparent
+                )}
+                variant={isScrolled ? "secondary" : "primary"} // Change variant? Or just style. Primary might be too bold. Let's stick to secondary but adjust via class/context if needed.
             >
 
+                {/* Removed Accueil Tab */}
+
                 <Tab
-                    className={"bg-transparent md:h-full pl-6"}
+                    className={classNames()}
                     selected={0 === activeTab}
-                    href={`/`}
-                    label={"Accueil"}
-                ></Tab>
-                <Tab
-                    className={"bg-transparent md:h-full"}
-                    selected={1 === activeTab}
                     href={`/services`}
                     label={"Services"}
                 ></Tab>
                 <Tab
-                    className={"bg-transparent md:h-full"}
-                    selected={2 === activeTab}
+                    className={classNames()}
+                    selected={1 === activeTab}
                     href={`/methode`}
                     label={"Méthode"}
                 ></Tab>
                 <Tab
-                    className={"bg-transparent md:h-full"}
-                    selected={3 === activeTab}
+                    className={classNames()}
+                    selected={2 === activeTab}
                     href={`/realisations`}
                     label={"Réalisations"}
                 ></Tab>
                 <Tab
-                    className={"bg-transparent md:h-full"}
-                    selected={4 === activeTab}
+                    className={classNames()}
+                    selected={3 === activeTab}
                     href={`/ressources`}
                     label={"Ressources"}
                 ></Tab>
                 <Tab
-                    className={"bg-transparent md:h-full"}
-                    selected={5 === activeTab}
+                    className={classNames()}
+                    selected={4 === activeTab}
                     href={`/agence`}
                     label={"Agence"}
                 ></Tab>
                 <Tab
-                    className={"bg-transparent md:h-full md:hidden block"}
-                    selected={6 === activeTab}
+                    className={" md:hidden block"}
+                    selected={5 === activeTab}
                     href={`/contact`}
                     label={"Contact"}
                 ></Tab>
@@ -163,7 +157,7 @@ export const Menu = ({
                 size={"small"}
                 allowShapeTransformation={false}
                 href={"/contact"}
-                className={"m-2 hidden md:block"}
+                className={classNames("m-2 hidden md:block transition-all", !isScrolled ? "bg-primary text-on-primary shadow-lg" : "")}
                 label={"Contact"}
             />
         </div>

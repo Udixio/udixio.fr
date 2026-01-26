@@ -1,7 +1,7 @@
 import {Logo} from "@components/Logo"
-import {Button, classNames} from "@udixio/ui-react"
+import {Button} from "@udixio/ui-react"
 import {motion, useMotionValueEvent, useScroll} from "motion/react";
-import {ReactNode, useState} from "react";
+import {type ReactNode, useState} from "react";
 // ... imports
 
 export const Hero = ({children}: { children?: ReactNode }) => {
@@ -15,266 +15,221 @@ export const Hero = ({children}: { children?: ReactNode }) => {
     })
 
     return <section
-        className="relative flex flex-col items-center justify-start bg-surface overflow-hidden min-h-[92vh]">
+        className="relative flex flex-col items-center justify-center bg-surface overflow-hidden min-h-[95vh] py-20 pt-32">
 
-        {/* M3 DECORATIVE ELEMENTS */}
-        <div className="absolute inset-0 z-0 opacity-30 pointer-events-none">
+        {/* M3 DECORATIVE ELEMENTS & NOISE */}
+        <div className="absolute inset-0 z-0 opacity-40 pointer-events-none">
+            {/* Gradients */}
             <div
-                className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-primary-container rounded-full blur-[120px] mix-blend-multiply"></div>
+                className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-primary-container rounded-[100%] blur-[120px] mix-blend-multiply opacity-60"></div>
             <div
-                className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-secondary-container rounded-full blur-[100px] mix-blend-multiply"></div>
+                className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-secondary-container rounded-full blur-[100px] mix-blend-multiply opacity-40"></div>
             <div
-                className="absolute top-[40%] left-[20%] w-[300px] h-[300px] bg-tertiary-container rounded-full blur-[80px] mix-blend-multiply opacity-50"></div>
-            {/* Noise Texture Overlay */}
-            <div
-                className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150 grayscale"></div>
+                className="absolute bottom-[20%] right-[-10%] w-[500px] h-[500px] bg-tertiary-container rounded-full blur-[80px] mix-blend-multiply opacity-40"></div>
+
+            {/* INLINE NOISE FILTER */}
+            <div className="absolute inset-0 opacity-20 contrast-150 brightness-100 grayscale mix-blend-overlay">
+                <svg className="w-full h-full">
+                    <filter id="noiseFilter">
+                        <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/>
+                    </filter>
+                    <rect width="100%" height="100%" filter="url(#noiseFilter)"/>
+                </svg>
+            </div>
         </div>
 
-        {/* HEADER / LOGO - Clean & Stable */}
-        <div className="w-full max-width padding-x pt-8 z-50">
+        {/* HEADER / LOGO - Top Left */}
+        <div className="absolute top-6 left-6 md:left-12 z-50 pointer-events-none">
             <motion.div
-                className={classNames("flex items-center", isScrolled ? "fixed top-4 left-0 right-0 max-width padding-x z-50" : "relative")}
-                layout
+                className="pointer-events-auto"
+                initial={{opacity: 0, x: -20}}
+                animate={{opacity: 1, x: 0}}
+                transition={{duration: 0.8}}
             >
-                <div
-                    className={classNames("transition-all duration-300 p-3 rounded-2xl backdrop-blur-md", isScrolled ? "bg-surface-container-high/80 shadow-sm border border-outline-variant/20" : "")}>
+                <div className="p-2 md:p-0">
                     <Logo className="fill-on-surface h-8 w-auto"/>
                 </div>
             </motion.div>
         </div>
 
 
-        {/* HERO CONTENT */}
+        {/* CENTERED AGENCY CONTENT */}
         <div
-            className="relative w-full max-width padding-x mt-12 lg:mt-20 mb-32 z-30 grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-8 items-center">
+            className="relative w-full max-width padding-x z-30 flex flex-col items-center text-center gap-10 mt-16 md:mt-0">
 
-            {/* LEFT: PITCH & MESSAGE */}
-            <div className="lg:col-span-7 flex flex-col gap-8 order-2 lg:order-1">
+            {/* EDITORIAL BLOCK */}
+            <motion.div
+                className="max-w-4xl flex flex-col items-center gap-8"
+                initial={{opacity: 0, y: 30}}
+                animate={{opacity: 1, y: 0}}
+                transition={{duration: 0.7}}
+            >
+                {/* Agency Status Badge */}
+                <div
+                    className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-surface-container border border-outline-variant/30 backdrop-blur-sm text-label-large text-on-surface-variant shadow-sm">
+                    <span className="relative flex h-2.5 w-2.5">
+                            <span
+                                className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green"></span>
+                    </span>
+                    Agence Web • Hauts-de-France
+                </div>
 
-                <motion.div
-                    initial={{opacity: 0, y: 20}}
-                    animate={{opacity: 1, y: 0}}
-                    transition={{duration: 0.6}}
-                    className="flex flex-col gap-6"
-                >
-                    {/* Chip Location */}
-                    <div
-                        className="inline-flex items-center gap-2 self-start px-4 py-1.5 rounded-full bg-surface-container-highest border border-outline-variant/30 text-label-large text-on-surface-variant shadow-sm">
-                        <span className="relative flex h-2.5 w-2.5">
-                             <span
-                                 className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                             <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary"></span>
-                        </span>
-                        Agence Web • Hauts-de-France
+                {/* H1 - Massive Editorial Style */}
+                <h1 className="text-display-medium md:text-display-large font-bold tracking-tight text-on-surface leading-[1.1] md:leading-[1.1]">
+                    Une structure,<br className="hidden md:block"/>
+                    <span className="text-primary">pas juste une vitrine.</span>
+                </h1>
+
+                {/* Subtext */}
+                <p className="text-body-large text-on-surface-variant/90 max-w-2xl leading-relaxed">
+                    L'exigence au service de votre vision. Udixio conçoit des outils
+                    digitaux <strong>durables</strong> et <strong>maîtrisés</strong>. Votre projet mérite méthode et
+                    pédagogie.
+                </p>
+
+                {/* CTAs & Signature */}
+                <div className="flex flex-col items-center gap-6 mt-2">
+                    <div className="flex flex-wrap justify-center gap-4">
+                        <Button href="/contact"
+                                className="h-14 px-10 rounded-full text-label-large shadow-lg shadow-primary/10 hover:shadow-primary/20 transition-all border border-transparent hover:border-primary/20"
+                                label="Parler de votre projet"/>
+                        <Button variant="outlined" href="/realisations"
+                                className="h-14 px-8 rounded-full border-outline-variant/40 bg-surface/50 hover:bg-surface text-label-large"
+                                label="Nos dernières réalisations"/>
                     </div>
 
-                    <h1 className="text-display-small md:text-display-medium font-bold tracking-tight text-on-surface leading-[1.15]">
-                        Votre site internet,<br/>
-                        <span className="text-primary relative inline-block">
-                             mission stratégique.
-                            {/* Underline decoration */}
-                            <svg className="absolute w-full h-3 -bottom-1 left-0 text-primary-container -z-10"
-                                 viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M0 5 Q 50 10 100 5"
-                                                                                       stroke="currentColor"
-                                                                                       strokeWidth="8"
-                                                                                       fill="none"/></svg>
-                        </span>
-                    </h1>
+                    {/* Founder Signature */}
+                    <div
+                        className="flex items-center gap-3 opacity-80 hover:opacity-100 transition-opacity cursor-default">
+                        <div className="flex -space-x-3">
+                            <div
+                                className="w-10 h-10 rounded-full bg-surface-container-high border-2 border-surface flex items-center justify-center font-bold text-label-medium text-primary">J
+                            </div>
+                            <div
+                                className="w-10 h-10 rounded-full bg-surface-container-high border-2 border-surface flex items-center justify-center font-bold text-label-medium text-secondary">F
+                            </div>
+                        </div>
+                        <div className="text-left">
+                            <div className="text-label-medium font-bold text-on-surface">Interlocuteurs directs</div>
+                            <div className="text-body-small text-on-surface-variant leading-none">Joël & Florent,
+                                fondateurs
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                    <p className="text-body-large text-on-surface-variant/90 max-w-xl leading-relaxed">
-                        Udixio accompagne les TPE/PME qui cherchent **clarté** et **maîtrise**. Nous structurons votre
-                        vision pour réaliser un outil digital durable, sans zones d'ombre.
+            </motion.div>
+
+
+            {/* THE METHOD GRID (Artifacts) - Linked with Arrows */}
+            <div
+                className="w-full max-w-7xl flex flex-col md:flex-row items-center justify-center gap-6 mt-16 md:mt-24 px-4">
+
+                {/* ARTIFACT 1: STRATEGY */}
+                <motion.div
+                    className="flex-1 w-full relative group bg-surface-container border border-outline-variant/30 rounded-2xl p-6 text-left hover:bg-surface-container-high hover:border-outline-variant/50 transition-all duration-300 hover:-translate-y-1 shadow-sm hover:shadow-md h-full"
+                    initial={{opacity: 0, y: 30}}
+                    animate={{opacity: 1, y: 0}}
+                    transition={{duration: 0.5, delay: 0.2}}
+                >
+                    <div className="mb-4 flex justify-between items-start">
+                        <div className="p-3 bg-secondary-container/30 text-secondary rounded-xl">
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+                                      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                            </svg>
+                        </div>
+                        <div
+                            className="px-2 py-1 bg-surface-container-high rounded text-label-small font-medium text-on-surface-variant/70 tracking-wide font-mono">ÉTAPE
+                            1
+                        </div>
+                    </div>
+                    <h3 className="text-title-large font-bold text-on-surface mb-2">Cahier des charges</h3>
+                    <p className="text-body-medium text-on-surface-variant">
+                        Nous traduisons votre besoin en spécifications techniques claires. Rien n'est laissé au hasard.
                     </p>
 
-                    {/* Value Props Grid - Mini Cards */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-lg">
-                        <div
-                            className="flex items-center gap-3 p-3 rounded-xl bg-surface-container border border-outline-variant/20">
-                            <div className="p-2 rounded-lg bg-secondary-container text-on-secondary-container">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24"
-                                     fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
-                                     strokeLinejoin="round">
-                                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
-                                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <div className="text-title-small font-bold text-on-surface">Pédagogie</div>
-                                <div className="text-body-small text-on-surface-variant">Nous parlons votre langue</div>
-                            </div>
-                        </div>
-                        <div
-                            className="flex items-center gap-3 p-3 rounded-xl bg-surface-container border border-outline-variant/20">
-                            <div className="p-2 rounded-lg bg-tertiary-container text-on-tertiary-container">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24"
-                                     fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
-                                     strokeLinejoin="round">
-                                    <rect width="20" height="14" x="2" y="3" rx="2"/>
-                                    <line x1="8" x2="16" y1="21" y2="21"/>
-                                    <line x1="12" x2="12" y1="17" y2="21"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <div className="text-title-small font-bold text-on-surface">Maîtrise</div>
-                                <div className="text-body-small text-on-surface-variant">Architecture pensée & durable
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="flex flex-wrap gap-4 mt-4 items-center">
-                        <Button href="/contact" className="h-12 px-8 rounded-full shadow-md shadow-primary/20"
-                                label="Démarrer le projet"/>
-                        {/* Reassurance text */}
-                        <div
-                            className="flex items-center gap-3 pl-2 text-label-medium text-on-surface-variant font-medium">
-                            <div className="flex -space-x-2">
-                                <div
-                                    className="w-8 h-8 rounded-full bg-surface-container-high border-2 border-surface flex items-center justify-center font-bold text-label-small text-primary">J
-                                </div>
-                                <div
-                                    className="w-8 h-8 rounded-full bg-surface-container-high border-2 border-surface flex items-center justify-center font-bold text-label-small text-secondary">F
-                                </div>
-                            </div>
-                            <span className="leading-tight">Interlocuteurs directs,<br/>sans intermédiaire.</span>
-                        </div>
-                    </div>
-
                 </motion.div>
-            </div>
 
-            {/* RIGHT: VISUAL STAGING (Material 3 Cards Stack) */}
-            <div
-                className="lg:col-span-5 relative w-full flex items-center justify-center lg:justify-end order-1 lg:order-2">
+                {/* ARROW 1 */}
+                <div className="flex-none text-outline-variant animate-pulse">
+                    <svg className="w-6 h-6 md:w-8 md:h-8 rotate-90 md:rotate-0 transform transition-transform"
+                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+                              d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                    </svg>
+                </div>
 
-                {/* Container for the 3D-ish composition */}
+                {/* ARTIFACT 2: ARCHITECTURE (Crucial) */}
                 <motion.div
-                    className="relative w-full max-w-[420px] h-[450px]"
-                    initial={{opacity: 0, x: 50}}
-                    animate={{opacity: 1, x: 0}}
-                    transition={{duration: 0.8, delay: 0.2}}
+                    className="flex-1 w-full relative group bg-surface-container border border-outline-variant/30 rounded-2xl p-6 text-left hover:bg-surface-container-high hover:border-outline-variant/50 transition-all duration-300 hover:-translate-y-1 shadow-sm hover:shadow-md h-full"
+                    initial={{opacity: 0, y: 30}}
+                    animate={{opacity: 1, y: 0}}
+                    transition={{duration: 0.5, delay: 0.3}}
                 >
-                    {/* Visual Grid Background */}
-                    <div
-                        className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] rounded-3xl border border-outline-variant/30"></div>
-
-                    {/* CARD 1: Cadrage - Top Left Floating */}
-                    <motion.div
-                        className="absolute top-6 left-4 w-60 bg-surface-container rounded-2xl shadow-lg border border-outline-variant/40 p-4 z-10"
-                        animate={{y: [0, -8, 0]}}
-                        transition={{duration: 4, repeat: Infinity, ease: "easeInOut"}}
-                    >
-                        <div className="flex items-center gap-3 mb-3">
-                            <div
-                                className="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
-                                <span className="font-bold text-label-small">1</span>
-                            </div>
-                            <span className="text-title-small font-bold text-on-surface">Cahier des charges</span>
-                        </div>
-                        <div className="space-y-2">
-                            <div className="h-2 w-3/4 bg-surface-container-highest rounded-full"></div>
-                            <div className="h-2 w-1/2 bg-surface-container-highest rounded-full"></div>
-                        </div>
-                        <div className="mt-3 flex gap-2">
-                            <span
-                                className="px-2 py-1 rounded-md bg-green-100/50 text-green-700 font-medium flex items-center gap-1 text-label-small">
-                                <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path
-                                    strokeLinecap="round" strokeLinejoin="round" strokeWidth="3"
-                                    d="M5 13l4 4L19 7"/></svg>
-                                Besoin compris
-                            </span>
-                        </div>
-                    </motion.div>
-
-                    {/* CARD 2: Architecture/Structure - Center/Right Dominant */}
-                    <motion.div
-                        className="absolute top-32 right-0 w-64 md:w-72 bg-surface-container-low rounded-2xl shadow-xl border border-outline-variant/40 p-5 z-20"
-                        initial={{scale: 0.9}}
-                        animate={{scale: 1}}
-                        transition={{duration: 0.5, delay: 0.4}}
-                    >
-                        <div className="flex justify-between items-center mb-4">
-                            <div className="flex items-center gap-2">
-                                <div className="w-2.5 h-2.5 rounded-full bg-outline-variant/50"></div>
-                                <div className="w-2.5 h-2.5 rounded-full bg-outline-variant/50"></div>
-                            </div>
-                            <span className="text-label-small font-medium text-on-surface-variant">Architecture / Arborescence</span>
-                        </div>
-
-                        {/* Visual Sitemap Structure */}
-                        <div className="flex flex-col items-center gap-2 py-2">
-                            <div
-                                className="px-3 py-1.5 rounded-lg bg-surface border border-primary/30 shadow-sm text-label-medium font-semibold text-on-surface w-fit">Accueil
-                                Stratégique
-                            </div>
-                            <div className="h-4 w-px bg-outline-variant"></div>
-                            <div className="grid grid-cols-2 gap-4 w-full px-2">
-                                <div className="flex flex-col items-center gap-2">
-                                    <div className="h-px w-full bg-outline-variant relative top-0"></div>
-                                    <div className="h-2 w-px bg-outline-variant -mt-2"></div>
-                                    <div
-                                        className="px-2 py-1 rounded bg-surface border border-outline-variant/30 text-label-small text-on-surface-variant w-full text-center">Offre
-                                    </div>
-                                </div>
-                                <div className="flex flex-col items-center gap-2">
-                                    <div className="h-px w-full bg-outline-variant relative top-0"></div>
-                                    <div className="h-2 w-px bg-outline-variant -mt-2"></div>
-                                    <div
-                                        className="px-2 py-1 rounded bg-surface border border-outline-variant/30 text-label-small text-on-surface-variant w-full text-center">Contact
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div
-                            className="absolute -bottom-3 -right-3 bg-primary text-on-primary px-3 py-1.5 rounded-lg text-label-small font-bold shadow-lg flex items-center gap-1">
-                            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3"
-                                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    <div className="mb-4 flex justify-between items-start">
+                        <div className="p-3 bg-primary-container/30 text-primary rounded-xl">
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+                                      d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
                             </svg>
-                            Validé
                         </div>
-                    </motion.div>
-
-                    {/* CARD 3: Livraison - Bottom Left */}
-                    <motion.div
-                        className="absolute bottom-6 left-6 w-56 bg-surface-container rounded-2xl shadow-lg border border-outline-variant/40 p-4 z-30"
-                        animate={{y: [0, 6, 0]}}
-                        transition={{duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1}}
-                    >
-                        <div className="flex items-center gap-3 mb-2">
-                            <div className="p-1.5 rounded-lg bg-tertiary-container text-on-tertiary-container">
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                                          d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <div className="text-title-small font-bold text-on-surface">Vous avez les clés</div>
-                            </div>
+                        <div
+                            className="px-2 py-1 bg-surface-container-high rounded text-label-small font-medium text-on-surface-variant/70 tracking-wide font-mono">ÉTAPE
+                            2
                         </div>
-                        <p className="text-body-small text-on-surface-variant leading-snug">
-                            Propriété totale de votre site.<br/>Autonomie et transparence.
-                        </p>
-                    </motion.div>
+                    </div>
+                    <h3 className="text-title-large font-bold text-on-surface mb-2">Architecture</h3>
+                    <p className="text-body-medium text-on-surface-variant">
+                        Structure, UX et SEO. Tout est cartographié avant la moindre ligne de code.
+                    </p>
 
                 </motion.div>
+
+                {/* ARROW 2 */}
+                <div className="flex-none text-outline-variant animate-pulse">
+                    <svg className="w-6 h-6 md:w-8 md:h-8 rotate-90 md:rotate-0 transform transition-transform"
+                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+                              d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                    </svg>
+                </div>
+
+                {/* ARTIFACT 3: OWNERSHIP */}
+                <motion.div
+                    className="flex-1 w-full relative group bg-surface-container border border-outline-variant/30 rounded-2xl p-6 text-left hover:bg-surface-container-high hover:border-outline-variant/50 transition-all duration-300 hover:-translate-y-1 shadow-sm hover:shadow-md h-full"
+                    initial={{opacity: 0, y: 30}}
+                    animate={{opacity: 1, y: 0}}
+                    transition={{duration: 0.5, delay: 0.4}}
+                >
+                    <div className="mb-4 flex justify-between items-start">
+                        <div className="p-3 bg-tertiary-container/30 text-tertiary rounded-xl">
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+                                      d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
+                            </svg>
+                        </div>
+                        <div
+                            className="px-2 py-1 bg-tertiary text-on-tertiary rounded text-label-small font-bold tracking-wide font-mono">FINAL
+                        </div>
+                    </div>
+                    <h3 className="text-title-large font-bold text-on-surface mb-2">Clés en main</h3>
+                    <p className="text-body-medium text-on-surface-variant">
+                        Vous êtes propriétaire à 100%. Code source, accès serveur, tout est à vous.
+                    </p>
+
+                </motion.div>
+
             </div>
 
         </div>
 
-
-        <div className={"absolute bottom-0 left-0 w-full z-20"}>
-            <svg preserveAspectRatio="none" className="z-10 fill-surface-container-lowest w-screen"
-                 width="850"
-                 height="50"
-                 viewBox="0 0 850 72"
-                 xmlns="http://www.w3.org/2000/svg">
-                <path fillRule="evenodd" clipRule="evenodd"
-                      d="M850 72C850 72 659.721 0 425 0C190.279 0 0 72 0 72H425H850Z"/>
-            </svg>
+        {/* Separator / Extension */}
+        <div className={"absolute bottom-0 left-0 w-full z-20 pointer-events-none"}>
             {children}
-
+            {/* Optional fade at bottom */}
+            <div className="hidden h-24 bg-gradient-to-t from-surface to-transparent w-full"></div>
         </div>
 
     </section>
