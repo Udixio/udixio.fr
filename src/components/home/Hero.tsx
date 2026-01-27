@@ -20,34 +20,41 @@ export const Hero = ({children}: { children?: ReactNode }) => {
         {/* M3 DECORATIVE ELEMENTS - SOFTENED */}
         {/* M3 DECORATIVE ELEMENTS - STRUCTURED & PRESENCE */}
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-            
+
             {/* 1. STRUCTURAL GRID PATTERN (Adds depth without "noise") */}
-            <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]" 
-                 style={{ backgroundImage: `radial-gradient(var(--on-surface-variant) 1px, transparent 1px)`, backgroundSize: '32px 32px' }}>
+            <div className="absolute inset-0 opacity-50"
+                 style={{
+                     backgroundImage: `radial-gradient(var(--color-on-surface-variant) 1px, transparent 1px)`,
+                     backgroundSize: '32px 32px'
+                 }}>
             </div>
-            
-             {/* 2. GRADIENT BLOBS - Reinforced for Light Mode */}
-             {/* Top Center - Primary - Light glow */}
-             <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-primary-container/60 rounded-[100%] blur-[120px] opacity-50 mix-blend-normal"></div>
-             
-             {/* Bottom Left - Secondary - Soft base */}
-             <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-secondary-container/50 rounded-full blur-[100px] opacity-40 mix-blend-normal"></div>
-             
-             {/* Center Right - Tertiary - Balancing warmth */}
-             <div className="absolute top-[30%] right-[-10%] w-[500px] h-[500px] bg-tertiary-container/40 rounded-full blur-[100px] opacity-40 mix-blend-normal"></div>
 
-             {/* 3. CENTER GLOW - Highlights the H1 directly */}
-             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-surface rounded-full blur-[80px] opacity-60 mix-blend-overlay"></div>
+            {/* 2. GRADIENT BLOBS - Reinforced for Light Mode */}
+            {/* Top Center - Primary - Light glow */}
+            <div
+                className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-primary-container/60 rounded-[100%] blur-[120px] opacity-50 mix-blend-normal"></div>
 
-             {/* 4. TEXTURE NOISE - Grainy feel */}
-             <div className="absolute inset-0 opacity-[0.04] mix-blend-overlay">
+            {/* Bottom Left - Secondary - Soft base */}
+            <div
+                className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-secondary-container/50 rounded-full blur-[100px] opacity-40 mix-blend-normal"></div>
+
+            {/* Center Right - Tertiary - Balancing warmth */}
+            <div
+                className="absolute top-[30%] right-[-10%] w-[500px] h-[500px] bg-tertiary-container/40 rounded-full blur-[100px] opacity-40 mix-blend-normal"></div>
+
+            {/* 3. CENTER GLOW - Highlights the H1 directly */}
+            <div
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-surface rounded-full blur-[80px] opacity-60 mix-blend-overlay"></div>
+
+            {/* 4. TEXTURE NOISE - Grainy feel */}
+            <div className="absolute inset-0 opacity-50 mix-blend-overlay">
                 <svg className="w-full h-full">
                     <filter id="noiseFilter">
                         <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/>
                     </filter>
-                    <rect width="100%" height="100%" filter="url(#noiseFilter)" />
+                    <rect width="100%" height="100%" filter="url(#noiseFilter)"/>
                 </svg>
-             </div>
+            </div>
         </div>
 
         {/* HEADER / LOGO - Top Left */}
