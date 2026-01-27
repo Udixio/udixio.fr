@@ -1,7 +1,7 @@
 ---
 import Layout from "@layouts/Layout.astro";
 import {Button} from "@udixio/ui-react";
-import {Hero} from "@components/home/hero";
+import {Hero} from "@components/home/Hero.tsx";
 import Realisations from "@components/Realisations.astro";
 import {FeaturesGrid} from "@components/home/modern/FeaturesGrid";
 // import { ValueProp } from "@components/home/modern/ValueProp";
@@ -13,29 +13,29 @@ import {FaqAccordion} from "@components/home/modern/FaqAccordion";
 
 const faqItems = [
     {
-        question: "Quel budget pour un site sur-mesure ?",
+        question: "Quel budget prévoir pour un site sur-mesure ?",
         answer:
-            "Nous travaillons sur devis détaillé. Après un cadrage offert, vous recevez une proposition chiffrée (options claires). Vous savez où va chaque euro : zéro surprise.",
+            "Après un cadrage offert, nous remettons un devis détaillé avec inclus/exclus et options. Vous comprenez ce qui est prévu avant de lancer la production.",
     },
     {
-        question: "Pourquoi travailler avec une petite équipe (Le Duo) ?",
+        question: "Comment suivez-vous l'avancement ?",
         answer:
-            "Pour l'agilité et la responsabilité. Pas de téléphone arabe : ceux qui vous conseillent sont ceux qui codent. Votre projet est notre priorité absolue, pas un numéro de dossier.",
+            "Vous avez accès au suivi du projet et à des points réguliers. Chaque décision est expliquée simplement pour garder la main.",
     },
     {
-        question: "Est-ce que je serai propriétaire de mon site ?",
+        question: "Serai-je propriétaire de mon site ?",
         answer:
-            "Oui, à 100%. Code source, nom de domaine, hébergement : tout est à vous. Nous ne créons aucune dépendance technique artificielle (pas d'abonnement caché).",
+            "Oui. Code source, accès et données vous appartiennent. Nous privilégions des technologies ouvertes et une documentation claire.",
     },
     {
-        question: "Comment éviter que les délais dérapent ?",
+        question: "Comment gérez-vous les délais ?",
         answer:
-            "Tout se joue au cadrage. Nous fixons un planning réaliste avec des jalons de validation. Si un imprévu survient, on en discute tout de suite. Transparence totale.",
+            "Le planning est défini dès le cadrage avec des jalons de validation. En cas d'ajustement, on en parle tout de suite.",
     },
     {
-        question: "Et après la mise en ligne ?",
+        question: "Que se passe-t-il après la mise en ligne ?",
         answer:
-            "Nous incluons une période de support réactif (hypercare) pour démarrer sereinement. Ensuite, formation admin incluse pour que vous soyez autonome.",
+            "Une phase d'hypercare est prévue pour le démarrage, puis une formation pour vous rendre autonome. La maintenance évolutive reste possible.",
     },
 ];
 ---
@@ -44,7 +44,7 @@ const faqItems = [
         seo={{
             title: "Clarté & Maîtrise pour votre site web • Udixio",
             description:
-                "Udixio est l'agence web qui structure vos projets digitaux : méthode claire, transparence totale et zéro dépendance technique.",
+                "Udixio structure vos projets digitaux : méthode claire, transparence, sobriété et autonomie durable.",
         }}
         background={false}
 >
@@ -57,15 +57,15 @@ const faqItems = [
     <section class="section">
         <div class="max-width padding-x">
             <h2 class="text-display-small text-center md:text-left">
-                Les vrais freins des projets web
+                Les freins qui ralentissent vos projets web
             </h2>
             <div
                     class="text-body-large mt-6 max-w-prose space-y-4 text-center md:text-left"
             >
                 <p>
-                    Trop de projets web finissent en frustration : budget dépassé, délais
-                    explosés, ou site impossible à modifier soi-même. Le problème n'est
-                    pas toujours la technique, mais le <strong>manque de méthode</strong>.
+                    Beaucoup de projets échouent par manque de clarté : périmètre qui
+                    s'étire, décisions floues, et autonomie limitée. Le frein principal
+                    n'est pas la technique, mais l'absence de méthode partagée.
                 </p>
             </div>
 
@@ -84,10 +84,10 @@ const faqItems = [
     <section class="section bg-surface-container-lowest py-24">
         <div class="max-width padding-x">
             <h2 class="text-display-small text-center mb-8">
-                Notre réponse : du tac au tac
+                Notre réponse : claire et structurée
             </h2>
             <p class="text-body-large max-w-2xl mx-auto text-center mb-12">
-                Survolez les cartes pour découvrir nos solutions structurelles.
+                Survolez les cartes pour voir comment nous répondons, étape par étape.
             </p>
 
             <ProblemSolutionSchema client:visible/>
@@ -97,7 +97,7 @@ const faqItems = [
     <section class="section">
         <div class="max-width padding-x">
             <h2 class="text-display-small text-center md:text-left mb-12">
-                Nos preuves tangibles
+                Nos preuves concrètes
             </h2>
             <ProofsGrid client:visible/>
 
@@ -105,7 +105,7 @@ const faqItems = [
                 <Button
                         className="w-fit"
                         href="/realisations"
-                        label="Explorer nos réalisations"
+                        label="Voir des exemples de réalisations"
                 />
             </div>
         </div>
@@ -114,10 +114,10 @@ const faqItems = [
     <section class="section bg-surface-container-lowest py-24">
         <div class="max-width padding-x">
             <div class="mb-12 text-center md:text-left">
-                <h2 class="text-display-small">Un processus rodé</h2>
+                <h2 class="text-display-small">Un processus clair</h2>
                 <p class="text-body-large mt-4 max-w-prose">
-                    5 étapes, 0 surprise. Une méthodologie qui a fait ses preuves pour
-                    livrer à temps et en qualité.
+                    5 étapes, une feuille de route lisible. La méthode sécurise le
+                    planning et la qualité sans promesses irréalistes.
                 </p>
             </div>
 
@@ -155,16 +155,16 @@ const faqItems = [
                     class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6"
             >
                 <div class="max-w-2xl">
-                    <h2 class="text-display-small mb-4">Guides & Conseils</h2>
+                    <h2 class="text-display-small mb-4">Engagements clairs</h2>
                     <p class="text-body-large text-on-surface-variant">
-                        Pour vous aider à mûrir votre projet avant même de signer. Du
-                        contenu actionnable, offert par la maison.
+                        Des règles simples pour éviter les zones d'ombre et garder le
+                        contrôle à chaque étape.
                     </p>
                 </div>
                 <Button
                         variant="outlined"
-                        href="/blog"
-                        label="Voir tous les articles"
+                        href="/services"
+                        label="Voir nos services"
                 />
             </div>
 
@@ -172,22 +172,22 @@ const faqItems = [
                 {
                     [
                         {
-                            title: "Le guide du cahier des charges",
-                            cat: "Méthode",
-                            desc: "Le modèle complet pour ne rien oublier lors de la définition de votre besoin.",
-                            href: "#",
+                            title: "Devis détaillé",
+                            cat: "Transparence",
+                            desc: "Inclus et exclus clairement listés, options chiffrées dès le départ.",
+                            href: "/services",
                         },
                         {
-                            title: "Refonte : les pièges à éviter",
-                            cat: "Stratégie",
-                            desc: "Pourquoi 50% des refontes échouent (et comment faire partie des réussites).",
-                            href: "#",
+                            title: "Suivi partagé",
+                            cat: "Clarté",
+                            desc: "Accès au tableau de bord et points réguliers pour décider ensemble.",
+                            href: "/methode",
                         },
                         {
-                            title: "SEO : Comprendre les bases",
-                            cat: "Technique",
-                            desc: "Le jargon du référencement expliqué aux dirigeants.",
-                            href: "#",
+                            title: "Autonomie client",
+                            cat: "Propriété",
+                            desc: "Code source, accès et formation pour reprendre la main après livraison.",
+                            href: "/methode",
                         },
                     ].map((resource) => (
                             <a
@@ -216,16 +216,16 @@ const faqItems = [
                     class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6"
             >
                 <div class="max-w-2xl">
-                    <h2 class="text-display-small mb-4">Guides & Conseils</h2>
+                    <h2 class="text-display-small mb-4">Ressources pour cadrer</h2>
                     <p class="text-body-large text-on-surface-variant">
-                        Pour vous aider à mûrir votre projet avant même de signer. Du
-                        contenu actionnable, offert par la maison.
+                        Des contenus courts et utiles pour avancer sereinement, avant
+                        même de lancer votre projet.
                     </p>
                 </div>
                 <Button
                         variant="outlined"
                         href="/blog"
-                        label="Voir tous les articles"
+                        label="Voir toutes les ressources"
                 />
             </div>
 
@@ -233,22 +233,22 @@ const faqItems = [
                 {
                     [
                         {
-                            title: "Le guide du cahier des charges",
+                            title: "Cadrer votre besoin",
                             cat: "Méthode",
-                            desc: "Le modèle complet pour ne rien oublier lors de la définition de votre besoin.",
-                            href: "#",
+                            desc: "Les questions essentielles pour clarifier objectifs, périmètre et priorités.",
+                            href: "/blog",
                         },
                         {
-                            title: "Refonte : les pièges à éviter",
+                            title: "Refonte sereine",
                             cat: "Stratégie",
-                            desc: "Pourquoi 50% des refontes échouent (et comment faire partie des réussites).",
-                            href: "#",
+                            desc: "Les points de vigilance pour éviter les dérives et garder un cap clair.",
+                            href: "/blog",
                         },
                         {
-                            title: "SEO : Comprendre les bases",
-                            cat: "Technique",
-                            desc: "Le jargon du référencement expliqué aux dirigeants.",
-                            href: "#",
+                            title: "SEO expliqué simplement",
+                            cat: "Clarté",
+                            desc: "Les bases du référencement, sans jargon, pour prendre les bonnes décisions.",
+                            href: "/blog",
                         },
                     ].map((resource) => (
                             <a
@@ -297,8 +297,8 @@ const faqItems = [
                         </h2>
                         <p class="text-body-large opacity-90 mb-8 max-w-lg">
                             Chaque projet commence par une conversation. Racontez-nous vos
-                            enjeux, nous vous dirons franchement si nous sommes l'agence qu'il
-                            vous faut (et sinon, on vous le dira aussi).
+                            enjeux, nous vous dirons clairement si nous sommes l'agence qu'il
+                            vous faut (et sinon, on vous l'expliquera).
                         </p>
                     </div>
                     <div

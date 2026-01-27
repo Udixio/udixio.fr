@@ -1,4 +1,4 @@
-import {defineConfig} from 'astro/config';
+import {defineConfig, fontProviders} from "astro/config";
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import robotsTxt from 'astro-robots-txt';
@@ -16,7 +16,30 @@ import {vitePlugin} from "@udixio/theme";
 export default defineConfig({
     site: "https://www.udixio.fr/",
     compressHTML: true,
-    experimental: {},
+    experimental: {
+        fonts: [
+            {
+                provider: fontProviders.local(),
+                name: "Vogun",
+                cssVariable: "--font-vogun",
+                options: {
+                    variants: [
+                        {
+                            weight: 500,
+                            style: "normal",
+                            src: ["./src/assets/fonts/vogun/Vogun-Medium.woff2"]
+                        },
+                        {
+                            weight: 500,
+                            style: "italic",
+                            src: ["./src/assets/fonts/vogun/Vogun-MediumItalic.woff2"]
+                        }
+                    ]
+                }
+            },
+
+        ]
+    },
     output: 'static',
     integrations: [react(), sitemap(), robotsTxt(), compress(), compressor(), mdx(), customIntegration()],
     vite: {

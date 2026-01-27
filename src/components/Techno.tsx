@@ -1,5 +1,5 @@
 import {classNames, Icon} from "@udixio/ui-react";
-import {type IconDefinition} from "@fortawesome/pro-light-svg-icons";
+import {type IconDefinition} from "@fortawesome/free-brands-svg-icons";
 import {useRef} from "react";
 
 export type TechnoProps = {

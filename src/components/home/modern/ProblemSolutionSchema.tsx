@@ -3,27 +3,27 @@ import { motion } from "motion/react";
 const schemaItems = [
     {
         id: "cadrage",
-        problem: "Flou & Dérives",
-        solution: "Cadrage Stratégique",
-        desc: "Objectifs clairs, périmètre blindé, planning fixe.",
+        problem: "Objectifs flous",
+        solution: "Cadrage & Clarté",
+        desc: "Atelier initial, périmètre validé, plan d'action partagé.",
     },
     {
         id: "transparence",
-        problem: "Opacité",
-        solution: "Transparence",
-        desc: "Aucun coût caché, vous validez chaque étape.",
+        problem: "Manque de visibilité",
+        solution: "Transparence & Pédagogie",
+        desc: "Suivi en temps réel, décisions expliquées, budget lisible.",
     },
     {
         id: "expertise",
-        problem: "Bricolage",
-        solution: "Expertise Durable",
-        desc: "Code propre, performance GreenIT, accessibilité.",
+        problem: "Site fragile",
+        solution: "Expertise & Fiabilité",
+        desc: "Technos ouvertes, performance mesurée, accessibilité soignée.",
     },
     {
         id: "independance",
         problem: "Dépendance",
-        solution: "Indépendance",
-        desc: "Vous êtes propriétaire à 100%, formation incluse.",
+        solution: "Autonomie",
+        desc: "Code livré, documentation claire, formation incluse.",
     }
 ];
 

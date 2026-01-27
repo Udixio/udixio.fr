@@ -5,29 +5,29 @@ import { classNames } from "@udixio/ui-react";
 // Content for the 5-step process
 const content = [
   {
-    title: "1. Exploration & Diagnostic",
+    title: "1. Diagnostic & Cadrage",
     description:
-      "On ne vend pas un template, on résout un problème. Nous commençons par un audit de vos enjeux business pour viser juste.",
+      "Audit initial, objectifs, contraintes et priorités. On clarifie avant de produire.",
   },
   {
-    title: "2. Cadrage & Plan d'action",
+    title: "2. Conception & Plan d'action",
     description:
-      "Feuille de route claire. Périmètre, budget, et délais sont figés et validés ensemble. Vous savez exactement où on va.",
+      "UX, contenus, maquettes. Le périmètre et le planning sont validés ensemble.",
   },
   {
-    title: "3. Design & Prototype",
+    title: "3. Production progressive",
     description:
-      "Co-conception. Vous validez l'ergonomie et le style sur des maquettes interactives. Zéro surprise visuelle à l'arrivée.",
+      "Développement par étapes, accès de suivi et validations régulières.",
   },
   {
-    title: "4. Dév. Transparent",
+    title: "4. Recette & mise en ligne",
     description:
-      "Vous suivez l'avancée (accès staging). Nous construisons votre outil avec des technos modernes et durables (Astro, React).",
+      "Tests, optimisation et déploiement contrôlé pour une mise en ligne sereine.",
   },
     {
-        title: "5. Livraison & Autonomie",
+        title: "5. Hypercare & autonomie",
         description:
-            "Clés en main. Formation complète, code source livré. Vous êtes maître à bord (et on reste dispo pour le support).",
+            "Support de démarrage, documentation et formation pour vous rendre autonome.",
     },
 ];
 

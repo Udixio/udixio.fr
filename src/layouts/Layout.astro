@@ -15,6 +15,7 @@ import {ClientRouter} from 'astro:transitions';
 import {SmoothScroll} from "@udixio/ui-react";
 
 import {BackgroundColor} from "@components/three/BackgroundColor";
+import Font from "astro/components/Font.astro";
 
 export interface Link extends HTMLLinkElement {
     prefetch: boolean;
@@ -138,16 +139,17 @@ const seoDefault: SEOProps = {
 <head>
 
     <script>
-        // document.addEventListener("astro:page-load", () => {
-        //     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        //         document.documentElement.classList.add('dark');
-        //     }
-        // });
+        document.addEventListener("astro:page-load", () => {
+            // if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            //     document.documentElement.classList.add('dark');
+            // }
+        });
     </script>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width"/>
     <link rel="icon" type="image/png" href="/favicon.svg"/>
 
+    <Font cssVariable="--font-vogun" preload/>
 
     <SEO {...seoDefault}/>
     <ClientRouter/>

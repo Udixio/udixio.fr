@@ -1,5 +1,5 @@
 import {Button, Card, classNames, Divider, IconButton} from "@udixio/ui-react";
-import {faArrowRight, faLink, faXmark} from "@fortawesome/pro-regular-svg-icons";
+import {faArrowRight, faLink, faXmark} from "@fortawesome/free-solid-svg-icons";
 import type {CollectionEntry} from "astro:content";
 import type {ReactNode} from "react";
 import {useState} from "react";

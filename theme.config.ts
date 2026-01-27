@@ -2,11 +2,16 @@ import {defineConfig} from "@udixio/ui-react";
 
 
 export default defineConfig({
-    sourceColor: '#5dce8c',
+    sourceColor: '#00816d',
     palettes: {
         success: "#4CAF50",
         warning: "#FFA726",
         info: "#2196F3"
+    },
+    fontFamily: {
+        expressive: [
+            'var(--font-vogun)'
+        ],
     },
     fontStyles: {
         // display: {

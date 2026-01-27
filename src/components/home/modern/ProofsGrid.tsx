@@ -2,24 +2,24 @@ import { motion } from "motion/react";
 
 const proofs = [
     {
-        title: "Responsabilité Totale",
-        description: "Un duo fondateur engagé. Pas de junior caché en stage sur votre projet critique - vous parlez à des seniors.",
-        badge: "Garantie"
+        title: "Indicateurs techniques mesurés",
+        description: "Performance, SEO et accessibilité sont suivis et partagés pour piloter dans la durée.",
+        badge: "Mesure"
     },
     {
-        title: "Udixio UI System",
-        description: "Notre librairie de composants interne, testée et optimisée. Garantit cohérence visuelle et développement accéléré.",
-        badge: "Asset"
+        title: "Sobriété & éco-conception",
+        description: "Choix techniques raisonnés, code léger et poids maîtrisé pour un site efficace.",
+        badge: "Durabilité"
     },
     {
-        title: "NetSimpler CMS",
-        description: "L'administration sans douleur. Notre interface simplifie votre gestion de contenu sans vous enfermer dans du code propriétaire.",
-        badge: "Product"
+        title: "Clés & documentation",
+        description: "Code source, accès et documentation remis. Formation incluse pour l'autonomie.",
+        badge: "Autonomie"
     },
     {
-        title: "Performance 100/100",
-        description: "Scores Lighthouse vérifiables. Un site ultra-rapide convertit mieux et plaît aux algorithmes de Google.",
-        badge: "Metric"
+        title: "Réalisations internes",
+        description: "Udixio UI, templates métiers et CMS maison illustrent notre méthode et notre rigueur.",
+        badge: "Réalisations"
     }
 ];
 

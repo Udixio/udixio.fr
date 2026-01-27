@@ -1,5 +1,4 @@
 import {classNames, Icon} from "@udixio/ui-react";
-import {type IconDefinition} from "@fortawesome/pro-light-svg-icons";
 
 import {useRef, useState} from "react";
 import {useMotionValueEvent, useScroll} from "motion/react";
@@ -12,7 +11,7 @@ export const Line = ({
                          visible,
                      }: {
     nextTheme?: string;
-    icon?: IconDefinition;
+    icon?: Icon;
     isFirst?: boolean;
     isLast?: boolean;
     visible?: boolean;
