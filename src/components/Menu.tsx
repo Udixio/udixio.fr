@@ -1,24 +1,19 @@
 import {Button, classNames, Tab, Tabs} from "@udixio/ui-react";
 import React, {useEffect, useLayoutEffect, useState} from "react";
+import {Card} from "@components/Card.tsx";
 
 
 export const Menu = ({
                          setFabVisible,
                          fabVisible,
+                         isScrolled
                      }: {
     fabVisible: boolean;
+    isScrolled: boolean
     setFabVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
     const [pathName, setPathName] = useState<string | null>(null);
-    const [isScrolled, setIsScrolled] = useState(false);
 
-    useEffect(() => {
-        const handleScroll = () => {
-            setIsScrolled(window.scrollY > 50);
-        };
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
 
     const getCurrentTab = () => {
         if (pathName === "/") {
@@ -87,13 +82,13 @@ export const Menu = ({
 
     return (
         pathName !== null &&
-        <div
+        <Card
+            style={{cornerShape: "superellipse(1)"}}
             className={classNames(
-                "fixed max-w-full flex items-center transition-all duration-500 ease-in-out left-1/2 -translate-x-1/2 z-50 mx-2 overflow-hidden rounded-full",
-                // Dynamic Styles based on Scroll
-                isScrolled
-                    ? "top-6 backdrop-blur-lg border border-surface-container-highest bg-surface-container-low/90 shadow-sm py-1 px-1"
-                    : "top-8 border border-transparent bg-transparent py-2 px-4", // Transparent & slightly lower/larger when at top
+                " max-w-full rounded-full flex items-center transition-all duration-500 ease-in-out z-50 mx-2 overflow-hidden",
+                {
+                    "bg-transparent backdrop-blur-none": !isScrolled
+                },
                 {"opacity-0": activeTab === null && pathName !== "/"},
             )}
         >
@@ -132,12 +127,12 @@ export const Menu = ({
                     href={`/realisations`}
                     label={"Réalisations"}
                 ></Tab>
-                <Tab
-                    className={classNames()}
-                    selected={3 === activeTab}
-                    href={`/ressources`}
-                    label={"Ressources"}
-                ></Tab>
+                {/*<Tab*/}
+                {/*    className={classNames()}*/}
+                {/*    selected={3 === activeTab}*/}
+                {/*    href={`/ressources`}*/}
+                {/*    label={"Ressources"}*/}
+                {/*></Tab>*/}
                 <Tab
                     className={classNames()}
                     selected={4 === activeTab}
@@ -153,13 +148,15 @@ export const Menu = ({
 
 
             </Tabs>
-            <Button
-                size={"small"}
-                allowShapeTransformation={false}
-                href={"/contact"}
-                className={classNames("m-2 hidden md:block transition-all", !isScrolled ? "bg-primary text-on-primary shadow-lg" : "")}
-                label={"Contact"}
-            />
-        </div>
+            {
+                isScrolled && <Button
+                    size={"small"}
+                    allowShapeTransformation={false}
+                    href={"/contact"}
+                    className={classNames("m-2 hidden md:block transition-all", !isScrolled ? "bg-primary text-on-primary shadow-lg" : "")}
+                    label={"Contact"}
+                />
+            }
+        </Card>
     );
 };

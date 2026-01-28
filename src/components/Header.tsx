@@ -1,7 +1,6 @@
 import {faComment} from "@fortawesome/free-solid-svg-icons";
 import {classNames, Fab} from "@udixio/ui-react";
 import {useEffect, useRef, useState} from "react";
-import {Menu} from "@components/Menu.tsx";
 
 import {motion} from "motion/react";
 
@@ -75,8 +74,9 @@ export const Header = () => {
             transition={{duration: 0.5}}
             className={theme}
         >
-            <Menu setFabVisible={setFabVisible} fabVisible={fabVisible}/>
+
             <Fab
+                variant={"tertiary"}
                 onMouseEnter={() => setFabIsHovered(true)}
                 onMouseLeave={() => setFabIsHovered(false)}
                 title={"Contacter Joël VIGREUX"}
@@ -87,7 +87,7 @@ export const Header = () => {
                 className={classNames("!fixed bottom-8 right-8 z-50", {
                     "opacity-0": !fabVisible,
                 })}
-                variant={"primary"}
+
                 isExtended={isMenuVisible || fabIsHovered}
             ></Fab>
         </motion.div>

@@ -1,6 +1,10 @@
 ---
 import Layout from "@layouts/Layout.astro";
 import {Button} from "@udixio/ui-react";
+
+export prerender = false
+
+return Astro.redirect('/')
 ---
 
 <Layout seo={{

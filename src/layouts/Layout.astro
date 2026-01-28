@@ -12,7 +12,7 @@ import "@fontsource/montserrat/700.css";
 import "@fontsource/montserrat/600.css";
 import defaultImage from "@assets/images/img.png";
 import {ClientRouter} from 'astro:transitions';
-import {SmoothScroll} from "@udixio/ui-react";
+import {SmoothScroll, animateOnScroll} from "@udixio/ui-react";
 
 import {BackgroundColor} from "@components/three/BackgroundColor";
 import Font from "astro/components/Font.astro";
@@ -156,7 +156,7 @@ const seoDefault: SEOProps = {
 
 
 </head>
-<body class="bg-surface  transition-all duration-500">
+<body>
 {menu &&
         <Header/>}
 
@@ -188,11 +188,12 @@ const seoDefault: SEOProps = {
 
 <script>
 
-    import AOS from 'aos'
+    import {animateOnScroll} from "@udixio/ui-react";
 
     document.addEventListener('astro:page-load', () => {
-        AOS.init()
+        animateOnScroll()
     })
 </script>
+
 </body>
 </html>

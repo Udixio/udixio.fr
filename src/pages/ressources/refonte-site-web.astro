@@ -3,6 +3,10 @@ import Layout from "@layouts/Layout.astro";
 import {Button} from "@udixio/ui-react";
 import Faq from "@components/sections/Faq.astro";
 
+export prerender = false
+
+return Astro.redirect('/')
+
 const faqItems = [
     {
         question: "Quand faut-il refondre un site ?",

@@ -7,7 +7,7 @@ html {
 }
 
 body {
-    @apply bg-surface;
+    @apply bg-surface-bright;
 
     margin: 0;
     overflow-x: clip;
