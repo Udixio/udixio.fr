@@ -1,63 +1,349 @@
 import {Logo} from "@components/Logo.tsx"
-import {motion} from "motion/react";
-import {type ReactNode, useState} from "react";
+import {motion, type MotionValue, useAnimationFrame, useMotionTemplate, useMotionValue, useSpring} from "motion/react";
+import {type ReactNode, useEffect, useRef, useState} from "react";
 import {SectionPadding} from "@components/SectionPadding.tsx";
 import {Menu} from "@components/Menu.tsx";
 import {createPortal} from "react-dom";
-// ... imports
+
+// -- Repulsive Shape Component --
+// -- Repulsive Shape Component --
+// Helper to create a smooth closed path from points (Catmull-Rom to Cubic Bezier)
+function spline(points: {x: number, y: number}[]) {
+  const n = points.length;
+  let d = "";
+  for (let i = 0; i < n; i++) {
+    const p0 = points[(i - 1 + n) % n];
+    const p1 = points[i];
+    const p2 = points[(i + 1) % n];
+    const p3 = points[(i + 2) % n];
+
+    const cp1x = p1.x + (p2.x - p0.x) / 6;
+    const cp1y = p1.y + (p2.y - p0.y) / 6;
+
+    const cp2x = p2.x - (p3.x - p1.x) / 6;
+    const cp2y = p2.y - (p3.y - p1.y) / 6;
+
+    if (i === 0) d += `M ${p1.x} ${p1.y} `;
+    d += `C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p2.x} ${p2.y} `;
+  }
+  return d + "Z";
+}
+
+const RepulsiveShape = ({
+                            shape,
+                            mouseX,
+                            mouseY
+                        }: {
+    shape: {
+        id: number;
+        width: string;
+        height: string;
+        top: string;
+        left: string;
+        background: string;
+        borderRadius: string[];
+        duration: number;
+    };
+    mouseX: MotionValue<number>;
+    mouseY: MotionValue<number>;
+}) => {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const clipPathRef = useRef<SVGPathElement>(null);
+    const uniqueId = `blob-${shape.id}`;
+
+    // Physics / Drift state
+    const x = useMotionValue(0);
+    const y = useMotionValue(0);
+    const velocity = useRef({ x: 0, y: 0 });
+
+    // Blob Vertices State
+    // 12 points for organic, complex feel
+    const numPoints = 12; // High complexity
+    const pointsRef = useRef(
+        Array.from({ length: numPoints }).map((_, i) => ({
+            angle: (Math.PI * 2 * i) / numPoints,
+            // Initial irregularity: Radius is NOT uniform. 
+            // We set a base offset so even without motion, it's not a circle.
+            baseRadiusOffset: -15 + Math.random() * 30, // +/- 15 units variance
+            
+            // Motion properties (Very slow)
+            noiseOffset: Math.random() * 100,
+            speed: 0.0001 + Math.random() * 0.00005, // Ultra slow morphing (>1s feel)
+            amp: 5 + Math.random() * 10, // Significant morph amplitude
+            
+            currentX: 0, 
+            currentY: 0
+        }))
+    );
+
+    useAnimationFrame((time) => {
+        if (!containerRef.current || !clipPathRef.current) return;
+
+        // --- 1. GLOBAL DRIFT PHYSICS ---
+        const mx = mouseX.get();
+        const my = mouseY.get();
+
+        const rect = containerRef.current.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        const dx = mx - centerX;
+        const dy = my - centerY;
+        const distToMouse = Math.sqrt(dx * dx + dy * dy);
+        
+        const driftRadius = 600; 
+        
+        if (distToMouse < driftRadius) {
+             const force = (1 - distToMouse / driftRadius) * 0.4; 
+             const dirX = -(dx / distToMouse || 0);
+             const dirY = -(dy / distToMouse || 0);
+             velocity.current.x += dirX * force;
+             velocity.current.y += dirY * force;
+        }
+
+        const margin = 0;
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        const wallForce = 0.8;
+        
+        if (centerX < margin) velocity.current.x += wallForce;
+        if (centerX > vw - margin) velocity.current.x -= wallForce;
+        if (centerY < margin) velocity.current.y += wallForce;
+        if (centerY > vh - margin) velocity.current.y -= wallForce;
+
+        velocity.current.x *= 0.94;
+        velocity.current.y *= 0.94;
+        
+        x.set(x.get() + velocity.current.x);
+        y.set(y.get() + velocity.current.y);
+
+
+        // --- 2. VERTEX DEFORMATION ---
+        // Internal logic uses a 200x200 coordinate system
+        const centerSize = 100;
+        
+        const localMouseX = mx - rect.left;
+        const localMouseY = my - rect.top;
+        const scaleFactorX = 200 / rect.width;
+        const scaleFactorY = 200 / rect.height;
+        const svgMx = localMouseX * scaleFactorX;
+        const svgMy = localMouseY * scaleFactorY;
+        
+        const dxCenter = svgMx - 100;
+        const dyCenter = svgMy - 100;
+        const distCenter = Math.sqrt(dxCenter * dxCenter + dyCenter * dyCenter);
+        
+        // Volume reaction
+        const pressExpansion = Math.max(0, (120 - distCenter) * 0.25); 
+
+        const renderPoints = pointsRef.current.map((pt, i) => {
+            // Noise Motion
+            const t = time;
+            // Complex multi-sine noise
+            const noise = 
+                Math.sin(t * pt.speed + pt.noiseOffset) * pt.amp + 
+                Math.cos(t * pt.speed * 0.5 + pt.noiseOffset) * (pt.amp * 0.5);
+            
+            // Radius breakdown:
+            // 75 (Base) + Offset (Initial Irregularity) + Noise (Motion) + Press (Expansion)
+            const r = 75 + pt.baseRadiusOffset + noise + pressExpansion;
+
+            let px = 100 + Math.cos(pt.angle) * r;
+            let py = 100 + Math.sin(pt.angle) * r;
+
+            // Local Point Repulsion
+            const vecX = px - svgMx;
+            const vecY = py - svgMy;
+            const pointDist = Math.sqrt(vecX * vecX + vecY * vecY);
+            const pointInteractionRadius = 80; 
+            
+            if (pointDist < pointInteractionRadius) {
+                const pushForce = (1 - pointDist / pointInteractionRadius) * 40; 
+                const pushDirX = vecX / pointDist;
+                const pushDirY = vecY / pointDist;
+                px += pushDirX * pushForce;
+                py += pushDirY * pushForce;
+            }
+            
+            // Normalize to 0..1 for clipPathUnits="objectBoundingBox"
+            return { x: px / 200, y: py / 200 };
+        });
+
+        // Update the Clip Path 'd' attribute directly
+        clipPathRef.current.setAttribute("d", spline(renderPoints));
+    });
+
+    const floatDuration = shape.duration * 2;
+    const floatX = Math.random() * 50 + 25;
+    const floatY = Math.random() * 50 + 25;
+
+    return (
+        <motion.div
+            ref={containerRef}
+            className="absolute"
+            // Apply drop shadow filter to wrapper so it follows the clipped shape
+            style={{
+                width: shape.width,
+                height: shape.height,
+                top: shape.top,
+                left: shape.left,
+                x, 
+                y,
+                filter: "drop-shadow(0px 10px 20px rgba(0,0,0,0.15))"
+            }}
+            animate={{
+                x: [0, floatX, -floatX, 0],
+                y: [0, -floatY, floatY, 0],
+            }}
+            transition={{
+                duration: floatDuration,
+                repeat: Infinity,
+                ease: "easeInOut",
+            }}
+        >
+            {/* Hidden SVG defining the clip path */}
+            <svg width="0" height="0" className="absolute">
+                <defs>
+                    <clipPath id={uniqueId} clipPathUnits="objectBoundingBox">
+                        <path ref={clipPathRef} />
+                    </clipPath>
+                </defs>
+            </svg>
+
+            {/* Visible Div using the User's BG Class + Clip Path */}
+            <div 
+                className={`w-full h-full ${shape.background} border-white/20`}
+                style={{ 
+                    clipPath: `url(#${uniqueId})`,
+                    // Border simulation via internal shadow or separate element is hard with clip-path
+                    // We assume outline isn't strictly necessary or we'd need a separate svg stroke overlay.
+                    // Given the "Fluid" request, borderless with shadow is cleaner.
+                }} 
+            />
+            
+            {/* Optional: Add an overlay for 'border' effect if needed, but 'fluid' usually implies borderless or soft. 
+                If border was vital, we'd use the SVG stroke approach. 
+                Let's stick to the color accuracy requested. */}
+        </motion.div>
+    );
+};
 
 export const Hero = ({children}: { children?: ReactNode }) => {
 
-    // -- Parallax Logic Removed --
     const [isMenuFixed, setIsMenuFixed] = useState(false);
+    const [fabVisible, setFabVisible] = useState(true);
+
+    // -- Parallax Logic (Architectural) --
+    const mouseX = useMotionValue(0); 
+    const mouseY = useMotionValue(0);
+
+    // -- Repulsion & Mask Logic --
+    const mouseXPx = useMotionValue(0);
+    const mouseYPx = useMotionValue(0);
+    
+    // Grid Mask: visible only around mouse
+    const gridMask = useMotionTemplate`radial-gradient(65vmin circle at ${mouseXPx}px ${mouseYPx}px, black, rgba(0,0,0,0.5))`;
+
+    useEffect(() => {
+        const handleMouseMove = (e: MouseEvent) => {
+            const {innerWidth, innerHeight} = window;
+            mouseX.set((e.clientX / innerWidth) - 0.5);
+            mouseY.set((e.clientY / innerHeight) - 0.5);
+
+            mouseXPx.set(e.clientX);
+            mouseYPx.set(e.clientY);
+        };
+
+        // Init center pos
+        if (typeof window !== 'undefined') {
+            mouseXPx.set(window.innerWidth / 2);
+            mouseYPx.set(window.innerHeight / 2);
+        }
+
+        if (typeof window !== 'undefined' && window.matchMedia("(pointer: fine)").matches) {
+            window.addEventListener("mousemove", handleMouseMove);
+        }
+        return () => window.removeEventListener("mousemove", handleMouseMove);
+    }, []);
+
+    const smoothX = useSpring(mouseX, {stiffness: 30, damping: 30});
+    const smoothY = useSpring(mouseY, {stiffness: 30, damping: 30});
+
+
+    // -- Random Shapes Logic --
+    const [shapes, setShapes] = useState<Array<{
+        id: number;
+        width: string;
+        height: string;
+        top: string;
+        left: string;
+        background: string;
+        borderRadius: string[];
+        duration: number;
+    }>>([]);
+
+    useEffect(() => {
+        // Helper to generate extreme organic blob shapes (8 values)
+        // High variance = "Paint Blot" / "Roughness"
+        const r = () => Math.floor(Math.random() * 60 + 20); // 20% to 80% range (Extreme irregularity)
+        const genBlob = () => `${r()}% ${r()}% ${r()}% ${r()}% / ${r()}% ${r()}% ${r()}% ${r()}%`;
+
+        // Generate random shapes on client-side only
+        const newShapes = Array.from({length: 5}).map((_, i) => ({
+            id: i,
+            width: `${Math.random() * 20 + 20}vh`,
+            height: `${Math.random() * 20 + 20}vh`,
+            top: `${Math.random() * 85}%`,
+            left: `${Math.random() * 85}%`,
+            background: i % 2 === 0 ? "bg-secondary-container" : "bg-tertiary-container",
+            // Generate 5 distinct morph states per shape for fluid irregularity
+            borderRadius: [
+                genBlob(),
+                genBlob(),
+                genBlob(),
+                genBlob(),
+                genBlob() // Cycle back will happen with repeatType mirror
+            ],
+            duration: Math.random() * 10 + 10, 
+        }));
+        setShapes(newShapes);
+    }, []);
+
 
     return <SectionPadding end as="section" onClose={() => setIsMenuFixed(true)} onOpen={() => setIsMenuFixed(false)}
     >
         <div
-            className="relative flex flex-col items-center justify-center bg-surface overflow-hidden min-h-[80vh] py-20 pt-32">
-            {/* M3 DECORATIVE ELEMENTS - WARM, DYNAMIC & TEXTURED */}
-            <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+            className="relative flex flex-col items-center justify-center bg-[#FAFAFA] text-on-surface overflow-hidden min-h-[90vh]  pt-16">
 
-                {/* 1. WARM HALO & 2. COOL BALANCE - Masked by Noise */}
-                <div className="absolute inset-0 overflow-hidden" style={{
-                    maskImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-                    WebkitMaskImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-                    maskRepeat: 'repeat',
-                    WebkitMaskRepeat: 'repeat',
-                }}>
-                    <motion.div
-                        animate={{
-                            scale: [1, 1.2, 1],
-                            rotate: [0, 5, 0],
-                            opacity: [0.6, 0.8, 0.6] // Glowing effect
-                        }}
-                        transition={{duration: 14, repeat: Infinity, ease: "easeInOut"}}
-                        className="absolute top-[10%] left-1/2 -translate-x-1/2 w-[1000px] h-[800px] bg-secondary-container/50 rounded-full blur-[100px] mix-blend-normal transform-gpu"
-                    ></motion.div>
+            {/* --- PAPER TEXTURE OVERLAY --- */}
+            <div className="absolute inset-0 z-10 pointer-events-none mix-blend-multiply opacity-40">
+                <svg className="w-full h-full">
+                    <filter id="paperNoise">
+                        <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/>
+                        <feColorMatrix type="saturate" values="0"/>
+                    </filter>
+                    <rect width="100%" height="100%" filter="url(#paperNoise)"/>
+                </svg>
+            </div>
 
-                    <motion.div
-                        animate={{
-                            scale: [1, 1.3, 1],
-                            rotate: [0, -10, 0],
-                            opacity: [0.5, 0.7, 0.5] // Deep breathing
-                        }}
-                        transition={{duration: 18, repeat: Infinity, ease: "easeInOut"}}
-                        className="absolute bottom-[-10%] right-[-10%] w-[900px] h-[800px] bg-secondary-container rounded-full blur-[100px] mix-blend-normal transform-gpu"
-                    ></motion.div>
+            {/* --- BACKGROUND LAYERS --- */}
+            <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+
+                {/* LAYER 1: SOFT ORGANIC "PAPER" SHAPES */}
+                <div className="absolute inset-0 z-0">
+                    {shapes.map((shape) => (
+                        <RepulsiveShape key={shape.id} shape={shape} mouseX={mouseXPx} mouseY={mouseYPx}/>
+                    ))}
                 </div>
 
-                {/* 3. MICRO-GRAIN DIRECTIONAL - Cleaner, mastered texture */}
-                <div className="absolute inset-0  mix-blend-overlay z-10 opacity-50">
-                    <svg className="w-full h-full">
-                        <filter id="noiseFilter">
-                            <feTurbulence type="fractalNoise" baseFrequency="1.5 0.8" numOctaves="1"
-                                          stitchTiles="stitch"/>
-                        </filter>
-                        <rect width="100%" height="100%" filter="url(#noiseFilter)"/>
-                    </svg>
+                {/* LAYER 2: ARCHITECTURAL STRUCTURE (Dominant) */}
+                <div className="absolute inset-0">
+                    {/* Grid Background with Flashlight Mask */}
+                    <motion.div
+                        style={{maskImage: gridMask, WebkitMaskImage: gridMask}}
+                        className="absolute inset-0 text-outline-variant/50 bg-[linear-gradient(to_right,currentColor_1px,transparent_1px),linear-gradient(to_bottom,currentColor_1px,transparent_1px)] bg-[size:40px_40px]">
+                    </motion.div>
                 </div>
-
-
             </div>
 
             {/* HEADER / LOGO - Top Left */}
@@ -78,9 +364,9 @@ export const Hero = ({children}: { children?: ReactNode }) => {
             {
                 !isMenuFixed && <motion.div
                     layoutId="main-menu"
-                    className={"absolute top-0 mx-auto left-0 right-0 w-fit mt-4"}
+                    className={"absolute top-0 mx-auto left-0 right-0 w-fit mt-4 z-40"}
                 >
-                    <Menu isScrolled={false}/>
+                    <Menu isScrolled={false} fabVisible={fabVisible} setFabVisible={setFabVisible}/>
                 </motion.div>
 
             }
@@ -88,9 +374,9 @@ export const Hero = ({children}: { children?: ReactNode }) => {
                 isMenuFixed && createPortal(
                     <motion.div
                         layoutId="main-menu"
-                        className={"fixed top-0 mx-auto left-0 right-0 w-fit mt-4"}
+                        className={"fixed top-0 mx-auto left-0 right-0 w-fit mt-4 z-50"}
                     >
-                        <Menu isScrolled={true}/>
+                        <Menu isScrolled={true} fabVisible={fabVisible} setFabVisible={setFabVisible}/>
                     </motion.div>,
                     document.body
                 )
@@ -99,7 +385,7 @@ export const Hero = ({children}: { children?: ReactNode }) => {
 
             {/* CENTERED AGENCY CONTENT */}
             <div
-                className="relative w-full section">
+                className="relative w-full section z-20">
 
                 {children}
 

@@ -3,7 +3,7 @@ import Layout from "@layouts/Layout.astro";
 import {Button} from "@udixio/ui-react";
 import Faq from "@components/sections/Faq.astro";
 
-export prerender = false
+export const prerender = false
 
 return Astro.redirect('/')
 
@@ -30,7 +30,8 @@ const faqItems = [
     <section class="section">
         <div class="max-width padding-x">
             <h1 class="text-display-small md:text-display-large">Cadrage de projet web : méthode simple</h1>
-            <p class="text-body-large mt-6 max-w-prose">Le cadrage, c'est ce qui évite les surprises : un cadre clair avant d'avancer.</p>
+            <p class="text-body-large mt-6 max-w-prose">Le cadrage, c'est ce qui évite les surprises : un cadre clair
+                avant d'avancer.</p>
         </div>
     </section>
 
@@ -55,18 +56,18 @@ const faqItems = [
                 <li>moins d'allers-retours inutiles</li>
             </ul>
             <div class="mt-8 flex flex-wrap gap-4">
-                <Button className="w-fit" href="/services" label="Voir nos services" />
-                <Button className="w-fit" variant="outlined" href="/methode" label="Voir la méthode" />
+                <Button className="w-fit" href="/services" label="Voir nos services"/>
+                <Button className="w-fit" variant="outlined" href="/methode" label="Voir la méthode"/>
             </div>
         </div>
     </section>
 
-    <Faq title="FAQ" items={faqItems} />
+    <Faq title="FAQ" items={faqItems}/>
 
     <section class="section">
         <div class="max-width padding-x">
             <p class="text-body-large">Besoin d'un cadrage clair ?</p>
-            <Button className="mt-6 w-fit" href="/contact" label="Demander un diagnostic" />
+            <Button className="mt-6 w-fit" href="/contact" label="Demander un diagnostic"/>
         </div>
     </section>
 </Layout>

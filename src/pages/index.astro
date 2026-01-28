@@ -2,6 +2,8 @@
 import Layout from "@layouts/Layout.astro";
 import {Button} from "@udixio/ui-react";
 import {Hero} from "@components/Hero.tsx";
+// import { HeroPaper } from "@components/home/HeroPaper";
+import {Logo} from "@components/Logo";
 import Realisations from "@components/Realisations.astro";
 import {FeaturesGrid} from "@components/home/modern/FeaturesGrid";
 // import { ValueProp } from "@components/home/modern/ValueProp";
@@ -16,7 +18,7 @@ const faqItems = [
     {
         question: "Quel budget prévoir pour un site sur-mesure ?",
         answer:
-            "Après un cadrage offert, nous remettons un devis détaillé avec inclus/exclus et options. Vous comprenez ce qui est prévu avant de lancer la production.",
+            "Après un cadrage initial, nous remettons un devis détaillé avec inclus/exclus et options. Vous comprenez ce qui est prévu avant de lancer la production.",
     },
     {
         question: "Comment suivez-vous l'avancement ?",
@@ -49,80 +51,109 @@ const faqItems = [
         }}
         background={false}
 >
-
-    <Hero client:idle>
+    <Hero client:load>
         <div
-                class="items-center flex flex-col  gap-8 text-center "
-
+                class="items-center flex flex-col gap-10 text-center relative z-20"
         >
-            {/* Agency Status Badge - Sober Version */}
-            <div
-                    class="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-secondary-container text-on-secondary-container border border-outline-variant/20 text-label-small uppercase tracking-wider ">
-                Udixio Agence Web • Hauts-de-France
-            </div>
-
-            <h1 class="
-  text-display-medium md:text-display-large font-bold tracking-tight text-on-surface ">
-                Udixio <span class="text-primary">agence web</span> : sites durables, clairs et sans surprise.
-
+            <h1
+                    class="text-display-medium md:text-display-large font-bold tracking-tight text-on-surface max-w-4xl text-balance"
+            >
+                <span class="text-display-small">Agence web en Hauts-de-France</span><br/> pensée pour<br
+                    class="hidden md:block"/>
+                <span class="text-primary relative inline-block">
+          un accompagnement transparent
+          <svg
+                  class="absolute -bottom-2 left-0 w-full h-3 text-primary/20 -z-10"
+                  viewBox="0 0 100 10"
+                  preserveAspectRatio="none"
+          >
+            <path
+                    d="M0 5 Q 50 10 100 5"
+                    stroke="currentColor"
+                    stroke-width="8"
+                    fill="none"></path>
+          </svg>
+        </span>
+                et durables
             </h1>
 
             {/* Subtext */}
-            <p class="text-body-large text-on-surface-variant max-w-2xl leading-relaxed">
-                Udixio structure vos projets digitaux sur-mesure pour un site
-                <strong> performant</strong> et <strong>durable</strong>, sans flou ni dépendance. Vous gardez
-                la
-                main sur chaque décision.
+            <p
+                    class="text-body-large"
+            >
+                Cadrage net, décisions expliquées, suivi partagé. Vous gardez la main à chaque étape.
             </p>
 
             {/* CTAs & Signature */}
-            <div class="flex flex-col items-center gap-6 mt-2">
+            <div class="flex flex-col items-center gap-6 mt-4">
                 <div class="flex flex-wrap justify-center gap-4">
-                    <Button href="/contact" shape={"squared"}
-                            label="Discutons de votre projet"/>
-                    <Button variant="outlined" href="/methode"
-                            label="Découvrir la méthode Udixio"/>
+                    <Button
+                            href="/contact"
+                            shape="squared"
+                            label="Planifier un échange"
+                    />
+                    <Button
+                            variant="outlined"
+                            href="/methode"
+                            label="Découvrir la méthode"
+                    />
                 </div>
-
             </div>
-
         </div>
-
     </Hero>
-
 
     {/* THE METHOD GRID (Artifacts) - Unified & Sober */}
     <div
-            class="w-full max-w-7xl flex flex-col md:flex-row items-center justify-center gap-6 mt-12 md:mt-20 px-4">
-
+            class="w-full max-w-7xl flex flex-col md:flex-row items-center justify-center gap-6 mt-12 md:mt-20 px-4"
+    >
         {/* ARTIFACT 1: STRATEGY */}
         <Card
                 className="flex-1 w-full relative group bg-surface-container border border-outline-variant rounded-2xl p-6 text-left hover:bg-surface-container-high hover:border-outline-variant transition-all duration-300 hover:-translate-y-1 shadow-sm hover:shadow-md h-full"
         >
             <div class="mb-4 flex justify-between items-start">
                 <div class="p-3 bg-surface-container-highest text-primary rounded-xl">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                    <svg
+                            class="w-6 h-6"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                    >
+                        <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                        ></path>
                     </svg>
                 </div>
                 <div
-                        class="px-2 py-1 bg-surface-container-high border border-outline-variant/20 rounded text-label-small font-medium text-on-surface-variant tracking-wide font-mono">
+                        class="px-2 py-1 bg-surface-container-high border border-outline-variant/20 rounded text-label-small font-medium text-on-surface-variant tracking-wide font-mono"
+                >
                     01
                 </div>
             </div>
-            <h3 class="text-title-large font-bold text-on-surface mb-2">Cadrage & objectifs</h3>
+            <h3 class="text-title-large font-bold text-on-surface mb-2">
+                Cadrage & objectifs
+            </h3>
             <p class="text-body-medium text-on-surface-variant">
-                Atelier initial, priorités et contraintes posées. Le périmètre est validé avant d'avancer.
+                Atelier initial, priorités et contraintes posées. Le périmètre est
+                validé avant d'avancer.
             </p>
         </Card>
 
         {/* ARROW 1 - Neutral */}
         <div class="flex-none text-outline-variant">
-            <svg class="w-6 h-6 md:w-8 md:h-8 rotate-90 md:rotate-0 transform transition-transform"
-                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                      d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+            <svg
+                    class="w-6 h-6 md:w-8 md:h-8 rotate-90 md:rotate-0 transform transition-transform"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+            >
+                <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
             </svg>
         </div>
 
@@ -132,53 +163,83 @@ const faqItems = [
         >
             <div class="mb-4 flex justify-between items-start">
                 <div class="p-3 bg-surface-container-highest text-primary rounded-xl">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                              d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+                    <svg
+                            class="w-6 h-6"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                    >
+                        <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"
+                        ></path>
                     </svg>
                 </div>
                 <div
-                        class="px-2 py-1 bg-surface-container-high border border-outline-variant/20 rounded text-label-small font-medium text-on-surface-variant tracking-wide font-mono">
+                        class="px-2 py-1 bg-surface-container-high border border-outline-variant/20 rounded text-label-small font-medium text-on-surface-variant tracking-wide font-mono"
+                >
                     02
                 </div>
             </div>
-            <h3 class="text-title-large font-bold text-on-surface mb-2">Plan d'action partagé</h3>
+            <h3 class="text-title-large font-bold text-on-surface mb-2">
+                Plan d'action partagé
+            </h3>
             <p class="text-body-medium text-on-surface-variant">
-                Feuille de route claire, validations régulières et suivi lisible pour garder le contrôle.
+                Feuille de route claire, validations régulières et suivi lisible pour
+                garder le contrôle.
             </p>
         </Card>
 
         {/* ARROW 2 - Neutral */}
         <div class="flex-none text-outline-variant">
-            <svg class="w-6 h-6 md:w-8 md:h-8 rotate-90 md:rotate-0 transform transition-transform"
-                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+            <svg
+                    class="w-6 h-6 md:w-8 md:h-8 rotate-90 md:rotate-0 transform transition-transform"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+            >
+                <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
             </svg>
         </div>
 
         {/* ARTIFACT 3: DELIVERY */}
-        <Card
-                className="flex-1 w-full relative group  p-6 text-left h-full"
-        >
+        <Card className="flex-1 w-full relative group  p-6 text-left h-full">
             <div class="mb-4 flex justify-between items-start">
                 <div class="p-3 bg-surface-container-highest text-primary rounded-xl">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                              d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
+                    <svg
+                            class="w-6 h-6"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                    >
+                        <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
+                        ></path>
                     </svg>
                 </div>
                 <div
-                        class="px-2 py-1 bg-surface-container-high border border-outline-variant rounded text-label-small font-medium text-on-surface-variant tracking-wide font-mono">
+                        class="px-2 py-1 bg-surface-container-high border border-outline-variant rounded text-label-small font-medium text-on-surface-variant tracking-wide font-mono"
+                >
                     03
                 </div>
             </div>
-            <h3 class="text-title-large font-bold text-on-surface mb-2">Autonomie & clés</h3>
+            <h3 class="text-title-large font-bold text-on-surface mb-2">
+                Autonomie & clés
+            </h3>
             <p class="text-body-medium text-on-surface-variant">
-                Code source, accès et documentation remis. Formation incluse pour vous rendre autonome.
+                Code source, accès et documentation remis. Formation incluse pour vous
+                rendre autonome.
             </p>
         </Card>
-
     </div>
 
     <section class="section">
@@ -202,7 +263,7 @@ const faqItems = [
                 <Button
                         variant="outlined"
                         href="/services"
-                        label="Découvrir comment on travaille"
+                        label="Voir comment on travaille"
                 />
             </div>
         </div>
@@ -232,7 +293,7 @@ const faqItems = [
                 <Button
                         className="w-fit"
                         href="/realisations"
-                        label="Voir des exemples de réalisations"
+                        label="Voir des exemples"
                 />
             </div>
         </div>
@@ -254,7 +315,7 @@ const faqItems = [
                 <Button
                         className="w-fit"
                         href="/methode"
-                        label="Comprendre notre méthode en détail"
+                        label="Voir la méthode en détail"
                 />
             </div>
         </div>
@@ -270,7 +331,7 @@ const faqItems = [
                 <Button
                         variant="outlined"
                         href="/realisations"
-                        label="Voir tout le portfolio"
+                        label="Voir le portfolio"
                 />
             </div>
         </div>
@@ -288,11 +349,7 @@ const faqItems = [
                         contrôle à chaque étape.
                     </p>
                 </div>
-                <Button
-                        variant="outlined"
-                        href="/services"
-                        label="Voir nos services"
-                />
+                <Button variant="outlined" href="/services" label="Voir nos services"/>
             </div>
 
             <div class="grid gap-6 md:grid-cols-3">
@@ -345,14 +402,14 @@ const faqItems = [
                 <div class="max-w-2xl">
                     <h2 class="text-display-small mb-4">Ressources pour cadrer</h2>
                     <p class="text-body-large text-on-surface-variant">
-                        Des contenus courts et utiles pour avancer sereinement, avant
-                        même de lancer votre projet.
+                        Des contenus courts et utiles pour avancer sereinement, avant même
+                        de lancer votre projet.
                     </p>
                 </div>
                 <Button
                         variant="outlined"
-                        href="/blog"
-                        label="Voir toutes les ressources"
+                        href="/ressources"
+                        label="Voir les ressources"
                 />
             </div>
 
@@ -363,19 +420,19 @@ const faqItems = [
                             title: "Cadrer votre besoin",
                             cat: "Méthode",
                             desc: "Les questions essentielles pour clarifier objectifs, périmètre et priorités.",
-                            href: "/blog",
+                            href: "/ressources",
                         },
                         {
                             title: "Refonte sereine",
                             cat: "Stratégie",
                             desc: "Les points de vigilance pour éviter les dérives et garder un cap clair.",
-                            href: "/blog",
+                            href: "/ressources",
                         },
                         {
                             title: "SEO expliqué simplement",
                             cat: "Clarté",
                             desc: "Les bases du référencement, sans jargon, pour prendre les bonnes décisions.",
-                            href: "/blog",
+                            href: "/ressources",
                         },
                     ].map((resource) => (
                             <a
@@ -434,7 +491,7 @@ const faqItems = [
                         <Button
                                 className="bg-white text-primary hover:bg-white/90"
                                 href="/contact"
-                                label="Demander un diagnostic offert"
+                                label="Demander un échange de cadrage"
                         />
                         <Button
                                 variant="outlined"
