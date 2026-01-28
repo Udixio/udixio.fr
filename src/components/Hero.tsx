@@ -8,25 +8,25 @@ import {createPortal} from "react-dom";
 // -- Repulsive Shape Component --
 // -- Repulsive Shape Component --
 // Helper to create a smooth closed path from points (Catmull-Rom to Cubic Bezier)
-function spline(points: {x: number, y: number}[]) {
-  const n = points.length;
-  let d = "";
-  for (let i = 0; i < n; i++) {
-    const p0 = points[(i - 1 + n) % n];
-    const p1 = points[i];
-    const p2 = points[(i + 1) % n];
-    const p3 = points[(i + 2) % n];
+function spline(points: { x: number, y: number }[]) {
+    const n = points.length;
+    let d = "";
+    for (let i = 0; i < n; i++) {
+        const p0 = points[(i - 1 + n) % n];
+        const p1 = points[i];
+        const p2 = points[(i + 1) % n];
+        const p3 = points[(i + 2) % n];
 
-    const cp1x = p1.x + (p2.x - p0.x) / 6;
-    const cp1y = p1.y + (p2.y - p0.y) / 6;
+        const cp1x = p1.x + (p2.x - p0.x) / 6;
+        const cp1y = p1.y + (p2.y - p0.y) / 6;
 
-    const cp2x = p2.x - (p3.x - p1.x) / 6;
-    const cp2y = p2.y - (p3.y - p1.y) / 6;
+        const cp2x = p2.x - (p3.x - p1.x) / 6;
+        const cp2y = p2.y - (p3.y - p1.y) / 6;
 
-    if (i === 0) d += `M ${p1.x} ${p1.y} `;
-    d += `C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p2.x} ${p2.y} `;
-  }
-  return d + "Z";
+        if (i === 0) d += `M ${p1.x} ${p1.y} `;
+        d += `C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p2.x} ${p2.y} `;
+    }
+    return d + "Z";
 }
 
 const RepulsiveShape = ({
@@ -54,24 +54,35 @@ const RepulsiveShape = ({
     // Physics / Drift state
     const x = useMotionValue(0);
     const y = useMotionValue(0);
-    const velocity = useRef({ x: 0, y: 0 });
+    const velocity = useRef({x: 0, y: 0});
 
     // Blob Vertices State
     // 12 points for organic, complex feel
-    const numPoints = 12; // High complexity
+    // 12 points for organic, complex feel
+    const minPoints = 5;
+    const maxPoints = 18;
+    const numPoints = Math.floor(Math.random() * (maxPoints - minPoints + 1)) + minPoints;
     const pointsRef = useRef(
-        Array.from({ length: numPoints }).map((_, i) => ({
+        Array.from({length: numPoints}).map((_, i) => ({
+            // We keep angles fixed relative to each other to prevent self-intersection knots,
+            // but we will animate the 'phase' of the noise to make features travel around the shape.
             angle: (Math.PI * 2 * i) / numPoints,
-            // Initial irregularity: Radius is NOT uniform. 
-            // We set a base offset so even without motion, it's not a circle.
-            baseRadiusOffset: -15 + Math.random() * 30, // +/- 15 units variance
-            
-            // Motion properties (Very slow)
-            noiseOffset: Math.random() * 100,
-            speed: 0.0001 + Math.random() * 0.00005, // Ultra slow morphing (>1s feel)
-            amp: 5 + Math.random() * 10, // Significant morph amplitude
-            
-            currentX: 0, 
+
+            // Feature 1: "Breathing" / Appearance & Disappearance
+            // We modulate the amplitude over time. Faster change now.
+            baseAmp: 5 + Math.random() * 10,
+            ampSpeed: 0.0002 + Math.random() * 0.0004, // Corrected speed (was too fast)
+            ampPhase: Math.random() * 10,
+
+            // Feature 2: "Traveling" / Moving internal points
+            // Features travel faster around the perimeter
+            waveSpeed: 0.0002 + Math.random() * 0.0004,
+            wavePhase: Math.random() * 10,
+
+            // Feature 3: Base Irregularity
+            baseRadiusOffset: -10 + Math.random() * 25,
+
+            currentX: 0,
             currentY: 0
         }))
     );
@@ -90,30 +101,42 @@ const RepulsiveShape = ({
         const dx = mx - centerX;
         const dy = my - centerY;
         const distToMouse = Math.sqrt(dx * dx + dy * dy);
-        
-        const driftRadius = 600; 
-        
+
+        const driftRadius = 600;
+
         if (distToMouse < driftRadius) {
-             const force = (1 - distToMouse / driftRadius) * 0.4; 
-             const dirX = -(dx / distToMouse || 0);
-             const dirY = -(dy / distToMouse || 0);
-             velocity.current.x += dirX * force;
-             velocity.current.y += dirY * force;
+            const force = (1 - distToMouse / driftRadius) * 0.4;
+            const dirX = -(dx / distToMouse || 0);
+            const dirY = -(dy / distToMouse || 0);
+            velocity.current.x += dirX * force;
+            velocity.current.y += dirY * force;
         }
 
         const margin = 0;
         const vw = window.innerWidth;
         const vh = window.innerHeight;
-        const wallForce = 0.8;
-        
-        if (centerX < margin) velocity.current.x += wallForce;
-        if (centerX > vw - margin) velocity.current.x -= wallForce;
-        if (centerY < margin) velocity.current.y += wallForce;
-        if (centerY > vh - margin) velocity.current.y -= wallForce;
+        const wallForce = 0.8; // Stronger walls to contain the high energy
+
+        if (centerX < margin) {
+            velocity.current.x += wallForce;
+            velocity.current.x *= 0.8;
+        }
+        if (centerX > vw - margin) {
+            velocity.current.x -= wallForce;
+            velocity.current.x *= 0.8;
+        }
+        if (centerY < margin) {
+            velocity.current.y += wallForce;
+            velocity.current.y *= 0.8;
+        }
+        if (centerY > vh - margin) {
+            velocity.current.y -= wallForce;
+            velocity.current.y *= 0.8;
+        }
 
         velocity.current.x *= 0.94;
         velocity.current.y *= 0.94;
-        
+
         x.set(x.get() + velocity.current.x);
         y.set(y.get() + velocity.current.y);
 
@@ -121,31 +144,37 @@ const RepulsiveShape = ({
         // --- 2. VERTEX DEFORMATION ---
         // Internal logic uses a 200x200 coordinate system
         const centerSize = 100;
-        
+
         const localMouseX = mx - rect.left;
         const localMouseY = my - rect.top;
         const scaleFactorX = 200 / rect.width;
         const scaleFactorY = 200 / rect.height;
         const svgMx = localMouseX * scaleFactorX;
         const svgMy = localMouseY * scaleFactorY;
-        
+
         const dxCenter = svgMx - 100;
         const dyCenter = svgMy - 100;
         const distCenter = Math.sqrt(dxCenter * dxCenter + dyCenter * dyCenter);
-        
+
         // Volume reaction
-        const pressExpansion = Math.max(0, (120 - distCenter) * 0.25); 
+        const pressExpansion = Math.max(0, (120 - distCenter) * 0.25);
 
         const renderPoints = pointsRef.current.map((pt, i) => {
-            // Noise Motion
             const t = time;
-            // Complex multi-sine noise
-            const noise = 
-                Math.sin(t * pt.speed + pt.noiseOffset) * pt.amp + 
-                Math.cos(t * pt.speed * 0.5 + pt.noiseOffset) * (pt.amp * 0.5);
-            
-            // Radius breakdown:
-            // 75 (Base) + Offset (Initial Irregularity) + Noise (Motion) + Press (Expansion)
+
+            // 1. Life Cycle: Some bumps grow, others shrink (appear/disappear)
+            // Factor varies between 0.2 (almost smooth) and 1.5 (very prominent)
+            const lifeFactor = Math.sin(t * pt.ampSpeed + pt.ampPhase) * 0.6 + 0.9;
+            const currentAmp = pt.baseAmp * lifeFactor;
+
+            // 2. Traveling Wave: Bumps move slowly around the perimeter
+            // We create complex noise based on angle + traveling phase
+            const phase = t * pt.waveSpeed + pt.wavePhase;
+            const noise =
+                Math.sin(phase) * currentAmp +
+                Math.cos(phase * 0.7 + i) * (currentAmp * 0.5);
+
+            // Radius: Base + Irregularity + Dynamic Noise + Press
             const r = 75 + pt.baseRadiusOffset + noise + pressExpansion;
 
             let px = 100 + Math.cos(pt.angle) * r;
@@ -155,18 +184,21 @@ const RepulsiveShape = ({
             const vecX = px - svgMx;
             const vecY = py - svgMy;
             const pointDist = Math.sqrt(vecX * vecX + vecY * vecY);
-            const pointInteractionRadius = 80; 
-            
+            // Hard Collider Logic
+            const pointInteractionRadius = 100; // Radius of the "Solid" Mouse Sphere
+
             if (pointDist < pointInteractionRadius) {
-                const pushForce = (1 - pointDist / pointInteractionRadius) * 40; 
-                const pushDirX = vecX / pointDist;
-                const pushDirY = vecY / pointDist;
-                px += pushDirX * pushForce;
-                py += pushDirY * pushForce;
+                // HARD CONSTRAINT: Point MUST be at radius distance
+                // We project the point out to the surface of the sphere
+                const angleToPoint = Math.atan2(vecY, vecX);
+
+                // New position on the circumference
+                px = svgMx + Math.cos(angleToPoint) * pointInteractionRadius;
+                py = svgMy + Math.sin(angleToPoint) * pointInteractionRadius;
             }
-            
+
             // Normalize to 0..1 for clipPathUnits="objectBoundingBox"
-            return { x: px / 200, y: py / 200 };
+            return {x: px / 200, y: py / 200};
         });
 
         // Update the Clip Path 'd' attribute directly
@@ -187,7 +219,7 @@ const RepulsiveShape = ({
                 height: shape.height,
                 top: shape.top,
                 left: shape.left,
-                x, 
+                x,
                 y,
                 filter: "drop-shadow(0px 10px 20px rgba(0,0,0,0.15))"
             }}
@@ -205,22 +237,22 @@ const RepulsiveShape = ({
             <svg width="0" height="0" className="absolute">
                 <defs>
                     <clipPath id={uniqueId} clipPathUnits="objectBoundingBox">
-                        <path ref={clipPathRef} />
+                        <path ref={clipPathRef}/>
                     </clipPath>
                 </defs>
             </svg>
 
             {/* Visible Div using the User's BG Class + Clip Path */}
-            <div 
+            <div
                 className={`w-full h-full ${shape.background} border-white/20`}
-                style={{ 
+                style={{
                     clipPath: `url(#${uniqueId})`,
                     // Border simulation via internal shadow or separate element is hard with clip-path
                     // We assume outline isn't strictly necessary or we'd need a separate svg stroke overlay.
                     // Given the "Fluid" request, borderless with shadow is cleaner.
-                }} 
+                }}
             />
-            
+
             {/* Optional: Add an overlay for 'border' effect if needed, but 'fluid' usually implies borderless or soft. 
                 If border was vital, we'd use the SVG stroke approach. 
                 Let's stick to the color accuracy requested. */}
@@ -234,13 +266,13 @@ export const Hero = ({children}: { children?: ReactNode }) => {
     const [fabVisible, setFabVisible] = useState(true);
 
     // -- Parallax Logic (Architectural) --
-    const mouseX = useMotionValue(0); 
+    const mouseX = useMotionValue(0);
     const mouseY = useMotionValue(0);
 
     // -- Repulsion & Mask Logic --
     const mouseXPx = useMotionValue(0);
     const mouseYPx = useMotionValue(0);
-    
+
     // Grid Mask: visible only around mouse
     const gridMask = useMotionTemplate`radial-gradient(65vmin circle at ${mouseXPx}px ${mouseYPx}px, black, rgba(0,0,0,0.5))`;
 
@@ -291,8 +323,8 @@ export const Hero = ({children}: { children?: ReactNode }) => {
         // Generate random shapes on client-side only
         const newShapes = Array.from({length: 5}).map((_, i) => ({
             id: i,
-            width: `${Math.random() * 20 + 20}vh`,
-            height: `${Math.random() * 20 + 20}vh`,
+            width: `${Math.random() * 50 + 20}vh`, // Much larger range (20vh to 70vh)
+            height: `${Math.random() * 50 + 20}vh`,
             top: `${Math.random() * 85}%`,
             left: `${Math.random() * 85}%`,
             background: i % 2 === 0 ? "bg-secondary-container" : "bg-tertiary-container",
@@ -304,7 +336,7 @@ export const Hero = ({children}: { children?: ReactNode }) => {
                 genBlob(),
                 genBlob() // Cycle back will happen with repeatType mirror
             ],
-            duration: Math.random() * 10 + 10, 
+            duration: Math.random() * 10 + 10,
         }));
         setShapes(newShapes);
     }, []);
