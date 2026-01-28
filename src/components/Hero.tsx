@@ -29,10 +29,20 @@ function spline(points: { x: number, y: number }[]) {
     return d + "Z";
 }
 
+// Helper to parse CSS units to pixels
+const parseUnit = (value: string, parentSize: number) => {
+    const float = parseFloat(value);
+    if (value.includes('%')) return (float / 100) * parentSize;
+    if (value.includes('vh')) return (float / 100) * (typeof window !== 'undefined' ? window.innerHeight : parentSize);
+    if (value.includes('vw')) return (float / 100) * (typeof window !== 'undefined' ? window.innerWidth : parentSize);
+    return float; // assume px
+};
+
 const RepulsiveShape = ({
                             shape,
                             mouseX,
-                            mouseY
+                            mouseY,
+                            parentRef
                         }: {
     shape: {
         id: number;
@@ -44,92 +54,110 @@ const RepulsiveShape = ({
         borderRadius: string[];
         duration: number;
     };
-    mouseX: MotionValue<number>;
     mouseY: MotionValue<number>;
+    parentRef: React.RefObject<HTMLElement | null>;
 }) => {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const clipPathRef = useRef<SVGPathElement>(null);
     const uniqueId = `blob-${shape.id}`;
+    const clipPathRef = useRef<SVGPathElement>(null);
+    const inited = useRef(false);
 
-    // Physics / Drift state
-    const x = useMotionValue(0);
-    const y = useMotionValue(0);
+    // Physics state (Absolute Pixel Coordinates)
+    const x = useMotionValue(-1000); // Start off-screen until inited
+    const y = useMotionValue(-1000);
     const velocity = useRef({x: 0, y: 0});
 
+    // Internal State
+    const radiusRef = useRef(50);
+
     // Blob Vertices State
-    // 12 points for organic, complex feel
-    // 12 points for organic, complex feel
+    // Randomize complexity per shape
     const minPoints = 5;
     const maxPoints = 18;
-    const numPoints = Math.floor(Math.random() * (maxPoints - minPoints + 1)) + minPoints;
-    const pointsRef = useRef(
-        Array.from({length: numPoints}).map((_, i) => ({
-            // We keep angles fixed relative to each other to prevent self-intersection knots,
-            // but we will animate the 'phase' of the noise to make features travel around the shape.
+    // We use a ref for points to persist between renders
+    const pointsRef = useRef<{
+        angle: number;
+        baseAmp: number;
+        ampSpeed: number;
+        ampPhase: number;
+        waveSpeed: number;
+        wavePhase: number;
+        baseRadiusOffset: number;
+        currentX: number;
+        currentY: number;
+    }[]>([]);
+
+    // Initialize points once
+    useEffect(() => {
+        const numPoints = Math.floor(Math.random() * (maxPoints - minPoints + 1)) + minPoints;
+        pointsRef.current = Array.from({length: numPoints}).map((_, i) => ({
             angle: (Math.PI * 2 * i) / numPoints,
-
-            // Feature 1: "Breathing" / Appearance & Disappearance
-            // We modulate the amplitude over time. Faster change now.
             baseAmp: 5 + Math.random() * 10,
-            ampSpeed: 0.0002 + Math.random() * 0.0004, // Corrected speed (was too fast)
+            ampSpeed: 0.0002 + Math.random() * 0.0004,
             ampPhase: Math.random() * 10,
-
-            // Feature 2: "Traveling" / Moving internal points
-            // Features travel faster around the perimeter
             waveSpeed: 0.0002 + Math.random() * 0.0004,
             wavePhase: Math.random() * 10,
-
-            // Feature 3: Base Irregularity
             baseRadiusOffset: -10 + Math.random() * 25,
-
             currentX: 0,
             currentY: 0
-        }))
-    );
+        }));
+    }, []);
+
+    // Initialize Position & Size from Props -> Pixels
+    useEffect(() => {
+        if (!parentRef.current) return;
+        const parent = parentRef.current;
+        const rect = parent.getBoundingClientRect();
+
+        const initX = parseUnit(shape.left, rect.width);
+        const initY = parseUnit(shape.top, rect.height);
+        const size = parseUnit(shape.width, rect.height); // Using height as ref for vh-based sizes mostly
+
+        x.set(initX);
+        y.set(initY);
+        radiusRef.current = size / 2;
+        inited.current = true;
+    }, [shape, parentRef]);
 
     useAnimationFrame((time) => {
-        if (!containerRef.current || !clipPathRef.current) return;
+        if (!clipPathRef.current || !parentRef.current || !inited.current) return;
 
-        // --- 1. GLOBAL DRIFT PHYSICS ---
+        // --- 1. GLOBAL DRIFT PHYSICS (Absolute) ---
         const mx = mouseX.get();
         const my = mouseY.get();
 
-        const rect = containerRef.current.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
+        // Center position (current physics state)
+        const cx = x.get();
+        const cy = y.get();
 
-        const dx = mx - centerX;
-        const dy = my - centerY;
+        const dx = mx - cx;
+        const dy = my - cy;
         const distToMouse = Math.sqrt(dx * dx + dy * dy);
-
         const driftRadius = 600;
 
-        if (distToMouse < driftRadius) {
-            const force = (1 - distToMouse / driftRadius) * 0.4;
-            const dirX = -(dx / distToMouse || 0);
-            const dirY = -(dy / distToMouse || 0);
-            velocity.current.x += dirX * force;
-            velocity.current.y += dirY * force;
-        }
+        // Drift logic is now reactive driven by vertex stress, not proactive.
+        // We accumulate the "Stress" (forces applied to vertices) to push the whole body.
+        let internalStressX = 0;
+        let internalStressY = 0;
 
         const margin = 0;
-        const vw = window.innerWidth;
-        const vh = window.innerHeight;
-        const wallForce = 0.8; // Stronger walls to contain the high energy
+        const rect = parentRef.current.getBoundingClientRect();
+        const vw = rect.width;
+        const vh = rect.height;
+        const wallForce = 0.8;
 
-        if (centerX < margin) {
+        if (cx < margin) {
             velocity.current.x += wallForce;
             velocity.current.x *= 0.8;
         }
-        if (centerX > vw - margin) {
+        if (cx > vw - margin) {
             velocity.current.x -= wallForce;
             velocity.current.x *= 0.8;
         }
-        if (centerY < margin) {
+        if (cy < margin) {
             velocity.current.y += wallForce;
             velocity.current.y *= 0.8;
         }
-        if (centerY > vh - margin) {
+        if (cy > vh - margin) {
             velocity.current.y -= wallForce;
             velocity.current.y *= 0.8;
         }
@@ -137,23 +165,16 @@ const RepulsiveShape = ({
         velocity.current.x *= 0.94;
         velocity.current.y *= 0.94;
 
-        x.set(x.get() + velocity.current.x);
-        y.set(y.get() + velocity.current.y);
+        const newX = cx + velocity.current.x;
+        const newY = cy + velocity.current.y;
+        x.set(newX);
+        y.set(newY);
 
 
         // --- 2. VERTEX DEFORMATION ---
-        // Internal logic uses a 200x200 coordinate system
-        const centerSize = 100;
-
-        const localMouseX = mx - rect.left;
-        const localMouseY = my - rect.top;
-        const scaleFactorX = 200 / rect.width;
-        const scaleFactorY = 200 / rect.height;
-        const svgMx = localMouseX * scaleFactorX;
-        const svgMy = localMouseY * scaleFactorY;
-
-        const dxCenter = svgMx - 100;
-        const dyCenter = svgMy - 100;
+        // Mouse relative to Shape Center
+        const dxCenter = mx - newX;
+        const dyCenter = my - newY;
         const distCenter = Math.sqrt(dxCenter * dxCenter + dyCenter * dyCenter);
 
         // Volume reaction
@@ -162,101 +183,85 @@ const RepulsiveShape = ({
         const renderPoints = pointsRef.current.map((pt, i) => {
             const t = time;
 
-            // 1. Life Cycle: Some bumps grow, others shrink (appear/disappear)
-            // Factor varies between 0.2 (almost smooth) and 1.5 (very prominent)
+            // Amplitude Modulation
             const lifeFactor = Math.sin(t * pt.ampSpeed + pt.ampPhase) * 0.6 + 0.9;
             const currentAmp = pt.baseAmp * lifeFactor;
 
-            // 2. Traveling Wave: Bumps move slowly around the perimeter
-            // We create complex noise based on angle + traveling phase
+            // Traveling Wave
             const phase = t * pt.waveSpeed + pt.wavePhase;
             const noise =
                 Math.sin(phase) * currentAmp +
                 Math.cos(phase * 0.7 + i) * (currentAmp * 0.5);
 
-            // Radius: Base + Irregularity + Dynamic Noise + Press
-            const r = 75 + pt.baseRadiusOffset + noise + pressExpansion;
+            const r = radiusRef.current + pt.baseRadiusOffset + noise + pressExpansion;
 
-            let px = 100 + Math.cos(pt.angle) * r;
-            let py = 100 + Math.sin(pt.angle) * r;
+            // Absolute Vertex Position
+            let px = newX + Math.cos(pt.angle) * r;
+            let py = newY + Math.sin(pt.angle) * r;
 
-            // Local Point Repulsion
-            const vecX = px - svgMx;
-            const vecY = py - svgMy;
+            // Interaction
+            const vecX = px - mx;
+            const vecY = py - my;
             const pointDist = Math.sqrt(vecX * vecX + vecY * vecY);
-            // Hard Collider Logic
-            const pointInteractionRadius = 100; // Radius of the "Solid" Mouse Sphere
+            const pointInteractionRadius = 100; // Hard collider
 
             if (pointDist < pointInteractionRadius) {
-                // HARD CONSTRAINT: Point MUST be at radius distance
-                // We project the point out to the surface of the sphere
                 const angleToPoint = Math.atan2(vecY, vecX);
 
                 // New position on the circumference
-                px = svgMx + Math.cos(angleToPoint) * pointInteractionRadius;
-                py = svgMy + Math.sin(angleToPoint) * pointInteractionRadius;
+                const solvedPx = mx + Math.cos(angleToPoint) * pointInteractionRadius;
+                const solvedPy = my + Math.sin(angleToPoint) * pointInteractionRadius;
+
+                // Calculate Displacement (Stress)
+                const displacementX = solvedPx - px;
+                const displacementY = solvedPy - py;
+
+                // Accumulate stress to push the main body later
+                // We weight it slightly so 1 point moving doesn't shove the whole huge shape instantly
+                internalStressX += displacementX;
+                internalStressY += displacementY;
+
+                px = solvedPx;
+                py = solvedPy;
             }
 
-            // Normalize to 0..1 for clipPathUnits="objectBoundingBox"
-            return {x: px / 200, y: py / 200};
+            return {x: px, y: py};
         });
 
-        // Update the Clip Path 'd' attribute directly
+        // --- 3. APPLY REACTIVE PHYSICS ---
+        // If vertices were deformed, push the body
+        // Threshold set high (40) so the shape dents SIGNIFICANTLY before moving (Heavy inertia)
+        if (Math.abs(internalStressX) > 40 || Math.abs(internalStressY) > 40) {
+            // Move body to relieve stress
+            const reliefFactor = 0.02;
+            velocity.current.x += internalStressX * reliefFactor;
+            velocity.current.y += internalStressY * reliefFactor;
+        }
+
         clipPathRef.current.setAttribute("d", spline(renderPoints));
     });
 
-    const floatDuration = shape.duration * 2;
-    const floatX = Math.random() * 50 + 25;
-    const floatY = Math.random() * 50 + 25;
-
     return (
-        <motion.div
-            ref={containerRef}
-            className="absolute"
-            // Apply drop shadow filter to wrapper so it follows the clipped shape
-            style={{
-                width: shape.width,
-                height: shape.height,
-                top: shape.top,
-                left: shape.left,
-                x,
-                y,
-                filter: "drop-shadow(0px 10px 20px rgba(0,0,0,0.15))"
-            }}
-            animate={{
-                x: [0, floatX, -floatX, 0],
-                y: [0, -floatY, floatY, 0],
-            }}
-            transition={{
-                duration: floatDuration,
-                repeat: Infinity,
-                ease: "easeInOut",
-            }}
-        >
-            {/* Hidden SVG defining the clip path */}
+        <div className="absolute inset-0 w-full h-full pointer-events-none">
+            {/* Hidden SVG defining the clip path (UserSpaceOnUse = Absolute Pixels) */}
             <svg width="0" height="0" className="absolute">
                 <defs>
-                    <clipPath id={uniqueId} clipPathUnits="objectBoundingBox">
+                    <clipPath id={uniqueId} clipPathUnits="userSpaceOnUse">
                         <path ref={clipPathRef}/>
                     </clipPath>
                 </defs>
             </svg>
 
-            {/* Visible Div using the User's BG Class + Clip Path */}
+            {/* Visible Full Screen Div using the User's BG Class + Clip Path */}
             <div
-                className={`w-full h-full ${shape.background} border-white/20`}
+                className={`absolute inset-0 w-full h-full ${shape.background}`}
                 style={{
                     clipPath: `url(#${uniqueId})`,
-                    // Border simulation via internal shadow or separate element is hard with clip-path
-                    // We assume outline isn't strictly necessary or we'd need a separate svg stroke overlay.
-                    // Given the "Fluid" request, borderless with shadow is cleaner.
+                    // We apply drop-shadow to this layer. Since it's clipped, shadow follows the shape.
+                    filter: "drop-shadow(0px 10px 20px rgba(0,0,0,0.15))"
                 }}
             />
-
-            {/* Optional: Add an overlay for 'border' effect if needed, but 'fluid' usually implies borderless or soft. 
-                If border was vital, we'd use the SVG stroke approach. 
-                Let's stick to the color accuracy requested. */}
-        </motion.div>
+        </div>
     );
 };
 
@@ -264,6 +269,9 @@ export const Hero = ({children}: { children?: ReactNode }) => {
 
     const [isMenuFixed, setIsMenuFixed] = useState(false);
     const [fabVisible, setFabVisible] = useState(true);
+
+    // Reference to the main hero container/canvas
+    const heroRef = useRef<HTMLDivElement>(null);
 
     // -- Parallax Logic (Architectural) --
     const mouseX = useMotionValue(0);
@@ -345,6 +353,7 @@ export const Hero = ({children}: { children?: ReactNode }) => {
     return <SectionPadding end as="section" onClose={() => setIsMenuFixed(true)} onOpen={() => setIsMenuFixed(false)}
     >
         <div
+            ref={heroRef}
             className="relative flex flex-col items-center justify-center bg-[#FAFAFA] text-on-surface overflow-hidden min-h-[90vh]  pt-16">
 
             {/* --- PAPER TEXTURE OVERLAY --- */}
@@ -364,7 +373,13 @@ export const Hero = ({children}: { children?: ReactNode }) => {
                 {/* LAYER 1: SOFT ORGANIC "PAPER" SHAPES */}
                 <div className="absolute inset-0 z-0">
                     {shapes.map((shape) => (
-                        <RepulsiveShape key={shape.id} shape={shape} mouseX={mouseXPx} mouseY={mouseYPx}/>
+                        <RepulsiveShape
+                            key={shape.id}
+                            shape={shape}
+                            mouseX={mouseXPx}
+                            mouseY={mouseYPx}
+                            parentRef={heroRef}
+                        />
                     ))}
                 </div>
 
