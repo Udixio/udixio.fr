@@ -1,71 +1,82 @@
 ---
-import {getCollection} from "astro:content";
+import { getCollection } from "astro:content";
 import Layout from "@layouts/Layout.astro";
-import {Button, Card, classNames} from "@udixio/ui-react";
-import {BackgroundColor} from "@components/BackgroundColor";
-import {faArrowRight} from "@fortawesome/free-solid-svg-icons";
-import type {ProjectProps} from "./Project";
-import {getImage} from "astro:assets";
-import {Project} from "./project/Project.tsx";
+import { Button, Card, classNames } from "@udixio/ui-react";
+import { BackgroundColor } from "@components/BackgroundColor";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import type { ProjectProps } from "./project/Project";
+import { ProjectsShowcase } from "./home/modern/ProjectsShowcase";
+import { getImage } from "astro:assets";
+import { Project } from "./project/Project.tsx";
 
+const { max } = Astro.props;
 
-const {max} = Astro.props;
+const realisations = await getCollection("realisation");
+realisations.sort(
+  (a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infinity),
+);
 
-const realisations = await getCollection('realisation');
-realisations.sort((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infinity));
+const images = import.meta.glob("@assets/renders/*.webp", { eager: true });
 
-const images = import.meta.glob('@assets/renders/*.webp', {eager: true});
+const projectsProps: ProjectProps[] = await Promise.all(
+  realisations.map(async (realisation) => {
+    if (!realisation.data.images.background) {
+      const imageFileName = `${realisation.id}.webp`;
 
-const projectsProps: ProjectProps[] = (await Promise.all(
-    realisations.map(async (realisation) => {
-        if (!realisation.data.images.background) {
+      const imageEntry = (
+        Object.entries(images).find(([path]) =>
+          path.endsWith(imageFileName),
+        )?.[1] as any
+      ).default;
 
-            const imageFileName = `${realisation.id}.webp`;
+      const background = await getImage({
+        src: imageEntry,
+        format: "webp",
+        width: 800,
+      });
 
-            const imageEntry = ((Object.entries(images).find(([path]) =>
-                path.endsWith(imageFileName)
-            ))?.[1] as any).default;
+      realisation.data.images.background = {
+        src: background.src,
+        alt: "",
+      };
+    }
 
-            const background = await getImage({src: imageEntry, format: 'webp', width: 800});
-
-            realisation.data.images.background = {
-                src: background.src,
-                alt: "",
-            };
-        }
-
-        return {
-            slug: realisation.id,
-            ...realisation.data,
-            images: {
-                ...realisation.data.images,
-                background: realisation.data.images.background,
-            },
-        }
-    })
-))
+    return {
+      slug: realisation.id,
+      ...realisation.data,
+      images: {
+        ...realisation.data.images,
+        background: realisation.data.images.background,
+      },
+    };
+  }),
+);
 
 const visibleProjects = max ? projectsProps.slice(0, max) : projectsProps;
 ---
 
-<div class="max-width padding-x gap-x-8 gap-y-16  md:gap-y-32 grid grid-cols-1 sm:grid-cols-[repeat(20,minmax(0,1fr))] ">
-    {
-        visibleProjects.map((realisation, index) => {
-            const isTrue = [0, 3, 4, 7].includes(index % 8); // Détermine "true" ou "false"
+{
+  max ? (
+    <ProjectsShowcase projects={visibleProjects} client:visible />
+  ) : (
+    <div class="max-width padding-x gap-x-8 gap-y-16  md:gap-y-32 grid grid-cols-1 sm:grid-cols-[repeat(20,minmax(0,1fr))] ">
+      {visibleProjects.map((realisation, index) => {
+        const isTrue = [0, 3, 4, 7].includes(index % 8); // Détermine "true" ou "false"
 
-
-            return (
-                    <a class={classNames('col-span-1 row-span-1',
-                        {
-                            "sm:col-[_span_11_/_span_11] sm:aspect-[10/7] ": isTrue,
-                            "sm:col-[_span_9_/_span_9] sm:aspect-[8/9]": !isTrue,
-                            "self-end": index % 4 == 0,
-                            'sm:-mt-[25%] ': (index % 4 === 1) && (index != 0 && index != 1)
-                        }
-                    )} href={"/realisations/" + realisation.slug}>
-                        <Project client:load view="mini" {...realisation}></Project>
-                    </a>
-            )
-        })
-    }
-</div>
+        return (
+          <a
+            class={classNames("col-span-1 row-span-1", {
+              "sm:col-[_span_11_/_span_11] sm:aspect-[10/7] ": isTrue,
+              "sm:col-[_span_9_/_span_9] sm:aspect-[8/9]": !isTrue,
+              "self-end": index % 4 == 0,
+              "sm:-mt-[25%] ": index % 4 === 1 && index != 0 && index != 1,
+            })}
+            href={"/realisations/" + realisation.slug}
+          >
+            <Project client:load view="mini" {...realisation} />
+          </a>
+        );
+      })}
+    </div>
+  )
+}

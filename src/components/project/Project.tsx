@@ -5,7 +5,7 @@ import type {ReactNode} from "react";
 import {useState} from "react";
 import {AnimatePresence, motion} from "motion/react";
 
-type Props = CollectionEntry<"realisation">['data'] & {
+export type ProjectProps = CollectionEntry<"realisation">['data'] & {
     slug: string,
     images: {
         background: {
@@ -14,13 +14,13 @@ type Props = CollectionEntry<"realisation">['data'] & {
     }
     technologies?: ReactNode,
     services?: ReactNode,
-    body: ReactNode,
-    sidebar: ReactNode
+    body?: ReactNode,
+    sidebar?: ReactNode
     view?: "mini" | "full";
 
 }
 
-export const Project = (props: Props) => {
+export const Project = (props: ProjectProps) => {
 
     const [isHovered, setHovered] = useState(false);
 
@@ -54,7 +54,7 @@ export const Project = (props: Props) => {
 }
 
 
-export const ProjectMini = ({slug, images, title, summary, isHovered}: Props & { isHovered: boolean }) => {
+export const ProjectMini = ({slug, images, title, summary, isHovered}: ProjectProps & { isHovered: boolean }) => {
     return (
         <>
             <div className="w-full flex-1 rounded-2xl overflow-hidden relative bg-surface">
@@ -119,7 +119,7 @@ export const ProjectFull = ({
                                 body,
                                 sidebar,
                                 website,
-                            }: Props) => {
+                            }: ProjectProps) => {
     return (
         <>
             <IconButton variant='outlined' icon={faXmark}

@@ -1,445 +1,689 @@
 ---
 import Layout from "@layouts/Layout.astro";
-import { Button } from "@udixio/ui-react";
-import { Hero } from "@components/Hero.tsx";
+import {Button} from "@udixio/ui-react";
+import {Hero} from "@components/Hero.tsx";
 // import { HeroPaper } from "@components/home/HeroPaper";
-import { Logo } from "@components/Logo";
+import {Logo} from "@components/Logo";
 import Realisations from "@components/Realisations.astro";
-import { FeaturesGrid } from "@components/home/modern/FeaturesGrid";
+import {FeaturesGrid} from "@components/home/modern/FeaturesGrid";
 // import { ValueProp } from "@components/home/modern/ValueProp";
-import { ProblemSolutionSchema } from "@components/home/modern/ProblemSolutionSchema";
+import {ProblemSolutionSchema} from "@components/home/modern/ProblemSolutionSchema";
 // import { MethodSteps } from "@components/home/modern/MethodSteps";
-import { ProcessStickyScroll } from "@components/home/modern/ProcessStickyScroll";
-import { ProofsGrid } from "@components/home/modern/ProofsGrid";
-import { FaqAccordion } from "@components/home/modern/FaqAccordion";
-import { Card } from "@/components/Card";
-import { Underline } from "@components/Underline";
+import {ProcessStickyScroll} from "@components/home/modern/ProcessStickyScroll";
+import {ProofsGrid} from "@components/home/modern/ProofsGrid";
+import {FaqAccordion} from "@components/home/modern/FaqAccordion";
+import {Card} from "@/components/Card";
+import {Underline} from "@components/Underline";
 
 const faqItems = [
-  {
-    question: "Quel budget prévoir pour un site sur-mesure ?",
-    answer:
-      "Après un cadrage initial, nous remettons un devis détaillé avec inclus/exclus et options. Vous comprenez ce qui est prévu avant de lancer la production.",
-  },
-  {
-    question: "Comment suivez-vous l'avancement ?",
-    answer:
-      "Vous avez accès au suivi du projet et à des points réguliers. Chaque décision est expliquée simplement pour garder la main.",
-  },
-  {
-    question: "Serai-je propriétaire de mon site ?",
-    answer:
-      "Oui. Code source, accès et données vous appartiennent. Nous privilégions des technologies ouvertes et une documentation claire.",
-  },
-  {
-    question: "Comment gérez-vous les délais ?",
-    answer:
-      "Le planning est défini dès le cadrage avec des jalons de validation. En cas d'ajustement, on en parle tout de suite.",
-  },
-  {
-    question: "Que se passe-t-il après la mise en ligne ?",
-    answer:
-      "Une phase d'hypercare est prévue pour le démarrage, puis une formation pour vous rendre autonome. La maintenance évolutive reste possible.",
-  },
+    {
+        question: "Quel budget prévoir pour un site sur-mesure ?",
+        answer:
+            "Après un cadrage initial, nous remettons un devis détaillé avec inclus/exclus et options. Vous comprenez ce qui est prévu avant de lancer la production.",
+    },
+    {
+        question: "Comment suivez-vous l'avancement ?",
+        answer:
+            "Vous avez accès au suivi du projet et à des points réguliers. Chaque décision est expliquée simplement pour garder la main.",
+    },
+    {
+        question: "Serai-je propriétaire de mon site ?",
+        answer:
+            "Oui. Code source, accès et données vous appartiennent. Nous privilégions des technologies ouvertes et une documentation claire.",
+    },
+    {
+        question: "Comment gérez-vous les délais ?",
+        answer:
+            "Le planning est défini dès le cadrage avec des jalons de validation. En cas d'ajustement, on en parle tout de suite.",
+    },
+    {
+        question: "Que se passe-t-il après la mise en ligne ?",
+        answer:
+            "Une phase d'hypercare est prévue pour le démarrage, puis une formation pour vous rendre autonome. La maintenance évolutive reste possible.",
+    },
+    {
+        question: "Puis-je récupérer mes accès et changer de prestataire ?",
+        answer:
+            "Oui. Les accès, le code et les livrables sont à vous. Nous documentons le projet pour garantir la réversibilité.",
+    },
 ];
 ---
 
 <Layout
-  seo={{
-    title: "Clarté & Maîtrise pour votre site web • Udixio",
-    description:
-      "Udixio structure vos projets digitaux : méthode claire, transparence, sobriété et autonomie durable.",
-  }}
-  background={false}
+        seo={{
+            title: "Clarté & Maîtrise pour votre site web • Udixio",
+            description:
+                "Udixio structure vos projets digitaux : méthode claire, transparence, sobriété et autonomie durable.",
+        }}
+        background={false}
 >
-  <Hero client:load>
-    <div
-      class="w-full max-w-[90rem] mx-auto px-4 flex flex-col justify-center min-h-[50vh]"
-    >
-      {/* Trendy Deconstructed Title */}
-      <div class="w-full flex justify-end mb-8 md:mb-0 md:-translate-y-4">
+    <Hero client:load>
+        <div
+                class="w-full max-w-[90rem] mx-auto px-4 flex flex-col justify-center min-h-[50vh]"
+        >
+            {/* Trendy Deconstructed Title */}
+            <div class="w-full flex justify-end mb-8 md:mb-0 md:-translate-y-4">
         <span
-          class="flex items-center gap-3 text-label-small md:text-label-medium font-mono text-tertiary uppercase tracking-widest bg-white/50 backdrop-blur-sm px-4 py-2 rounded-full border border-tertiary/20 anim-fade anim-duration-1000 ease-out"
+                class="flex items-center gap-3 text-label-small md:text-label-medium font-mono text-tertiary uppercase tracking-widest bg-white/50 backdrop-blur-sm px-4 py-2 rounded-full border border-tertiary/20 anim-fade anim-duration-1000 ease-out"
         >
           <span class="relative flex h-2 w-2">
             <span
-              class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-75"
+                    class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-75"
             ></span>
             <span class="relative inline-flex rounded-full h-2 w-2 bg-tertiary"
             ></span>
           </span>
           HAUTS-DE-FRANCE
         </span>
-      </div>
-      <h1
-        class="flex flex-col uppercase mix-blend-darken text-on-surface-variant"
-      >
-        {/* Row 1: Left */}
-        <span
-          class="self-start flex flex-col md:flex-row md:items-baseline gap-2 md:gap-4 group"
-        >
+            </div>
+            <h1
+                    class="flex flex-col uppercase mix-blend-darken text-on-surface-variant"
+            >
+                {/* Row 1: Left */}
+                <span
+                        class="self-start flex flex-col md:flex-row md:items-baseline gap-2 md:gap-4 group"
+                >
           <span
-            class="text-headline-small normal-case mb-2 md:mb-0 block anim-fade anim-slide-from-left anim-duration-1000 ease-out"
+                  class="text-headline-small normal-case mb-2 md:mb-0 block anim-fade anim-slide-from-left anim-duration-1000 ease-out"
           >
             — L'agence web
           </span>
           <span
-            class="text-display-large text-on-surface anim-fade anim-slide-from-left anim-duration-1000 ease-out anim-delay-100"
-            >UDIXIO</span
+                  class="text-display-large text-on-surface anim-fade anim-slide-from-left anim-duration-1000 ease-out anim-delay-100"
+          >UDIXIO</span
           >
         </span>
 
-        {/* Row 2: Right/Indented */}
-        <span
-          class="self-start md:self-end md:mr-12 text-display-large text-gradient anim-fade anim-slide-from-left anim-duration-1000 ease-out anim-delay-200"
-        >
+                {/* Row 2: Right/Indented */}
+                <span
+                        class="self-start md:self-end md:mr-12 text-display-large text-gradient anim-fade anim-slide-from-left anim-duration-1000 ease-out anim-delay-200"
+                >
           ACCOMPAGNE
         </span>
 
-        {/* Row 3: Mixed (Small 'en' + Big 'Transparence') */}
-        <span
-          class="self-start md:self-center flex flex-col md:flex-row items-baseline gap-2 md:gap-6 mt-2 md:mt-0"
-        >
+                {/* Row 3: Mixed (Small 'en' + Big 'Transparence') */}
+                <span
+                        class="self-start md:self-center flex flex-col md:flex-row items-baseline gap-2 md:gap-6 mt-2 md:mt-0"
+                >
           <span
-            class="text-headline-medium lowercase anim-fade anim-slide-from-bottom anim-duration-1000 ease-out anim-delay-300"
+                  class="text-headline-medium lowercase anim-fade anim-slide-from-bottom anim-duration-1000 ease-out anim-delay-300"
           >
             en toute
           </span>
           <span
-            class="relative italic inline-block text-display-large text-primary anim-fade anim-slide-from-bottom anim-duration-1000 ease-out anim-delay-400"
+                  class="relative italic inline-block text-display-large text-primary anim-fade anim-slide-from-bottom anim-duration-1000 ease-out anim-delay-400"
           >
             TRANSPARENCE.
-            <Underline client:idle className="text-primary/30" delay={0.6} />
+            <Underline client:idle className="text-primary/30" delay={0.6}/>
           </span>
         </span>
-      </h1>
+            </h1>
 
-      {/* Deconstructed Footer: Description Left, CTA Right */}
-      <div
-        class="flex flex-col md:flex-row justify-between items-start md:items-end mt-16 md:mt-24 gap-8 anim-fade anim-duration-1500 border-t border-outline-variant/50 pt-8"
-      >
-        <p
-          class="text-body-large max-w-md text-on-surface-variant anim-fade anim-duration-1000 ease-out anim-delay-200"
-        >
-          <strong>Fini le jargon et les boîtes noires.</strong><br />
-          Un cadrage net, des décisions expliquées et un suivi partagé. Vous récupérez
-          le contrôle de votre outil digital.
-        </p>
-
-        <div
-          class="flex flex-wrap gap-4 anim-scale-in anim-duration-1000 anim-delay-500"
-        >
-          <Button
-            href="/contact"
-            shape="squared"
-            label="Planifier un échange"
-            className="bg-primary text-on-primary"
-          />
-          <Button variant="outlined" href="/methode" label="Voir la méthode" />
-        </div>
-      </div>
-    </div>
-  </Hero>
-
-  {/* 01. LA MÉTHODE - VISUAL MANIFESTO */}
-  <section class="section py-32 bg-surface">
-    <div class="max-width padding-x">
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-24">
-        {/* Sticky Title */}
-        <div class="md:col-span-4 relative">
-          <div class="sticky top-32">
-            <span class="text-label-large font-mono text-tertiary mb-4 block"
-              >01 — LE PROCESSUS</span
+            {/* Deconstructed Footer: Description Left, CTA Right */}
+            <div
+                    class="flex flex-col md:flex-row justify-between items-start md:items-end mt-16 md:mt-24 gap-8 anim-fade anim-duration-1500 border-t border-outline-variant/50 pt-8"
             >
-            <h2 class="text-display-medium leading-tight text-on-surface">
-              3 étapes.<br />
-              <span class="text-on-surface-variant opacity-50"
-                >Zéro surprise.</span
-              >
-            </h2>
-            <div class="mt-8 hidden md:block">
-              <svg
-                class="w-12 h-12 text-primary animate-bounce-slow"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.5"><path d="M12 5v14M5 12l7 7 7-7"></path></svg
-              >
+                <p
+                        class="text-body-large max-w-md text-on-surface-variant anim-fade anim-duration-1000 ease-out anim-delay-200"
+                >
+                    <strong>Fini le jargon et les boîtes noires.</strong><br/>
+                    Un cadrage net, des décisions expliquées et un suivi partagé. Agence web pour
+                    TPE/PME exigeantes : visibilité, crédibilité et acquisition maîtrisées.
+                </p>
+
+                <div
+                        class="flex flex-wrap gap-4 anim-scale-in anim-duration-1000 anim-delay-500"
+                >
+                    <div class="flex items-center gap-2">
+                        <Button
+                                href="/contact"
+                                shape="squared"
+                                label="Obtenir un diagnostic"
+                                className="bg-primary text-on-primary"
+                        />
+                        <span class="text-label-small uppercase tracking-widest text-tertiary border border-tertiary/40 rounded-full px-3 py-1">
+                            Offert
+                        </span>
+                    </div>
+                    <Button variant="outlined" href="/realisations" label="Parcourir nos réalisations"/>
+                </div>
             </div>
-          </div>
         </div>
+    </Hero>
 
-        {/* Vertical Steps */}
-        <div class="md:col-span-8 space-y-24">
-          {/* Step 1 */}
-          <div
-            class="group relative pl-8 border-l-2 border-outline-variant hover:border-primary transition-colors duration-500 anim-fade-up"
-          >
+    {/* 01. LA MÉTHODE - VISUAL MANIFESTO */}
+    <section class="section py-32 bg-surface">
+        <div class="max-width padding-x">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-24">
+                {/* Sticky Title */}
+                <div class="md:col-span-4 relative">
+                    <div class="sticky top-32">
+            <span class="text-label-large font-mono text-tertiary mb-4 block"
+            >01 — LE PROCESSUS</span
+            >
+                        <h2 class="text-headline-large leading-tight text-on-surface">
+                            3 étapes claires.<br/>
+                            <span class="text-on-surface-variant opacity-50"
+                            >Rythme maîtrisé.</span
+                            >
+                        </h2>
+                        <div class="mt-8 hidden md:block">
+                            <svg
+                                    class="w-12 h-12 text-primary animate-bounce-slow"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.5">
+                                <path d="M12 5v14M5 12l7 7 7-7"></path>
+                            </svg
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                {/* Vertical Steps */}
+                <div class="md:col-span-8 space-y-24">
+                    {/* Step 1 */}
+                    <div
+                            class="group relative pl-8 border-l-2 border-outline-variant hover:border-primary transition-colors duration-500 anim-fade-up"
+                    >
             <span
-              class="absolute -left-[1.35rem] top-0 flex h-10 w-10 items-center justify-center rounded-full bg-surface border-2 border-outline-variant group-hover:border-primary group-hover:bg-primary group-hover:text-on-primary transition-all text-title-medium font-bold"
-              >1</span
+                    class="absolute -left-[1.35rem] top-0 flex h-10 w-10 items-center justify-center rounded-full bg-surface border-2 border-outline-variant group-hover:border-primary group-hover:bg-primary group-hover:text-on-primary transition-all text-title-medium font-bold"
+            >1</span
             >
-            <h3 class="text-display-small mb-4 text-on-surface">
-              Cadrage & objectifs
-            </h3>
-            <p
-              class="text-headline-small text-on-surface-variant font-light max-w-lg"
-            >
-              Atelier initial, priorités et contraintes posées. Le périmètre est
-              validé avant d'avancer.
-            </p>
-          </div>
+                        <h3 class="text-headline-medium mb-4 text-on-surface">
+                            Cadrage des objectifs
+                        </h3>
+                        <p
+                                class="text-body-large text-on-surface-variant font-light max-w-lg"
+                        >
+                            Atelier initial, priorités et contraintes posées. Le périmètre est
+                            validé avant d'avancer.
+                        </p>
+                    </div>
 
-          {/* Step 2 */}
-          <div
-            class="group relative pl-8 border-l-2 border-outline-variant hover:border-primary transition-colors duration-500 anim-fade-up delay-100"
-          >
+                    {/* Step 2 */}
+                    <div
+                            class="group relative pl-8 border-l-2 border-outline-variant hover:border-primary transition-colors duration-500 anim-fade-up delay-100"
+                    >
             <span
-              class="absolute -left-[1.35rem] top-0 flex h-10 w-10 items-center justify-center rounded-full bg-surface border-2 border-outline-variant group-hover:border-primary group-hover:bg-primary group-hover:text-on-primary transition-all text-title-medium font-bold"
-              >2</span
+                    class="absolute -left-[1.35rem] top-0 flex h-10 w-10 items-center justify-center rounded-full bg-surface border-2 border-outline-variant group-hover:border-primary group-hover:bg-primary group-hover:text-on-primary transition-all text-title-medium font-bold"
+            >2</span
             >
-            <h3 class="text-display-small mb-4 text-on-surface">
-              Plan d'action partagé
-            </h3>
-            <p
-              class="text-headline-small text-on-surface-variant font-light max-w-lg"
-            >
-              Feuille de route claire, validations régulières et suivi lisible
-              pour garder le contrôle.
-            </p>
-          </div>
+                        <h3 class="text-headline-medium mb-4 text-on-surface">
+                            Plan d'action clair
+                        </h3>
+                        <p
+                                class="text-body-large text-on-surface-variant font-light max-w-lg"
+                        >
+                            Feuille de route claire, validations régulières et suivi lisible
+                            pour garder le contrôle.
+                        </p>
+                    </div>
 
-          {/* Step 3 */}
-          <div
-            class="group relative pl-8 border-l-2 border-outline-variant hover:border-primary transition-colors duration-500 anim-fade-up delay-200"
-          >
+                    {/* Step 3 */}
+                    <div
+                            class="group relative pl-8 border-l-2 border-outline-variant hover:border-primary transition-colors duration-500 anim-fade-up delay-200"
+                    >
             <span
-              class="absolute -left-[1.35rem] top-0 flex h-10 w-10 items-center justify-center rounded-full bg-surface border-2 border-outline-variant group-hover:border-primary group-hover:bg-primary group-hover:text-on-primary transition-all text-title-medium font-bold"
-              >3</span
+                    class="absolute -left-[1.35rem] top-0 flex h-10 w-10 items-center justify-center rounded-full bg-surface border-2 border-outline-variant group-hover:border-primary group-hover:bg-primary group-hover:text-on-primary transition-all text-title-medium font-bold"
+            >3</span
             >
-            <h3 class="text-display-small mb-4 text-on-surface">
-              Autonomie & clés
-            </h3>
-            <p
-              class="text-headline-small text-on-surface-variant font-light max-w-lg"
-            >
-              Code source, accès et documentation remis. Formation incluse pour
-              vous rendre autonome.
-            </p>
-          </div>
+                        <h3 class="text-headline-medium mb-4 text-on-surface">
+                            Autonomie et transmission
+                        </h3>
+                        <p
+                                class="text-body-large text-on-surface-variant font-light max-w-lg"
+                        >
+                            Code source, accès et documentation remis. Formation incluse pour
+                            vous rendre autonome.
+                        </p>
+                    </div>
 
-          <div class="pt-12">
-            <Button
-              href="/methode"
-              label="Explorer la méthode en détail"
-              variant="outlined"
-              className="group-hover:bg-primary group-hover:text-on-primary"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  {/* 02. LES FREINS - ASYMMETRIC SPLIT */}
-  <section class="section py-32 bg-surface-container-low overflow-hidden">
-    <div class="max-width padding-x relative z-10">
-      <div class="flex flex-col md:flex-row gap-16 md:gap-32 items-start">
-        <div class="md:w-1/3 sticky top-32">
-          <span class="text-label-large font-mono text-error mb-4 block"
-            >02 — CONSTAT</span
-          >
-          <h2
-            class="text-[4rem] sm:text-[6rem] leading-[0.9] font-black text-on-surface tracking-tighter uppercase mix-blend-overlay opacity-20 md:opacity-100 absolute md:static top-0 left-0 -z-10 md:z-0"
-          >
-            LES<br />FREINS
-          </h2>
-          <p
-            class="mt-8 text-title-large text-on-surface-variant max-w-xs anim-fade-up"
-          >
-            Beaucoup de projets échouent par manque de clarté. Le frein
-            principal n'est pas la technique, mais l'absence de méthode
-            partagée.
-          </p>
-        </div>
-        <div
-          class="md:w-2/3 w-full bg-surface p-8 md:p-12 rounded-3xl border border-outline-variant/30 shadow-2xl anim-slide-from-right"
-        >
-          <FeaturesGrid client:visible />
-        </div>
-      </div>
-    </div>
-  </section>
+                    <Button
+                            href="/methode"
+                            label="Explorer la méthode en détail"
+                            variant="outlined"
+                            className="w-fit"
+                    />
 
-  {/* 03. NOTRE RÉPONSE - DARK MODE IMMERSION */}
-  <section
-    class="section py-32 bg-inverse-surface text-inverse-on-surface relative"
-  >
-    <div class="max-width padding-x">
-      <div class="text-center mb-24">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {/* 02. LES BASES - ASYMMETRIC SPLIT */}
+    <section class="py-32 bg-surface-container-low overflow-hidden">
+        <div class="section relative z-10">
+            <div class="flex flex-col md:flex-row gap-16 md:gap-32 items-start">
+                <div class="md:w-1/3 sticky top-32">
+          <span class="text-label-large font-mono text-tertiary mb-4 block"
+          >02 — LES BASES</span
+          >
+                    <h2
+                            class="text-[4rem] sm:text-[6rem] leading-[0.9] font-black text-on-surface tracking-tighter uppercase mix-blend-overlay opacity-20 md:opacity-100 absolute md:static top-0 left-0 -z-10 md:z-0"
+                    >
+                        LES BASES<br/>D'UN PROJET CLAIR
+                    </h2>
+                    <p
+                            class="mt-8 text-title-large text-on-surface-variant max-w-xs anim-fade-up"
+                    >
+                        Beaucoup de projets avancent mal faute de repères simples.
+                        Ce qui fait la différence : un cadre lisible, une méthode
+                        partagée et un pilotage transparent.
+                    </p>
+                </div>
+                <div
+                        class="md:w-2/3 w-full bg-surface p-8 md:p-12 rounded-3xl border border-outline-variant/30 shadow-2xl anim-slide-from-right"
+                >
+                    <FeaturesGrid client:visible/>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {/* 02b. OFFRE CLAIRE - TEXT ONLY */}
+    {/* UX NOTE: This block can be a compact split layout (text + small checklist/visual) to avoid stacking similar text sections. */}
+    <section class="section py-24 bg-surface">
+        <div class="max-width padding-x">
+            <div class="max-w-3xl">
+                <h2 class="text-headline-large text-on-surface">
+                    Une offre claire, du cadrage à l'autonomie
+                </h2>
+                <p class="text-title-medium text-on-surface-variant mt-6">
+                    Nous concevons des sites web sur-mesure, de l'audit initial au déploiement :
+                    design, développement, SEO technique et formation. Chaque livrable est posé
+                    dès le départ, avec inclus/exclus explicites et un planning réaliste.
+                </p>
+                <div class="mt-8 flex flex-wrap gap-4">
+                    <Button href="/services" label="Voir ce qui est inclus" variant="outlined"/>
+                    <Button href="/methode" label="Comprendre notre méthode" variant="text"/>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {/* 02c. BENEFICES - VALUE LINK */}
+    {/* UX NOTE: Consider a visual variant (icons or metric chips) to differentiate from the offer block above. */}
+    <section class="section py-24 bg-surface">
+        <div class="max-width padding-x">
+            <div class="max-w-4xl">
+                <h2 class="text-headline-large text-on-surface">
+                    Des bénéfices concrets, reliés à des leviers précis
+                </h2>
+                <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="p-6 rounded-2xl border border-outline-variant/40 bg-surface">
+                        <h3 class="text-headline-small font-bold mb-2">Visibilité & prospects</h3>
+                        <p class="text-body-medium text-on-surface-variant">
+                            SEO technique + performance + architecture claire = plus de trafic qualifié
+                            et des conversions mesurables.
+                        </p>
+                    </div>
+                    <div class="p-6 rounded-2xl border border-outline-variant/40 bg-surface">
+                        <h3 class="text-headline-small font-bold mb-2">Crédibilité immédiate</h3>
+                        <p class="text-body-medium text-on-surface-variant">
+                            UX soignée, design sobre et contenu structuré = une image professionnelle
+                            qui rassure dès les premières secondes.
+                        </p>
+                    </div>
+                    <div class="p-6 rounded-2xl border border-outline-variant/40 bg-surface">
+                        <h3 class="text-headline-small font-bold mb-2">Gain de temps</h3>
+                        <p class="text-body-medium text-on-surface-variant">
+                            CMS simple + documentation + formation = autonomie réelle et mises à jour
+                            rapides sans dépendance.
+                        </p>
+                    </div>
+                    <div class="p-6 rounded-2xl border border-outline-variant/40 bg-surface">
+                        <h3 class="text-headline-small font-bold mb-2">Croissance maîtrisée</h3>
+                        <p class="text-body-medium text-on-surface-variant">
+                            Méthode cadrée + jalons validés = décisions plus sûres, moins d'aléas,
+                            et un investissement mieux piloté.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {/* 03. NOTRE RÉPONSE - DARK MODE IMMERSION */}
+    <section
+            class="section py-32 bg-inverse-surface text-inverse-on-surface relative"
+    >
+        <div class="max-width padding-x">
+            <div class="text-center mb-24">
         <span class="text-label-large font-mono text-primary-fixed mb-4 block"
-          >03 — LA SOLUTION</span
+        >03 — NOTRE APPROCHE</span
         >
-        <h2 class="text-display-small md:text-display-large">
-          Notre réponse :<br /><span class="text-primary-fixed"
-            >claire et structurée</span
-          >
-        </h2>
-        <p class="text-title-medium mt-6 text-inverse-on-surface/70">
-          Survolez les cartes pour découvrir notre approche.
-        </p>
-      </div>
-      <ProblemSolutionSchema client:visible />
-    </div>
-  </section>
-
-  {/* 04. PREUVES - WIDE GALLERY */}
-  <section class="section py-32">
-    <div class="max-width padding-x">
-      <div class="flex justify-between items-end mb-16">
-        <h2 class="text-display-medium text-on-surface">Preuves concrètes</h2>
-        <Button
-          href="/realisations"
-          label="Tout voir"
-          variant="outlined"
-          className="border-transparent"
-        />
-      </div>
-      <ProofsGrid client:visible />
-
-      <div class="mt-32">
-        <h3 class="text-headline-large mb-12">Réalisations récentes</h3>
-        <Realisations max={4} />
-      </div>
-    </div>
-  </section>
-
-  {/* 05. BENTO GRID - RESOURCES & ENGAGEMENTS */}
-  <section class="section py-32 bg-surface-container">
-    <div class="max-width padding-x">
-      <h2 class="text-display-medium mb-16">Ressources & Engagements</h2>
-
-      <div
-        class="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-6 h-auto md:h-[800px]"
-      >
-        {/* Promesse Principale (Large) */}
-        <div
-          class="md:col-span-2 md:row-span-1 bg-primary text-on-primary p-12 rounded-[2rem] flex flex-col justify-between hover:scale-[1.01] transition-transform duration-500"
-        >
-          <h3 class="text-display-small">Devis détaillé & Transparence</h3>
-          <div class="flex justify-between items-end">
-            <p class="max-w-md text-title-medium opacity-90">
-              Inclus et exclus clairement listés. Vous signez en sachant
-              exactement ce que vous achetez.
-            </p>
-            <span class="text-display-large opacity-20 font-mono">01</span>
-          </div>
+                <h2 class="text-headline-large md:text-headline-large">
+                    Vos objectifs d'abord :<br/><span class="text-primary-fixed"
+                >des réponses claires</span
+                >
+                </h2>
+                <p class="text-title-medium mt-6 text-inverse-on-surface/70">
+                    Des choix simples, expliqués et reliés à vos priorités.
+                </p>
+            </div>
+            <ProblemSolutionSchema client:visible/>
         </div>
+    </section>
 
-        {/* Resource 1 */}
-        <a
-          href="/ressources"
-          class="bg-surface p-8 rounded-[2rem] border border-outline-variant hover:border-primary transition-colors flex flex-col justify-between group"
-        >
-          <div
-            class="h-12 w-12 bg-tertiary-container rounded-full flex items-center justify-center text-on-tertiary-container group-hover:scale-110 transition-transform"
-          >
-            ?
-          </div>
-          <div>
-            <h4 class="text-headline-small font-bold mb-2">
-              Cadrer votre besoin
-            </h4>
-            <p class="text-body-medium text-on-surface-variant">
-              Les questions essentielles avant de démarrer.
-            </p>
-          </div>
-        </a>
+    {/* 04. PREUVES - WIDE GALLERY */}
+    <section class="section py-32">
+        <div class="max-width padding-x">
+            <div class="flex justify-between items-end mb-8">
+                <div>
+                    <h2 class="text-headline-large text-on-surface">
+                        Des preuves claires, pas des promesses
+                    </h2>
+                    <p class="text-title-medium text-on-surface-variant mt-4 max-w-2xl">
+                        Nos choix techniques et nos résultats sont vérifiables : indicateurs publiés,
+                        audits lisibles et sobriété mesurée.
+                    </p>
+                </div>
+                <Button
+                        href="/realisations"
+                        label="Tout voir"
+                        variant="outlined"
+                        className="border-transparent"
+                />
+            </div>
 
-        {/* Engagement 2 */}
-        <div
-          class="bg-surface-container-high p-8 rounded-[2rem] flex flex-col justify-center text-center items-center gap-6"
-        >
-          <h4 class="text-headline-medium font-bold text-primary">
-            Autonomie Client
-          </h4>
-          <p class="text-body-large">
-            Code source et accès vous appartiennent.
-          </p>
-          <Button href="/methode" label="En savoir plus" variant="outlined" />
+            <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="p-6 rounded-2xl border border-outline-variant/40 bg-surface">
+                    <h3 class="text-headline-small font-bold mb-2">Qualité mesurée</h3>
+                    <p class="text-body-medium text-on-surface-variant">
+                        Performance, SEO, accessibilité : des scores partagés pour chaque projet livré.
+                    </p>
+                </div>
+                <div class="p-6 rounded-2xl border border-outline-variant/40 bg-surface">
+                    <h3 class="text-headline-small font-bold mb-2">Audits vérifiables</h3>
+                    <p class="text-body-medium text-on-surface-variant">
+                        Résultats lisibles (ex. Lighthouse, Core Web Vitals) pour valider la qualité.
+                    </p>
+                </div>
+                <div class="p-6 rounded-2xl border border-outline-variant/40 bg-surface">
+                    <h3 class="text-headline-small font-bold mb-2">Sobriété maîtrisée</h3>
+                    <p class="text-body-medium text-on-surface-variant">
+                        Poids de page et éco‑indicateurs suivis pour limiter l'empreinte.
+                    </p>
+                </div>
+            </div>
+
+            <ProofsGrid client:visible/>
+
+            <div class="mt-24">
+                <div class="flex items-center justify-between mb-10">
+                    <h3 class="text-headline-large">Dernières réalisations</h3>
+                    <Button href="/realisations" label="Voir toutes les réalisations" variant="text"/>
+                </div>
+                <Realisations max={4}/>
+            </div>
         </div>
+    </section>
 
-        {/* Resource 2 (Large) */}
-        <div
-          class="md:col-span-2 bg-on-surface text-inverse-on-surface p-12 rounded-[2rem] flex flex-col md:flex-row gap-12 items-center hover:scale-[1.01] transition-transform duration-500"
-        >
-          <div class="flex-1">
-            <h3 class="text-display-small mb-4 text-primary-fixed">
-              Refonte sereine
-            </h3>
-            <p class="text-title-medium text-inverse-on-surface/80">
-              Evitez les dérives budgétaires avec notre guide de stratégie.
-            </p>
-          </div>
-          <Button
-            href="/ressources"
-            label="Lire le guide"
-            className="bg-primary-fixed text-on-primary-fixed whitespace-nowrap"
-          />
+    {/* 04b. INVESTISSEMENT & MAITRISE */}
+    {/* UX NOTE: This can be styled as a pricing transparency panel (cards or accordion) to break the rhythm. */}
+    <section class="section py-24 bg-surface">
+        <div class="max-width padding-x">
+            <div class="max-w-4xl">
+                <h2 class="text-headline-large text-on-surface">
+                    Transparence sur l'investissement
+                </h2>
+                <p class="text-title-medium text-on-surface-variant mt-6">
+                    Devis détaillé, jalons clairs, coûts expliqués : vous savez où va chaque euro
+                    et pourquoi.
+                </p>
+                <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="p-6 rounded-2xl border border-outline-variant/40 bg-surface">
+                        <h3 class="text-headline-small font-bold mb-2">Inclus & exclus</h3>
+                        <p class="text-body-medium text-on-surface-variant">
+                            Design, dev, SEO technique, formation : le périmètre est explicitement cadré.
+                        </p>
+                    </div>
+                    <div class="p-6 rounded-2xl border border-outline-variant/40 bg-surface">
+                        <h3 class="text-headline-small font-bold mb-2">Options lisibles</h3>
+                        <p class="text-body-medium text-on-surface-variant">
+                            Ce qui fait varier le budget est présenté clairement, sans surprise.
+                        </p>
+                    </div>
+                    <div class="p-6 rounded-2xl border border-outline-variant/40 bg-surface">
+                        <h3 class="text-headline-small font-bold mb-2">Planning annoncé</h3>
+                        <p class="text-body-medium text-on-surface-variant">
+                            Jalons et validations fixés dès le cadrage, avec un rythme réaliste.
+                        </p>
+                    </div>
+                </div>
+                <div class="mt-8">
+                    <Button href="/services" label="Voir ce qui est inclus" variant="outlined"/>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  {/* 06. FAQ - SPLIT INTERACTIVE */}
-  <section class="section py-32">
-    <div class="max-width padding-x grid md:grid-cols-2 gap-16">
-      <div>
+    {/* 04c. ANTI-DEPENDANCE */}
+    {/* UX NOTE: Consider a key/ownership visual or "keys delivered" badge row to make this feel distinct. */}
+    <section class="section py-24 bg-surface">
+        <div class="max-width padding-x">
+            <div class="max-w-4xl">
+                <h2 class="text-headline-large text-on-surface">
+                    Vous gardez les clés
+                </h2>
+                <p class="text-title-medium text-on-surface-variant mt-6">
+                    Code, accès, données : tout vous appartient. La réversibilité est prévue dès le départ.
+                </p>
+                <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="p-6 rounded-2xl border border-outline-variant/40 bg-surface">
+                        <h3 class="text-headline-small font-bold mb-2">Accès complets</h3>
+                        <p class="text-body-medium text-on-surface-variant">
+                            Dépôts, comptes et outils sont partagés pour éviter toute dépendance.
+                        </p>
+                    </div>
+                    <div class="p-6 rounded-2xl border border-outline-variant/40 bg-surface">
+                        <h3 class="text-headline-small font-bold mb-2">Documentation claire</h3>
+                        <p class="text-body-medium text-on-surface-variant">
+                            Livrables expliqués et guide de prise en main remis à la livraison.
+                        </p>
+                    </div>
+                    <div class="p-6 rounded-2xl border border-outline-variant/40 bg-surface">
+                        <h3 class="text-headline-small font-bold mb-2">Formation incluse</h3>
+                        <p class="text-body-medium text-on-surface-variant">
+                            Une session dédiée pour vous rendre autonome sur votre site.
+                        </p>
+                    </div>
+                </div>
+                <div class="mt-8">
+                    <Button href="/methode" label="Découvrir l'approche" variant="outlined"/>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {/* 05b. DUO FONDATEUR */}
+    {/* UX NOTE: Candidate for a compact team card with photo placeholders; keep it personal but short. */}
+    <section class="section py-24 bg-surface-container-low">
+        <div class="max-width padding-x">
+            <div class="max-w-4xl">
+                <h2 class="text-headline-large text-on-surface">
+                    Un duo impliqué, en accès direct
+                </h2>
+                <p class="text-title-medium text-on-surface-variant mt-6">
+                    Joel (tech) et Florian (cadrage/relations) pilotent chaque projet en direct,
+                    sans intermédiaires ni perte d'information.
+                </p>
+                <div class="mt-8 flex flex-col sm:flex-row gap-6">
+                    <div class="flex items-center gap-4">
+                        <div class="h-12 w-12 rounded-full border border-outline-variant bg-surface flex items-center justify-center text-title-small font-bold">
+                            JV
+                        </div>
+                        <div>
+                            <div class="text-title-medium font-bold text-on-surface">Joel Vigreux</div>
+                            <div class="text-body-medium text-on-surface-variant">Tech, performance, qualite</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="h-12 w-12 rounded-full border border-outline-variant bg-surface flex items-center justify-center text-title-small font-bold">
+                            FV
+                        </div>
+                        <div>
+                            <div class="text-title-medium font-bold text-on-surface">Florian Vigreux</div>
+                            <div class="text-body-medium text-on-surface-variant">Cadrage, relation client, pilotage</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-6">
+                    <Button href="/agence" label="Découvrir l'équipe" variant="outlined"/>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {/* 05. BENTO GRID - RESOURCES & ENGAGEMENTS */}
+    {/* UX NOTE: Eco-conception cards should feel "lighter" (subtle green accents, weight/ecoindex chips). */}
+    <section class="section py-32 bg-surface-container">
+        <div class="max-width padding-x">
+            <h2 class="text-headline-large mb-16">Ressources & éco‑conception</h2>
+
+            <div
+                    class="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-6 h-auto md:h-[800px]"
+            >
+                {/* Promesse Principale (Large) */}
+                <div
+                        class="md:col-span-2 md:row-span-1 bg-primary text-on-primary p-12 rounded-[2rem] flex flex-col justify-between hover:scale-[1.01] transition-transform duration-500"
+                >
+                    <h3 class="text-headline-medium">Devis clair & transparence totale</h3>
+                    <div class="flex justify-between items-end">
+                        <p class="max-w-md text-title-medium opacity-90">
+                            Inclus et exclus clairement listés. Vous signez en sachant
+                            exactement ce que vous achetez.
+                        </p>
+                        <span class="text-headline-large opacity-20 font-mono">01</span>
+                    </div>
+                </div>
+
+                {/* Eco 1 */}
+                <div
+                        class="bg-surface p-8 rounded-[2rem] border border-outline-variant flex flex-col justify-between"
+                >
+                    <div>
+                        <h4 class="text-headline-small font-bold mb-2">
+                            Sobriété numérique
+                        </h4>
+                        <p class="text-body-medium text-on-surface-variant">
+                            Design frugal, code léger et médias optimisés pour réduire le poids des pages.
+                        </p>
+                    </div>
+                    <div class="mt-6">
+                        <Button href="/methode" label="Voir nos choix" variant="text"/>
+                    </div>
+                </div>
+
+                {/* Engagement 2 */}
+                <div
+                        class="bg-surface-container-high p-8 rounded-[2rem] flex flex-col justify-center text-center items-center gap-6"
+                >
+                    <h4 class="text-headline-medium font-bold text-primary">
+                        Autonomie Client
+                    </h4>
+                    <p class="text-body-large">
+                        Code source et accès vous appartiennent.
+                    </p>
+                    <Button href="/methode" label="En savoir plus" variant="outlined"/>
+                </div>
+
+                {/* Eco 2 */}
+                <div
+                        class="bg-surface p-8 rounded-[2rem] border border-outline-variant flex flex-col justify-between"
+                >
+                    <div>
+                        <h4 class="text-headline-small font-bold mb-2">
+                            Indicateurs éco-conçus
+                        </h4>
+                        <p class="text-body-medium text-on-surface-variant">
+                            Poids de page, EcoIndex et bonnes pratiques suivis pour limiter l'empreinte.
+                        </p>
+                    </div>
+                    <div class="mt-6">
+                        <Button href="/realisations" label="Voir des exemples" variant="text"/>
+                    </div>
+                </div>
+
+                {/* Resource 2 (Large) */}
+                <div
+                        class="md:col-span-2 bg-on-surface text-inverse-on-surface p-12 rounded-[2rem] flex flex-col md:flex-row gap-12 items-center hover:scale-[1.01] transition-transform duration-500"
+                >
+                    <div class="flex-1">
+                        <h3 class="text-headline-medium mb-4 text-primary-fixed">
+                            Refonte sereine et cadrée
+                        </h3>
+                        <p class="text-title-medium text-inverse-on-surface/80">
+                            Evitez les dérives budgétaires avec notre guide de stratégie.
+                        </p>
+                    </div>
+                    <Button
+                            href="/ressources"
+                            label="Lire le guide"
+                            className="bg-primary-fixed text-on-primary-fixed whitespace-nowrap"
+                    />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {/* 06. FAQ - SPLIT INTERACTIVE */}
+    <section class="section py-32">
+        <div class="max-width padding-x grid md:grid-cols-2 gap-16">
+            <div>
         <span
-          class="text-display-large font-black text-outline-variant/20 block -mb-8"
-          >?</span
+                class="text-headline-large font-black text-outline-variant/20 block -mb-8"
+        >?</span
         >
-        <h2 class="text-display-medium mb-8">Questions<br />fréquentes</h2>
-        <p class="text-title-medium text-on-surface-variant mb-8">
-          Sans tabou. On répond à tout avant même le premier appel.
-        </p>
-        <Button
-          href="/contact"
-          label="Poser une autre question"
-          variant="outlined"
-        />
-      </div>
-      <div>
-        <FaqAccordion client:visible items={faqItems} />
-      </div>
-    </div>
-  </section>
-
-  {/* 07. CTA FINAL - ULTRA MINIMAL */}
-  <section class="section py-36 relative overflow-hidden">
-    <div class="absolute inset-0 bg-primary opacity-5 skew-y-3 scale-110"></div>
-    <div class="max-width padding-x relative z-10 text-center">
-      <h2 class="text-display-large mb-8 tracking-tighter">On commence ?</h2>
-      <p
-        class="text-headline-small text-on-surface-variant mb-12 max-w-2xl mx-auto"
-      >
-        Racontez-nous vos enjeux. Si nous ne sommes pas l'agence qu'il vous
-        faut, nous vous le dirons.
-      </p>
-      <div class="flex justify-center gap-6">
-        <div class="group relative">
-          <div
-            class="absolute -inset-1 bg-gradient-to-r from-primary to-tertiary rounded-lg blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"
-          >
-          </div>
-          <Button
-            href="/contact"
-            label="Demander un échange"
-            className="relative text-title-medium py-4 px-8"
-          />
+                <h2 class="text-headline-large mb-8">Questions<br/>utiles</h2>
+                <p class="text-title-medium text-on-surface-variant mb-8">
+                    Sans tabou. On répond à tout avant même le premier appel.
+                </p>
+                <Button
+                        href="/contact"
+                        label="Poser une autre question"
+                        variant="outlined"
+                />
+            </div>
+            <div>
+                <FaqAccordion client:visible items={faqItems}/>
+            </div>
         </div>
-        <Button href="/services" label="Nos services" variant="text" />
-      </div>
-    </div>
-  </section>
+    </section>
+
+    {/* 07. CTA FINAL - ULTRA MINIMAL */}
+    <section class="section py-36 relative overflow-hidden">
+        <div class="absolute inset-0 bg-primary opacity-5 skew-y-3 scale-110"></div>
+        <div class="max-width padding-x relative z-10 text-center">
+            <h2 class="text-headline-large mb-8 tracking-tighter">On démarre en transparence ?</h2>
+            <p
+                    class="text-headline-small text-on-surface-variant mb-12 max-w-2xl mx-auto"
+            >
+                Racontez-nous vos enjeux. Si nous ne sommes pas l'agence qu'il vous
+                faut, nous vous le dirons.
+            </p>
+            <div class="flex justify-center gap-6">
+                <div class="group relative">
+                    <div
+                            class="absolute -inset-1 bg-gradient-to-r from-primary to-tertiary rounded-lg blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"
+                    >
+                    </div>
+                    <div class="relative flex items-center justify-center gap-2">
+                        <Button
+                                href="/contact"
+                                label="Obtenir un diagnostic"
+                                className="relative text-title-medium py-4 px-8"
+                        />
+                        <span class="text-label-small uppercase tracking-widest text-tertiary border border-tertiary/40 rounded-full px-3 py-1">
+                            Offert
+                        </span>
+                    </div>
+                </div>
+                <Button href="/services" label="Nos services" variant="text"/>
+            </div>
+        </div>
+    </section>
 </Layout>
