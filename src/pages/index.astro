@@ -56,22 +56,27 @@ const faqItems = [
                 class="w-full max-w-[90rem] mx-auto px-4 flex flex-col justify-center min-h-[50vh]"
         >
             {/* Trendy Deconstructed Title */}
-            <h1 class="flex flex-col  uppercase mix-blend-darken text-on-surface-variant">
+            <h1
+                    class="flex flex-col uppercase mix-blend-darken text-on-surface-variant"
+            >
                 {/* Row 1: Left */}
                 <span
                         class="self-start flex flex-col md:flex-row md:items-baseline gap-2 md:gap-4 group"
                 >
           <span
-                  class="text-headline-small  normal-case mb-2 md:mb-0 block"
+                  class="text-headline-small normal-case mb-2 md:mb-0 block anim-fade anim-slide-from-left anim-duration-700"
           >
             — L'agence web
           </span>
-          <span class="text-display-large text-on-surface">UDIXIO</span>
+          <span
+                  class="text-display-large text-on-surface anim-fade anim-slide-from-left anim-duration-700 anim-delay-200"
+          >UDIXIO</span
+          >
         </span>
 
                 {/* Row 2: Right/Indented */}
                 <span
-                        class="self-start md:self-end md:mr-12 text-display-large text-primary/50"
+                        class="self-start md:self-end md:mr-12 text-display-large text-primary/50 anim-fade anim-slide-from-left anim-duration-700 anim-delay-400"
                 >
           ACCOMPAGNE
         </span>
@@ -81,11 +86,13 @@ const faqItems = [
                         class="self-start md:self-center flex flex-col md:flex-row items-baseline gap-2 md:gap-6 mt-2 md:mt-0"
                 >
           <span
-                  class="text-headline-medium lowercase "
+                  class="text-headline-medium lowercase anim-fade anim-slide-from-bottom anim-duration-700 anim-delay-600"
           >
             en toute
           </span>
-          <span class="relative inline-block text-display-large text-primary">
+          <span
+                  class="relative inline-block text-display-large text-primary anim-fade anim-slide-from-bottom anim-duration-700 anim-delay-800"
+          >
             TRANSPARENCE.
             <svg
                     class="absolute -bottom-2 md:-bottom-4 left-0 w-full h-3 md:h-6 text-primary/30 -z-10"
@@ -106,13 +113,17 @@ const faqItems = [
             <div
                     class="flex flex-col md:flex-row justify-between items-start md:items-end mt-16 md:mt-24 gap-8 border-t border-outline-variant/20 pt-8"
             >
-                <p class="text-body-large max-w-md text-on-surface-variant">
+                <p
+                        class="text-body-large max-w-md text-on-surface-variant anim-fade anim-slide-from-bottom anim-duration-700 anim-delay-1000"
+                >
                     <strong>Fini le jargon et les boîtes noires.</strong><br/>
                     Un cadrage net, des décisions expliquées et un suivi partagé. Vous récupérez
                     le contrôle de votre outil digital.
                 </p>
 
-                <div class="flex flex-wrap gap-4">
+                <div
+                        class="flex flex-wrap gap-4 anim-scale-in anim-duration-700 anim-delay-1000"
+                >
                     <Button
                             href="/contact"
                             shape="squared"

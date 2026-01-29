@@ -164,7 +164,7 @@ export const Hero = ({children}: { children?: ReactNode }) => {
                 height: `${h}vh`,
                 top,
                 left,
-                background: i % 2 === 0 ? "bg-secondary-container/60" : "bg-tertiary-container/60",
+                background: i % 2 === 0 ? "bg-secondary-container/80" : "bg-tertiary-container/80",
                 // Generate 5 distinct morph states per shape for fluid irregularity
                 // This array will be cycled through by Framer Motion in RepulsiveShape
                 borderRadius: [
@@ -214,16 +214,9 @@ export const Hero = ({children}: { children?: ReactNode }) => {
 
             {/* HEADER / LOGO - Top Left */}
             <div className="absolute top-6 left-6 md:left-12 z-50 pointer-events-none">
-                <motion.div
-                    className="pointer-events-auto"
-                    initial={{opacity: 0, x: -20}}
-                    animate={{opacity: 1, x: 0}}
-                    transition={{duration: 0.8}}
-                >
-                    <div className="p-2 md:p-0">
-                        <Logo className="fill-on-surface h-8 w-auto"/>
-                    </div>
-                </motion.div>
+                <div className="p-2 md:p-0">
+                    <Logo className="fill-on-surface h-8 w-auto"/>
+                </div>
             </div>
 
             {/* MENU - Static position initially, then fixed */}
