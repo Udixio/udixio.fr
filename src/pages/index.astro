@@ -1,532 +1,546 @@
 ---
 import Layout from "@layouts/Layout.astro";
-import {Button} from "@udixio/ui-react";
-import {Hero} from "@components/Hero.tsx";
+import { Button } from "@udixio/ui-react";
+import { Hero } from "@components/Hero.tsx";
 // import { HeroPaper } from "@components/home/HeroPaper";
-import {Logo} from "@components/Logo";
+import { Logo } from "@components/Logo";
 import Realisations from "@components/Realisations.astro";
-import {FeaturesGrid} from "@components/home/modern/FeaturesGrid";
+import { FeaturesGrid } from "@components/home/modern/FeaturesGrid";
 // import { ValueProp } from "@components/home/modern/ValueProp";
-import {ProblemSolutionSchema} from "@components/home/modern/ProblemSolutionSchema";
+import { ProblemSolutionSchema } from "@components/home/modern/ProblemSolutionSchema";
 // import { MethodSteps } from "@components/home/modern/MethodSteps";
-import {ProcessStickyScroll} from "@components/home/modern/ProcessStickyScroll";
-import {ProofsGrid} from "@components/home/modern/ProofsGrid";
-import {FaqAccordion} from "@components/home/modern/FaqAccordion";
-import {Card} from "@/components/Card";
-import {Underline} from "@components/Underline";
+import { ProcessStickyScroll } from "@components/home/modern/ProcessStickyScroll";
+import { ProofsGrid } from "@components/home/modern/ProofsGrid";
+import { FaqAccordion } from "@components/home/modern/FaqAccordion";
+import { Card } from "@/components/Card";
+import { Underline } from "@components/Underline";
 
 const faqItems = [
-    {
-        question: "Quel budget prévoir pour un site sur-mesure ?",
-        answer:
-            "Après un cadrage initial, nous remettons un devis détaillé avec inclus/exclus et options. Vous comprenez ce qui est prévu avant de lancer la production.",
-    },
-    {
-        question: "Comment suivez-vous l'avancement ?",
-        answer:
-            "Vous avez accès au suivi du projet et à des points réguliers. Chaque décision est expliquée simplement pour garder la main.",
-    },
-    {
-        question: "Serai-je propriétaire de mon site ?",
-        answer:
-            "Oui. Code source, accès et données vous appartiennent. Nous privilégions des technologies ouvertes et une documentation claire.",
-    },
-    {
-        question: "Comment gérez-vous les délais ?",
-        answer:
-            "Le planning est défini dès le cadrage avec des jalons de validation. En cas d'ajustement, on en parle tout de suite.",
-    },
-    {
-        question: "Que se passe-t-il après la mise en ligne ?",
-        answer:
-            "Une phase d'hypercare est prévue pour le démarrage, puis une formation pour vous rendre autonome. La maintenance évolutive reste possible.",
-    },
+  {
+    question: "Quel budget prévoir pour un site sur-mesure ?",
+    answer:
+      "Après un cadrage initial, nous remettons un devis détaillé avec inclus/exclus et options. Vous comprenez ce qui est prévu avant de lancer la production.",
+  },
+  {
+    question: "Comment suivez-vous l'avancement ?",
+    answer:
+      "Vous avez accès au suivi du projet et à des points réguliers. Chaque décision est expliquée simplement pour garder la main.",
+  },
+  {
+    question: "Serai-je propriétaire de mon site ?",
+    answer:
+      "Oui. Code source, accès et données vous appartiennent. Nous privilégions des technologies ouvertes et une documentation claire.",
+  },
+  {
+    question: "Comment gérez-vous les délais ?",
+    answer:
+      "Le planning est défini dès le cadrage avec des jalons de validation. En cas d'ajustement, on en parle tout de suite.",
+  },
+  {
+    question: "Que se passe-t-il après la mise en ligne ?",
+    answer:
+      "Une phase d'hypercare est prévue pour le démarrage, puis une formation pour vous rendre autonome. La maintenance évolutive reste possible.",
+  },
 ];
 ---
 
 <Layout
-        seo={{
-            title: "Clarté & Maîtrise pour votre site web • Udixio",
-            description:
-                "Udixio structure vos projets digitaux : méthode claire, transparence, sobriété et autonomie durable.",
-        }}
-        background={false}
+  seo={{
+    title: "Clarté & Maîtrise pour votre site web • Udixio",
+    description:
+      "Udixio structure vos projets digitaux : méthode claire, transparence, sobriété et autonomie durable.",
+  }}
+  background={false}
 >
-    <Hero client:load>
-        <div
-                class="w-full max-w-[90rem] mx-auto px-4 flex flex-col justify-center min-h-[50vh]"
+  <Hero client:load>
+    <div
+      class="w-full max-w-[90rem] mx-auto px-4 flex flex-col justify-center min-h-[50vh]"
+    >
+      {/* Trendy Deconstructed Title */}
+      <div class="w-full flex justify-end mb-8 md:mb-0 md:-translate-y-4">
+        <span
+          class="flex items-center gap-3 text-label-small md:text-label-medium font-mono text-tertiary uppercase tracking-widest bg-white/50 backdrop-blur-sm px-4 py-2 rounded-full border border-tertiary/20 anim-fade anim-duration-1000 ease-out"
         >
-            {/* Trendy Deconstructed Title */}
-            <h1
-                    class="flex flex-col uppercase mix-blend-darken text-on-surface-variant"
-            >
-                {/* Row 1: Left */}
-                <span
-                        class="self-start flex flex-col md:flex-row md:items-baseline gap-2 md:gap-4 group"
-                >
+          <span class="relative flex h-2 w-2">
+            <span
+              class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-75"
+            ></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-tertiary"
+            ></span>
+          </span>
+          HAUTS-DE-FRANCE
+        </span>
+      </div>
+      <h1
+        class="flex flex-col uppercase mix-blend-darken text-on-surface-variant"
+      >
+        {/* Row 1: Left */}
+        <span
+          class="self-start flex flex-col md:flex-row md:items-baseline gap-2 md:gap-4 group"
+        >
           <span
-                  class="text-headline-small normal-case mb-2 md:mb-0 block anim-fade anim-slide-from-left anim-duration-1000 ease-out"
+            class="text-headline-small normal-case mb-2 md:mb-0 block anim-fade anim-slide-from-left anim-duration-1000 ease-out"
           >
             — L'agence web
           </span>
           <span
-                  class="text-display-large text-on-surface anim-fade anim-slide-from-left anim-duration-1000 ease-out anim-delay-100"
-          >UDIXIO</span
+            class="text-display-large text-on-surface anim-fade anim-slide-from-left anim-duration-1000 ease-out anim-delay-100"
+            >UDIXIO</span
           >
         </span>
 
-                {/* Row 2: Right/Indented */}
-                <span
-                        class="self-start md:self-end md:mr-12 text-display-large text-gradient anim-fade anim-slide-from-left anim-duration-1000 ease-out anim-delay-200"
-                >
+        {/* Row 2: Right/Indented */}
+        <span
+          class="self-start md:self-end md:mr-12 text-display-large text-gradient anim-fade anim-slide-from-left anim-duration-1000 ease-out anim-delay-200"
+        >
           ACCOMPAGNE
         </span>
 
-                {/* Row 3: Mixed (Small 'en' + Big 'Transparence') */}
-                <span
-                        class="self-start md:self-center flex flex-col md:flex-row items-baseline gap-2 md:gap-6 mt-2 md:mt-0"
-                >
+        {/* Row 3: Mixed (Small 'en' + Big 'Transparence') */}
+        <span
+          class="self-start md:self-center flex flex-col md:flex-row items-baseline gap-2 md:gap-6 mt-2 md:mt-0"
+        >
           <span
-                  class="text-headline-medium lowercase anim-fade anim-slide-from-bottom anim-duration-1000 ease-out anim-delay-300"
+            class="text-headline-medium lowercase anim-fade anim-slide-from-bottom anim-duration-1000 ease-out anim-delay-300"
           >
             en toute
           </span>
           <span
-                  class="relative italic inline-block text-display-large text-primary anim-fade anim-slide-from-bottom anim-duration-1000 ease-out anim-delay-400"
+            class="relative italic inline-block text-display-large text-primary anim-fade anim-slide-from-bottom anim-duration-1000 ease-out anim-delay-400"
           >
             TRANSPARENCE.
-            <Underline client:idle className="text-primary/30" delay={0.6}/>
+            <Underline client:idle className="text-primary/30" delay={0.6} />
           </span>
         </span>
-            </h1>
+      </h1>
 
-            {/* Deconstructed Footer: Description Left, CTA Right */}
-            <div
-                    class="flex flex-col md:flex-row justify-between items-start md:items-end mt-16 md:mt-24 gap-8 border-t border-outline-variant/20 pt-8"
-            >
-                <p
-                        class="text-body-large max-w-md text-on-surface-variant anim-fade anim-duration-1000 ease-out anim-delay-200"
-                >
-                    <strong>Fini le jargon et les boîtes noires.</strong><br/>
-                    Un cadrage net, des décisions expliquées et un suivi partagé. Vous récupérez
-                    le contrôle de votre outil digital.
-                </p>
+      {/* Deconstructed Footer: Description Left, CTA Right */}
+      <div
+        class="flex flex-col md:flex-row justify-between items-start md:items-end mt-16 md:mt-24 gap-8 border-t border-outline-variant/20 pt-8"
+      >
+        <p
+          class="text-body-large max-w-md text-on-surface-variant anim-fade anim-duration-1000 ease-out anim-delay-200"
+        >
+          <strong>Fini le jargon et les boîtes noires.</strong><br />
+          Un cadrage net, des décisions expliquées et un suivi partagé. Vous récupérez
+          le contrôle de votre outil digital.
+        </p>
 
-                <div
-                        class="flex flex-wrap gap-4 anim-scale-in anim-duration-1000 anim-delay-500"
-                >
-                    <Button
-                            href="/contact"
-                            shape="squared"
-                            label="Planifier un échange"
-                            className="bg-primary text-on-primary"
-                    />
-                    <Button variant="outlined" href="/methode" label="Voir la méthode"/>
-                </div>
-            </div>
+        <div
+          class="flex flex-wrap gap-4 anim-scale-in anim-duration-1000 anim-delay-500"
+        >
+          <Button
+            href="/contact"
+            shape="squared"
+            label="Planifier un échange"
+            className="bg-primary text-on-primary"
+          />
+          <Button variant="outlined" href="/methode" label="Voir la méthode" />
         </div>
-    </Hero>
+      </div>
+    </div>
+  </Hero>
 
-    {/* THE METHOD GRID (Artifacts) - Unified & Sober */}
-    <div
-            class="w-full max-w-7xl flex flex-col md:flex-row items-center justify-center gap-6 mt-12 md:mt-20 px-4"
+  {/* THE METHOD GRID (Artifacts) - Unified & Sober */}
+  <div
+    class="w-full max-w-7xl flex flex-col md:flex-row items-center justify-center gap-6 mt-12 md:mt-20 px-4"
+  >
+    {/* ARTIFACT 1: STRATEGY */}
+    <Card
+      className="flex-1 w-full relative group bg-surface-container border border-outline-variant rounded-2xl p-6 text-left hover:bg-surface-container-high hover:border-outline-variant transition-all duration-300 hover:-translate-y-1 shadow-sm hover:shadow-md h-full"
     >
-        {/* ARTIFACT 1: STRATEGY */}
-        <Card
-                className="flex-1 w-full relative group bg-surface-container border border-outline-variant rounded-2xl p-6 text-left hover:bg-surface-container-high hover:border-outline-variant transition-all duration-300 hover:-translate-y-1 shadow-sm hover:shadow-md h-full"
-        >
-            <div class="mb-4 flex justify-between items-start">
-                <div class="p-3 bg-surface-container-highest text-primary rounded-xl">
-                    <svg
-                            class="w-6 h-6"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                    >
-                        <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-                        ></path>
-                    </svg>
-                </div>
-                <div
-                        class="px-2 py-1 bg-surface-container-high border border-outline-variant/20 rounded text-label-small font-medium text-on-surface-variant tracking-wide font-mono"
-                >
-                    01
-                </div>
-            </div>
-            <h3 class="text-title-large font-bold text-on-surface mb-2">
-                Cadrage & objectifs
-            </h3>
-            <p class="text-body-medium text-on-surface-variant">
-                Atelier initial, priorités et contraintes posées. Le périmètre est
-                validé avant d'avancer.
-            </p>
-        </Card>
-
-        {/* ARROW 1 - Neutral */}
-        <div class="flex-none text-outline-variant">
-            <svg
-                    class="w-6 h-6 md:w-8 md:h-8 rotate-90 md:rotate-0 transform transition-transform"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-            >
-                <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-            </svg>
+      <div class="mb-4 flex justify-between items-start">
+        <div class="p-3 bg-surface-container-highest text-primary rounded-xl">
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+            ></path>
+          </svg>
         </div>
-
-        {/* ARTIFACT 2: ARCHITECTURE */}
-        <Card
-                className="flex-1 w-full relative group bg-surface-container border border-outline-variant rounded-2xl p-6 text-left hover:bg-surface-container-high hover:border-outline-variant transition-all duration-300 hover:-translate-y-1 shadow-sm hover:shadow-md h-full"
+        <div
+          class="px-2 py-1 bg-surface-container-high border border-outline-variant/20 rounded text-label-small font-medium text-on-surface-variant tracking-wide font-mono"
         >
-            <div class="mb-4 flex justify-between items-start">
-                <div class="p-3 bg-surface-container-highest text-primary rounded-xl">
-                    <svg
-                            class="w-6 h-6"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                    >
-                        <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"
-                        ></path>
-                    </svg>
-                </div>
-                <div
-                        class="px-2 py-1 bg-surface-container-high border border-outline-variant/20 rounded text-label-small font-medium text-on-surface-variant tracking-wide font-mono"
-                >
-                    02
-                </div>
-            </div>
-            <h3 class="text-title-large font-bold text-on-surface mb-2">
-                Plan d'action partagé
-            </h3>
-            <p class="text-body-medium text-on-surface-variant">
-                Feuille de route claire, validations régulières et suivi lisible pour
-                garder le contrôle.
-            </p>
-        </Card>
-
-        {/* ARROW 2 - Neutral */}
-        <div class="flex-none text-outline-variant">
-            <svg
-                    class="w-6 h-6 md:w-8 md:h-8 rotate-90 md:rotate-0 transform transition-transform"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-            >
-                <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-            </svg>
+          01
         </div>
+      </div>
+      <h3 class="text-title-large font-bold text-on-surface mb-2">
+        Cadrage & objectifs
+      </h3>
+      <p class="text-body-medium text-on-surface-variant">
+        Atelier initial, priorités et contraintes posées. Le périmètre est
+        validé avant d'avancer.
+      </p>
+    </Card>
 
-        {/* ARTIFACT 3: DELIVERY */}
-        <Card className="flex-1 w-full relative group  p-6 text-left h-full">
-            <div class="mb-4 flex justify-between items-start">
-                <div class="p-3 bg-surface-container-highest text-primary rounded-xl">
-                    <svg
-                            class="w-6 h-6"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                    >
-                        <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
-                        ></path>
-                    </svg>
-                </div>
-                <div
-                        class="px-2 py-1 bg-surface-container-high border border-outline-variant rounded text-label-small font-medium text-on-surface-variant tracking-wide font-mono"
-                >
-                    03
-                </div>
-            </div>
-            <h3 class="text-title-large font-bold text-on-surface mb-2">
-                Autonomie & clés
-            </h3>
-            <p class="text-body-medium text-on-surface-variant">
-                Code source, accès et documentation remis. Formation incluse pour vous
-                rendre autonome.
-            </p>
-        </Card>
+    {/* ARROW 1 - Neutral */}
+    <div class="flex-none text-outline-variant">
+      <svg
+        class="w-6 h-6 md:w-8 md:h-8 rotate-90 md:rotate-0 transform transition-transform"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+      </svg>
     </div>
 
-    <section class="section">
-        <div class="max-width padding-x">
-            <h2 class="text-display-small text-center md:text-left">
-                Les freins qui ralentissent vos projets web
-            </h2>
-            <div
-                    class="text-body-large mt-6 max-w-prose space-y-4 text-center md:text-left"
-            >
-                <p>
-                    Beaucoup de projets échouent par manque de clarté : périmètre qui
-                    s'étire, décisions floues, et autonomie limitée. Le frein principal
-                    n'est pas la technique, mais l'absence de méthode partagée.
-                </p>
-            </div>
-
-            <FeaturesGrid client:visible/>
-
-            <div class="mt-12 flex justify-center md:justify-start">
-                <Button
-                        variant="outlined"
-                        href="/services"
-                        label="Voir comment on travaille"
-                />
-            </div>
+    {/* ARTIFACT 2: ARCHITECTURE */}
+    <Card
+      className="flex-1 w-full relative group bg-surface-container border border-outline-variant rounded-2xl p-6 text-left hover:bg-surface-container-high hover:border-outline-variant transition-all duration-300 hover:-translate-y-1 shadow-sm hover:shadow-md h-full"
+    >
+      <div class="mb-4 flex justify-between items-start">
+        <div class="p-3 bg-surface-container-highest text-primary rounded-xl">
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"
+            ></path>
+          </svg>
         </div>
-    </section>
+        <div
+          class="px-2 py-1 bg-surface-container-high border border-outline-variant/20 rounded text-label-small font-medium text-on-surface-variant tracking-wide font-mono"
+        >
+          02
+        </div>
+      </div>
+      <h3 class="text-title-large font-bold text-on-surface mb-2">
+        Plan d'action partagé
+      </h3>
+      <p class="text-body-medium text-on-surface-variant">
+        Feuille de route claire, validations régulières et suivi lisible pour
+        garder le contrôle.
+      </p>
+    </Card>
 
-    <section class="section bg-surface-container-lowest py-24">
-        <div class="max-width padding-x">
-            <h2 class="text-display-small text-center mb-8">
-                Notre réponse : claire et structurée
+    {/* ARROW 2 - Neutral */}
+    <div class="flex-none text-outline-variant">
+      <svg
+        class="w-6 h-6 md:w-8 md:h-8 rotate-90 md:rotate-0 transform transition-transform"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+      </svg>
+    </div>
+
+    {/* ARTIFACT 3: DELIVERY */}
+    <Card className="flex-1 w-full relative group  p-6 text-left h-full">
+      <div class="mb-4 flex justify-between items-start">
+        <div class="p-3 bg-surface-container-highest text-primary rounded-xl">
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
+            ></path>
+          </svg>
+        </div>
+        <div
+          class="px-2 py-1 bg-surface-container-high border border-outline-variant rounded text-label-small font-medium text-on-surface-variant tracking-wide font-mono"
+        >
+          03
+        </div>
+      </div>
+      <h3 class="text-title-large font-bold text-on-surface mb-2">
+        Autonomie & clés
+      </h3>
+      <p class="text-body-medium text-on-surface-variant">
+        Code source, accès et documentation remis. Formation incluse pour vous
+        rendre autonome.
+      </p>
+    </Card>
+  </div>
+
+  <section class="section">
+    <div class="max-width padding-x">
+      <h2 class="text-display-small text-center md:text-left">
+        Les freins qui ralentissent vos projets web
+      </h2>
+      <div
+        class="text-body-large mt-6 max-w-prose space-y-4 text-center md:text-left"
+      >
+        <p>
+          Beaucoup de projets échouent par manque de clarté : périmètre qui
+          s'étire, décisions floues, et autonomie limitée. Le frein principal
+          n'est pas la technique, mais l'absence de méthode partagée.
+        </p>
+      </div>
+
+      <FeaturesGrid client:visible />
+
+      <div class="mt-12 flex justify-center md:justify-start">
+        <Button
+          variant="outlined"
+          href="/services"
+          label="Voir comment on travaille"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-surface-container-lowest py-24">
+    <div class="max-width padding-x">
+      <h2 class="text-display-small text-center mb-8">
+        Notre réponse : claire et structurée
+      </h2>
+      <p class="text-body-large max-w-2xl mx-auto text-center mb-12">
+        Survolez les cartes pour voir comment nous répondons, étape par étape.
+      </p>
+
+      <ProblemSolutionSchema client:visible />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="max-width padding-x">
+      <h2 class="text-display-small text-center md:text-left mb-12">
+        Nos preuves concrètes
+      </h2>
+      <ProofsGrid client:visible />
+
+      <div class="mt-12 flex justify-center md:justify-start">
+        <Button
+          className="w-fit"
+          href="/realisations"
+          label="Voir des exemples"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-surface-container-lowest py-24">
+    <div class="max-width padding-x">
+      <div class="mb-12 text-center md:text-left">
+        <h2 class="text-display-small">Un processus clair</h2>
+        <p class="text-body-large mt-4 max-w-prose">
+          5 étapes, une feuille de route lisible. La méthode sécurise le
+          planning et la qualité sans promesses irréalistes.
+        </p>
+      </div>
+
+      <ProcessStickyScroll client:visible />
+
+      <div class="mt-8 flex justify-center">
+        <Button
+          className="w-fit"
+          href="/methode"
+          label="Voir la méthode en détail"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="max-width padding-x">
+      <h2 class="text-display-small mb-12">Réalisations récentes</h2>
+
+      <Realisations max={4} />
+
+      <div class="mt-12 flex justify-center">
+        <Button
+          variant="outlined"
+          href="/realisations"
+          label="Voir le portfolio"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-surface-container-lowest py-24">
+    <div class="max-width padding-x">
+      <div
+        class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6"
+      >
+        <div class="max-w-2xl">
+          <h2 class="text-display-small mb-4">Engagements clairs</h2>
+          <p class="text-body-large text-on-surface-variant">
+            Des règles simples pour éviter les zones d'ombre et garder le
+            contrôle à chaque étape.
+          </p>
+        </div>
+        <Button variant="outlined" href="/services" label="Voir nos services" />
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-3">
+        {
+          [
+            {
+              title: "Devis détaillé",
+              cat: "Transparence",
+              desc: "Inclus et exclus clairement listés, options chiffrées dès le départ.",
+              href: "/services",
+            },
+            {
+              title: "Suivi partagé",
+              cat: "Clarté",
+              desc: "Accès au tableau de bord et points réguliers pour décider ensemble.",
+              href: "/methode",
+            },
+            {
+              title: "Autonomie client",
+              cat: "Propriété",
+              desc: "Code source, accès et formation pour reprendre la main après livraison.",
+              href: "/methode",
+            },
+          ].map((resource) => (
+            <a
+              href={resource.href}
+              class="group block p-8 rounded-3xl bg-surface border border-outline-variant/50 hover:border-primary/50 transition-colors"
+            >
+              <span class="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-label-small font-bold mb-4">
+                {resource.cat}
+              </span>
+              <h3 class="text-title-large font-bold mb-3 group-hover:text-primary transition-colors">
+                {resource.title}
+              </h3>
+              <p class="text-body-medium text-on-surface-variant">
+                {resource.desc}
+              </p>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-surface-container-lowest py-24">
+    <div class="max-width padding-x">
+      <div
+        class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6"
+      >
+        <div class="max-w-2xl">
+          <h2 class="text-display-small mb-4">Ressources pour cadrer</h2>
+          <p class="text-body-large text-on-surface-variant">
+            Des contenus courts et utiles pour avancer sereinement, avant même
+            de lancer votre projet.
+          </p>
+        </div>
+        <Button
+          variant="outlined"
+          href="/ressources"
+          label="Voir les ressources"
+        />
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-3">
+        {
+          [
+            {
+              title: "Cadrer votre besoin",
+              cat: "Méthode",
+              desc: "Les questions essentielles pour clarifier objectifs, périmètre et priorités.",
+              href: "/ressources",
+            },
+            {
+              title: "Refonte sereine",
+              cat: "Stratégie",
+              desc: "Les points de vigilance pour éviter les dérives et garder un cap clair.",
+              href: "/ressources",
+            },
+            {
+              title: "SEO expliqué simplement",
+              cat: "Clarté",
+              desc: "Les bases du référencement, sans jargon, pour prendre les bonnes décisions.",
+              href: "/ressources",
+            },
+          ].map((resource) => (
+            <a
+              href={resource.href}
+              class="group block p-8 rounded-3xl bg-surface border border-outline-variant/50 hover:border-primary/50 transition-colors"
+            >
+              <span class="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-label-small font-bold mb-4">
+                {resource.cat}
+              </span>
+              <h3 class="text-title-large font-bold mb-3 group-hover:text-primary transition-colors">
+                {resource.title}
+              </h3>
+              <p class="text-body-medium text-on-surface-variant">
+                {resource.desc}
+              </p>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-surface-container-high py-24">
+    <div class="max-width padding-x">
+      <h2 class="text-display-small text-center mb-12">
+        Questions fréquentes (sans tabou)
+      </h2>
+      <FaqAccordion client:visible items={faqItems} />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="max-width padding-x">
+      <div
+        class="rounded-3xl bg-primary text-on-primary p-8 md:p-16 text-center md:text-left overflow-hidden relative"
+      >
+        <div
+          class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"
+        >
+        </div>
+
+        <div class="relative z-10 grid gap-8 md:grid-cols-2 items-center">
+          <div>
+            <h2 class="text-display-medium mb-6">
+              Besoin d'y voir plus clair ?
             </h2>
-            <p class="text-body-large max-w-2xl mx-auto text-center mb-12">
-                Survolez les cartes pour voir comment nous répondons, étape par étape.
+            <p class="text-body-large opacity-90 mb-8 max-w-lg">
+              Chaque projet commence par une conversation. Racontez-nous vos
+              enjeux, nous vous dirons clairement si nous sommes l'agence qu'il
+              vous faut (et sinon, on vous l'expliquera).
             </p>
-
-            <ProblemSolutionSchema client:visible/>
+          </div>
+          <div
+            class="flex flex-col sm:flex-row gap-4 justify-center md:justify-end"
+          >
+            <Button
+              className="bg-white text-primary hover:bg-white/90"
+              href="/contact"
+              label="Demander un échange de cadrage"
+            />
+            <Button
+              variant="outlined"
+              className="border-white text-white hover:bg-white/10"
+              href="/services"
+              label="Voir nos services"
+            />
+          </div>
         </div>
-    </section>
-
-    <section class="section">
-        <div class="max-width padding-x">
-            <h2 class="text-display-small text-center md:text-left mb-12">
-                Nos preuves concrètes
-            </h2>
-            <ProofsGrid client:visible/>
-
-            <div class="mt-12 flex justify-center md:justify-start">
-                <Button
-                        className="w-fit"
-                        href="/realisations"
-                        label="Voir des exemples"
-                />
-            </div>
-        </div>
-    </section>
-
-    <section class="section bg-surface-container-lowest py-24">
-        <div class="max-width padding-x">
-            <div class="mb-12 text-center md:text-left">
-                <h2 class="text-display-small">Un processus clair</h2>
-                <p class="text-body-large mt-4 max-w-prose">
-                    5 étapes, une feuille de route lisible. La méthode sécurise le
-                    planning et la qualité sans promesses irréalistes.
-                </p>
-            </div>
-
-            <ProcessStickyScroll client:visible/>
-
-            <div class="mt-8 flex justify-center">
-                <Button
-                        className="w-fit"
-                        href="/methode"
-                        label="Voir la méthode en détail"
-                />
-            </div>
-        </div>
-    </section>
-
-    <section class="section">
-        <div class="max-width padding-x">
-            <h2 class="text-display-small mb-12">Réalisations récentes</h2>
-
-            <Realisations max={4}/>
-
-            <div class="mt-12 flex justify-center">
-                <Button
-                        variant="outlined"
-                        href="/realisations"
-                        label="Voir le portfolio"
-                />
-            </div>
-        </div>
-    </section>
-
-    <section class="section bg-surface-container-lowest py-24">
-        <div class="max-width padding-x">
-            <div
-                    class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6"
-            >
-                <div class="max-w-2xl">
-                    <h2 class="text-display-small mb-4">Engagements clairs</h2>
-                    <p class="text-body-large text-on-surface-variant">
-                        Des règles simples pour éviter les zones d'ombre et garder le
-                        contrôle à chaque étape.
-                    </p>
-                </div>
-                <Button variant="outlined" href="/services" label="Voir nos services"/>
-            </div>
-
-            <div class="grid gap-6 md:grid-cols-3">
-                {
-                    [
-                        {
-                            title: "Devis détaillé",
-                            cat: "Transparence",
-                            desc: "Inclus et exclus clairement listés, options chiffrées dès le départ.",
-                            href: "/services",
-                        },
-                        {
-                            title: "Suivi partagé",
-                            cat: "Clarté",
-                            desc: "Accès au tableau de bord et points réguliers pour décider ensemble.",
-                            href: "/methode",
-                        },
-                        {
-                            title: "Autonomie client",
-                            cat: "Propriété",
-                            desc: "Code source, accès et formation pour reprendre la main après livraison.",
-                            href: "/methode",
-                        },
-                    ].map((resource) => (
-                            <a
-                                    href={resource.href}
-                                    class="group block p-8 rounded-3xl bg-surface border border-outline-variant/50 hover:border-primary/50 transition-colors"
-                            >
-              <span class="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-label-small font-bold mb-4">
-                {resource.cat}
-              </span>
-                                <h3 class="text-title-large font-bold mb-3 group-hover:text-primary transition-colors">
-                                    {resource.title}
-                                </h3>
-                                <p class="text-body-medium text-on-surface-variant">
-                                    {resource.desc}
-                                </p>
-                            </a>
-                    ))
-                }
-            </div>
-        </div>
-    </section>
-
-    <section class="section bg-surface-container-lowest py-24">
-        <div class="max-width padding-x">
-            <div
-                    class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6"
-            >
-                <div class="max-w-2xl">
-                    <h2 class="text-display-small mb-4">Ressources pour cadrer</h2>
-                    <p class="text-body-large text-on-surface-variant">
-                        Des contenus courts et utiles pour avancer sereinement, avant même
-                        de lancer votre projet.
-                    </p>
-                </div>
-                <Button
-                        variant="outlined"
-                        href="/ressources"
-                        label="Voir les ressources"
-                />
-            </div>
-
-            <div class="grid gap-6 md:grid-cols-3">
-                {
-                    [
-                        {
-                            title: "Cadrer votre besoin",
-                            cat: "Méthode",
-                            desc: "Les questions essentielles pour clarifier objectifs, périmètre et priorités.",
-                            href: "/ressources",
-                        },
-                        {
-                            title: "Refonte sereine",
-                            cat: "Stratégie",
-                            desc: "Les points de vigilance pour éviter les dérives et garder un cap clair.",
-                            href: "/ressources",
-                        },
-                        {
-                            title: "SEO expliqué simplement",
-                            cat: "Clarté",
-                            desc: "Les bases du référencement, sans jargon, pour prendre les bonnes décisions.",
-                            href: "/ressources",
-                        },
-                    ].map((resource) => (
-                            <a
-                                    href={resource.href}
-                                    class="group block p-8 rounded-3xl bg-surface border border-outline-variant/50 hover:border-primary/50 transition-colors"
-                            >
-              <span class="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-label-small font-bold mb-4">
-                {resource.cat}
-              </span>
-                                <h3 class="text-title-large font-bold mb-3 group-hover:text-primary transition-colors">
-                                    {resource.title}
-                                </h3>
-                                <p class="text-body-medium text-on-surface-variant">
-                                    {resource.desc}
-                                </p>
-                            </a>
-                    ))
-                }
-            </div>
-        </div>
-    </section>
-
-    <section class="section bg-surface-container-high py-24">
-        <div class="max-width padding-x">
-            <h2 class="text-display-small text-center mb-12">
-                Questions fréquentes (sans tabou)
-            </h2>
-            <FaqAccordion client:visible items={faqItems}/>
-        </div>
-    </section>
-
-    <section class="section">
-        <div class="max-width padding-x">
-            <div
-                    class="rounded-3xl bg-primary text-on-primary p-8 md:p-16 text-center md:text-left overflow-hidden relative"
-            >
-                <div
-                        class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"
-                >
-                </div>
-
-                <div class="relative z-10 grid gap-8 md:grid-cols-2 items-center">
-                    <div>
-                        <h2 class="text-display-medium mb-6">
-                            Besoin d'y voir plus clair ?
-                        </h2>
-                        <p class="text-body-large opacity-90 mb-8 max-w-lg">
-                            Chaque projet commence par une conversation. Racontez-nous vos
-                            enjeux, nous vous dirons clairement si nous sommes l'agence qu'il
-                            vous faut (et sinon, on vous l'expliquera).
-                        </p>
-                    </div>
-                    <div
-                            class="flex flex-col sm:flex-row gap-4 justify-center md:justify-end"
-                    >
-                        <Button
-                                className="bg-white text-primary hover:bg-white/90"
-                                href="/contact"
-                                label="Demander un échange de cadrage"
-                        />
-                        <Button
-                                variant="outlined"
-                                className="border-white text-white hover:bg-white/10"
-                                href="/services"
-                                label="Voir nos services"
-                        />
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+      </div>
+    </div>
+  </section>
 </Layout>
