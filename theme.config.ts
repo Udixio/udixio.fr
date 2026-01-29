@@ -18,12 +18,15 @@ export default defineConfig({
         display: {
             large: {
                 fontWeight: 700,
-                fontSize: 4.5,
+                fontSize: 5,
+                letterSpacing: -0.2,
             },
             medium: {
+                fontSize: 4,
                 fontWeight: 700,
             },
             small: {
+                fontSize: 3,
                 fontWeight: 700,
             },
         },

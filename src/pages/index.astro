@@ -13,6 +13,7 @@ import {ProcessStickyScroll} from "@components/home/modern/ProcessStickyScroll";
 import {ProofsGrid} from "@components/home/modern/ProofsGrid";
 import {FaqAccordion} from "@components/home/modern/FaqAccordion";
 import {Card} from "@/components/Card";
+import {Underline} from "@components/Underline";
 
 const faqItems = [
     {
@@ -64,19 +65,19 @@ const faqItems = [
                         class="self-start flex flex-col md:flex-row md:items-baseline gap-2 md:gap-4 group"
                 >
           <span
-                  class="text-headline-small normal-case mb-2 md:mb-0 block anim-fade anim-slide-from-left anim-duration-700"
+                  class="text-headline-small normal-case mb-2 md:mb-0 block anim-fade anim-slide-from-left anim-duration-1000 ease-out"
           >
             — L'agence web
           </span>
           <span
-                  class="text-display-large text-on-surface anim-fade anim-slide-from-left anim-duration-700 anim-delay-200"
+                  class="text-display-large text-on-surface anim-fade anim-slide-from-left anim-duration-1000 ease-out anim-delay-100"
           >UDIXIO</span
           >
         </span>
 
                 {/* Row 2: Right/Indented */}
                 <span
-                        class="self-start md:self-end md:mr-12 text-display-large text-primary/50 anim-fade anim-slide-from-left anim-duration-700 anim-delay-400"
+                        class="self-start md:self-end md:mr-12 text-display-large text-gradient anim-fade anim-slide-from-left anim-duration-1000 ease-out anim-delay-200"
                 >
           ACCOMPAGNE
         </span>
@@ -86,25 +87,15 @@ const faqItems = [
                         class="self-start md:self-center flex flex-col md:flex-row items-baseline gap-2 md:gap-6 mt-2 md:mt-0"
                 >
           <span
-                  class="text-headline-medium lowercase anim-fade anim-slide-from-bottom anim-duration-700 anim-delay-600"
+                  class="text-headline-medium lowercase anim-fade anim-slide-from-bottom anim-duration-1000 ease-out anim-delay-300"
           >
             en toute
           </span>
           <span
-                  class="relative inline-block text-display-large text-primary anim-fade anim-slide-from-bottom anim-duration-700 anim-delay-800"
+                  class="relative italic inline-block text-display-large text-primary anim-fade anim-slide-from-bottom anim-duration-1000 ease-out anim-delay-400"
           >
             TRANSPARENCE.
-            <svg
-                    class="absolute -bottom-2 md:-bottom-4 left-0 w-full h-3 md:h-6 text-primary/30 -z-10"
-                    viewBox="0 0 100 10"
-                    preserveAspectRatio="none"
-            >
-              <path
-                      d="M0 5 Q 50 15 100 5"
-                      stroke="currentColor"
-                      stroke-width="5"
-                      fill="none"></path>
-            </svg>
+            <Underline client:idle className="text-primary/30" delay={0.6}/>
           </span>
         </span>
             </h1>
@@ -114,7 +105,7 @@ const faqItems = [
                     class="flex flex-col md:flex-row justify-between items-start md:items-end mt-16 md:mt-24 gap-8 border-t border-outline-variant/20 pt-8"
             >
                 <p
-                        class="text-body-large max-w-md text-on-surface-variant anim-fade anim-slide-from-bottom anim-duration-700 anim-delay-1000"
+                        class="text-body-large max-w-md text-on-surface-variant anim-fade anim-duration-1000 ease-out anim-delay-200"
                 >
                     <strong>Fini le jargon et les boîtes noires.</strong><br/>
                     Un cadrage net, des décisions expliquées et un suivi partagé. Vous récupérez
@@ -122,7 +113,7 @@ const faqItems = [
                 </p>
 
                 <div
-                        class="flex flex-wrap gap-4 anim-scale-in anim-duration-700 anim-delay-1000"
+                        class="flex flex-wrap gap-4 anim-scale-in anim-duration-1000 anim-delay-500"
                 >
                     <Button
                             href="/contact"

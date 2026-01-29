@@ -104,7 +104,7 @@ section {
 }
 
 .text-gradient {
-    @apply bg-gradient-to-r from-primary to-tertiary text-transparent bg-clip-text;
+    @apply bg-gradient-to-b from-primary/60 to-tertiary-container/50 text-primary/50 bg-clip-text;
 }
 
 .square-area {
