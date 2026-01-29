@@ -58,28 +58,27 @@ const cardVariants = {
 
 export const FeaturesGrid = () => {
     return (
-        <motion.div
-            className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mt-12"
-            initial="offscreen"
-            whileInView="onscreen"
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ staggerChildren: 0.1 }}
-        >
+        <div className="flex flex-col gap-4 mt-4">
             {features.map((feature, index) => (
                 <motion.div
                     key={index}
-                    variants={cardVariants}
-                    className="group relative overflow-hidden rounded-3xl bg-surface-container hover:bg-surface-container-high transition-colors p-8 border border-outline-variant/50 hover:border-outline-variant"
+                    initial={{ opacity: 0, x: 20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.1 }}
+                    className="group flex gap-4 items-start p-4 rounded-2xl hover:bg-surface-container-high border border-transparent hover:border-outline-variant/30 transition-all"
                 >
-                    <div className="mb-4 text-primary group-hover:scale-110 transition-transform duration-300">
+                    <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-primary/5 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-on-primary transition-colors duration-300">
                         {feature.icon}
                     </div>
-                    <h3 className="text-title-large font-bold mb-3">{feature.title}</h3>
-                    <p className="text-body-large text-on-surface-variant group-hover:text-on-surface transition-colors">
-                        {feature.description}
-                    </p>
+                    <div>
+                        <h3 className="text-title-medium font-bold text-on-surface mb-1">{feature.title}</h3>
+                        <p className="text-body-medium text-on-surface-variant group-hover:text-on-surface transition-colors">
+                            {feature.description}
+                        </p>
+                    </div>
                 </motion.div>
             ))}
-        </motion.div>
+        </div>
     );
 };

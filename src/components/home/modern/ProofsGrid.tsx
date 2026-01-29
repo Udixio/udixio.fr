@@ -25,22 +25,24 @@ const proofs = [
 
 export const ProofsGrid = () => {
     return (
-        <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-12 grid gap-px bg-outline-variant/30 border border-outline-variant/30 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 overflow-hidden rounded-3xl">
             {proofs.map((proof, index) => (
                 <motion.div
                     key={index}
-                    whileHover={{ y: -5 }}
-                    className="flex flex-col p-6 rounded-3xl bg-surface-container-low border border-outline-variant/30 h-full"
+                    className="flex flex-col p-8 bg-surface hover:bg-surface-container-high transition-colors h-full"
                 >
-                    <div className="mb-4 self-start px-3 py-1 rounded-full bg-primary/10 text-primary text-label-small font-medium">
+                    <div className="mb-6 self-start px-3 py-1 rounded-full border border-primary/20 text-primary text-label-small font-mono uppercase tracking-wider">
                         {proof.badge}
                     </div>
-                    <h3 className="text-title-large font-bold mb-3">{proof.title}</h3>
-                    <p className="text-body-medium text-on-surface-variant">
-                        {proof.description}
-                    </p>
+                    <div className="mt-auto">
+                        <h3 className="text-title-large font-bold mb-3 leading-tight">{proof.title}</h3>
+                        <p className="text-body-medium text-on-surface-variant/80">
+                            {proof.description}
+                        </p>
+                    </div>
                 </motion.div>
             ))}
         </div>
     );
+
 };

@@ -47,7 +47,7 @@ export const FaqAccordion = ({ items }: { items: { question: string, answer: str
     const [openIndex, setOpenIndex] = useState<number | null>(0);
 
     return (
-        <div className="w-full max-w-3xl mx-auto mt-12">
+        <div className="w-full flex flex-col">
             {items.map((item, index) => (
                 <FaqItem
                     key={index}
