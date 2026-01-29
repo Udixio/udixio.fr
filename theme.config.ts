@@ -11,21 +11,22 @@ export default defineConfig({
     },
     fontFamily: {
         expressive: [
-            'var(--font-vogun)'
+            'var(--font-just-sans)'
         ],
     },
     fontStyles: {
-        // display: {
-        //     large: {
-        //         fontWeight: 600,
-        //     },
-        //     medium: {
-        //         fontWeight: 600,
-        //     },
-        //     small: {
-        //         fontWeight: 600,
-        //     },
-        // },
+        display: {
+            large: {
+                fontWeight: 700,
+                fontSize: 4.5,
+            },
+            medium: {
+                fontWeight: 700,
+            },
+            small: {
+                fontWeight: 700,
+            },
+        },
         // headline: {
         //     large: {
         //         fontWeight: 600,
@@ -48,25 +49,10 @@ export default defineConfig({
         //         fontWeight: 500,
         //     },
         // },
-        // body: {
-        //     large: {
-        //         fontSize: 1.25,
-        //         lineHeight: 1.5625,
-        //     },
-        //     medium: {
-        //         fontSize: 1,
-        //         lineHeight: 1.25,
-        //     },
-        //     small: {
-        //         fontSize: 0.75,
-        //         lineHeight: 1,
-        //     },
-        // },
-
     },
     responsiveBreakPoints: {
-        lg: 1.125,
-        xl: 1.25,
+        lg: 1.2,
+        xl: 1.4,
     },
     subThemes: {
         warning: '#e5bb79',

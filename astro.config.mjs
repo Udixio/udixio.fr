@@ -20,19 +20,44 @@ export default defineConfig({
         fonts: [
             {
                 provider: fontProviders.local(),
-                name: "Vogun",
-                cssVariable: "--font-vogun",
+                name: "Just Sans",
+                cssVariable: "--font-just-sans",
                 options: {
                     variants: [
                         {
-                            weight: 500,
+                            weight: 200,
                             style: "normal",
-                            src: ["./src/assets/fonts/vogun/Vogun-Medium.woff2"]
+                            src: ["./src/assets/fonts/just-sans/JUST Sans ExLight.woff2"]
+                        },
+                        {
+                            weight: 300,
+                            style: "normal",
+                            src: ["./src/assets/fonts/just-sans/JUST Sans Light.woff2"]
+                        },
+                        {
+                            weight: 400,
+                            style: "normal",
+                            src: ["./src/assets/fonts/just-sans/JUST Sans Regular.woff2"]
                         },
                         {
                             weight: 500,
-                            style: "italic",
-                            src: ["./src/assets/fonts/vogun/Vogun-MediumItalic.woff2"]
+                            style: "normal",
+                            src: ["./src/assets/fonts/just-sans/JUST Sans Medium.woff2"]
+                        },
+                        {
+                            weight: 600,
+                            style: "normal",
+                            src: ["./src/assets/fonts/just-sans/JUST Sans SemiBold.woff2"]
+                        },
+                        {
+                            weight: 700,
+                            style: "normal",
+                            src: ["./src/assets/fonts/just-sans/JUST Sans Bold.woff2"]
+                        },
+                        {
+                            weight: 800,
+                            style: "normal",
+                            src: ["./src/assets/fonts/just-sans/JUST Sans ExBold.woff2"]
                         }
                     ]
                 }

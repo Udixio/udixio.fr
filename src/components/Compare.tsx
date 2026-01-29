@@ -1,6 +1,6 @@
 import React, {useMemo, useState} from 'react'
 import {Button, classNames, Icon, Tab, Tabs} from '@udixio/ui-react'
-import {faCircleCheck, faCircleMinus, faCircleXmark} from '@fortawesome/pro-solid-svg-icons'
+import {faCircleCheck, faCircleMinus, faCircleXmark} from '@fortawesome/free-solid-svg-icons'
 import {Card} from "@components/Card.tsx";
 
 export type PlanColumn = {
