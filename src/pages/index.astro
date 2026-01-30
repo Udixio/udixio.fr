@@ -14,6 +14,17 @@ import {ProofsGrid} from "@components/home/modern/ProofsGrid";
 import {FaqAccordion} from "@components/home/modern/FaqAccordion";
 import {Card} from "@/components/Card";
 import {Underline} from "@components/Underline";
+import {Icon} from "@udixio/ui-react";
+
+import rVisibility from "@material-design-icons/svg/outlined/visibility.svg?raw";
+import rHandshake from "@material-design-icons/svg/outlined/handshake.svg?raw";
+import rBolt from "@material-design-icons/svg/outlined/bolt.svg?raw";
+import rTrendingUp from "@material-design-icons/svg/outlined/trending_up.svg?raw";
+import rFolder from "@material-design-icons/svg/outlined/folder.svg?raw";
+import rKey from "@material-design-icons/svg/outlined/key.svg?raw";
+import rCloud from "@material-design-icons/svg/outlined/cloud.svg?raw";
+import rForest from "@material-design-icons/svg/outlined/forest.svg?raw";
+import rBarChart from "@material-design-icons/svg/outlined/bar_chart.svg?raw";
 
 const faqItems = [
     {
@@ -96,7 +107,7 @@ const faqItems = [
 
                 {/* Row 2: Right/Indented */}
                 <span
-                        class="self-start md:self-end md:mr-12 text-display-large text-gradient anim-fade anim-slide-from-left anim-duration-1000 ease-out anim-delay-200"
+                        class="self-start md:self-end md:mr-12 text-display-large opacity-70 anim-fade anim-slide-from-left anim-duration-1000 ease-out anim-delay-200"
                 >
           ACCOMPAGNE
         </span>
@@ -111,9 +122,9 @@ const faqItems = [
             en toute
           </span>
           <span
-                  class="relative italic inline-block text-display-large text-primary anim-fade anim-slide-from-bottom anim-duration-1000 ease-out anim-delay-400"
+                  class="relative italic inline-block text-display-large text-gradient anim-fade anim-slide-from-bottom anim-duration-1000 ease-out anim-delay-400"
           >
-            TRANSPARENCE.
+            TRANSPARENCE
             <Underline client:idle className="text-primary/30" delay={0.6}/>
           </span>
         </span>
@@ -127,25 +138,52 @@ const faqItems = [
                         class="text-body-large max-w-md text-on-surface-variant anim-fade anim-duration-1000 ease-out anim-delay-200"
                 >
                     <strong>Fini le jargon et les boîtes noires.</strong><br/>
-                    Un cadrage net, des décisions expliquées et un suivi partagé. Agence web pour
-                    TPE/PME exigeantes : visibilité, crédibilité et acquisition maîtrisées.
+                    Un cadrage net, des décisions expliquées et un suivi partagé. Agence web
+                    pour TPE/PME exigeantes : visibilité, crédibilité et acquisition maîtrisées.
                 </p>
 
                 <div
                         class="flex flex-wrap gap-4 anim-scale-in anim-duration-1000 anim-delay-500"
                 >
-                    <div class="flex items-center gap-2">
+                    <div class="relative group">
                         <Button
                                 href="/contact"
                                 shape="squared"
                                 label="Obtenir un diagnostic"
                                 className="bg-primary text-on-primary"
                         />
-                        <span class="text-label-small uppercase tracking-widest text-tertiary border border-tertiary/40 rounded-full px-3 py-1">
-                            Offert
-                        </span>
+                        {/* Annotation Arrow - Absolute Position (Top Right) */}
+                        <div
+                                class="hidden sm:flex flex-col items-center absolute bottom-full -right-4 translate-x-1/4 mb-1 w-max pointer-events-none group-hover:-translate-y-1 transition-transform duration-300"
+                        >
+              <span
+                      class="text-tertiary font-bold -rotate-6 text-title-small"
+                      style="font-family: 'Comforter', cursive;"
+              >
+                (100% Offert !)
+              </span>
+                            <svg
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="text-tertiary -mt-1 -ml-8"
+                            >
+                                <path
+                                        d="M18 2C16 8 10 16 4 20M4 20L10 18M4 20L8 14"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                            </svg>
+                        </div>
                     </div>
-                    <Button variant="outlined" href="/realisations" label="Parcourir nos réalisations"/>
+                    <Button
+                            variant="outlined"
+                            href="/realisations"
+                            label="Parcourir nos réalisations"
+                    />
                 </div>
             </div>
         </div>
@@ -158,14 +196,12 @@ const faqItems = [
                 {/* Sticky Title */}
                 <div class="md:col-span-4 relative">
                     <div class="sticky top-32">
-            <span class="text-label-large font-mono text-tertiary mb-4 block"
+            <span class="text-title-small text-tertiary mb-4 block"
             >01 — LE PROCESSUS</span
             >
-                        <h2 class="text-headline-large leading-tight text-on-surface">
+                        <h2 class="text-headline-large leading-tight ">
                             3 étapes claires.<br/>
-                            <span class="text-on-surface-variant opacity-50"
-                            >Rythme maîtrisé.</span
-                            >
+                            <span class="text-gradient">Rythme maîtrisé.</span>
                         </h2>
                         <div class="mt-8 hidden md:block">
                             <svg
@@ -173,10 +209,10 @@ const faqItems = [
                                     viewBox="0 0 24 24"
                                     fill="none"
                                     stroke="currentColor"
-                                    stroke-width="1.5">
-                                <path d="M12 5v14M5 12l7 7 7-7"></path>
-                            </svg
+                                    stroke-width="1.5"
                             >
+                                <path d="M12 5v14M5 12l7 7 7-7"></path>
+                            </svg>
                         </div>
                     </div>
                 </div>
@@ -185,10 +221,10 @@ const faqItems = [
                 <div class="md:col-span-8 space-y-24">
                     {/* Step 1 */}
                     <div
-                            class="group relative pl-8 border-l-2 border-outline-variant hover:border-primary transition-colors duration-500 anim-fade-up"
+                            class="group relative pl-8 border-l-2 border-outline-variant hover:border-primary transition-colors duration-500 anim-fade-up delay-200"
                     >
             <span
-                    class="absolute -left-[1.35rem] top-0 flex h-10 w-10 items-center justify-center rounded-full bg-surface border-2 border-outline-variant group-hover:border-primary group-hover:bg-primary group-hover:text-on-primary transition-all text-title-medium font-bold"
+                    class="absolute -left-[1.35rem] top-0 flex h-10 w-10 items-center justify-center rounded-full bg-surface border-2 border-outline-variant group-hover:border-secondary group-hover:bg-secondary group-hover:text-on-secondary transition-all text-title-medium font-bold"
             >1</span
             >
                         <h3 class="text-headline-medium mb-4 text-on-surface">
@@ -204,10 +240,10 @@ const faqItems = [
 
                     {/* Step 2 */}
                     <div
-                            class="group relative pl-8 border-l-2 border-outline-variant hover:border-primary transition-colors duration-500 anim-fade-up delay-100"
+                            class="group relative pl-8 border-l-2 border-outline-variant hover:border-primary transition-colors duration-500 anim-fade-up delay-200"
                     >
             <span
-                    class="absolute -left-[1.35rem] top-0 flex h-10 w-10 items-center justify-center rounded-full bg-surface border-2 border-outline-variant group-hover:border-primary group-hover:bg-primary group-hover:text-on-primary transition-all text-title-medium font-bold"
+                    class="absolute -left-[1.35rem] top-0 flex h-10 w-10 items-center justify-center rounded-full bg-surface border-2 border-outline-variant group-hover:border-secondary group-hover:bg-secondary group-hover:text-on-secondary transition-all text-title-medium font-bold"
             >2</span
             >
                         <h3 class="text-headline-medium mb-4 text-on-surface">
@@ -226,7 +262,7 @@ const faqItems = [
                             class="group relative pl-8 border-l-2 border-outline-variant hover:border-primary transition-colors duration-500 anim-fade-up delay-200"
                     >
             <span
-                    class="absolute -left-[1.35rem] top-0 flex h-10 w-10 items-center justify-center rounded-full bg-surface border-2 border-outline-variant group-hover:border-primary group-hover:bg-primary group-hover:text-on-primary transition-all text-title-medium font-bold"
+                    class="absolute -left-[1.35rem] top-0 flex h-10 w-10 items-center justify-center rounded-full bg-surface border-2 border-outline-variant group-hover:border-secondary group-hover:bg-secondary group-hover:text-on-secondary transition-all text-title-medium font-bold"
             >3</span
             >
                         <h3 class="text-headline-medium mb-4 text-on-surface">
@@ -240,14 +276,12 @@ const faqItems = [
                         </p>
                     </div>
 
-
                     <Button
                             href="/methode"
                             label="Explorer la méthode en détail"
                             variant="outlined"
                             className="w-fit"
                     />
-
                 </div>
             </div>
         </div>
@@ -258,89 +292,162 @@ const faqItems = [
         <div class="section relative z-10">
             <div class="flex flex-col md:flex-row gap-16 md:gap-32 items-start">
                 <div class="md:w-1/3 sticky top-32">
-          <span class="text-label-large font-mono text-tertiary mb-4 block"
+          <span class="text-label-large text-gradient mb-4 block"
           >02 — LES BASES</span
           >
-                    <h2
-                            class="text-[4rem] sm:text-[6rem] leading-[0.9] font-black text-on-surface tracking-tighter uppercase mix-blend-overlay opacity-20 md:opacity-100 absolute md:static top-0 left-0 -z-10 md:z-0"
-                    >
-                        LES BASES<br/>D'UN PROJET CLAIR
+                    <h2 class="text-headline-large text-on-surface tracking-tighter">
+                        Les bases<br/>d'un projet clair
                     </h2>
                     <p
-                            class="mt-8 text-title-large text-on-surface-variant max-w-xs anim-fade-up"
+                            class="mt-8 text-body-large text-on-surface-variant max-w-xs anim-fade-up"
                     >
-                        Beaucoup de projets avancent mal faute de repères simples.
-                        Ce qui fait la différence : un cadre lisible, une méthode
-                        partagée et un pilotage transparent.
+                        Beaucoup de projets avancent mal faute de repères simples. Ce qui
+                        fait la différence : un cadre lisible, une méthode partagée et un
+                        pilotage transparent.
                     </p>
                 </div>
-                <div
-                        class="md:w-2/3 w-full bg-surface p-8 md:p-12 rounded-3xl border border-outline-variant/30 shadow-2xl anim-slide-from-right"
-                >
+                <Card className="md:w-2/3 w-full p-8 md:p-12   anim-slide-from-right">
                     <FeaturesGrid client:visible/>
+                </Card>
+            </div>
+        </div>
+    </section>
+
+    {/* 02b. OFFRE CLAIRE - COMPACT SPLIT WITH VISUAL CHECKLIST */}
+    <section class="section py-24 bg-surface overflow-hidden">
+        <div class="max-width padding-x">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-headline-large text-on-surface">
+                        Une offre claire,<br/>du cadrage à l'autonomie
+                    </h2>
+                    <p class="text-title-medium text-on-surface-variant mt-6">
+                        Nous concevons des sites web sur-mesure, de l'audit initial au
+                        déploiement. Chaque livrable est posé dès le départ, avec un
+                        planning réaliste et sans coûts cachés.
+                    </p>
+                    <div class="mt-8 flex flex-wrap gap-4">
+                        <Button
+                                href="/services"
+                                label="Voir ce qui est inclus"
+                                variant="outlined"
+                        />
+                        <Button href="/methode" label="Notre méthode" variant="text"/>
+                    </div>
+                </div>
+
+                {/* Visual Checklist Card */}
+                <div
+                        class="bg-surface-container-low p-8 rounded-3xl border border-outline-variant/50 relative"
+                >
+                    <div
+                            class="absolute top-4 right-4 bg-primary/10 text-primary px-3 py-1 rounded-full text-label-small font-bold uppercase tracking-wide"
+                    >
+                        Inclus
+                    </div>
+                    <ul class="space-y-4 mt-2">
+                        {
+                            [
+                                "Audit & Stratégie digitale",
+                                "Design UI/UX sur-mesure",
+                                "Développement performant",
+                                "Optimisation SEO Technique",
+                                "Formation & Autonomie",
+                            ].map((item) => (
+                                    <li class="flex items-center gap-3">
+                  <span class="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-on-primary flex items-center justify-center text-[10px]">
+                    <svg
+                            width="12"
+                            height="12"
+                            viewBox="0 0 12 12"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                    >
+                      <polyline points="2 6 4.5 9 10 3"/>
+                    </svg>
+                  </span>
+                                        <span class="text-title-medium text-on-surface">{item}</span>
+                                    </li>
+                            ))
+                        }
+                    </ul>
                 </div>
             </div>
         </div>
     </section>
 
-    {/* 02b. OFFRE CLAIRE - TEXT ONLY */}
-    {/* UX NOTE: This block can be a compact split layout (text + small checklist/visual) to avoid stacking similar text sections. */}
+    {/* 02c. BENEFICES - VALUE CHIPS */}
     <section class="section py-24 bg-surface">
         <div class="max-width padding-x">
-            <div class="max-w-3xl">
+            <div class="max-w-4xl mb-12">
                 <h2 class="text-headline-large text-on-surface">
-                    Une offre claire, du cadrage à l'autonomie
+                    Des bénéfices concrets.<br/>
+                    <span class="text-on-surface-variant opacity-60">Sans détour.</span>
                 </h2>
-                <p class="text-title-medium text-on-surface-variant mt-6">
-                    Nous concevons des sites web sur-mesure, de l'audit initial au déploiement :
-                    design, développement, SEO technique et formation. Chaque livrable est posé
-                    dès le départ, avec inclus/exclus explicites et un planning réaliste.
-                </p>
-                <div class="mt-8 flex flex-wrap gap-4">
-                    <Button href="/services" label="Voir ce qui est inclus" variant="outlined"/>
-                    <Button href="/methode" label="Comprendre notre méthode" variant="text"/>
-                </div>
             </div>
-        </div>
-    </section>
 
-    {/* 02c. BENEFICES - VALUE LINK */}
-    {/* UX NOTE: Consider a visual variant (icons or metric chips) to differentiate from the offer block above. */}
-    <section class="section py-24 bg-surface">
-        <div class="max-width padding-x">
-            <div class="max-w-4xl">
-                <h2 class="text-headline-large text-on-surface">
-                    Des bénéfices concrets, reliés à des leviers précis
-                </h2>
-                <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="p-6 rounded-2xl border border-outline-variant/40 bg-surface">
-                        <h3 class="text-headline-small font-bold mb-2">Visibilité & prospects</h3>
-                        <p class="text-body-medium text-on-surface-variant">
-                            SEO technique + performance + architecture claire = plus de trafic qualifié
-                            et des conversions mesurables.
-                        </p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {/* Item 1 */}
+                <div
+                        class="group p-6 rounded-2xl bg-surface-container-lowest border border-outline-variant/30 hover:border-primary/50 transition-colors duration-300"
+                >
+                    <div
+                            class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
+                    >
+                        <Icon icon={rVisibility} className="w-6 h-6 fill-current"/>
                     </div>
-                    <div class="p-6 rounded-2xl border border-outline-variant/40 bg-surface">
-                        <h3 class="text-headline-small font-bold mb-2">Crédibilité immédiate</h3>
-                        <p class="text-body-medium text-on-surface-variant">
-                            UX soignée, design sobre et contenu structuré = une image professionnelle
-                            qui rassure dès les premières secondes.
-                        </p>
+                    <h3 class="text-headline-small font-bold mb-2">Visibilité</h3>
+                    <p class="text-body-medium text-on-surface-variant">
+                        Plus de trafic qualifié grâce à un SEO technique irréprochable.
+                    </p>
+                </div>
+
+                {/* Item 2 */}
+                <div
+                        class="group p-6 rounded-2xl bg-surface-container-lowest border border-outline-variant/30 hover:border-primary/50 transition-colors duration-300"
+                >
+                    <div
+                            class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
+                    >
+                        <Icon icon={rHandshake} className="w-6 h-6 fill-current"/>
                     </div>
-                    <div class="p-6 rounded-2xl border border-outline-variant/40 bg-surface">
-                        <h3 class="text-headline-small font-bold mb-2">Gain de temps</h3>
-                        <p class="text-body-medium text-on-surface-variant">
-                            CMS simple + documentation + formation = autonomie réelle et mises à jour
-                            rapides sans dépendance.
-                        </p>
+                    <h3 class="text-headline-small font-bold mb-2">Crédibilité</h3>
+                    <p class="text-body-medium text-on-surface-variant">
+                        Une image pro et rassurante dès la première seconde.
+                    </p>
+                </div>
+
+                {/* Item 3 */}
+                <div
+                        class="group p-6 rounded-2xl bg-surface-container-lowest border border-outline-variant/30 hover:border-primary/50 transition-colors duration-300"
+                >
+                    <div
+                            class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
+                    >
+                        <Icon icon={rBolt} className="w-6 h-6 fill-current"/>
                     </div>
-                    <div class="p-6 rounded-2xl border border-outline-variant/40 bg-surface">
-                        <h3 class="text-headline-small font-bold mb-2">Croissance maîtrisée</h3>
-                        <p class="text-body-medium text-on-surface-variant">
-                            Méthode cadrée + jalons validés = décisions plus sûres, moins d'aléas,
-                            et un investissement mieux piloté.
-                        </p>
+                    <h3 class="text-headline-small font-bold mb-2">Gain de temps</h3>
+                    <p class="text-body-medium text-on-surface-variant">
+                        CMS simple et autonomie totale pour vos mises à jour.
+                    </p>
+                </div>
+
+                {/* Item 4 */}
+                <div
+                        class="group p-6 rounded-2xl bg-surface-container-lowest border border-outline-variant/30 hover:border-primary/50 transition-colors duration-300"
+                >
+                    <div
+                            class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
+                    >
+                        <Icon icon={rTrendingUp} className="w-6 h-6 fill-current"/>
                     </div>
+                    <h3 class="text-headline-small font-bold mb-2">Croissance</h3>
+                    <p class="text-body-medium text-on-surface-variant">
+                        Investissement piloté sans aléas budgétaires.
+                    </p>
                 </div>
             </div>
         </div>
@@ -377,8 +484,8 @@ const faqItems = [
                         Des preuves claires, pas des promesses
                     </h2>
                     <p class="text-title-medium text-on-surface-variant mt-4 max-w-2xl">
-                        Nos choix techniques et nos résultats sont vérifiables : indicateurs publiés,
-                        audits lisibles et sobriété mesurée.
+                        Nos choix techniques et nos résultats sont vérifiables : indicateurs
+                        publiés, audits lisibles et sobriété mesurée.
                     </p>
                 </div>
                 <Button
@@ -390,19 +497,27 @@ const faqItems = [
             </div>
 
             <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="p-6 rounded-2xl border border-outline-variant/40 bg-surface">
+                <div
+                        class="p-6 rounded-2xl border border-outline-variant/40 bg-surface"
+                >
                     <h3 class="text-headline-small font-bold mb-2">Qualité mesurée</h3>
                     <p class="text-body-medium text-on-surface-variant">
-                        Performance, SEO, accessibilité : des scores partagés pour chaque projet livré.
+                        Performance, SEO, accessibilité : des scores partagés pour chaque
+                        projet livré.
                     </p>
                 </div>
-                <div class="p-6 rounded-2xl border border-outline-variant/40 bg-surface">
+                <div
+                        class="p-6 rounded-2xl border border-outline-variant/40 bg-surface"
+                >
                     <h3 class="text-headline-small font-bold mb-2">Audits vérifiables</h3>
                     <p class="text-body-medium text-on-surface-variant">
-                        Résultats lisibles (ex. Lighthouse, Core Web Vitals) pour valider la qualité.
+                        Résultats lisibles (ex. Lighthouse, Core Web Vitals) pour valider la
+                        qualité.
                     </p>
                 </div>
-                <div class="p-6 rounded-2xl border border-outline-variant/40 bg-surface">
+                <div
+                        class="p-6 rounded-2xl border border-outline-variant/40 bg-surface"
+                >
                     <h3 class="text-headline-small font-bold mb-2">Sobriété maîtrisée</h3>
                     <p class="text-body-medium text-on-surface-variant">
                         Poids de page et éco‑indicateurs suivis pour limiter l'empreinte.
@@ -415,7 +530,11 @@ const faqItems = [
             <div class="mt-24">
                 <div class="flex items-center justify-between mb-10">
                     <h3 class="text-headline-large">Dernières réalisations</h3>
-                    <Button href="/realisations" label="Voir toutes les réalisations" variant="text"/>
+                    <Button
+                            href="/realisations"
+                            label="Voir toutes les réalisations"
+                            variant="text"
+                    />
                 </div>
                 <Realisations max={4}/>
             </div>
@@ -423,123 +542,235 @@ const faqItems = [
     </section>
 
     {/* 04b. INVESTISSEMENT & MAITRISE */}
-    {/* UX NOTE: This can be styled as a pricing transparency panel (cards or accordion) to break the rhythm. */}
+    {/* 04b. INVESTISSEMENT & MAITRISE - TRANSPARENCY PANEL */}
     <section class="section py-24 bg-surface">
         <div class="max-width padding-x">
-            <div class="max-w-4xl">
-                <h2 class="text-headline-large text-on-surface">
-                    Transparence sur l'investissement
-                </h2>
-                <p class="text-title-medium text-on-surface-variant mt-6">
-                    Devis détaillé, jalons clairs, coûts expliqués : vous savez où va chaque euro
-                    et pourquoi.
-                </p>
-                <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="p-6 rounded-2xl border border-outline-variant/40 bg-surface">
-                        <h3 class="text-headline-small font-bold mb-2">Inclus & exclus</h3>
-                        <p class="text-body-medium text-on-surface-variant">
-                            Design, dev, SEO technique, formation : le périmètre est explicitement cadré.
+            <div class="bg-surface-container p-8 md:p-12 rounded-[2.5rem]">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h2
+                                class="text-headline-medium md:text-headline-large text-on-surface mb-6"
+                        >
+                            Transparence totale<br/>sur l'investissement.
+                        </h2>
+                        <p class="text-title-medium text-on-surface-variant mb-8">
+                            Pas de "coûts cachés" ou de "frais de dossier" obscurs. Tout est
+                            listé, tout est justifié.
                         </p>
+                        <Button
+                                href="/services"
+                                label="Détail des prestations"
+                                variant="outlined"
+                                className="bg-surface"
+                        />
                     </div>
-                    <div class="p-6 rounded-2xl border border-outline-variant/40 bg-surface">
-                        <h3 class="text-headline-small font-bold mb-2">Options lisibles</h3>
-                        <p class="text-body-medium text-on-surface-variant">
-                            Ce qui fait varier le budget est présenté clairement, sans surprise.
-                        </p>
+
+                    {/* Bill Breakdown Visual */}
+                    <div
+                            class="bg-surface rounded-2xl p-6 shadow-sm border border-outline-variant/30 font-mono text-body-medium"
+                    >
+                        <div
+                                class="flex justify-between border-b border-outline-variant/30 pb-4 mb-4 text-on-surface-variant uppercase tracking-wider text-label-small"
+                        >
+                            <span>Poste</span>
+                            <span>Statut</span>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center">
+                                <span>Audit & Stratégie</span>
+                                <span
+                                        class="bg-tertiary-container text-on-tertiary-container px-2 py-1 rounded text-label-small"
+                                >INCLUS</span
+                                >
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span>Design UI/UX</span>
+                                <span
+                                        class="bg-tertiary-container text-on-tertiary-container px-2 py-1 rounded text-label-small"
+                                >INCLUS</span
+                                >
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span>Intégration & Dev</span>
+                                <span
+                                        class="bg-tertiary-container text-on-tertiary-container px-2 py-1 rounded text-label-small"
+                                >INCLUS</span
+                                >
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span>Formation Admin</span>
+                                <span
+                                        class="bg-tertiary-container text-on-tertiary-container px-2 py-1 rounded text-label-small"
+                                >INCLUS</span
+                                >
+                            </div>
+                            <div class="flex justify-between items-center opacity-60">
+                                <span>Maintenance Evolutive</span>
+                                <span
+                                        class="border border-outline-variant px-2 py-1 rounded text-label-small"
+                                >OPTION</span
+                                >
+                            </div>
+                        </div>
+                        <div
+                                class="mt-6 pt-4 border-t border-outline-variant/30 flex justify-between items-center text-headline-small text-primary font-sans font-bold"
+                        >
+                            <span>Surprises</span>
+                            <span>0€</span>
+                        </div>
                     </div>
-                    <div class="p-6 rounded-2xl border border-outline-variant/40 bg-surface">
-                        <h3 class="text-headline-small font-bold mb-2">Planning annoncé</h3>
-                        <p class="text-body-medium text-on-surface-variant">
-                            Jalons et validations fixés dès le cadrage, avec un rythme réaliste.
-                        </p>
-                    </div>
-                </div>
-                <div class="mt-8">
-                    <Button href="/services" label="Voir ce qui est inclus" variant="outlined"/>
                 </div>
             </div>
         </div>
     </section>
 
-    {/* 04c. ANTI-DEPENDANCE */}
-    {/* UX NOTE: Consider a key/ownership visual or "keys delivered" badge row to make this feel distinct. */}
+    {/* 04c. ANTI-DEPENDANCE - KEYS DELIVERED */}
     <section class="section py-24 bg-surface">
-        <div class="max-width padding-x">
-            <div class="max-w-4xl">
-                <h2 class="text-headline-large text-on-surface">
-                    Vous gardez les clés
-                </h2>
-                <p class="text-title-medium text-on-surface-variant mt-6">
-                    Code, accès, données : tout vous appartient. La réversibilité est prévue dès le départ.
-                </p>
-                <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="p-6 rounded-2xl border border-outline-variant/40 bg-surface">
-                        <h3 class="text-headline-small font-bold mb-2">Accès complets</h3>
-                        <p class="text-body-medium text-on-surface-variant">
-                            Dépôts, comptes et outils sont partagés pour éviter toute dépendance.
-                        </p>
+        <div class="max-width padding-x text-center">
+            <h2 class="text-headline-large text-on-surface mb-6">
+                Vous gardez les clés.
+            </h2>
+            <p
+                    class="text-title-medium text-on-surface-variant max-w-2xl mx-auto mb-16"
+            >
+                Chez Udixio, pas de "lock-in" propriétaire. Vous êtes chez vous. Voici
+                ce que vous récupérez à la fin du projet :
+            </p>
+
+            <div class="flex flex-wrap justify-center gap-8">
+                {/* Key Card 1 */}
+                <div
+                        class="w-64 aspect-[3/4] bg-surface-container rounded-3xl border border-outline-variant/40 p-6 flex flex-col items-center justify-center hover:-translate-y-2 transition-transform duration-300 shadow-lg"
+                >
+                    <div
+                            class="w-20 h-20 bg-secondary-container rounded-full flex items-center justify-center mb-6"
+                    >
+                        <Icon
+                                icon={rFolder}
+                                className="w-10 h-10 fill-on-secondary-container"
+                        />
                     </div>
-                    <div class="p-6 rounded-2xl border border-outline-variant/40 bg-surface">
-                        <h3 class="text-headline-small font-bold mb-2">Documentation claire</h3>
-                        <p class="text-body-medium text-on-surface-variant">
-                            Livrables expliqués et guide de prise en main remis à la livraison.
-                        </p>
-                    </div>
-                    <div class="p-6 rounded-2xl border border-outline-variant/40 bg-surface">
-                        <h3 class="text-headline-small font-bold mb-2">Formation incluse</h3>
-                        <p class="text-body-medium text-on-surface-variant">
-                            Une session dédiée pour vous rendre autonome sur votre site.
-                        </p>
-                    </div>
+                    <h3 class="text-headline-small font-bold mb-2">Code Source</h3>
+                    <p class="text-body-small text-on-surface-variant">
+                        Dépôt Git complet
+                    </p>
                 </div>
-                <div class="mt-8">
-                    <Button href="/methode" label="Découvrir l'approche" variant="outlined"/>
+
+                {/* Key Card 2 */}
+                <div
+                        class="w-64 aspect-[3/4] bg-surface-container rounded-3xl border border-outline-variant/40 p-6 flex flex-col items-center justify-center hover:-translate-y-2 transition-transform duration-300 shadow-lg relative z-10 scale-105 border-primary/20"
+                >
+                    <div
+                            class="w-20 h-20 bg-primary-container rounded-full flex items-center justify-center mb-6"
+                    >
+                        <Icon icon={rKey} className="w-10 h-10 fill-on-primary-container"/>
+                    </div>
+                    <h3 class="text-headline-small font-bold mb-2">Accès Admin</h3>
+                    <p class="text-body-small text-on-surface-variant">
+                        Contrôle total du CMS
+                    </p>
                 </div>
+
+                {/* Key Card 3 */}
+                <div
+                        class="w-64 aspect-[3/4] bg-surface-container rounded-3xl border border-outline-variant/40 p-6 flex flex-col items-center justify-center hover:-translate-y-2 transition-transform duration-300 shadow-lg"
+                >
+                    <div
+                            class="w-20 h-20 bg-tertiary-container rounded-full flex items-center justify-center mb-6"
+                    >
+                        <Icon
+                                icon={rCloud}
+                                className="w-10 h-10 fill-on-tertiary-container"
+                        />
+                    </div>
+                    <h3 class="text-headline-small font-bold mb-2">Hébergement</h3>
+                    <p class="text-body-small text-on-surface-variant">
+                        Propriété directe
+                    </p>
+                </div>
+            </div>
+
+            <div class="mt-16">
+                <Button
+                        href="/methode"
+                        label="Notre politique de réversibilité"
+                        variant="text"
+                />
             </div>
         </div>
     </section>
 
-    {/* 05b. DUO FONDATEUR */}
-    {/* UX NOTE: Candidate for a compact team card with photo placeholders; keep it personal but short. */}
+    {/* 05b. DUO FONDATEUR - COMPACT TEAM CARD */}
     <section class="section py-24 bg-surface-container-low">
         <div class="max-width padding-x">
-            <div class="max-w-4xl">
-                <h2 class="text-headline-large text-on-surface">
-                    Un duo impliqué, en accès direct
-                </h2>
-                <p class="text-title-medium text-on-surface-variant mt-6">
-                    Joel (tech) et Florian (cadrage/relations) pilotent chaque projet en direct,
-                    sans intermédiaires ni perte d'information.
-                </p>
-                <div class="mt-8 flex flex-col sm:flex-row gap-6">
-                    <div class="flex items-center gap-4">
-                        <div class="h-12 w-12 rounded-full border border-outline-variant bg-surface flex items-center justify-center text-title-small font-bold">
+            <div
+                    class="max-w-5xl mx-auto bg-surface rounded-3xl p-8 md:p-12 shadow-sm border border-outline-variant/30 flex flex-col md:flex-row items-center gap-12"
+            >
+                <div class="flex-1">
+                    <h2 class="text-headline-medium text-on-surface mb-4">
+                        Un duo impliqué,<br/>en accès direct.
+                    </h2>
+                    <p class="text-body-large text-on-surface-variant mb-8">
+                        Pas de chef de projet junior ou de commercial qui disparaît une fois
+                        le devis signé. Joel et Florian pilotent tout en direct : technique
+                        et stratégie, sans intermédiaires.
+                    </p>
+                    <Button
+                            href="/agence"
+                            label="Découvrir l'équipe"
+                            variant="outlined"
+                    />
+                </div>
+
+                {/* Founders Visual */}
+                <div class="flex flex-col sm:flex-row gap-6">
+                    {/* Joel */}
+                    <div
+                            class="flex items-center gap-4 bg-surface-container-lowest p-4 rounded-2xl border border-outline-variant/30"
+                    >
+                        <div
+                                class="h-14 w-14 rounded-full bg-surface-container-high flex items-center justify-center text-title-medium font-bold border border-outline-variant"
+                        >
                             JV
                         </div>
                         <div>
-                            <div class="text-title-medium font-bold text-on-surface">Joel Vigreux</div>
-                            <div class="text-body-medium text-on-surface-variant">Tech, performance, qualite</div>
+                            <div class="text-title-small font-bold text-on-surface">
+                                Joel Vigreux
+                            </div>
+                            <div
+                                    class="text-label-small text-on-surface-variant uppercase tracking-wider"
+                            >
+                                Directeur Technique
+                            </div>
                         </div>
                     </div>
-                    <div class="flex items-center gap-4">
-                        <div class="h-12 w-12 rounded-full border border-outline-variant bg-surface flex items-center justify-center text-title-small font-bold">
+
+                    {/* Florian */}
+                    <div
+                            class="flex items-center gap-4 bg-surface-container-lowest p-4 rounded-2xl border border-outline-variant/30"
+                    >
+                        <div
+                                class="h-14 w-14 rounded-full bg-surface-container-high flex items-center justify-center text-title-medium font-bold border border-outline-variant"
+                        >
                             FV
                         </div>
                         <div>
-                            <div class="text-title-medium font-bold text-on-surface">Florian Vigreux</div>
-                            <div class="text-body-medium text-on-surface-variant">Cadrage, relation client, pilotage</div>
+                            <div class="text-title-small font-bold text-on-surface">
+                                Florian Vigreux
+                            </div>
+                            <div
+                                    class="text-label-small text-on-surface-variant uppercase tracking-wider"
+                            >
+                                Directeur Conseil
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="mt-6">
-                    <Button href="/agence" label="Découvrir l'équipe" variant="outlined"/>
                 </div>
             </div>
         </div>
     </section>
 
     {/* 05. BENTO GRID - RESOURCES & ENGAGEMENTS */}
-    {/* UX NOTE: Eco-conception cards should feel "lighter" (subtle green accents, weight/ecoindex chips). */}
     <section class="section py-32 bg-surface-container">
         <div class="max-width padding-x">
             <h2 class="text-headline-large mb-16">Ressources & éco‑conception</h2>
@@ -551,30 +782,49 @@ const faqItems = [
                 <div
                         class="md:col-span-2 md:row-span-1 bg-primary text-on-primary p-12 rounded-[2rem] flex flex-col justify-between hover:scale-[1.01] transition-transform duration-500"
                 >
-                    <h3 class="text-headline-medium">Devis clair & transparence totale</h3>
+                    <h3 class="text-headline-medium">Hébergement responsable</h3>
                     <div class="flex justify-between items-end">
                         <p class="max-w-md text-title-medium opacity-90">
-                            Inclus et exclus clairement listés. Vous signez en sachant
-                            exactement ce que vous achetez.
+                            Choix d'infrastructures sobres, sécurité maîtrisée et impact
+                            limité, sans compromis sur la performance.
                         </p>
                         <span class="text-headline-large opacity-20 font-mono">01</span>
                     </div>
                 </div>
 
-                {/* Eco 1 */}
+                {/* Eco 1 - Sobriété */}
                 <div
-                        class="bg-surface p-8 rounded-[2rem] border border-outline-variant flex flex-col justify-between"
+                        class="bg-surface p-8 rounded-[2rem] border border-[#4CAF50]/30 relative overflow-hidden flex flex-col justify-between group"
                 >
+                    <div class="absolute top-0 right-0 p-4 opacity-50">
+            <span class="group-hover:grayscale-0 transition-all duration-500">
+              <Icon
+                      icon={rForest}
+                      className="w-8 h-8 fill-on-surface-variant/40 group-hover:fill-[#4CAF50]"
+              />
+            </span>
+                    </div>
                     <div>
-                        <h4 class="text-headline-small font-bold mb-2">
+            <span
+                    class="inline-block px-3 py-1 bg-[#4CAF50]/10 text-[#4CAF50] rounded-full text-label-small font-bold mb-4"
+            >
+              LOW CARBON
+            </span>
+                        <h4 class="text-headline-small font-bold mb-2 text-[#2E7D32]">
                             Sobriété numérique
                         </h4>
                         <p class="text-body-medium text-on-surface-variant">
-                            Design frugal, code léger et médias optimisés pour réduire le poids des pages.
+                            Design frugal, code léger et médias optimisés pour réduire le
+                            poids des pages.
                         </p>
                     </div>
                     <div class="mt-6">
-                        <Button href="/methode" label="Voir nos choix" variant="text"/>
+                        <Button
+                                href="/methode"
+                                label="Voir nos choix"
+                                variant="text"
+                                className="!text-[#2E7D32] hover:!bg-[#4CAF50]/10"
+                        />
                     </div>
                 </div>
 
@@ -591,20 +841,39 @@ const faqItems = [
                     <Button href="/methode" label="En savoir plus" variant="outlined"/>
                 </div>
 
-                {/* Eco 2 */}
+                {/* Eco 2 - Indicateurs */}
                 <div
-                        class="bg-surface p-8 rounded-[2rem] border border-outline-variant flex flex-col justify-between"
+                        class="bg-surface p-8 rounded-[2rem] border border-[#4CAF50]/30 relative overflow-hidden flex flex-col justify-between group"
                 >
+                    <div class="absolute top-0 right-0 p-4 opacity-50">
+            <span class="group-hover:grayscale-0 transition-all duration-500">
+              <Icon
+                      icon={rBarChart}
+                      className="w-8 h-8 fill-on-surface-variant/40 group-hover:fill-[#4CAF50]"
+              />
+            </span>
+                    </div>
                     <div>
-                        <h4 class="text-headline-small font-bold mb-2">
+            <span
+                    class="inline-block px-3 py-1 bg-[#4CAF50]/10 text-[#4CAF50] rounded-full text-label-small font-bold mb-4"
+            >
+              ECOINDEX A/B
+            </span>
+                        <h4 class="text-headline-small font-bold mb-2 text-[#2E7D32]">
                             Indicateurs éco-conçus
                         </h4>
                         <p class="text-body-medium text-on-surface-variant">
-                            Poids de page, EcoIndex et bonnes pratiques suivis pour limiter l'empreinte.
+                            Poids de page, EcoIndex et bonnes pratiques suivis pour limiter
+                            l'empreinte.
                         </p>
                     </div>
                     <div class="mt-6">
-                        <Button href="/realisations" label="Voir des exemples" variant="text"/>
+                        <Button
+                                href="/realisations"
+                                label="Voir des exemples"
+                                variant="text"
+                                className="!text-[#2E7D32] hover:!bg-[#4CAF50]/10"
+                        />
                     </div>
                 </div>
 
@@ -658,7 +927,9 @@ const faqItems = [
     <section class="section py-36 relative overflow-hidden">
         <div class="absolute inset-0 bg-primary opacity-5 skew-y-3 scale-110"></div>
         <div class="max-width padding-x relative z-10 text-center">
-            <h2 class="text-headline-large mb-8 tracking-tighter">On démarre en transparence ?</h2>
+            <h2 class="text-headline-large mb-8 tracking-tighter">
+                On démarre en transparence ?
+            </h2>
             <p
                     class="text-headline-small text-on-surface-variant mb-12 max-w-2xl mx-auto"
             >
@@ -677,9 +948,11 @@ const faqItems = [
                                 label="Obtenir un diagnostic"
                                 className="relative text-title-medium py-4 px-8"
                         />
-                        <span class="text-label-small uppercase tracking-widest text-tertiary border border-tertiary/40 rounded-full px-3 py-1">
-                            Offert
-                        </span>
+                        <span
+                                class="text-label-small uppercase tracking-widest text-tertiary border border-tertiary/40 rounded-full px-3 py-1"
+                        >
+              Offert
+            </span>
                     </div>
                 </div>
                 <Button href="/services" label="Nos services" variant="text"/>

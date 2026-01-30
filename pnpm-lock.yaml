@@ -41,6 +41,9 @@ importers:
       '@fortawesome/react-fontawesome':
         specifier: ^0.2.0
         version: 0.2.6(@fortawesome/fontawesome-svg-core@7.1.0)(react@19.2.0)
+      '@material-design-icons/svg':
+        specifier: ^0.14.15
+        version: 0.14.15
       '@material/material-color-utilities':
         specifier: ^0.3.0
         version: 0.3.0
@@ -78,14 +81,14 @@ importers:
         specifier: ^19.0.3
         version: 19.2.3(@types/react@19.2.4)
       '@udixio/tailwind':
-        specifier: ^2.4.11
-        version: 2.4.11
+        specifier: ^2.4.12
+        version: 2.4.12
       '@udixio/theme':
-        specifier: ^2.1.11
-        version: 2.1.11
+        specifier: ^2.1.12
+        version: 2.1.12
       '@udixio/ui-react':
-        specifier: ^2.9.12
-        version: 2.9.12(@types/react@19.2.4)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        specifier: ^2.9.13
+        version: 2.9.13(@types/react@19.2.4)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       aos:
         specifier: ^2.3.4
         version: 2.3.4
@@ -1074,6 +1077,9 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
+  '@material-design-icons/svg@0.14.15':
+    resolution: {integrity: sha512-6nbjwGwyJnphwQUscJAYqw1Tk6+W8KvsgOAeyVgzIFXVsHfgX5XyplTUcZ29wbcTUysMMyCUi1LYpmFKA/e61g==}
+
   '@material/material-color-utilities@0.3.0':
     resolution: {integrity: sha512-ztmtTd6xwnuh2/xu+Vb01btgV8SQWYCaK56CkRK8gEkWe5TuDyBcYJ0wgkMRn+2VcE9KUmhvkz+N9GHrqw/C0g==}
 
@@ -1863,15 +1869,15 @@ packages:
   '@types/yauzl@2.10.3':
     resolution: {integrity: sha512-oJoftv0LSuaDZE3Le4DbKX+KS9G36NzOeSap90UIK0yMA/NhKJhqlSGtNDORNRaIbQfzjXDrQa0ytJ6mNRGz/Q==}
 
-  '@udixio/tailwind@2.4.11':
-    resolution: {integrity: sha512-+tIsuedwyCIWKUTq4NEmHog5nW17ZwrfV8v2jh38Elmr5nyGs52xSGUom0khBYNOWPwbZq2PpZAqhGPd4AwCJg==}
+  '@udixio/tailwind@2.4.12':
+    resolution: {integrity: sha512-l2rI5+uB4Aq3ql7cMCBK/fH7cHNgGbKYbj6IoK8D9JKz3jZ9861bpl7uYQo6rwGT7XFBnyXZmMtdLLfZ46joVA==}
 
-  '@udixio/theme@2.1.11':
-    resolution: {integrity: sha512-Ak50NLLbajrgnDeomz40uMNP98DYecEj6rZsgT2ITwHEZ5svYk4RlwgdVBcQZHODo0m5MswfeJtXclVZLFcrIw==}
+  '@udixio/theme@2.1.12':
+    resolution: {integrity: sha512-iRfS/2ntK7Z6VgsL49tL1d9BsjAkFGOl81XRVnOUiDISqgYCdRSNA06s8HAd2lZlYFCURVvD8x7G6hTgLgltWw==}
     hasBin: true
 
-  '@udixio/ui-react@2.9.12':
-    resolution: {integrity: sha512-5AH32KPUJtup3noHBJUhRs5IAagf/X1SoGAGGJcJ8IqooB9JM1upFgwhsBU8/MFDtlL1fpyoYxq0dcUU95C+xA==}
+  '@udixio/ui-react@2.9.13':
+    resolution: {integrity: sha512-hfWR6yeOb6TkI7On2oUdbhrYpp6maezHAICne0i/YVpXCiirJbvtilCaLlKVFuWcLCLfrIPMoDKcTk7yTIiQyA==}
     peerDependencies:
       react: '>19.0.0'
       react-dom: '>19.0.0'
@@ -6173,6 +6179,8 @@ snapshots:
       - encoding
       - supports-color
 
+  '@material-design-icons/svg@0.14.15': {}
+
   '@material/material-color-utilities@0.3.0': {}
 
   '@mdx-js/mdx@3.1.1':
@@ -7058,16 +7066,16 @@ snapshots:
       '@types/node': 24.10.1
     optional: true
 
-  '@udixio/tailwind@2.4.11':
+  '@udixio/tailwind@2.4.12':
     dependencies:
-      '@udixio/theme': 2.1.11
+      '@udixio/theme': 2.1.12
       chalk: 5.6.2
       pathe: 2.0.3
       tailwindcss: 4.1.17
       text-case: 1.2.9
       tslib: 2.8.1
 
-  '@udixio/theme@2.1.11':
+  '@udixio/theme@2.1.12':
     dependencies:
       '@material/material-color-utilities': 0.3.0
       awilix: 12.0.5
@@ -7081,7 +7089,7 @@ snapshots:
       tailwindcss: 4.1.17
       unplugin: 2.3.10
 
-  '@udixio/ui-react@2.9.12(@types/react@19.2.4)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
+  '@udixio/ui-react@2.9.13(@types/react@19.2.4)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
     dependencies:
       '@fortawesome/fontawesome-svg-core': 7.1.0
       '@fortawesome/free-regular-svg-icons': 7.1.0
