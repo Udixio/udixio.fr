@@ -29,7 +29,7 @@ export const ProofsGrid = () => {
             {proofs.map((proof, index) => (
                 <motion.div
                     key={index}
-                    className="flex flex-col p-8 bg-surface hover:bg-surface-container-high transition-colors h-full"
+                    className="flex flex-col p-8 bg-surface h-full"
                 >
                     <div className="mb-6 self-start px-3 py-1 rounded-full border border-primary/20 text-primary text-label-small font-mono uppercase tracking-wider">
                         {proof.badge}

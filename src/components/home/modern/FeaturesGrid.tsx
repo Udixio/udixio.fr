@@ -66,14 +66,14 @@ export const FeaturesGrid = () => {
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.1 }}
-                    className="group flex gap-4 items-start p-4 rounded-2xl hover:bg-surface-container-high border border-transparent hover:border-outline-variant/30 transition-all"
+                    className="group flex gap-4 items-start p-4 rounded-2xl border border-transparent transition-all"
                 >
-                    <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-primary/5 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-on-primary transition-colors duration-300">
+                    <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-primary/5 text-primary flex items-center justify-center transition-colors duration-300">
                         {feature.icon}
                     </div>
                     <div>
                         <h3 className="text-title-medium font-bold text-on-surface mb-1">{feature.title}</h3>
-                        <p className="text-body-medium text-on-surface-variant group-hover:text-on-surface transition-colors">
+                        <p className="text-body-medium text-on-surface-variant transition-colors">
                             {feature.description}
                         </p>
                     </div>
