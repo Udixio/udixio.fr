@@ -80,6 +80,9 @@ importers:
       '@types/react-dom':
         specifier: ^19.0.3
         version: 19.2.3(@types/react@19.2.4)
+      '@udixio/icons-rounded-400':
+        specifier: ^0.0.1
+        version: 0.0.1
       '@udixio/tailwind':
         specifier: ^2.4.12
         version: 2.4.12
@@ -1868,6 +1871,9 @@ packages:
 
   '@types/yauzl@2.10.3':
     resolution: {integrity: sha512-oJoftv0LSuaDZE3Le4DbKX+KS9G36NzOeSap90UIK0yMA/NhKJhqlSGtNDORNRaIbQfzjXDrQa0ytJ6mNRGz/Q==}
+
+  '@udixio/icons-rounded-400@0.0.1':
+    resolution: {integrity: sha512-ImuLBpR3tKYPFz5EEbxFlVSkOf8Vu4H3oGg2E5wbBWb6thhI4ql6O59cTvIdBc6Jng8STIPWdo4fvNHgcRO8jQ==}
 
   '@udixio/tailwind@2.4.12':
     resolution: {integrity: sha512-l2rI5+uB4Aq3ql7cMCBK/fH7cHNgGbKYbj6IoK8D9JKz3jZ9861bpl7uYQo6rwGT7XFBnyXZmMtdLLfZ46joVA==}
@@ -7065,6 +7071,8 @@ snapshots:
     dependencies:
       '@types/node': 24.10.1
     optional: true
+
+  '@udixio/icons-rounded-400@0.0.1': {}
 
   '@udixio/tailwind@2.4.12':
     dependencies:

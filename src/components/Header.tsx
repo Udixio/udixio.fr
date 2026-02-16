@@ -1,4 +1,4 @@
-import {faComment} from "@fortawesome/free-solid-svg-icons";
+import { iComment } from "@udixio/icons-rounded-400/comment";
 import {classNames, Fab} from "@udixio/ui-react";
 import {useEffect, useRef, useState} from "react";
 
@@ -80,7 +80,7 @@ export const Header = () => {
                 onMouseEnter={() => setFabIsHovered(true)}
                 onMouseLeave={() => setFabIsHovered(false)}
                 title={"Contacter Joël VIGREUX"}
-                icon={faComment}
+                icon={iComment}
                 id={"button-contact"}
                 href={"/contact"}
                 label={"Contactez-nous"}

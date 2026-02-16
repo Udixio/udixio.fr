@@ -1,5 +1,7 @@
 import {Button, Card, classNames, Divider, IconButton} from "@udixio/ui-react";
-import {faArrowRight, faLink, faXmark} from "@fortawesome/free-solid-svg-icons";
+import { iArrowRight } from "@udixio/icons-rounded-400/arrow_right";
+import { iLink } from "@udixio/icons-rounded-400/link";
+import { iClose } from "@udixio/icons-rounded-400/close";
 import type {CollectionEntry} from "astro:content";
 import type {ReactNode} from "react";
 import {useState} from "react";
@@ -96,7 +98,7 @@ export const ProjectMini = ({slug, images, title, summary, isHovered}: ProjectPr
 
                             transition={{duration: 0.3}}       // Durée de l'animation
                         >
-                            <Button iconPosition="right" icon={faArrowRight} size={"small"} label="Découvrir"
+                            <Button iconPosition="right" icon={iArrowRight} size={"small"} label="Découvrir"
                                     className={classNames(
                                         "transition-all duration-300 hover:gap-4",
                                     )}
@@ -122,7 +124,7 @@ export const ProjectFull = ({
                             }: ProjectProps) => {
     return (
         <>
-            <IconButton variant='outlined' icon={faXmark}
+            <IconButton variant='outlined' icon={iClose}
                         className="block !absolute z-10 w-fit  ml-auto right-0 m-4 top-4 primary"
                         label="retour aux projets"
                         onClick={() => {
@@ -183,7 +185,7 @@ export const ProjectFull = ({
 
                                 </div>}
                             {website &&
-                                <Button className="w-fit" target="_blank" href={website} icon={faLink}
+                                <Button className="w-fit" target="_blank" href={website} icon={iLink}
                                         label={"Visiter le siteWeb"}/>}
                         </div>
 

@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
-import { Button, Carousel, CarouselItem } from "@udixio/ui-react";
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { Button, Carousel, CarouselItem, Icon } from "@udixio/ui-react";
+import { iArrowRight } from "@udixio/icons-rounded-400/arrow_right";
 import type { ProjectProps } from "../../project/Project";
 
 export const ProjectsShowcase = ({ projects }: { projects: ProjectProps[] }) => {
@@ -60,7 +60,7 @@ export const ProjectsShowcase = ({ projects }: { projects: ProjectProps[] }) => 
                         <Button 
                             href="/contact" 
                             label="Lancer mon projet" 
-                            icon={faArrowRight} 
+                            icon={iArrowRight} 
                             iconPosition="right"
                             className="group-hover:pl-6 transition-all"
                         />
@@ -110,10 +110,10 @@ const ShowcaseItem = ({ project }: { project: ProjectProps }) => {
                     </div>
                     <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-white border border-white/20 group-hover:bg-white group-hover:text-primary-fixed transition-colors duration-300">
                          <span className="sr-only">Voir le projet</span>
-                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transform -rotate-45 group-hover:rotate-0 transition-transform duration-300">
-                             <line x1="5" y1="12" x2="19" y2="12"></line>
-                             <polyline points="12 5 19 12 12 19"></polyline>
-                         </svg>
+                         <Icon 
+                            icon={iArrowRight} 
+                            className="transform -rotate-45 group-hover:rotate-0 transition-transform duration-300 w-6 h-6 fill-current" 
+                         />
                     </div>
                 </div>
             </div>

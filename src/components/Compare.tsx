@@ -1,6 +1,8 @@
 import React, {useMemo, useState} from 'react'
 import {Button, classNames, Icon, Tab, Tabs} from '@udixio/ui-react'
-import {faCircleCheck, faCircleMinus, faCircleXmark} from '@fortawesome/free-solid-svg-icons'
+import { iCheckCircle } from "@udixio/icons-rounded-400/check_circle";
+import { iDoNotDisturbOn } from "@udixio/icons-rounded-400/do_not_disturb_on";
+import { iCancel } from "@udixio/icons-rounded-400/cancel";
 import {Card} from "@components/Card.tsx";
 
 export type PlanColumn = {
@@ -56,21 +58,21 @@ function StatusCell({value}: { value: Feature['value'] }) {
     if (value === true) {
         return (
             <div className="flex items-center justify-center">
-                <Icon className="text-success size-5" icon={faCircleCheck}/>
+                <Icon className="text-success size-5" icon={iCheckCircle}/>
             </div>
         )
     }
     if (value === false) {
         return (
             <div className="flex items-center justify-center">
-                <Icon className="text-error size-5" icon={faCircleXmark}/>
+                <Icon className="text-error size-5" icon={iCancel}/>
             </div>
         )
     }
     if (value === 'partial') {
         return (
             <div className="flex items-center justify-center">
-                <Icon className="text-warning size-5" icon={faCircleMinus}/>
+                <Icon className="text-warning size-5" icon={iDoNotDisturbOn}/>
             </div>
         )
     }

@@ -1,11 +1,10 @@
 import {classNames, Icon} from "@udixio/ui-react";
-import {type IconDefinition} from "@fortawesome/free-brands-svg-icons";
 import {useRef} from "react";
 
 export type TechnoProps = {
     name: string;
     image?: any;
-    icon?: IconDefinition;
+    icon?: any;
     className?: string;
     children?: any;
     variant?: "primary" | "secondary";
