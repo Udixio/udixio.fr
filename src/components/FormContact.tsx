@@ -146,7 +146,7 @@ export const FormContact = () => {
                 placeholder={"Votre prénom"}
                 errorText={getFormErrorMessage("name")}
                 onChange={(e) => {
-                    formik.setFieldValue("name", e);
+                    formik.setFieldValue("name", e.target.value);
                 }}
                 supportingText={"\u00A0"}
                 showSupportingText
@@ -160,7 +160,7 @@ export const FormContact = () => {
                 placeholder={"Votre e-mail"}
                 errorText={getFormErrorMessage("email")}
                 onChange={(e) => {
-                    formik.setFieldValue("email", e);
+                    formik.setFieldValue("email", e.target.value);
                 }}
                 supportingText={"\u00A0"}
                 showSupportingText
@@ -173,7 +173,7 @@ export const FormContact = () => {
                 label={"Message"}
                 value={formik.values.message}
                 onChange={(e) => {
-                    formik.setFieldValue("message", e);
+                    formik.setFieldValue("message", e.target.value);
                 }}
                 placeholder={"Votre message"}
                 errorText={getFormErrorMessage("message")}
@@ -209,9 +209,9 @@ export const FormContact = () => {
             {message && (
                 <Snackbar
                     key={message}
-                    className={"!absolute -bottom-20"}
+                    className={"absolute -bottom-20"}
                     duration={5000}
-                    supportingText={message}
+                    message={message}
                     onClose={() => setMessage(null)}
                 />
             )}
