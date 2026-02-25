@@ -273,7 +273,7 @@ Notre ton de voix doit refléter notre positionnement : **pédagogique, fiable e
 Concrètement, voici les principes à suivre pour le style rédactionnel de tous nos supports (site web, offres,
 articles…) :
 
-- **Clarté et simplicité avant tout :** On bannit le jargon technique inutile, conformément à notre promesse de rendre
+- **Simplicité et Pédagogie avant tout :** On bannit le jargon technique inutile, conformément à notre promesse de rendre
   les choses lisibles. Quand une notion complexe doit être introduite, on la vulgarise avec des mots courants ou une
   analogie. Par exemple, on parlera de _"plan de route"_ plutôt que _"roadmap"_, de _"boîte à outils numérique"_ plutôt
   que _"stack technologique"_ si besoin. L'idée est que n'importe quel décideur non technique comprenne nos messages
