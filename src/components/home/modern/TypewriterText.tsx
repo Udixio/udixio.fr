@@ -15,58 +15,80 @@ export const TypewriterText = ({phrases}: TypewriterTextProps) => {
     const [index, setIndex] = useState(0);
     // Initialize fully typed out for the first phrase (index 0)
     const initialFullLength = phrases.length > 0 ? phrases[0].verb.length + phrases[0].prefix.length + phrases[0].highlight.length : 0;
-    const [subIndex, setSubIndex] = useState(initialFullLength);
-    const [reverse, setReverse] = useState(false);
-    const [isStarted, setIsStarted] = useState(false); // To handle the initial pause
-
-    // Typing effect
-    useEffect(() => {
-        const fullLength = phrases[index].verb.length + phrases[index].prefix.length + phrases[index].highlight.length;
-
-        if (!isStarted) {
-            const timeout = setTimeout(() => {
-                setIsStarted(true);
-                setReverse(true);
-            }, 3000); // Initial display time before first deletion
-            return () => clearTimeout(timeout);
-        }
-
-        if (subIndex === fullLength + 1 && !reverse) {
-            // Pause before deleting
-            const timeout = setTimeout(() => {
-                setReverse(true);
-            }, 2500);
-            return () => clearTimeout(timeout);
-        }
-
-        if (subIndex === 0 && reverse) {
-            setReverse(false);
-            setIndex((prev) => (prev + 1) % phrases.length);
-            return;
-        }
-
-        const timeout = setTimeout(() => {
-            setSubIndex((prev) => prev + (reverse ? -1 : 1));
-        }, Math.max(reverse ? 20 : subIndex === fullLength ? 1000 : 40, Math.random() * 40));
-
-        return () => clearTimeout(timeout);
-    }, [subIndex, index, reverse, isStarted]);
+    const [isInitialState, setIsInitialState] = useState(true);
+    const [visible, setVisible] = useState(true);
+    const [underlineReady, setUnderlineReady] = useState(initialFullLength > 0);
 
     const phrase = phrases[index];
     const fullLength = phrase.verb.length + phrase.prefix.length + phrase.highlight.length;
 
-    const visibleVerb = phrase.verb.substring(0, Math.min(subIndex, phrase.verb.length));
-    const isShowingPrefix = subIndex > phrase.verb.length;
+    // CSS fade parameters
+    const letterDelay = 15; // 15ms per letter wavefront
+    const fadeDuration = 700; // 700ms duration per letter
 
-    const visiblePrefix = isShowingPrefix
-        ? phrase.prefix.substring(0, Math.min(subIndex - phrase.verb.length, phrase.prefix.length))
-        : "";
+    const highlightEndDelay = fullLength * letterDelay;
+    const totalFadeTime = highlightEndDelay + fadeDuration;
 
-    const isShowingHighlight = subIndex > phrase.verb.length + phrase.prefix.length;
+    // Gemini-like progressive fade effect using CSS transitions
+    useEffect(() => {
+        if (isInitialState) {
+            const t = setTimeout(() => {
+                setIsInitialState(false);
+                setVisible(false);
+                setUnderlineReady(false);
 
-    const visibleHighlight = isShowingHighlight
-        ? phrase.highlight.substring(0, subIndex - phrase.verb.length - phrase.prefix.length)
-        : "";
+                setTimeout(() => {
+                    setIndex((prev) => (prev + 1) % phrases.length);
+                }, 50);
+
+            }, 3000);
+            return () => clearTimeout(t);
+        }
+
+        if (!visible) {
+            const t = setTimeout(() => {
+                setVisible(true);
+            }, 50);
+            return () => clearTimeout(t);
+        }
+
+        const tUnderline = setTimeout(() => {
+            setUnderlineReady(true);
+        }, highlightEndDelay + 400); // Trigger underline slightly before the fade reaches mathematically 100% opacity for better responsiveness
+
+        const tNext = setTimeout(() => {
+            setVisible(false);
+            setUnderlineReady(false);
+            setTimeout(() => {
+                setIndex((prev) => (prev + 1) % phrases.length);
+            }, 50);
+        }, totalFadeTime + 2500); // Wait 2.5s before changing word
+
+        return () => {
+            clearTimeout(tUnderline);
+            clearTimeout(tNext);
+        };
+    }, [isInitialState, visible, index, phrases.length, highlightEndDelay, totalFadeTime]);
+
+    // Give each character a delay based on its absolute position in the entire sentence
+    const renderChars = (text: string, globalOffset: number) => {
+        return text.split("").map((char, i) => {
+            const charAbsoluteIndex = globalOffset + i;
+            const delayMs = (!isInitialState && visible) ? charAbsoluteIndex * letterDelay : 0;
+            const durationClass = (!isInitialState && visible) ? "duration-700" : "duration-0";
+            const opacityClass = visible ? "opacity-100" : "opacity-0";
+
+            return (
+                <span
+                    key={i}
+                    className={`inline-block transition-opacity ease-out ${durationClass} ${opacityClass}`}
+                    style={{transitionDelay: `${delayMs}ms`}}
+                >
+                    {char === " " ? "\u00A0" : char}
+                </span>
+            );
+        });
+    };
 
     return (
         <>
@@ -75,9 +97,8 @@ export const TypewriterText = ({phrases}: TypewriterTextProps) => {
                 className="self-center flex h-16 md:h-24 text-display-large text-outline mt-2 md:-mt-6 relative whitespace-nowrap"
             >
                 <span className="opacity-0">{phrase.verb}</span>
-                <span className="absolute left-0 top-0">
-                    {visibleVerb}
-                    {!isShowingPrefix && <span className="animate-pulse border-r-4 border-on-surface ml-1"></span>}
+                <span className="absolute left-0 top-0 whitespace-nowrap">
+                    {renderChars(phrase.verb, 0)}
                 </span>
             </span>
 
@@ -87,20 +108,19 @@ export const TypewriterText = ({phrases}: TypewriterTextProps) => {
                 <span
                     className="relative text-headline-medium lowercase text-on-surface whitespace-nowrap min-h-8">
                     <span className="opacity-0">{phrase.prefix}</span>
-                    <span className="absolute left-0 top-0">
-                        {visiblePrefix}
-                        {isShowingPrefix && !isShowingHighlight &&
-                            <span className="animate-pulse border-r-2 border-on-surface ml-1"></span>}
+                    <span className="absolute left-0 top-0 whitespace-nowrap">
+                        {renderChars(phrase.prefix, phrase.verb.length)}
                     </span>
                 </span>
                 <span
                     className="relative italic inline-block text-[2rem] leading-tight md:text-display-large whitespace-nowrap">
-                    <span className="opacity-0 text-gradient">{phrase.highlight}</span>
-                    <span className="absolute left-0 top-0 text-gradient">
-                        {visibleHighlight}
-                        {isShowingHighlight && <span className="animate-pulse border-r-4 border-primary ml-1"></span>}
-                        {isShowingHighlight && subIndex >= fullLength && !reverse && (
-                            <Underline className="text-primary/30" delay={0.1}/>
+                    <span className="opacity-0 text-primary">{phrase.highlight}</span>
+                    <span className="absolute left-0 top-0 text-primary whitespace-nowrap">
+                        {renderChars(phrase.highlight, phrase.verb.length + phrase.prefix.length)}
+                        {underlineReady && (
+                            <div className="absolute top-0 right-0 w-full h-full">
+                              <Underline className="text-primary/30" delay={0}/>
+                            </div>
                         )}
                     </span>
                 </span>
