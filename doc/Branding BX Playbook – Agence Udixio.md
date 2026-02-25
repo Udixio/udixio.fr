@@ -60,18 +60,18 @@ comment", la gestion des risques, la propriété, etc.).
 
 ## Positionnement : Options Stratégiques
 
-Nous proposons **trois options de positionnement distinctes** pour Agence Udixio, en accord avec nos valeurs internes et
-les attentes du marché. Chacune capitalise sur un aspect différent de notre identité, tout en restant crédible et
-attractive.
+Nous présentons une **option de positionnement principale** pour Udixio, en accord avec nos valeurs internes et les
+attentes du marché. Elle capitalise sur l'aspect le plus différenciant de notre identité : la présence directe de Joël
+et Florian aux commandes.
 
-### Option 1 : « Le Duo Fondateur au Service du Succès »
+### Option 1 : « Le Duo d'Experts au Service du Succès »
 
-**Concept :** Mettre en récit l'histoire des _deux frères_ fondateurs comme garantie d'un accompagnement de haute
+**Concept :** Mettre en récit l'histoire des _deux frères_ (Joël et Florian) comme garantie d'un accompagnement de haute
 qualité. Udixio se présente d'abord comme **un binôme complémentaire ultra-impliqué**, offrant aux clients un accès
 direct à des experts seniors qui couvrent à la fois la stratégie business et l'exécution technique.
 
 **Promesse centrale :** _"Vos projets web pris en charge par ceux qui les comprennent le mieux : un duo à l'écoute de
-vos enjeux et responsable de bout en bout."_ L'idée est de rassurer en soulignant que les fondateurs s'occupent
+vos enjeux et responsable de bout en bout."_ L'idée est de rassurer en soulignant que **le duo** s'occupe
 personnellement de chaque projet - pas de dilution de responsabilité. Cela implique : - Un **contact direct et humain
 ** : pas de commerciaux intermédiaires ou de couches hiérarchiques, vous parlez aux personnes qui réalisent
 effectivement le
@@ -81,7 +81,7 @@ interlocuteur"_[\[12\]](https://swat.studio/pourquoi-travailler-avec-une-agence-
 Une **complémentarité rare** : deux profils _"cerveaux connectés"_ aux expertises distinctes (business & full-stack)
 travaillant main dans la main sur votre projet. Là où d'autres petites structures ont des lacunes, notre duo couvre
 _stratégie + design UX + tech_, assurant cohérence et efficacité. - Un **engagement personnel** : le succès du client =
-le succès des fondateurs. On rejoint l'idée que _"votre réussite est aussi la
+le succès du duo. On rejoint l'idée que _"votre réussite est aussi la
 nôtre"_[\[13\]](https://swat.studio/pourquoi-travailler-avec-une-agence-web-a-taille-humaine-fait-toute-la-difference/#:~:text=Une%20%C3%A9quipe%20impliqu%C3%A9e%2C%20pas%20une,arm%C3%A9e%20d%E2%80%99ex%C3%A9cutants).
 Cette proximité de dirigeant à dirigeant crée un niveau de confiance élevé (on confie son projet à des entrepreneurs qui
 comprennent les risques et enjeux, pas à des exécutants éloignés).
@@ -94,132 +94,36 @@ scalable).
 
 **Avantages :** C'est un positionnement très **humain et rassurant**, idéal pour décrocher les premiers clients qui
 cherchent un partenaire de confiance. Il nous différencie des agences impersonnelles en capitalisant sur notre histoire
-unique. Cela renforce aussi la **notion de responsabilité** : en tant que fondateurs, on _donne notre nom_ sur chaque
-projet, gage de qualité.
+unique. Cela renforce aussi la **notion de responsabilité** : en tant que créateurs d'Udixio, on _donne notre nom_ sur
+chaque projet, gage de qualité.
 
 **Limites :** Il faudra veiller à ne pas enfermer la marque uniquement autour des deux frères. En cas de croissance (
 arrivée de nouveaux membres), ce discours devra évoluer vers _"culture du duo"_ (par exemple, chaque projet continue
-d'être piloté par un binôme équilibré, même si ce n'est plus forcément les fondateurs). De plus, ce positionnement seul
+d'être piloté par un binôme équilibré, même si ce n'est plus forcément Joël et Florian). De plus, ce positionnement seul
 n'insiste pas assez sur la méthodologie structurée, or c'est notre autre force.
 
-### Option 2 : « L'Agence de la Clarté et de la Maîtrise »
+### Recommandation : Positionnement **« Le Duo d'Experts aux Commandes »**
 
-**Concept :** Se positionner comme **la référence en cadrage structuré et en transparence** pour les projets web. Ici,
-Udixio = _"l'agence qui remet de l'ordre dans le chaos digital"_. Cette option fait de notre approche méthodique et
-pédagogique l'argument numéro un, devant même l'aspect humain ou technique.
+Nous recommandons de centrer le positionnement sur **le duo** (Joël et Florian) comme promesse principale : c'est
+l'angle **le plus authentique**, le plus personnel et le plus difficile à copier.
 
-**Promesse centrale :** _"Advancez sans flou ni surprises : chaque étape de votre projet web est cadrée, expliquée et
-maîtrisée."_ Nous ciblons directement les clients échaudés par des expériences floues. On se distingue en vendant **une
-méthode avant un produit**. Concrètement : - **Cadrage en amont systématique** : On communique que tout projet démarre
-par un audit/atelier approfondi pour définir objectifs, priorités et contraintes. Ce cadrage initial est ce qui évite
-les dérives par la suite. Par exemple : _"On ne code pas une ligne sans une vision commune validée."_ - **Transparence
-totale pendant le projet** : On s'engage à _tout rendre lisible_. Roadmap claire, étapes balisées et validées
-ensemble[\[14\]](https://www.nateev.fr/accompagnement.html#:~:text=D%C3%A8s%20le%20d%C3%A9part%2C%20on%20structure,et%20surtout%2C%20o%C3%B9%20on%20va),
-outil de suivi partagé en temps réel, points d'avancement réguliers. Le client _sait toujours où on en est et où on
-va_[\[14\]](https://www.nateev.fr/accompagnement.html#:~:text=D%C3%A8s%20le%20d%C3%A9part%2C%20on%20structure,et%20surtout%2C%20o%C3%B9%20on%20va).
-S'il y a un imprévu, on l'explique immédiatement et on le gère ensemble. Aucune décision technique n'est imposée sans
-explication compréhensible. - **Maîtrise côté client** : Notre devise pourrait être _"pas de dépendance, pas de
-jargon"_. Ici on reprend nos engagements d'anti-dépendance : livrables documentés, accès aux codes/sources, utilisation
-de standards reconnus pour que le client puisse faire évoluer son site librement. On pourrait expliciter : _"Vous restez
-propriétaire de votre site et de vos données à 100%"_, avec accompagnement sur les choix d'hébergement, etc., comme le
-fait Le
-Duo[\[4\]](https://leduo.co/agence-web-hesdin#:~:text=Vous%20restez%20propri%C3%A9taire%20de%20votre,domaine%20%3A%20OVH%2C%20Ionos%2C%20Infomaniak).
+Ce positionnement dit clairement : _vous ne déléguez pas à une structure impersonnelle — vous confiez votre projet à un
+duo d'experts qui le pilote en direct, de bout en bout_.
 
-**Preuves à mobiliser :** Cet angle "evidence-based" nous oblige à montrer concrètement notre méthode. On pourra
-intégrer des éléments tels que : un schéma de notre **processus en 4 étapes** (inspiré par exemple de la "Méthode
-Hiboost" structurée en 4 phases de conception
-validées)[\[15\]](https://www.hiboost.fr/#:~:text=Forts%20de%20nos%20ann%C3%A9es%20d%E2%80%99exp%C3%A9riences,aux%20attentes%20de%20vos%20clients),
-ou un extrait de plan de projet type. On peut également citer des _principes_ (ex : "backlog partagé", "livrables de
-spécifications", etc.) et mettre en avant des outils (ex : _Notion/Asana partagés, dépôt Git accessible au client,
-etc._) pour donner du poids.
+**Important :** la méthode et la « maîtrise côté client » ne disparaissent pas. Elles deviennent des **conséquences
+visibles** et des **preuves** de l'engagement du duo :
 
-**Avantages :** Ce positionnement répond **directement aux plus grosses peurs** identifiées : peur de l'inconnu (on
-apporte structure et visibilité), peur d'être floué (on apporte transparence), peur de perdre le contrôle (on donne les
-clés et les connaissances au client). Il nous différencie nettement des agences plus floues ou purement exécutantes. Il
-est aussi pérenne : la "culture de la clarté" peut rester notre étendard quel que soit notre effectif.
+- **La méthode** = notre manière de sécuriser le projet (cadrage, points de validation, suivi, transparence).
+- **La maîtrise et l'autonomie** = notre manière de respecter le client (propriété des livrables, accès, documentation,
+  capacité à déléguer… ou à reprendre la main quand vous le souhaitez).
 
-**Limites :** Il faut faire attention à ne pas paraître _froid_ ou trop process-driven. On vend une méthode, oui, mais
-il faut la rendre **chaleureuse et orientée résultats** (le client ne veut pas un cours de gestion de projet, il veut
-réussir son site). Il faudra donc toujours relier la clarté à un bénéfice concret : _moins de stress, plus d'efficacité,
-meilleur ROI_. De plus, ce discours très rationnel peut sembler similaire à celui de certaines grandes agences (qui ont
-des process ISO, etc.), il faudra le nuancer par notre **taille humaine** et notre flexibilité (pas de "process lourd
-rigide", on reste agile et
-adaptable[\[16\]](https://swat.studio/pourquoi-travailler-avec-une-agence-web-a-taille-humaine-fait-toute-la-difference/#:~:text=Travailler%20avec%20une%20agence%20%C3%A0,taille%20humaine%2C%20c%E2%80%99est%20profiter%20de)).
-
-### Option 3 : « Le Partenaire qui Rend Autonome »
-
-**Concept :** Positionner Udixio comme **le champion de l'empowerment digital** : l'agence dont la mission est de rendre
-ses clients plus forts, plus autonomes et mieux armés sur le long terme. Ici, on exploite le levier _"anti-dépendance"_
-et _"durabilité"_ à fond, ce qui résonne particulièrement pour les clients méfiants des prestataires classiques.
-
-**Promesse centrale :** _"Construisons ensemble une solution durable dont_ _vous_ _gardez la maîtrise."_ On insiste sur
-le fait que faire appel à nous, ce n'est pas _"externaliser et subir"_, c'est _"collaborer et grandir en compétence"_.
-Axes de discours : - **Transfert de compétences** : Udixio n'est pas seulement prestataire, mais mentor. À la fin du
-projet, le client comprend son propre site. On propose par exemple systématiquement une **formation à la prise en main
-** (admin du site, bonnes pratiques SEO de base, etc.). Cela pourrait devenir un de nos marqueurs (pack d'heures de
-formation inclus dans chaque offre). Le Duo en fait _"le cœur de \[sa\] proposition"_ pour répondre aux clients qui
-veulent rester
-indépendants[\[17\]](https://leduo.co/agence-web-hesdin#:~:text=Certaines%20entreprises%20ou%20associations%20nous,le%20c%C5%93ur%20de%20notre%20proposition) -
-nous pouvons faire de même. - **Solutions open-source et ouvertes** : On peut communiquer que nos sites sont faits pour
-durer et évoluer _sans verrou_. Par exemple : _"0 plugin propriétaire obscur : que des technos ouvertes et
-documentées."_ Si nous utilisons notre propre CMS (NetSimpler), il faudra clarifier qu'il s'agit d'une solution
-_white-label_ exportable, ou alors mettre l'accent sur notre capacité à livrer sous WordPress/Headless selon le besoin
-du client pour qu'il ne soit pas prisonnier d'un outil. Le message doit être : _"on vous facilite la vie mais sans vous
-rendre captif."_ - **Engagement durable à vos côtés** : Empowerment ne veut pas dire abandon. On reste disponible sur le
-long terme pour du support, de la maintenance évolutive, mais _sans obligation_. Le client sait qu'il peut compter sur
-nous en cas de besoin (contrat de maintenance flexible, assistance en option), tout en ayant les moyens internes de
-gérer au quotidien s'il le souhaite.
-
-**Preuves à mobiliser :** Ici, on pourra citer nos **actifs techniques** comme preuves de cette philosophie : par ex, _"
-Udixio UI : notre bibliothèque UI open-source disponible pour nos clients"_ ou _"Netsimpler : un CMS sans verrou
-propriétaire qui vous appartient"_. On montrera aussi des exemples d'_artefacts de transparence_ : guide utilisateur
-remis au client, documentation complète… Ainsi que mettre en avant les scores de performance et qualité (100/100) qui
-suggèrent une **excellence technique** telle que le client n'aura pas à tout refaire tous les
-ans[\[18\]](https://www.udixio.fr/#:~:text=Les%20sites%20Udixio%20sont%20con%C3%A7us,pour%20durer) (durabilité).
-
-**Avantages :** Ce positionnement construit énormément la **confiance** : il montre qu'on n'a _rien à cacher_ et qu'on
-cherche l'intérêt du client avant le nôtre. Il peut créer un effet de bouche-à-oreille puissant, car un client qui se
-sent armé et respecté deviendra ambassadeur. De plus, il est en phase avec les tendances "no bullsh_t" et_ "
-libération"\* (on peut faire un parallèle avec certains SaaS qui prônent la portabilité des données, etc., signe
-d'éthique).
-
-**Limites :** Attention à ne pas **auto-saboter la rentabilité** : il faudra cadrer ce qu'on offre (tout donner ne veut
-pas dire travailler gratuitement). Il s'agit de donner de la maîtrise au client, pas de lui faire tout faire. Notre
-expertise reste nécessaire et valorisée, simplement on la partage plus que d'autres. En communication, le risque est
-aussi d'avoir un discours très technique (outils open-source, etc.) - veillons à formuler en bénéfices concrets ("vous
-gardez le contrôle, vous comprenez ce qui est fait, etc."). Enfin, il faudra prouver que malgré la jeune âge de
-l'agence, on a la crédibilité pour _"rendre expert"_ nos clients - ce qu'on pourra soutenir via nos propres assets (
-démos, produits internes).
-
-### Recommandation : Positionnement **« Clarté & Maîtrise »**
-
-Parmi ces options, nous recommandons **l'Option 2** : _"l'Agence de la Clarté et de la Maîtrise"_, comme base principale
-du positionnement, tout en incorporant des éléments des deux autres options en soutien.
-
-**Raisons du choix :** - **Alignement avec notre ADN et projet d'entreprise :** Notre texte identitaire insiste sur _"
-cadrage, lisibilité des choix, durabilité, maîtrise côté client"_. L'Option 2 embrasse exactement ces piliers, et offre
-un **cadre scalable** pour l'avenir (on peut grandir en continuant d'être "ceux qui apportent de la méthode"). - *
-*Réponse aux attentes critiques du marché :** C'est l'option qui adresse le plus frontalement les peurs universelles
-identifiées (flou, dépassements, opacité). En misant sur la clarté méthodologique, on se positionne là où nos
-concurrents directs sont souvent faibles (beaucoup promettent du sur-mesure et de la réactivité, peu articulent une
-méthode rassurante de A à Z). - **Différenciation crédible :** Aucune agence ne va se proclamer _"floue"_ évidemment,
-mais peu en font un argument de vente structuré. Nous pouvons devenir _"ceux qui structurent le digital"_ tout comme
-certaines agences se sont fait connaître comme _"ceux qui dépoussièrent le SEO"_ par exemple. C'est un créneau crédible
-pour une nouvelle agence car il ne dépend pas d'un long track-record de cas clients, mais d'une attitude et de preuves
-internes (processus, guides, etc.) que nous maîtrisons. - **Intégration des éléments humains :** Ce positionnement
-n'empêche pas de valoriser notre dimension humaine, au contraire. On pourra l'enrichir avec le **levier du duo fondateur
-** (Option 1 en soutien) en disant par ex: _"Une méthode claire, appliquée par ceux qui s'investissent comme si c'était
-leur propre projet."_ De même, l'aspect empowerment (Option 3) devient un des bénéfices concrets mis en avant dans la
-promesse de maîtrise. En somme, Option 2 sert de colonne vertébrale, et Option 1 et 3 peuvent être des _accents
-narratifs_ pour toucher la corde émotionnelle (confiance personnelle) et rationnelle (indépendance technique).
-
-En conclusion, nous définirons Udixio comme **"l'agence web structurée et transparente, qui permet aux clients de garder
-la main sur des solutions durables"**. Ce positionnement combiné est à la fois **distinctif**, **fédérateur en interne
-** (il donne un cap clair à notre façon de travailler) et **porteur de valeur perçue** pour les clients.
+En résumé : la promesse, c'est **l'implication directe du duo** ; la preuve, c'est **une façon de travailler structurée,
+transparente et réversible**.
 
 ## Différenciation : Se Démarquer de la Concurrence
 
-Adopter le positionnement "Clarté & Maîtrise" impose de le décliner en éléments concrets de différenciation par rapport
+Adopter le positionnement **« Le Duo d'Experts aux Commandes »** impose de le décliner en éléments concrets de
+différenciation par rapport
 à deux catégories : **les grandes agences généralistes** d'une part, et **les autres petites agences web** d'autre part.
 Nous devons occuper une place unique dans l'esprit du client.
 
@@ -228,7 +132,7 @@ Nous devons occuper une place unique dans l'esprit du client.
   pas de tunnel hiérarchique à rallonge, on parle en direct et on avance
   vite"_[\[19\]](https://swat.studio/pourquoi-travailler-avec-une-agence-web-a-taille-humaine-fait-toute-la-difference/#:~:text=Chez%20nous%2C%20pas%20de%20tunnel,On%20avance%20vite).
   Contrairement à un gros acteur, nous ne traitons pas le client comme un projet parmi d'autres - chaque mission est
-  stratégique (rappel de notre slogan) et reçoit l'attention personnelle des fondateurs. Cette **implication** et cette
+  stratégique (rappel de notre slogan) et reçoit l'attention personnelle du duo. Cette **implication** et cette
   **réactivité** nous démarquent : par ex, Trusty Studio promet de ne jamais laisser un client attendre trois jours une
   réponse[\[20\]](https://www.trustystudio.fr/blog/comment-choisir-une-agence-web-pour-une-tpe-pme-criteres-erreurs-a-eviter-et-comparatif-agence#:~:text=) -
   nous pouvons en faire également un standard (une question = une réponse sous 24h, etc.). En outre, là où les grands
@@ -296,82 +200,74 @@ Pour traduire le positionnement en communications cohérentes, nous structurons 
 *message house** à trois niveaux : la promesse centrale, les piliers de preuve, et les messages de support/détails. Ceci
 servira de base pour rédiger le site (home, pages services, à-propos, etc.) de manière cohérente et percutante.
 
-- **Promesse centrale (Roof):** _« Des projets web_ _structurés, transparents et durables, pour des résultats
-  maîtrisés - avec Udixio, aucune place au flou ou à la dépendance, votre site devient un atout stratégique que_ _vous_
-  _contrôlez. »_  
-  _(Ce message roof condense l'idée que nous apportons à la fois la clarté (structurés, pas de flou), la confiance (
-  transparents, pas de piège), la pérennité (durables), et l'empowerment (vous contrôlez). Il positionne le site web non
-  pas comme un livrable technique mais comme une mission stratégique réussie.)_
-- **Pilier 1 -** Cadrage & Clarté**_\* :_ « Chaque projet démarre par une boussole claire. _Nous définissons ensemble
-  vos objectifs, vos priorités et vos contraintes avant de foncer. »_**  
-  Preuves/arguments : **Méthode Udixio (atelier de cadrage initial, plan d'action étape par étape), livrables de
-  conception (cahier des charges allégé ou user stories partagées), engagements sur la compréhension mutuelle du
-  besoin (_"pas de développement sans validation du quoi et pourquoi"_).**  
-  Bénéfice client mis en avant : _"Vous savez où vous allez dès le départ, vous évitez les décisions précipitées et les
-  mauvaises surprises."_ (Réduction de l'incertitude, sérénité).
-- **Pilier 2 -** Transparence & Pédagogie**_\* :_ « Pas de zone d'ombre, vous êtes de la partie. _Outils de suivi en
-  temps réel, points d'avancement réguliers, explications sans jargon à chaque décision technique. »_**  
-  Preuves/arguments : **Tableau de bord projet partagé (ex: accès à notre outil de gestion de tâches, comme Nateev le
-  fait**[**\[27\]
+- **Promesse centrale (Roof):** _« Votre projet web, piloté en direct par le duo d'experts qui l'a créé. Avec Udixio,
+  vous bénéficiez d'un engagement personnel et d'une double expertise (stratégie & technique) pour un résultat durable
+  et maîtrisé. »_  
+  _(Ce message roof met en avant notre différence : l'implication directe de Joël et Florian. La méthode et la maîtrise
+  côté client restent présentes, mais comme preuves concrètes de cet engagement.)_
+- **Pilier 1 -** L'Engagement du Duo**_\* :_ « Vos objectifs deviennent les nôtres. _Nous limitons le nombre de projets
+  pour nous investir pleinement sur chacun. Vous échangez en direct avec Joël et Florian, qui pilotent votre projet de
+  bout en bout. »_**  
+  Preuves/arguments : **Agence à taille humaine, disponibilité (ex: échanges WhatsApp ou Slack possible), délais de
+  réponse rapides, continuité (les mêmes personnes du début à la fin), accompagnement bienveillant.**  
+  Bénéfice client : _"Vous n'êtes pas un numéro. Votre réussite nous tient à cœur, et nous nous alignons sur vos enjeux
+  comme un partenaire engagé."_
+- **Pilier 2 -** Un Savoir-Faire Structuré**_\* :_ « Une méthode claire, appliquée par le duo. _On cadre, on explique,
+  on valide : chaque étape est lisible et sécurise vos décisions. »_**  
+  Preuves/arguments : **Atelier de cadrage initial, plan d'action étape par étape, livrables de conception (cahier des
+  charges allégé / user stories partagées), points de validation explicites, tableau de bord projet partagé (ex: accès à
+  notre outil de gestion de tâches, comme Nateev**[**\[27\]
   **](https://www.nateev.fr/accompagnement.html#:~:text=On%20utilise%20un%20outil%20de,temps%20r%C3%A9el%2C%20%C3%A9tape%20par%20%C3%A9tape)
-  **), réunions hebdo ou bi-mensuelles, FAQ claire sur notre site répondant aux questions sensibles (propriété du code,
-  traitement des changements, etc.), politiques de devis et contrat limpides (tout ce qui est inclus/exclu est annoncé
-  **[**\[2\]
-  **](https://www.trustystudio.fr/blog/comment-choisir-une-agence-web-pour-une-tpe-pme-criteres-erreurs-a-eviter-et-comparatif-agence#:~:text=Une%20agence%20s%C3%A9rieuse%20est%20transparente,)
-  **).**  
-  Bénéfice client : _"Vous pilotez avec nous : jamais perdu, jamais mis devant un fait accompli. Vous comprenez ce qui
-  est fait et pourquoi."_ (Sentiment de contrôle et d'accompagnement, on n'a _pas_ le syndrome du prestataire fantôme).
-- **Pilier 3 -** Expertise & Fiabilité**_\* :_ « L'expérience et la technique sans compromis. _Un duo d'experts
-  chevronnés, des solutions robustes et évolutives, et des scores de performance au sommet. »_**  
-  Preuves/arguments : **Profil des fondateurs (10+ années d'exp cumulées, etc.), mention de projets ou réalisations (
+  **), réunions régulières, explications sans jargon.**  
+  Bénéfice client : _"Vous savez où vous allez, vous comprenez les choix, et vous évitez les mauvaises surprises."_
+- **Pilier 3 -** Expertise & Fiabilité**_\* :_ « L'expérience et la technique sans compromis. _Deux profils
+  complémentaires,
+  des solutions robustes et évolutives, et des scores de performance au sommet. »_**  
+  Preuves/arguments : **Profil de Joël et Florian (expérience cumulée, etc.), mention de projets ou réalisations (
   portfolio) pertinents, nos outils internes (UI kit, CMS) illustrant notre maîtrise, indicateurs qualité (
   ex: _100/100 performance, 100/100 SEO_ sur Lighthouse**[**\[28\]**](https://www.udixio.fr/#:~:text=Performance) **pour
   un site réalisé), utilisation de technologies modernes éprouvées (on peut lister Astro, NestJS, etc. en expliquant
   l'intérêt pour le client).** (+ **éventuellement volet éco-responsable
   ici : _"code léger = site rapide pour vos utilisateurs_ et _la planète"_).**  
-  Bénéfice client : _"Vous vous appuyez sur une équipe pointue qui a déjà fait ses preuves. Votre site sera rapide, sûr,
-  et fait pour durer (pas besoin de tout refaire l'an prochain)."_ (Réassurance sur la compétence, le sérieux, la
-  pérennité technique).
-- **Pilier 4 -** Implication & Partenariat**_\* :_ « Vos objectifs deviennent les nôtres. _Nous limitons le nombre de
-  projets pour nous investir pleinement sur chacun. Vous avez accès directement aux fondateurs, qui pilotent votre
-  projet comme si c'était le leur. »_**  
-  **_(Ce pilier reprend l'esprit de l'Option 1 pour humaniser l'ensemble.)_**  
-  Preuves/arguments : **Structure agence à taille humaine, disponibilité (ex: échanges WhatsApp ou Slack possible,
-  délais de réponse rapides), témoignages (dès qu'on en aura) soulignant notre accompagnement bienveillant. On peut
-  aussi indiquer _"pas de turn-over : les mêmes qui commencent votre projet le finiront à vos côtés"_.**  
-  Bénéfice client : _"Vous n'êtes pas un numéro. Votre réussite nous tient à cœur, et on s'aligne sur vos objectifs
-  business comme un partenaire à long terme."_ (Le client se sent compris et en confiance, ce qui lève la peur d'un
-  prestataire qui ne serait "pas à fond").
+  Bénéfice client : _"Votre site sera rapide, sûr, et fait pour durer (pas besoin de tout refaire l'an prochain)."_
+- **Pilier 4 -** Votre Maîtrise et Flexibilité**_\* :_ « Vous gardez les clés du camion. _Livrables, accès,
+  transparence :
+  vous choisissez de déléguer… ou de reprendre la main, quand vous le souhaitez. »_**  
+  Preuves/arguments : **Propriété des livrables, accès aux comptes/outils, documentation, explications pédagogiques,
+  réversibilité (pas de boîte noire), accompagnement à la prise en main selon vos besoins.**  
+  Bénéfice client : _"Vous n'êtes jamais captif : vous gardez le contrôle et la liberté d'évolution."_
 
 _(Remarque : on utilise quatre piliers ici pour couvrir tout le spectre, mais on pourra en regrouper certains lors de la
 rédaction selon les pages. Par ex, sur la Home on fera peut-être ressortir 3 axes principaux.)_
 
 - **Messages de support (Foundation):** Ce sont les détails, exemples et formulations variées qui viendront sous chaque
   pilier selon les supports (site web, présentations commerciales, etc.). Quelques exemples :
-- Sous _Cadrage & Clarté_ : _"On commence par écouter : quels problèmes vous voulez résoudre ? On challenge (avec le
-  sourire) vos idées et on apporte notre regard externe"_, _"Un diagnostic initial offert peut être réalisé pour y voir
-  clair"_. Insister sur _"structure"_ : ex: _"un plan de site détaillé validé avant design, c'est la garantie que rien
-  n'est oublié"_.
-- Sous _Transparence_ : _"Vous aurez_ _accès à tout_ _: code source, comptes analytics, backlog… rien n'est caché"_, _"
-  On vous explique chaque semaine ce qui a été fait, en termes clairs compréhensibles par tous"_, _"Pas de jargon pour
-  noyer le poisson : si c'est complexe, on prend le temps de vous expliquer"_. On peut même inclure un peu d'humour bien
-  dosé du style _"la seule langue que nous parlons couramment (en dehors de HTML/CSS), c'est le français clair"_.
+- Sous _L'Engagement du Duo_ : _"On limite nos projets pour ne pas courir plusieurs lièvres à la fois"_, _"vous échangez
+  en direct avec Joël et Florian"_, _"on vous répond rapidement, même en cas d'urgence on est là"_, _"on vous conseille
+  au-delà du périmètre si on voit quelque chose qui pourrait vous aider"_. Pourquoi pas un clin d'œil : _"si on ne
+  décroche pas à la minute, c'est qu'on est en train de coder pour vous (ou de boire un café pour réfléchir à votre
+  problématique) - mais on vous rappelle très vite."_
+- Sous _Un Savoir-Faire Structuré_ : _"On commence par écouter : quels problèmes vous voulez résoudre ? On challenge
+  (avec le sourire) vos idées et on apporte notre regard externe"_, _"un plan de site détaillé validé avant design,
+  c'est la garantie que rien n'est oublié"_, _"vous suivez l'avancement en temps réel"_, _"pas de jargon pour noyer le
+  poisson : si c'est complexe, on prend le temps de vous expliquer"_.
 - Sous _Expertise & Fiabilité_ : _"10+ ans d'expérience cumulée, des références dans X secteurs"_, _"Techno modernes (
   React, Astro…) pour un site à la pointe"_, _"optimisé SEO dès la conception (parce qu'un beau site invisible ne sert à
   rien)_[
   _\[29\]_](https://www.trustystudio.fr/blog/comment-choisir-une-agence-web-pour-une-tpe-pme-criteres-erreurs-a-eviter-et-comparatif-agence#:~:text=%E2%9D%8C%20Choisir%20uniquement%20sur%20le,toujours%20par%20co%C3%BBter%20plus%20cher)
   _"_, _"tests rigoureux, monitoring de performance et sécurité inclus"_. Également, _"partenaire d'hébergement fiable (
   ex: on peut citer un hébergeur éco-responsable) pour dormir sur vos deux oreilles"_.
-- Sous _Implication & Partenariat_ : _"Deux co-fondateurs impliqués sur chaque projet, disponibles en direct"_, _"on
-  limite nos projets pour ne pas courir plusieurs lièvres à la fois"_, _"on vous répond rapidement, même en cas
-  d'urgence on est là"_, _"on vous conseille au-delà du périmètre si on voit quelque chose qui pourrait vous aider"_.
-  Pourquoi pas un clin d'œil : _"si on ne décroche pas à la minute, c'est qu'on est en train de coder pour vous (ou de
-  boire un café pour réfléchir à votre problématique) - mais on vous rappelle très vite."_
+- Sous _Votre Maîtrise et Flexibilité_ : _"Vous aurez accès à tout : code source, comptes analytics, backlog… rien
+  n'est caché"_, _"si un jour vous décidez de changer d'organisation ou de prestataire, on facilite la transmission"_,
+  _"on vous forme (si vous le souhaitez) pour que vous puissiez déléguer… ou reprendre la main"_.
 
 Cette architecture de messages nous servira de **guide rédactionnel** : chaque contenu que nous produirons devrait
 s'insérer dans cet édifice, afin de marteler une image de marque cohérente.
 
 ## Tonalité de Marque
+
+Notre voix de marque est celle de Joël et Florian. Elle doit être directe, personnelle et refléter la fierté d'un
+artisan pour son travail. Elle est moins la voix d'une "agence" que celle d'un partenaire expert et engagé.
 
 Notre ton de voix doit refléter notre positionnement : **pédagogique, fiable et accessible**, avec une touche humaine.
 Concrètement, voici les principes à suivre pour le style rédactionnel de tous nos supports (site web, offres,
@@ -523,43 +419,62 @@ explicite**. Par ex : _"Udixio est une agence web qui structure et réalise vos 
 sites performants, durables, et enfin compréhensibles."_ En une phrase, cela dit _quoi_ (agence web sur-mesure), _pour
 qui_ (ceux qui veulent performance et compréhension) et _comment_ (en structurant et réalisant). Ajouter un **CTA
 primaire** bien visible du type _"Discutons de votre projet"_ (on garde le CTA de contact actuel) et peut-être un CTA
-secondaire _"Voir nos réalisations"_ pour les convaincus visuels. - **Section Problème/Enjeux :** Juste après le hero,
-insérer une courte section qui montre qu'on **comprend le problème du client**. Par exemple, un bloc _"Marre des projets
-web flous ?"_ avec 2-3 phrases listant les pain points typiques : _"Des budgets qui explosent, des délais qui
-s'allongent, un jargon incompréhensible… beaucoup de projets web échouent faute de cadrage et de transparence."_ Cela
-attire l'attention en validant les frustrations du lecteur. - **Section Solution/Approche :** Dans la foulée, on
-présente _notre approche en réponse_. Par ex : 4 icônes alignées reprenant nos piliers : **Cadrage Stratégique**, *
-*Transparence Totale**, **Tech Excellence**, **Maîtrise Client**. Chacune avec 1 phrase : _"On commence par comprendre
-et planifier"_, _"Vous voyez tout, vous validez tout"_, _"Qualité sans compromis (performance, SEO…)"_, _"Vous gardez
-les clés du camion (propriété, accès, formation)"_. Ce **résumé visuel** permettra en un coup d'œil de saisir notre
-différenciation sur le
-marché[\[16\]](https://swat.studio/pourquoi-travailler-avec-une-agence-web-a-taille-humaine-fait-toute-la-difference/#:~:text=Travailler%20avec%20une%20agence%20%C3%A0,taille%20humaine%2C%20c%E2%80%99est%20profiter%20de)[\[2\]](https://www.trustystudio.fr/blog/comment-choisir-une-agence-web-pour-une-tpe-pme-criteres-erreurs-a-eviter-et-comparatif-agence#:~:text=Une%20agence%20s%C3%A9rieuse%20est%20transparente,). -
-**Section Preuves & Réassurance :** Plutôt que l'actuelle phrase "Nos réalisations parlent d'elles-mêmes" un peu vague,
-on va densifier cette partie. Intégrer un slider ou mosaïque avec nos projets internes (vignettes + courtes légendes
-contextualisées, pas juste les titres). Sous chaque vignette, indiquer un mini-résultat ou atout : ex _"UI Library - +30
-composants prêts à l'emploi (notre accélérateur interne)"_, _"Netsimpler - 0 dépendance, 100% simplicité (notre CMS
-maison)"_, _"Portfolio Joël - 100/100 perf (démonstration en prod)"_. Et ajouter un lien _"Voir plus de projets"_ menant
-vers une page Portfolio détaillée. - **Section Processus/Méthode :** Unique pour une home d'agence, on va afficher un
-_aperçu de notre méthode_ sous forme d'infographie ou timeline simplifiée. Par ex : _"Comment ça se passe
-concrètement ?"_ avec 4 étapes clés décrites en une ligne : **Audit & Plan** (ex: _"On clarifie vos objectifs et on pose
-un plan d'action"_), **Design & Prototype** (_"Maquettes sur-mesure et contenus validés avec vous"_), **Dév & Test** (_"
-Développement itératif, vous suivez en direct"_), **Lancement & Suivi** (_"Mise en ligne sans stress, puis on reste
-dispo"_). Chaque étape pouvant renvoyer vers la page "Méthode" pour plus de détail. Cela **répond à l'incertitude "
-comment ça va se passer ?" dès la page d'accueil** - ce qui est actuellement totalement absent. - **Section Preuves
-sociales (à venir) :** À terme, prévoir un bloc _"Ils nous font confiance"_ avec logos ou témoignages. Dans un premier
-temps, on peut mettre un **appel à action** type _"Premier projet en cours - et si le prochain témoignage était le
-vôtre ?"_ ou mettre en avant notre note 5★ (si on a déjà quelques avis Google ou Malt, on peut les afficher). Trust et
-Le Duo affichent leurs avis
-Google[\[32\]](https://leduo.co/agence-web-hesdin#:~:text=D%C3%A9couvrez%20nos%20derniers%20projets%2C%20sites,clients%20sur%20notre%20fiche%20Google),
-on pourra faire de même dès qu'on en aura un nombre suffisant. - **FAQ teaser / anti-objections :** En bas de page ou en
-sidebar, un encart _"Vos questions, nos réponses"_ reprenant 2-3 questions sensibles (par ex: "Combien coûte un site
-sur-mesure ?", "Et si je n'ai pas de ressource en interne ?", "Est-ce que je reste propriétaire du site ?"). Chacune
-avec un début de réponse très court + lien vers une page FAQ complète ou la page Méthode. L'idée est de montrer qu'on
-n'élude pas ces sujets (prix, propriété…) dès la home. _NB:_ EasyWebStudio recommande que dès l'entrée de page on trouve
-_"Indication de fit, CTA adapté"_, etc. On répondra à ça via ces éléments de FAQ et l'explicitation du pour qui/pour
-quoi. - **Footer :** Ajouter au footer les éléments de réassurance classique : mentions légales claires, éventuellement
-une mention de notre numéro SIRET (signe qu'on est réel et transparent), nos localisations (Amiens & Le Havre), et un
-rappel _"contact direct avec Joël : \[tél\], Florian : \[tél\]"_ pour souligner l'accessibilité des fondateurs.
+secondaire _"Voir nos réalisations"_ pour les convaincus visuels.
+
+_Note (nouvelle direction) :_ le Header (Hero) doit maintenant **mettre en scène le duo** (photo, accroche, signature)
+et non seulement la méthode : l'engagement personnel est la promesse, la méthode est la preuve.
+
+- **Section Problème/Enjeux :** Juste après le hero,
+  insérer une courte section qui montre qu'on **comprend le problème du client**. Par exemple, un bloc _"Marre des
+  projets
+  web flous ?"_ avec 2-3 phrases listant les pain points typiques : _"Des budgets qui explosent, des délais qui
+  s'allongent, un jargon incompréhensible… beaucoup de projets web échouent faute de cadrage et de transparence."_ Cela
+  attire l'attention en validant les frustrations du lecteur. - **Section Solution/Approche :** Dans la foulée, on
+  présente _notre approche en réponse_. Par ex : 4 icônes alignées reprenant nos piliers : **L'Engagement du Duo**, **Un
+  Savoir-Faire Structuré**, **Expertise & Fiabilité**, **Votre Maîtrise et Flexibilité**. Chacune avec 1 phrase : _"
+  Piloté
+  en direct par Joël et Florian"_, _"On cadre, on explique, on valide"_, _"Qualité sans compromis (performance, SEO…)"_,
+  _"Vous gardez les clés du camion (propriété, accès, formation)"_. Ce **résumé visuel** permettra en un coup d'œil de
+  saisir notre
+  différenciation sur le
+  marché[\[16\]](https://swat.studio/pourquoi-travailler-avec-une-agence-web-a-taille-humaine-fait-toute-la-difference/#:~:text=Travailler%20avec%20une%20agence%20%C3%A0,taille%20humaine%2C%20c%E2%80%99est%20profiter%20de)[\[2\]](https://www.trustystudio.fr/blog/comment-choisir-une-agence-web-pour-une-tpe-pme-criteres-erreurs-a-eviter-et-comparatif-agence#:~:text=Une%20agence%20s%C3%A9rieuse%20est%20transparente,). -
+  **Section Preuves & Réassurance :** Plutôt que l'actuelle phrase "Nos réalisations parlent d'elles-mêmes" un peu
+  vague,
+  on va densifier cette partie. Intégrer un slider ou mosaïque avec nos projets internes (vignettes + courtes légendes
+  contextualisées, pas juste les titres). Sous chaque vignette, indiquer un mini-résultat ou atout : ex _"UI Library -
+  +30
+  composants prêts à l'emploi (notre accélérateur interne)"_, _"Netsimpler - 0 dépendance, 100% simplicité (notre CMS
+  maison)"_, _"Portfolio Joël - 100/100 perf (démonstration en prod)"_. Et ajouter un lien _"Voir plus de projets"_
+  menant
+  vers une page Portfolio détaillée. - **Section Processus / Savoir-Faire :** Unique pour une home d'agence, on va
+  afficher un
+  _aperçu de notre méthode_ sous forme d'infographie ou timeline simplifiée. Par ex : _"Comment ça se passe
+  concrètement ?"_ avec 4 étapes clés décrites en une ligne : **Audit & Plan** (ex: _"On clarifie vos objectifs et on
+  pose
+  un plan d'action"_), **Design & Prototype** (_"Maquettes sur-mesure et contenus validés avec vous"_), **Dév & Test** (
+  _"
+  Développement itératif, vous suivez en direct"_), **Lancement & Suivi** (_"Mise en ligne sans stress, puis on reste
+  dispo"_). Chaque étape pouvant renvoyer vers la page "Notre Savoir-Faire" (ou "Notre Approche") pour plus de détail.
+  Cela **répond à l'incertitude "
+  comment ça va se passer ?" dès la page d'accueil** - ce qui est actuellement totalement absent. - **Section Preuves
+  sociales (à venir) :** À terme, prévoir un bloc _"Ils nous font confiance"_ avec logos ou témoignages. Dans un premier
+  temps, on peut mettre un **appel à action** type _"Premier projet en cours - et si le prochain témoignage était le
+  vôtre ?"_ ou mettre en avant notre note 5★ (si on a déjà quelques avis Google ou Malt, on peut les afficher). Trust et
+  Le Duo affichent leurs avis
+  Google[\[32\]](https://leduo.co/agence-web-hesdin#:~:text=D%C3%A9couvrez%20nos%20derniers%20projets%2C%20sites,clients%20sur%20notre%20fiche%20Google),
+  on pourra faire de même dès qu'on en aura un nombre suffisant. - **FAQ teaser / anti-objections :** En bas de page ou
+  en
+  sidebar, un encart _"Vos questions, nos réponses"_ reprenant 2-3 questions sensibles (par ex: "Combien coûte un site
+  sur-mesure ?", "Et si je n'ai pas de ressource en interne ?", "Est-ce que je reste propriétaire du site ?"). Chacune
+  avec un début de réponse très court + lien vers une page FAQ complète ou la page "Notre Savoir-Faire" (ou "Notre
+  Approche"). L'idée est de montrer qu'on
+  n'élude pas ces sujets (prix, propriété…) dès la home. _NB:_ EasyWebStudio recommande que dès l'entrée de page on
+  trouve
+  _"Indication de fit, CTA adapté"_, etc. On répondra à ça via ces éléments de FAQ et l'explicitation du pour qui/pour
+  quoi. - **Footer :** Ajouter au footer les éléments de réassurance classique : mentions légales claires,
+  éventuellement
+  une mention de notre numéro SIRET (signe qu'on est réel et transparent), nos localisations (Amiens & Le Havre), et un
+  rappel _"contact direct avec Joël : \[tél\], Florian : \[tél\]"_ pour souligner l'accessibilité du duo.
 
 En bref, la Home doit **résumer** notre proposition de valeur sans omettre les catégories de contenu que les prospects
 recherchent dans leur _checklist
@@ -602,9 +517,13 @@ une refonte ?" - on donne un ordre de grandeur de planning).
 En somme, chaque page service doit être rédigée comme une **landing page** orientée conversion, tout en fournissant
 assez de détails pour le prospect sérieux qui fait son étude comparative. On peut s'inspirer des meilleurs éléments de
 la _checklist page parfaite_ qu'on a (beaucoup d'items de la checklist devront trouver leur place ici, ex: gouvernance,
-process de validation, propriété… si non abordés ailleurs, la page méthode ou FAQ les couvrira).
+process de validation, propriété… si non abordés ailleurs, la page "Notre Savoir-Faire" (ou "Notre Approche") ou FAQ les
+couvrira).
 
-### Page "Méthode" - « Notre façon de travailler »
+### Page "Notre Savoir-Faire" (ou "Notre Approche") - « Notre façon de travailler »
+
+_Note :_ renommer "Méthode" en **Notre Savoir-Faire** (ou **Notre Approche**) pour un ton plus personnel et moins
+"process corporate".
 
 Cette page sera le cœur de la preuve de notre démarche. On la structurera pédagogiquement : - **Intro générale :** _"
 Notre mission : éliminer le flou. Voici comment on s'y prend, du premier contact à la mise en ligne et au-delà."_ (
@@ -638,7 +557,8 @@ tâches[\[27\]](https://www.nateev.fr/accompagnement.html#:~:text=On%20utilise%2
    suivre
    l'avancement et nous contacter facilement (on peut nommer Trello, Asana ou autre selon ce qu'on choisit)", "
    Slack/Teams - canal direct avec notre équipe"_. Cela **matérialise la transparence** dans l'esprit du prospect (il se
-   dit "ok ils ont mis en place des trucs pour que je suive, cool"). - **FAQ détaillée :** La page méthode est un bon
+   dit "ok ils ont mis en place des trucs pour que je suive, cool"). - **FAQ détaillée :** La page "Notre
+   Savoir-Faire" (ou "Notre Approche") est un bon
    endroit pour inclure une FAQ couvrant les _questions stratégiques clés_ identifiées dans la carte de la
    demande[\[36\]](https://www.trustystudio.fr/blog/comment-choisir-une-agence-web-pour-une-tpe-pme-criteres-erreurs-a-eviter-et-comparatif-agence#:~:text=Comment%20choisir%20une%20agence%20web,agences%20ind%C3%A9pendantes%20comme%20Trusty)[\[37\]](https://easywebstudio.fr/comment-choisir-agence-web-guide-complet/#:~:text=Sur%20la%20m%C3%A9thodologie%20%3A)[\[38\]](https://easywebstudio.fr/comment-choisir-agence-web-guide-complet/#:~:text=%2A%20Quelles%20technologies%20allez,vous%20pour%20l%E2%80%99h%C3%A9bergement).
    Par exemple : - _"Et si je n'ai pas de contenu prêt ?"_ - on explique comment on peut aider à structurer le contenu
@@ -656,21 +576,28 @@ tâches[\[27\]](https://www.nateev.fr/accompagnement.html#:~:text=On%20utilise%2
    peut-être
    renvoyer au fait qu'on peut brancher Analytics et former le client à lire les stats, etc.).
 
-L'idée est d'éliminer toute ambiguïté. **Une page méthode/FAQ très complète deviendra un atout** : le prospect y verra
+L'idée est d'éliminer toute ambiguïté. **Une page "Notre Savoir-Faire" / FAQ très complète deviendra un atout** : le
+prospect y verra
 du sérieux et du **pragmatisme**.
 
-Résultat attendu : après avoir lu la page Méthode, un prospect doit pouvoir se dire _"Ok, je vois comment ils
+Résultat attendu : après avoir lu la page "Notre Savoir-Faire", un prospect doit pouvoir se dire _"Ok, je vois comment
+ils
 travaillent, ça m'a l'air carré et je n'ai pas de question sans réponse"_. Peu d'agences fournissent autant de détails,
 donc cela renforcera notre différenciation _evidence-based_.
 
 ### Page "À propos" (Notre identité) - « Confiance et personnalité »
+
+_Note (nouvelle direction) :_ cette page devient **la plus importante du site**. C'est le cœur du réacteur de la
+stratégie : c'est ici que l'on prouve le positionnement « duo aux commandes » (visages, histoire, complémentarité,
+engagement).
 
 Cette page sert à mettre des visages, des parcours et des valeurs sur la marque. Dans notre cas, c'est l'occasion de
 raconter **notre histoire de deux frères** de manière alignée avec le positionnement : - **Notre mission & vision** :
 Réaffirmer pourquoi on a créé Udixio. Expliquer le constat de départ (_"trop de projets échouent par manque de
 cadrage…"_ comme dans le texte source) et comment cela nous a motivé à fonder une agence différente. On peut formuler
 une **vision** courte : _"Nous croyons qu'un projet web réussi, c'est 50% de méthode, 50% de technique - et 0% de jargon
-inutile."_ Ce genre de phrase manifeste plante le décor. - **Le duo fondateur** : Présenter Joël et Florian avec photo
+inutile."_ Ce genre de phrase manifeste plante le décor. - **Le duo (Joël et Florian)** : Présenter Joël et Florian avec
+photo
 et bio brève. Insister sur la complémentarité (business + dev) comme un atout pour les
 clients[\[39\]](https://cavrois-digital.fr/pme-tpe-comment-choisir-agence-web/#:~:text=PME%2C%20TPE%20%3A%20comment%20choisir,SEO%29%20et%20une).
 On peut ajouter une touche personnelle (ex: _"Frères jumeaux? Non, mais presque - 2 ans d'écart et la même envie d'
@@ -696,9 +623,12 @@ sympa/passionnés) et **différencier** (leur vision est tranchée par rapport a
 
 ### Autres éléments UX/IA
 
-- **Navigation :** S'assurer que le menu du site met en avant les sections attendues : _Services, Méthode, Projets, À
-  propos, Blog (si actif)_. Éviter les libellés flous. Par ex, ne pas cacher la page Méthode derrière "Pourquoi nous
-  choisir" (terme trop marketing). Mieux vaut un simple _"Méthode"_ ou _"Notre approche"_. Idem pour Services, on peut
+- **Navigation :** S'assurer que le menu du site met en avant les sections attendues : _Services, Notre Savoir-Faire,
+  Projets, À
+  propos, Blog (si actif)_. Éviter les libellés flous. Par ex, ne pas cacher la page "Notre Savoir-Faire" derrière "
+  Pourquoi nous
+  choisir" (terme trop marketing). Mieux vaut un simple _"Notre Savoir-Faire"_ ou _"Notre approche"_. Idem pour
+  Services, on peut
   dérouler "Site vitrine", "Refonte", etc., ou avoir une page hub si trop de sous-pages. L'important est que l'
   utilisateur trouve immédiatement ce qu'il cherche s'il a une question spécifique.
 - **Microcopy & aide contextuelle :** Implémenter des petits textes explicatifs aux bons endroits. Par ex, sur le
@@ -760,13 +690,13 @@ recommandations :
   maison (ex: un diagramme de notre méthode en 4 étapes, designé aux couleurs de la charte). L'objectif est de *
   *visualiser la structure** que l'on prône. Éviter en revanche les images purement décoratives sans lien (exit les
   banques d'images de gens en costard se serrant la main - plutôt mettre nos propres images).
-- **Photographies :** Inclure de vraies photos de nous (les fondateurs) et de l'agence (même si c'est en home office)
+- **Photographies :** Inclure de vraies photos de nous (Joël et Florian) et de l'agence (même si c'est en home office)
   pour humaniser. Par exemple, sur la page À propos, un portrait des deux frères ensemble, souriants mais pro, apportera
   la confiance (les visiteurs aiment voir _qui_ est derrière la boîte). Sur la page Contact, mettre la photo de la
   personne de contact (ex: Florian au téléphone ou ordi) peut aussi personnaliser. Ces photos doivent être de bonne
   qualité, éclairage naturel, et cohérentes (même filtre ou rendu couleur global). Éventuellement, des photos de **nos
   écrans** en situation (ex: Joël présentant du code ou un design sur un laptop à Florian) pourraient illustrer la
-  section méthode, montrant qu'on travaille de façon collaborative et transparente (on voit l'écran !).
+  section savoir-faire, montrant qu'on travaille de façon collaborative et transparente (on voit l'écran !).
 - **Animations et interactions :** Pour souligner l'innovation sans surcharger, on peut intégrer quelques
   micro-animations subtiles : par ex, une animation du score 100% qui se remplit, ou une apparition progressive des
   étapes du process en scroll, etc. Cela apporte du dynamisme (notre côté moderne/tech) tout en restant fonctionnel (pas
