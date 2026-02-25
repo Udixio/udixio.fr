@@ -2,24 +2,24 @@ import { motion } from "motion/react";
 
 const proofs = [
     {
-        title: "Indicateurs techniques mesurés",
-        description: "Performance, SEO et accessibilité sont suivis et partagés pour piloter dans la durée.",
-        badge: "Mesure"
+        title: "Scores de Performance 100/100",
+        description: "Nous visons l'excellence mesurable (Lighthouse) sur la vitesse et le SEO, prouvée sur nos réalisations.",
+        badge: "Qualité mesurée"
     },
     {
-        title: "Sobriété & éco-conception",
-        description: "Choix techniques raisonnés, code léger et poids maîtrisé pour un site efficace.",
-        badge: "Durabilité"
+        title: "Indépendance Technique Totale",
+        description: "Nous utilisons des outils ouverts et performants (Astro, React, CMS sur-mesure) pour vous libérer des systèmes fermés.",
+        badge: "Propriété Client"
     },
     {
-        title: "Clés & documentation",
-        description: "Code source, accès et documentation remis. Formation incluse pour l'autonomie.",
-        badge: "Autonomie"
+        title: "Outils Développés en Interne",
+        description: "Notre CMS léger Netsimpler et notre propre librairie design Udixio UI garantissent efficacité et personnalisation.",
+        badge: "Créateurs"
     },
     {
-        title: "Réalisations internes",
-        description: "Udixio UI, templates métiers et CMS maison illustrent notre méthode et notre rigueur.",
-        badge: "Réalisations"
+        title: "Méthodologie Cadrée et Publique",
+        description: "Notre processus (ateliers, points de validation, garanties post-lancement) est documenté pour avancer en toute confiance.",
+        badge: "Méthodologie"
     }
 ];
 

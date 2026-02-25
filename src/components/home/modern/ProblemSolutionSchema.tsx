@@ -3,23 +3,23 @@ import { motion } from "motion/react";
 const schemaItems = [
     {
         id: "cadrage",
-        title: "Objectifs clairs, décisions posées",
-        desc: "Atelier initial, priorités cadrées, périmètre validé avant d'avancer.",
+        title: "Budget flou ? Cadrage net.",
+        desc: "Pas de dérives financières. Un atelier initial pose vos priorités, le périmètre et le devis exact avant tout développement.",
     },
     {
         id: "transparence",
-        title: "Suivi lisible, échanges simples",
-        desc: "Avancement partagé, décisions expliquées, budget et planning sans zones d'ombre.",
+        title: "« Boîte noire » ? Suivi limpide.",
+        desc: "Fini le jargon et les dépendances aveugles. Vous suivez chaque étape, validez chaque jalon et comprenez ce qu'on fait.",
     },
     {
         id: "expertise",
-        title: "Qualité durable, sobriété mesurée",
-        desc: "Technos ouvertes, performance suivie, accessibilité soignée, éco‑indicateurs maîtrisés.",
+        title: "Site lent ou invisible ? Qualité 100/100.",
+        desc: "On ne sacrifie ni la performance (100 Lighthouse), ni le SEO. Nos choix techniques garantissent des résultats pérennes.",
     },
     {
         id: "independance",
-        title: "Autonomie réelle, sans dépendance",
-        desc: "Code livré, documentation claire, formation incluse pour garder la main.",
+        title: "Prestataire bloquant ? Propriété totale.",
+        desc: "Pas de coûts cachés ou d'abonnement forcé. Code source, accès serveurs : on vous donne les clés et on vous forme.",
     }
 ];
 
