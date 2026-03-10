@@ -19,50 +19,49 @@ export default defineConfig({
     experimental: {
         fonts: [
             {
+                provider: fontProviders.google(),
+                name: "Inter",
+                cssVariable: "--font-inter",
+            },
+            {
                 provider: fontProviders.local(),
-                name: "Just Sans",
-                cssVariable: "--font-just-sans",
+                name: "Clash Grotesk",
+                cssVariable: "--font-clash-grotesk",
                 options: {
                     variants: [
                         {
                             weight: 200,
                             style: "normal",
-                            src: ["./src/assets/fonts/just-sans/JUST Sans ExLight.woff2"]
+                            src: ["./src/assets/fonts/clash-grotesk/ClashGrotesk-Extralight.woff2"]
                         },
                         {
                             weight: 300,
                             style: "normal",
-                            src: ["./src/assets/fonts/just-sans/JUST Sans Light.woff2"]
+                            src: ["./src/assets/fonts/clash-grotesk/ClashGrotesk-Light.woff2"]
                         },
                         {
                             weight: 400,
                             style: "normal",
-                            src: ["./src/assets/fonts/just-sans/JUST Sans Regular.woff2"]
+                            src: ["./src/assets/fonts/clash-grotesk/ClashGrotesk-Regular.woff2"]
                         },
                         {
                             weight: 500,
                             style: "normal",
-                            src: ["./src/assets/fonts/just-sans/JUST Sans Medium.woff2"]
+                            src: ["./src/assets/fonts/clash-grotesk/ClashGrotesk-Medium.woff2"]
                         },
                         {
                             weight: 600,
                             style: "normal",
-                            src: ["./src/assets/fonts/just-sans/JUST Sans SemiBold.woff2"]
+                            src: ["./src/assets/fonts/clash-grotesk/ClashGrotesk-Semibold.woff2"]
                         },
                         {
                             weight: 700,
                             style: "normal",
-                            src: ["./src/assets/fonts/just-sans/JUST Sans Bold.woff2"]
-                        },
-                        {
-                            weight: 800,
-                            style: "normal",
-                            src: ["./src/assets/fonts/just-sans/JUST Sans ExBold.woff2"]
+                            src: ["./src/assets/fonts/clash-grotesk/ClashGrotesk-Bold.woff2"]
                         }
                     ]
                 }
             },
-
         ]
     },
     output: 'static',

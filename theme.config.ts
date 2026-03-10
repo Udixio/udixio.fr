@@ -11,18 +11,20 @@ export default defineConfig({
     },
     fontFamily: {
         expressive: [
-            'var(--font-just-sans)'
+            'var(--font-clash-grotesk)'
         ],
+        neutral: [
+            'var(--font-inter)'
+        ]
     },
     fontStyles: {
         display: {
             large: {
                 fontWeight: 700,
-                fontSize: 5,
-                letterSpacing: -0.2,
+                fontSize: 7,
             },
             medium: {
-                fontSize: 4,
+                fontSize: 5,
                 fontWeight: 700,
             },
             small: {
