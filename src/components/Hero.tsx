@@ -1,10 +1,10 @@
-import {Logo} from "@components/Logo.tsx";
-import {motion, useMotionValue} from "motion/react";
-import {type ReactNode, useEffect, useRef, useState} from "react";
-import {SectionPadding} from "@components/SectionPadding.tsx";
-import {Menu} from "@components/Menu.tsx";
-import {createPortal} from "react-dom";
-import {classNames} from "@udixio/ui-react"; // -- UI Wireframe Shape Component --
+import { Logo } from "@components/Logo.tsx";
+import { motion, useMotionValue } from "motion/react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
+import { SectionPadding } from "@components/SectionPadding.tsx";
+import { Menu } from "@components/Menu.tsx";
+import { createPortal } from "react-dom";
+import { classNames } from "@udixio/ui-react"; // -- UI Wireframe Shape Component --
 
 // -- UI Wireframe Shape Component --
 // Abstract shapes that evoke web UI components (cards, navbars, pills, circles)
