@@ -20,16 +20,16 @@ export default defineConfig({
     fontStyles: {
         display: {
             large: {
-                fontWeight: 700,
-                fontSize: 7,
+                fontWeight: 500,
+                fontSize: 5,
             },
             medium: {
-                fontSize: 5,
-                fontWeight: 700,
+                fontSize: 4,
+                fontWeight: 500,
             },
             small: {
                 fontSize: 3,
-                fontWeight: 700,
+                fontWeight: 500,
             },
         },
         // headline: {

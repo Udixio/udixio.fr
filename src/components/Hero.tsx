@@ -4,72 +4,89 @@ import {type ReactNode, useEffect, useRef, useState} from "react";
 import {SectionPadding} from "@components/SectionPadding.tsx";
 import {Menu} from "@components/Menu.tsx";
 import {createPortal} from "react-dom";
+import {classNames} from "@udixio/ui-react";
 
-// -- Repulsive Shape Component --
-// Helper to create a smooth closed path from points (Catmull-Rom to Cubic Bezier)
-// Helper removed (simpler CSS approach)
+// -- UI Wireframe Shape Component --
+// Abstract shapes that evoke web UI components (cards, navbars, pills, circles)
+// without being literal screenshots — stays graphic/modern while signaling craft
 
-const RepulsiveShape = ({shape}: {
-    shape: {
-        id: number;
-        width: string;
-        height: string;
-        top: string;
-        left: string;
-        background: string;
-        borderRadius: string[];
-        duration: number;
+type UIShapeVariant = 'card' | 'navbar' | 'pill' | 'circle';
+
+interface UIShape {
+    id: number;
+    variant: UIShapeVariant;
+    width: string;
+    height: string;
+    top: string;
+    left: string;
+    borderRadius: string;
+    colorClass: string;
+    opacity: number;
+    rotate: number;
+    floatY: number;
+    duration: number;
+    delay: number;
+}
+
+const UIWireframeShape = ({shape}: { shape: UIShape }) => {
+    const innerContent = () => {
+        if (shape.variant === 'card') {
+            return (
+                <div className="p-[12%] h-full flex flex-col gap-[8%]">
+                    {/* Simulated header bar */}
+                    <div className="w-full h-[10%] rounded-md bg-current opacity-20"/>
+                    {/* Text lines */}
+                    <div className="w-3/4 h-[7%] rounded bg-current opacity-10"/>
+                    <div className="w-1/2 h-[7%] rounded bg-current opacity-10"/>
+                    {/* Bottom pill (CTA) */}
+                    <div className="mt-auto w-2/5 h-[10%] rounded-full bg-current opacity-15"/>
+                </div>
+            );
+        }
+        if (shape.variant === 'navbar') {
+            return (
+                <div className="flex items-center gap-3 h-full px-4">
+                    <div className="w-3 h-3 rounded-full bg-current opacity-30 shrink-0"/>
+                    <div className="w-10 h-[30%] rounded bg-current opacity-15"/>
+                    <div className="w-10 h-[30%] rounded bg-current opacity-15"/>
+                    <div className="w-10 h-[30%] rounded bg-current opacity-15"/>
+                    <div className="ml-auto w-8 h-[50%] rounded-full bg-current opacity-20"/>
+                </div>
+            );
+        }
+        return null;
     };
-}) => {
-    // Pure CSS/Motion Optimized Version
-    // We animate 'borderRadius' which is GPU accelerated in modern browsers or at least very cheap paint-wise compared to JS path calculation.
-    // We also rotate slightly to simulate fluidity.
 
     return (
         <motion.div
-            className={`absolute ${shape.background} opacity-90`}
+            className={`absolute border overflow-hidden ${shape.colorClass}`}
             style={{
                 width: shape.width,
                 height: shape.height,
                 top: shape.top,
                 left: shape.left,
-                filter: "drop-shadow(0px 10px 20px rgba(0,0,0,0.1))"
-            }}
-            initial={{
-                borderRadius: shape.borderRadius[0],
-                rotate: Math.random() * 360
-            }}
-            animate={{
-                // Cycle through the pre-generated random shapes
                 borderRadius: shape.borderRadius,
-                // Slow rotation adds to the liquid feel
-                rotate: 360,
-                // Subtle float
-                y: [0, -15, 0],
+                rotate: shape.rotate,
+            }}
+            initial={{opacity: 0}}
+            animate={{
+                opacity: [shape.opacity * 0.5, shape.opacity, shape.opacity * 0.5],
+                y: [0, -shape.floatY, 0],
+                rotate: [shape.rotate - 0.8, shape.rotate + 0.8, shape.rotate - 0.8],
             }}
             transition={{
-                borderRadius: {
-                    duration: shape.duration * 2, // Slower morph
-                    repeat: Infinity,
-                    repeatType: "mirror", // Prevents the hard reset (YoYo effect)
-                    ease: "easeInOut"
-                },
-                rotate: {
-                    duration: shape.duration * 15, // Extremely slow rotation
-                    repeat: Infinity,
-                    ease: "linear"
-                },
-                y: {
-                    duration: shape.duration * 3, // Very slow breathing float
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                }
+                duration: shape.duration,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: shape.delay,
             }}
-        />
+        >
+            {innerContent()}
+        </motion.div>
     );
 };
 
-export const Hero = ({children}: { children?: ReactNode }) => {
+export const Hero = ({children, className}: { children?: ReactNode, className?: string }) => {
 
     const [isMenuFixed, setIsMenuFixed] = useState(false);
     const [fabVisible, setFabVisible] = useState(true);
@@ -106,75 +123,101 @@ export const Hero = ({children}: { children?: ReactNode }) => {
     // const smoothY = useSpring(mouseY, {stiffness: 30, damping: 30});
 
 
-    // -- Random Shapes Logic --
-    const [shapes, setShapes] = useState<Array<{
-        id: number;
-        width: string;
-        height: string;
-        top: string;
-        left: string;
-        background: string;
-        borderRadius: string[];
-        duration: number;
-    }>>([]);
+    // -- UI Wireframe Shapes Logic --
+    const [shapes, setShapes] = useState<UIShape[]>([]);
 
     useEffect(() => {
-        // Helper to generate extreme organic blob shapes (8 values)
-        // High variance = "Paint Blot" / "Roughness"
-        const r = () => Math.floor(Math.random() * 60 + 20); // 20% to 80% range (Extreme irregularity)
-        const genBlob = () => `${r()}% ${r()}% ${r()}% ${r()}% / ${r()}% ${r()}% ${r()}% ${r()}%`;
+        const rand = (min: number, max: number) => Math.random() * (max - min) + min;
 
-        // Generate random shapes on client-side only
-        // Forced to edges: Centered on the edge + small offset
-        const newShapes = Array.from({length: 5}).map((_, i) => {
-            // Generate size first (numeric vh)
-            // Generate size first (numeric vh) - Reduced to 30-70vh
-            const w = Math.random() * 40 + 30;
-            const h = Math.random() * 40 + 30;
+        type ShapeConfig = {
+            variant: UIShapeVariant;
+            wVh: [number, number];
+            hVh: [number, number];
+            borderRadius: string;
+            colorClass: string;
+            positionFn: (w: number, h: number) => { top: string; left: string };
+        };
 
-            let top, left;
+        const configs: ShapeConfig[] = [
+            // Card (primary tint) — right side, lower half
+            {
+                variant: 'card',
+                wVh: [22, 30],
+                hVh: [22, 30],
+                borderRadius: '20px',
+                colorClass: 'border-primary/20 bg-primary/[0.04] text-primary',
+                positionFn: (w, h) => ({
+                    top: `calc(${rand(50, 75)}% - ${h / 2}vh)`,
+                    left: `calc(100% - ${w * 0.75}vh)`,
+                }),
+            },
+            // Navbar — top area, slightly offset
+            {
+                variant: 'navbar',
+                wVh: [32, 44],
+                hVh: [4, 6],
+                borderRadius: '12px',
+                colorClass: 'border-outline-variant/30 bg-surface/50 text-on-surface-variant',
+                positionFn: (w, h) => ({
+                    top: `calc(${rand(12, 28)}% - ${h / 2}vh)`,
+                    left: `calc(${rand(25, 55)}% - ${w / 2}vh)`,
+                }),
+            },
+            // Pill / Badge — right side middle
+            {
+                variant: 'pill',
+                wVh: [10, 16],
+                hVh: [3.5, 5],
+                borderRadius: '100px',
+                colorClass: 'border-tertiary/30 bg-tertiary/[0.06] text-tertiary',
+                positionFn: (w, h) => ({
+                    top: `calc(${rand(38, 62)}% - ${h / 2}vh)`,
+                    left: `calc(100% - ${w * 0.6}vh)`,
+                }),
+            },
+            // Card (neutral) — left side, lower half
+            {
+                variant: 'card',
+                wVh: [18, 26],
+                hVh: [18, 26],
+                borderRadius: '16px',
+                colorClass: 'border-outline-variant/35 bg-surface-container/40 text-on-surface-variant',
+                positionFn: (w, h) => ({
+                    top: `calc(${rand(55, 80)}% - ${h / 2}vh)`,
+                    left: `calc(0% - ${w * 0.35}vh)`,
+                }),
+            },
+            // Circle — bottom-right floating
+            {
+                variant: 'circle',
+                wVh: [7, 11],
+                hVh: [7, 11],
+                borderRadius: '50%',
+                colorClass: 'border-secondary/25 bg-secondary/[0.06] text-secondary',
+                positionFn: (w, h) => ({
+                    top: `calc(${rand(62, 82)}% - ${h / 2}vh)`,
+                    left: `calc(${rand(58, 78)}% - ${w / 2}vh)`,
+                }),
+            },
+        ];
 
-            // 1: Right, 2: Bottom, 3: Left (No Top)
-            const side = Math.floor(Math.random() * 3) + 1;
-
-            // Offset from the exact edge center (in vh). Positive = Shift Into Screen, Negative = Shift Out
-            // We want roughly -5 to +10vh to ensure it touches but is mostly visible
-            const edgeOffset = () => Math.random() * 10 - 2;
-
-            // Random position along the perpendicular axis (in vw/vh) - Restricted to bottom 60-100%
-            const randomAxis = () => Math.random() * 40 + 60;
-
-            if (side === 1) { // Right
-                // Center is at 100% x.
-                left = `calc(100% - ${w / 2}vh - ${edgeOffset()}vh)`; // Minus offset to pull left (into screen)
-                top = `calc(${randomAxis()}% - ${h / 2}vh)`;
-            } else if (side === 2) { // Bottom
-                // Center at 100% y.
-                top = `calc(100% - ${h / 2}vh - ${edgeOffset()}vh)`; // Minus to pull up
-                left = `calc(${randomAxis()}% - ${w / 2}vh)`;
-            } else { // Left
-                // Center at 0% x.
-                left = `calc(0% - ${w / 2}vh + ${edgeOffset()}vh)`;
-                top = `calc(${randomAxis()}% - ${h / 2}vh)`;
-            }
-
+        const newShapes: UIShape[] = configs.map((config, i) => {
+            const w = rand(config.wVh[0], config.wVh[1]);
+            const h = rand(config.hVh[0], config.hVh[1]);
+            const pos = config.positionFn(w, h);
             return {
                 id: i,
+                variant: config.variant,
                 width: `${w}vh`,
                 height: `${h}vh`,
-                top,
-                left,
-                background: i % 2 === 0 ? "bg-secondary-container/80" : "bg-tertiary-container/80",
-                // Generate 5 distinct morph states per shape for fluid irregularity
-                // This array will be cycled through by Framer Motion in RepulsiveShape
-                borderRadius: [
-                    genBlob(),
-                    genBlob(),
-                    genBlob(),
-                    genBlob(),
-                    genBlob()
-                ],
-                duration: 5 + Math.random() * 5,
+                ...pos,
+                borderRadius: config.borderRadius,
+                colorClass: config.colorClass,
+                opacity: rand(0.4, 0.65),
+                rotate: rand(-4, 4),
+                floatY: rand(8, 16),
+                duration: rand(7, 13),
+                delay: rand(0, 3),
             };
         });
         setShapes(newShapes);
@@ -185,7 +228,7 @@ export const Hero = ({children}: { children?: ReactNode }) => {
     >
         <div
             ref={heroRef}
-            className="relative min-h-screen flex flex-col items-center justify-center bg-surface-container-low text-on-surface overflow-hidden h-full pt-16">
+            className="relative min-h-screen flex  items-center justify-center bg-surface-container-low text-on-surface overflow-hidden h-full pt-16">
 
             {/* --- PAPER TEXTURE OVERLAY --- */}
             <div className="absolute inset-0 z-10 pointer-events-none  opacity-40">
@@ -196,20 +239,6 @@ export const Hero = ({children}: { children?: ReactNode }) => {
                     </filter>
                     <rect width="100%" height="100%" filter="url(#paperNoise)"/>
                 </svg>
-            </div>
-
-            {/* --- BACKGROUND LAYERS --- */}
-            <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-
-                {/* LAYER 1: SOFT ORGANIC "PAPER" SHAPES */}
-                <div className="absolute inset-0 z-0">
-                    {shapes.map((shape) => (
-                        <RepulsiveShape
-                            key={shape.id}
-                            shape={shape}
-                        />
-                    ))}
-                </div>
             </div>
 
             {/* HEADER / LOGO - Top Left */}
@@ -244,7 +273,7 @@ export const Hero = ({children}: { children?: ReactNode }) => {
 
             {/* CENTERED AGENCY CONTENT */}
             <div
-                className="relative w-full section z-20">
+                className={classNames("relative w-full section z-20", className)}>
 
                 {children}
 
