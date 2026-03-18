@@ -72,8 +72,8 @@ importers:
         specifier: ^19.0.3
         version: 19.2.3(@types/react@19.2.4)
       '@udixio/icons-rounded-400':
-        specifier: ^0.0.1
-        version: 0.0.1
+        specifier: ^0.1.1
+        version: 0.1.1
       '@udixio/tailwind':
         specifier: ^2.4.16
         version: 2.4.16
@@ -81,8 +81,8 @@ importers:
         specifier: ^2.1.16
         version: 2.1.16
       '@udixio/ui-react':
-        specifier: ^2.10.6
-        version: 2.10.6(@types/react@19.2.4)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        specifier: ^2.10.8
+        version: 2.10.8(@types/react@19.2.4)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       aos:
         specifier: ^2.3.4
         version: 2.3.4
@@ -1851,8 +1851,8 @@ packages:
   '@types/yauzl@2.10.3':
     resolution: {integrity: sha512-oJoftv0LSuaDZE3Le4DbKX+KS9G36NzOeSap90UIK0yMA/NhKJhqlSGtNDORNRaIbQfzjXDrQa0ytJ6mNRGz/Q==}
 
-  '@udixio/icons-rounded-400@0.0.1':
-    resolution: {integrity: sha512-ImuLBpR3tKYPFz5EEbxFlVSkOf8Vu4H3oGg2E5wbBWb6thhI4ql6O59cTvIdBc6Jng8STIPWdo4fvNHgcRO8jQ==}
+  '@udixio/icons-rounded-400@0.1.1':
+    resolution: {integrity: sha512-ofE8A+AqMCt7dwJVVdjoR8XCeSgc+M3VSg+t5ZiYMC8+utqVSw64Mliuzlw6qZCJBYhLnfdGAXXL0KMuWMVjaA==}
 
   '@udixio/tailwind@2.4.16':
     resolution: {integrity: sha512-Vrr59kMhZ6HbxBIVD1Qur0ljzFUsGSKb8DIQB5iKkRDjRoR4144R/rPE/wTMOoobv7saaBZdvituUvr03Rr8Jw==}
@@ -1861,8 +1861,8 @@ packages:
     resolution: {integrity: sha512-c4NnXe3Okj7Mw0Wohb+08ivHWfcGFWmo5afPBN2XMPjweA9g7CwmcwOJnZRMCg51S0os2qaX7dca9gEcGJQLZA==}
     hasBin: true
 
-  '@udixio/ui-react@2.10.6':
-    resolution: {integrity: sha512-6Pm+Q+vOcSYRKeqqiG0DkFpb4/rJJ9GJjQG3qPBd2Tis7qRtdyxHEcYjtWGZJtEmNyYRRGK9eqxSbBuMJ+22lw==}
+  '@udixio/ui-react@2.10.8':
+    resolution: {integrity: sha512-8ySd3RLD0aberM1Ak/xs5+AqI7djnD/+/pAnastjAtaUDe8dP91+mNopKvfwiP0cWYQLh44cJoz++/2tXce4bw==}
     peerDependencies:
       react: '>19.0.0'
       react-dom: '>19.0.0'
@@ -7050,7 +7050,7 @@ snapshots:
       '@types/node': 24.10.1
     optional: true
 
-  '@udixio/icons-rounded-400@0.0.1': {}
+  '@udixio/icons-rounded-400@0.1.1': {}
 
   '@udixio/tailwind@2.4.16':
     dependencies:
@@ -7075,7 +7075,7 @@ snapshots:
       tailwindcss: 4.1.17
       unplugin: 2.3.10
 
-  '@udixio/ui-react@2.10.6(@types/react@19.2.4)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
+  '@udixio/ui-react@2.10.8(@types/react@19.2.4)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
     dependencies:
       '@fortawesome/fontawesome-svg-core': 7.1.0
       '@fortawesome/free-regular-svg-icons': 7.1.0
