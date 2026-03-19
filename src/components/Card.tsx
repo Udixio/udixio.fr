@@ -1,6 +1,6 @@
-import type { CardInterface, ReactProps } from "@udixio/ui-react";
-import { Card as UdixioCard, classNames } from "@udixio/ui-react";
-import type { ReactNode } from "react";
+import type {CardInterface, ReactProps} from "@udixio/ui-react";
+import {Card as UdixioCard, classNames} from "@udixio/ui-react";
+import type {ReactNode} from "react";
 
 export const Card = ({
   children,
@@ -16,7 +16,7 @@ export const Card = ({
       variant={restProps?.variant ?? "filled"}
       {...restProps}
       className={classNames(
-        "rounded-[3rem] bg-surface-container-high/70 backdrop-blur-xl",
+        "rounded-[3rem] bg-surface-container-high/70 bg-radial-[at_90%_90%] from-tertiary-container/20 to-transparent backdrop-blur-xl",
         className,
       )}
     >

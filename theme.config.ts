@@ -26,14 +26,15 @@ export default defineConfig({
       large: {
         fontWeight: 500,
         fontSize: 5,
+        lineHeight: 5,
       },
       medium: {
         fontSize: 4,
-        fontWeight: 500,
+        fontWeight: 4,
       },
       small: {
         fontSize: 3,
-        fontWeight: 500,
+        fontWeight: 3,
       },
     },
     // headline: {
