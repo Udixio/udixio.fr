@@ -27,6 +27,14 @@ import { iForest } from "@udixio/icons-rounded-400/forest";
 import { iBarChart } from "@udixio/icons-rounded-400/bar_chart";
 import { iTune } from "@udixio/icons-rounded-400/tune";
 import { number } from "zod";
+import { iInfo } from "@udixio/icons-rounded-400/info";
+import { iChat } from "@udixio/icons-rounded-400/chat";
+import { iLock } from "@udixio/icons-rounded-400/lock";
+import { iVisibilityOff } from "@udixio/icons-rounded-400/visibility_off";
+import { iPartnerExchange } from "@udixio/icons-rounded-400/partner_exchange";
+import { iChecklist } from "@udixio/icons-rounded-400/checklist";
+import { iVerifiedUser } from "@udixio/icons-rounded-400/verified_user";
+import { SymbolKind } from "vscode-languageserver-types";
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -308,20 +316,72 @@ const faqItems = [
     <div class="section relative z-10">
       <div class="flex flex-col md:flex-row gap-16 md:gap-32 items-start">
         <div class="md:w-1/3 sticky top-32">
-          <span class="sub-title">LES BASES</span>
-          <h2 class="text-headline-large text-on-surface tracking-tighter">
-            Les bases<br />d'un projet clair
-          </h2>
-          <p
-            class="mt-8 text-body-large text-on-surface-variant max-w-xs anim-fade-up"
-          >
-            Beaucoup de projets avancent mal faute de repères simples. Ce qui
-            fait la différence : un cadre lisible, une méthode partagée et un
-            pilotage transparent.
+          <span class="sub-title">Les bases</span>
+          <h2 class="text-headline-large">Ce qui fait la différence</h2>
+          <p class="mt-8 text-body-large max-w-xs anim-fade-up">
+            Beaucoup de projets bloquent ou dérivent sans cadre simple. Ce qui
+            change vraiment :
           </p>
+          <ul
+            class="mt-4 space-y-2 text-body-large text-on-surface-variant list-disc pl-6"
+          >
+            <li>savoir où on va</li>
+            <li>comment on y va</li>
+            <li>et qui fait quoi</li>
+          </ul>
         </div>
         <Card className="md:w-2/3 w-full p-8 md:p-12   anim-slide-from-right">
-          <FeaturesGrid client:visible />
+          <div class="flex flex-col gap-4 mt-4">
+            {
+              [
+                {
+                  title: "Deux interlocuteurs, pas d’intermédiaire",
+                  description: `Vous échangez directement avec nous, du début à la fin.
+Les décisions sont prises plus vite, sans perte d’information.`,
+                  icon: iPartnerExchange,
+                },
+                {
+                  title: "Un projet cadré dès le départ",
+                  description:
+                    "Chaque étape est posée simplement : vous savez ce qui est fait, ce qui vient ensuite, et pourquoi.",
+                  icon: iChecklist,
+                },
+                {
+                  title: "Expertise & Fiabilité",
+                  description:
+                    "Des choix techniques solides, pensés pour durer et évoluer sans repartir de zéro.",
+                  icon: iVerifiedUser,
+                },
+                {
+                  title: "Vous gardez la main",
+                  description:
+                    "Vous gardez l’accès, la compréhension et la maîtrise de votre site, sans dépendre de nous.",
+                  icon: iKey,
+                },
+              ].map((feature, index) => (
+                <div
+                  style={{ ["--anim-delay"]: `${100 * index}ms` }}
+                  class="group flex gap-6 items-start p-4 rounded-2xl border border-transparent  anim-in-fade
+anim-slide-from-right
+anim-duration-1000
+anim-delay-200
+ "
+                >
+                  <div class=" p-4 aspect-square rounded-xl bg-surface-container-highest text-on-surface-variant flex items-center justify-center ">
+                    <Icon className="size-8" icon={feature.icon} />
+                  </div>
+                  <div>
+                    <h3 class="text-headline-small text-on-surface mb-1">
+                      {feature.title}
+                    </h3>
+                    <p class="text-body-medium text-on-surface-variant ">
+                      {feature.description}
+                    </p>
+                  </div>
+                </div>
+              ))
+            }
+          </div>
         </Card>
       </div>
     </div>
