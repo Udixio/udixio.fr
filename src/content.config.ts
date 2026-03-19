@@ -25,6 +25,10 @@ const realisation = defineCollection({
         summary: z.string(),
         technologies: z.array(z.string()).optional(),
         services: z.array(z.string()).optional(),
+        metrics: z.array(z.object({
+            label: z.string(),
+            value: z.string()
+        })).optional(),
     }),
 });
 

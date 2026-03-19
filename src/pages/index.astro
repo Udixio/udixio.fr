@@ -25,49 +25,101 @@ import { iKey } from "@udixio/icons-rounded-400/key";
 import { iCloud } from "@udixio/icons-rounded-400/cloud";
 import { iForest } from "@udixio/icons-rounded-400/forest";
 import { iBarChart } from "@udixio/icons-rounded-400/bar_chart";
+import { iTune } from "@udixio/icons-rounded-400/tune";
+import { number } from "zod";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://www.udixio.fr/#organization",
+      name: "Udixio",
+      url: "https://www.udixio.fr/",
+      logo: "https://www.udixio.fr/images/logo.png",
+      sameAs: [
+        "https://www.linkedin.com/company/udixio",
+        "https://github.com/Udixio",
+      ],
+      contactPoint: {
+        "@type": "ContactPoint",
+        email: "florian@udixio.fr",
+        contactType: "customer service",
+      },
+    },
+    {
+      "@type": "LocalBusiness",
+      "@id": "https://www.udixio.fr/#localbusiness",
+      name: "Udixio",
+      url: "https://www.udixio.fr/",
+      email: "florian@udixio.fr",
+      image: "https://www.udixio.fr/images/logo.png",
+      priceRange: "$$",
+      address: [
+        {
+          "@type": "PostalAddress",
+          addressLocality: "Amiens",
+          addressRegion: "Hauts-de-France",
+          addressCountry: "FR",
+        },
+        {
+          "@type": "PostalAddress",
+          addressLocality: "Le Havre",
+          addressRegion: "Normandie",
+          addressCountry: "FR",
+        },
+      ],
+    },
+  ],
+};
 
 const faqItems = [
   {
-    question: "Combien coûte un site sur-mesure ?",
+    question: "Combien coûte un site sur-mesure pour PME ?",
     answer:
-      "Chaque projet est différent, mais nous vous remettons un devis détaillé (avec ce qui est inclus et exclus) après un premier cadrage. Zéro surprise, zéro coût caché.",
+      "Un site vitrine complet démarre généralement à parit de 2500€. Avant de signer, nous vous remettons un devis détaillé avec une estimation claire du retour sur investissement et garantie d'aucune surprise financière.",
   },
   {
-    question: "Et si je n'ai pas de ressource en interne ?",
+    question: "Avez-vous une agence physique à Amiens ou Le Havre ?",
     answer:
-      "C'est justement notre métier : nous cadrons, concevons et développons avec une méthode claire. Nous prenons en charge la technique pour que vous vous concentriez sur votre business.",
+      "Notre ancrage local nous permet de vous accompagner directement en Normandie et dans les Hauts-de-France (notamment autour du Havre et d'Amiens). Nous cadrons chaque projet de visu ou en visio avec vos équipes.",
   },
   {
-    question: "Est-ce que je reste propriétaire du site ?",
+    question: "Est-ce que je reste propriétaire du site et de son code ?",
     answer:
-      "Absolument. Code source, accès serveurs et données vous appartiennent à 100%. Pas de système propriétaire fermé ni d'engagement forcé.",
+      "Absolument. Contrairement aux solutions propriétaires (Wix, solutions d'agences fermées), le code source, l'hébergement et toutes les bases de données vous appartiennent à 100%.",
   },
   {
-    question: "Comment suivez-vous l'avancement ?",
+    question: "Générez-vous réellement des leads supplémentaires ?",
     answer:
-      "Vous avez accès au suivi du projet. Chaque décision (design, technique) est expliquée simplement, sans jargon, et fait l'objet d'un point de validation.",
+      "Oui. Toute notre démarche vise à optimiser votre acquisition de leads. Le SEO technique, le design et le copywriting sont pensés en priorité pour transformer un visiteur en client qualifié.",
   },
   {
     question: "Que se passe-t-il après la mise en ligne ?",
     answer:
-      "Nous proposons une phase d'hypercare pour le lancement (correction rapide des retours), puis nous vous formons pour que vous soyez autonome sur les mises à jour courantes.",
+      "Nous proposons une phase d'hypercare pour stabiliser le lancement, puis nous pouvons définir des engagements de disponibilité (SLA) via des forfaits de maintenance, afin d'assurer l'évolution continue du projet.",
   },
   {
     question: "Puis-je récupérer mes accès et changer de prestataire ?",
     answer:
-      "Oui. La réversibilité est au cœur de notre contrat. Nous documentons le projet et garantissons une passation sans couture si vous le souhaitez.",
+      "Oui. La portabilité est totale et notre politique de réversibilité garantit une documentation claire pour ne jamais dépendre uniquement de nous.",
   },
 ];
 ---
 
 <Layout
   seo={{
-    title: "Clarté & Maîtrise pour votre site web • Udixio",
+    title:
+      "Udixio • Agence Web (Amiens / Le Havre) - Création de sites générateurs de leads",
     description:
-      "Udixio structure vos projets digitaux : méthode claire, transparence, sobriété et autonomie durable.",
+      "Udixio accompagne les TPE/PME avec une approche web sur-mesure et écoresponsable axée sur l'acquisition de trafic et de croissance. Agence en Normandie et Hauts-de-France.",
   }}
   background={false}
 >
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </Fragment>
+
   <Hero client:load className="self-stretch flex  min-h-[60vh]">
     <div class="flex-1 flex flex-col justify-between">
       <h1
@@ -79,10 +131,10 @@ const faqItems = [
       <div class="flex gap-8">
         <div class="flex-1">
           <p
-            class="text-body-large max-w-80 mb-12 anim-fade anim-slide-from-left anim-duration-1000 ease-out anim-delay-200"
+            class="text-body-large max-w-96 mb-12 anim-fade anim-slide-from-left anim-duration-1000 ease-out anim-delay-200"
           >
-            Chez Udixio, on clarifie vos besoins, on structure le projet, puis
-            on le livre.
+            Chez Udixio, on cadre, structure et fait avancer votre projet, sans
+            complexité inutile.
           </p>
 
           <div class="relative group w-fit">
@@ -121,12 +173,10 @@ const faqItems = [
           class="flex flex-2 w-full gap-4 anim-fade anim-slide-from-right anim-duration-1000 ease-out anim-delay-400"
         >
           <Card
-            className="w-1/3 p-6  text-center bg-tertiary-container text-on-tertiary-container"
+            className="w-1/3 p-6 flex flex-col items-center gap-4 justify-center text-center bg-tertiary-container text-on-tertiary-container "
           >
-            <span class="text-headline-medium font-bold">100%</span>
-            <span class="text-label-small mt-2 uppercase tracking-wide"
-              >Sur-mesure</span
-            >
+            <Icon className="size-16" icon={iTune} />
+            <p class="text-title-large">Approche<br /> sur-mesure</p>
           </Card>
           <Card
             className="w-2/3 p-8 bg-surface-container-low   flex flex-col justify-center  "
@@ -149,28 +199,28 @@ const faqItems = [
               variant="tonal"
               href="/contact"
               label="Obtenir un diagnostic"
-              className="ml-auto">Voir notre approche</Button
-            >
+              className="ml-auto"
+              >Voir notre approche
+            </Button>
           </Card>
         </div>
       </div>
     </div>
-    <!--<div class="absolute flex-1 flex flex-col justify-between">-->
-    <!--  <div class="top-8 right-4 md:top-12 md:right-8 flex justify-end">-->
-    <!--    <span-->
-    <!--      class="flex items-center gap-3 text-label-small md:text-label-medium font-mono text-tertiary uppercase tracking-widest bg-white/50 backdrop-blur-sm px-4 py-2 rounded-full border border-tertiary/20 anim-fade anim-duration-1000 ease-out"-->
-    <!--    >-->
-    <!--      <span class="relative flex h-2 w-2">-->
-    <!--        <span-->
-    <!--          class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-75"-->
-    <!--        ></span>-->
-    <!--        <span class="relative inline-flex rounded-full h-2 w-2 bg-tertiary"-->
-    <!--        ></span>-->
-    <!--      </span>-->
-    <!--      HAUTS-DE-FRANCE-->
-    <!--    </span>-->
-    <!--  </div>-->
-    <!--</div>-->
+
+    <div class="absolute top-8 right-4 md:top-12 md:right-8 flex justify-end">
+      <span
+        class="flex items-center gap-3 text-label-small md:text-label-medium font-mono text-tertiary uppercase tracking-widest bg-white/50 backdrop-blur-sm px-4 py-2 rounded-full border border-tertiary/20 anim-fade anim-duration-1000 ease-out"
+      >
+        <span class="relative flex h-2 w-2">
+          <span
+            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary"
+          ></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-tertiary"
+          ></span>
+        </span>
+        HAUTS-DE-FRANCE
+      </span>
+    </div>
   </Hero>
 
   {/* 01. LA MÉTHODE - VISUAL MANIFESTO */}
@@ -180,12 +230,10 @@ const faqItems = [
         {/* Sticky Title */}
         <div class="md:col-span-4 relative">
           <div class="sticky top-32">
-            <span class="text-title-small text-tertiary mb-4 block"
-              >01 — LE PROCESSUS</span
-            >
+            <span class="sub-title">Le processus</span>
             <h2 class="text-headline-large leading-tight">
-              4 étapes claires.<br />
-              <span class="text-gradient">Projet sécurisé.</span>
+              Une <span class="text-gradient">collaboration directe</span>, du
+              cadrage au lancement.
             </h2>
             <div class="mt-8 hidden md:block">
               <svg
@@ -202,82 +250,47 @@ const faqItems = [
         </div>
 
         {/* Vertical Steps */}
-        <div class="md:col-span-8 space-y-24">
-          {/* Step 1 */}
-          <div
-            class="group relative pl-8 border-l-2 border-outline-variant transition-colors duration-500 anim-fade-up delay-200"
-          >
-            <span
-              class="absolute -left-[1.35rem] top-0 flex h-10 w-10 items-center justify-center rounded-full bg-surface border-2 border-outline-variant transition-all text-title-medium font-bold"
-              >1</span
-            >
-            <h3 class="text-headline-medium mb-4 text-on-surface">
-              Audit & Plan
-            </h3>
-            <p
-              class="text-body-large text-on-surface-variant font-light max-w-lg"
-            >
-              On clarifie vos objectifs commerciaux et on pose un plan d'action
-              lisible. Le périmètre est validé d'emblée.
-            </p>
-          </div>
-
-          {/* Step 2 */}
-          <div
-            class="group relative pl-8 border-l-2 border-outline-variant transition-colors duration-500 anim-fade-up delay-200"
-          >
-            <span
-              class="absolute -left-[1.35rem] top-0 flex h-10 w-10 items-center justify-center rounded-full bg-surface border-2 border-outline-variant transition-all text-title-medium font-bold"
-              >2</span
-            >
-            <h3 class="text-headline-medium mb-4 text-on-surface">
-              Design & Prototype
-            </h3>
-            <p
-              class="text-body-large text-on-surface-variant font-light max-w-lg"
-            >
-              Maquettes UX/UI sur-mesure pour votre image de marque, validées
-              avec vous sans aucun jargon technique.
-            </p>
-          </div>
-
-          {/* Step 3 */}
-          <div
-            class="group relative pl-8 border-l-2 border-outline-variant transition-colors duration-500 anim-fade-up delay-200"
-          >
-            <span
-              class="absolute -left-[1.35rem] top-0 flex h-10 w-10 items-center justify-center rounded-full bg-surface border-2 border-outline-variant transition-all text-title-medium font-bold"
-              >3</span
-            >
-            <h3 class="text-headline-medium mb-4 text-on-surface">
-              Développement & Tests
-            </h3>
-            <p
-              class="text-body-large text-on-surface-variant font-light max-w-lg"
-            >
-              Développement itératif performant (Astro, React). Vous suivez
-              l'évolution sur un environnement de test sécurisé.
-            </p>
-          </div>
-
-          {/* Step 4 */}
-          <div
-            class="group relative pl-8 border-l-2 border-outline-variant transition-colors duration-500 anim-fade-up delay-200"
-          >
-            <span
-              class="absolute -left-[1.35rem] top-0 flex h-10 w-10 items-center justify-center rounded-full bg-surface border-2 border-outline-variant transition-all text-title-medium font-bold"
-              >4</span
-            >
-            <h3 class="text-headline-medium mb-4 text-on-surface">
-              Lancement & Suivi
-            </h3>
-            <p
-              class="text-body-large text-on-surface-variant font-light max-w-lg"
-            >
-              Mise en ligne sans stress. On reste disponible pour le support
-              (hypercare) et on vous forme à l'utilisation.
-            </p>
-          </div>
+        <div class="md:col-span-8 space-y-8">
+          {
+            [
+              {
+                number: 1,
+                title: "Audit & Plan",
+                description:
+                  "On échange pour comprendre vos objectifs, puis on pose un cadre simple : ce qu'on fait, dans quel ordre, et pourquoi.",
+              },
+              {
+                number: 2,
+                title: "Design & Prototype",
+                description:
+                  "On conçoit une interface adaptée à votre activité, que vous validez rapidement avant de passer au développement.",
+              },
+              {
+                number: 3,
+                title: "Développement & Tests",
+                description:
+                  "Le site est développé étape par étape, avec un accès pour suivre l'avancement et tester avant la mise en ligne.",
+              },
+              {
+                number: 4,
+                title: "Lancement & Suivi",
+                description:
+                  "Mise en ligne maîtrisée, puis accompagnement pour la prise en main et les ajustements nécessaires.",
+              },
+            ].map((step) => (
+              <div class="group relative pl-8 border-l-2 border-outline-variant transition-colors duration-500 anim-fade-up delay-200">
+                <span class="text-title-medium absolute -left-[1.35rem] top-0 flex h-10 w-10 items-center justify-center rounded-full bg-surface border-2 border-outline-variant transition-all ">
+                  {step.number}
+                </span>
+                <h3 class="text-headline-medium mb-4 text-on-surface">
+                  {step.title}
+                </h3>
+                <p class="text-body-large text-on-surface-variant font-light max-w-lg pb-16">
+                  {step.description}
+                </p>
+              </div>
+            ))
+          }
 
           <Button
             href="/savoir-faire"
@@ -295,9 +308,7 @@ const faqItems = [
     <div class="section relative z-10">
       <div class="flex flex-col md:flex-row gap-16 md:gap-32 items-start">
         <div class="md:w-1/3 sticky top-32">
-          <span class="text-label-large text-gradient mb-4 block"
-            >02 — LES BASES</span
-          >
+          <span class="sub-title">LES BASES</span>
           <h2 class="text-headline-large text-on-surface tracking-tighter">
             Les bases<br />d'un projet clair
           </h2>
@@ -402,9 +413,10 @@ const faqItems = [
           >
             <Icon icon={iVisibility} className="w-6 h-6 fill-current" />
           </div>
-          <h3 class="text-headline-small font-bold mb-2">Visibilité</h3>
+          <h3 class="text-headline-small font-bold mb-2">Acquisition</h3>
           <p class="text-body-medium text-on-surface-variant">
-            Plus de trafic qualifié grâce à un SEO technique irréprochable.
+            Un SEO local parfaitement exécuté pour obtenir de nouvelles visites
+            intéressées au quotidien.
           </p>
         </div>
 
@@ -419,7 +431,8 @@ const faqItems = [
           </div>
           <h3 class="text-headline-small font-bold mb-2">Crédibilité</h3>
           <p class="text-body-medium text-on-surface-variant">
-            Une image pro et rassurante dès la première seconde.
+            Une image digitale professionnelle qui rassure vos futurs
+            partenaires et prospects TPE/PME.
           </p>
         </div>
 
@@ -432,9 +445,10 @@ const faqItems = [
           >
             <Icon icon={iBolt} className="w-6 h-6 fill-current" />
           </div>
-          <h3 class="text-headline-small font-bold mb-2">Gain de temps</h3>
+          <h3 class="text-headline-small font-bold mb-2">Productivité</h3>
           <p class="text-body-medium text-on-surface-variant">
-            CMS simple et autonomie totale pour vos mises à jour.
+            Automatisation de la prise de contact pour libérer du temps
+            commercial à vos équipes.
           </p>
         </div>
 
@@ -447,9 +461,10 @@ const faqItems = [
           >
             <Icon icon={iTrendingUp} className="w-6 h-6 fill-current" />
           </div>
-          <h3 class="text-headline-small font-bold mb-2">Croissance</h3>
+          <h3 class="text-headline-small font-bold mb-2">Croissance PME</h3>
           <p class="text-body-medium text-on-surface-variant">
-            Investissement piloté sans aléas budgétaires.
+            Mesurez vos résultats tangibles et transformez l'abonnement internet
+            en apporteur d'affaires.
           </p>
         </div>
       </div>
@@ -580,45 +595,55 @@ const faqItems = [
             </div>
             <div class="space-y-4">
               <div class="flex justify-between items-center">
-                <span>Audit & Stratégie</span>
+                <span class="font-bold text-on-surface"
+                  >Site Vitrine Performant</span
+                >
                 <span
-                  class="bg-tertiary-container text-on-tertiary-container px-2 py-1 rounded text-label-small"
-                  >INCLUS</span
+                  class="bg-tertiary-container text-on-tertiary-container px-2 py-1 rounded text-label-small whitespace-nowrap"
+                  >Dès 2500€</span
                 >
               </div>
+              <p
+                class="text-body-small italic opacity-80 mb-4 pb-4 border-b border-outline-variant/30"
+              >
+                Idéal TPE/PME. Audit commercial, SEO technique, UI sur-mesure et
+                Formation inclus.
+              </p>
+
               <div class="flex justify-between items-center">
-                <span>Design UI/UX</span>
+                <span class="font-bold text-on-surface"
+                  >Application / E-commerce</span
+                >
                 <span
-                  class="bg-tertiary-container text-on-tertiary-container px-2 py-1 rounded text-label-small"
-                  >INCLUS</span
+                  class="bg-tertiary-container text-on-tertiary-container px-2 py-1 rounded text-label-small whitespace-nowrap"
+                  >Sur devis (Dès 5k€)</span
                 >
               </div>
-              <div class="flex justify-between items-center">
-                <span>Intégration & Dev</span>
+              <p
+                class="text-body-small italic opacity-80 mb-4 pb-4 border-b border-outline-variant/30"
+              >
+                Plateforme métier complexe, portail client sur-mesure, ou tunnel
+                d'achat complet.
+              </p>
+
+              <div class="flex justify-between items-center opacity-80">
+                <span class="font-bold text-on-surface"
+                  >Maintenance & Évolutions</span
+                >
                 <span
-                  class="bg-tertiary-container text-on-tertiary-container px-2 py-1 rounded text-label-small"
-                  >INCLUS</span
+                  class="border border-outline-variant px-2 py-1 rounded text-label-small whitespace-nowrap"
+                  >SUR DEVIS (SLA)</span
                 >
               </div>
-              <div class="flex justify-between items-center">
-                <span>Formation Admin</span>
-                <span
-                  class="bg-tertiary-container text-on-tertiary-container px-2 py-1 rounded text-label-small"
-                  >INCLUS</span
-                >
-              </div>
-              <div class="flex justify-between items-center opacity-60">
-                <span>Maintenance Evolutive</span>
-                <span
-                  class="border border-outline-variant px-2 py-1 rounded text-label-small"
-                  >OPTION</span
-                >
-              </div>
+              <p class="text-body-small italic opacity-60">
+                Temps de réponse garanti, mises à jour techniques et suivi
+                continuel.
+              </p>
             </div>
             <div
               class="mt-6 pt-4 border-t border-outline-variant/30 flex justify-between items-center text-headline-small text-primary font-sans font-bold"
             >
-              <span>Surprises</span>
+              <span>Frais ou Coûts cachés</span>
               <span>0€</span>
             </div>
           </div>
@@ -930,9 +955,7 @@ const faqItems = [
   <section class="section py-36 relative overflow-hidden">
     <div class="absolute inset-0 bg-primary opacity-5 skew-y-3 scale-110"></div>
     <div class="max-width padding-x relative z-10 text-center">
-      <h2 class="text-headline-large mb-8 tracking-tighter">
-        Prêt à structurer votre projet ?
-      </h2>
+      <h2 class="text-headline-large mb-8">Prêt à structurer votre projet ?</h2>
       <p
         class="text-headline-small text-on-surface-variant mb-12 max-w-2xl mx-auto"
       >

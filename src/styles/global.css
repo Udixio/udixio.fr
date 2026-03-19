@@ -79,7 +79,7 @@ section {
 }
 
 .sub-title {
-    @apply font-semibold text-tertiary pl-7 relative uppercase text-base mb-2;
+    @apply text-title-large text-tertiary pl-6 relative uppercase text-base mb-2;
 
     & + :first-of-type {
         margin-top: 0;
@@ -98,8 +98,8 @@ section {
     &:before {
         content: "";
         transform: translateY(-50%);
-        height: 3px;
-        @apply absolute bg-primary w-5 left-0 top-1/2 rounded-full;
+        height: 2px;
+        @apply absolute bg-primary w-3 left-0 top-1/2 rounded-full;
     }
 }
 

@@ -16,6 +16,7 @@ export type ProjectProps = CollectionEntry<"realisation">['data'] & {
     }
     technologies?: ReactNode,
     services?: ReactNode,
+    metrics?: {label: string, value: string}[],
     body?: ReactNode,
     sidebar?: ReactNode
     view?: "mini" | "full";
@@ -30,7 +31,7 @@ export const Project = (props: ProjectProps) => {
     return (
         <Card
             variant={"filled"}
-            isInteractive={view == "mini"}
+            interactive={view == "mini"}
             className={
                 classNames({
                     " flex flex-col h-full group bg-surface/60 backdrop-blur transition-all duration-300 !rounded-2xl": view == "mini",
@@ -118,6 +119,7 @@ export const ProjectFull = ({
                                 summary,
                                 services,
                                 technologies,
+                                metrics,
                                 body,
                                 sidebar,
                                 website,
@@ -177,12 +179,24 @@ export const ProjectFull = ({
 
                                 </div>}
                             {technologies &&
-                                <div>
+                                <div className="mb-6">
                                     <p className="text-headline-small uppercase mb-2">Technologies</p>
                                     <div className="flex flex-wrap">
                                         {technologies}
                                     </div>
 
+                                </div>}
+                            {metrics &&
+                                <div className="mb-6">
+                                    <p className="text-headline-small uppercase mb-4">Résultats Clés</p>
+                                    <div className="flex flex-col gap-4">
+                                        {metrics.map((m, i) => (
+                                            <div key={i} className="flex flex-col bg-surface-container p-4 rounded-xl border border-outline-variant/30">
+                                                <span className="text-headline-medium text-primary font-bold leading-none mb-1">{m.value}</span>
+                                                <span className="text-label-medium text-on-surface-variant uppercase tracking-wider">{m.label}</span>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>}
                             {website &&
                                 <Button className="w-fit" target="_blank" href={website} icon={iLink}

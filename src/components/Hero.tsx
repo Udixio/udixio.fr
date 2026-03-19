@@ -261,7 +261,7 @@ export const Hero = ({
         </div>
 
         {/* HEADER / LOGO - Top Left */}
-        <div className="absolute top-6 inset-0 mx-auto  z-50 pointer-events-none max-width padding-x flex justify-between ">
+        <div className="absolute h-fit top-6 inset-0 mx-auto  z-50 pointer-events-none max-width padding-x flex justify-between ">
           <Logo className="fill-on-surface h-8 w-auto" />
           <div className={"pointer-events-auto"}>
             {/* MENU - Static position initially, then fixed */}
