@@ -59,15 +59,15 @@ const visibleProjects = max ? projectsProps.slice(0, max) : projectsProps;
   max ? (
     <ProjectsShowcase projects={visibleProjects} client:visible />
   ) : (
-    <div class="max-width padding-x gap-x-8 gap-y-16  md:gap-y-32 grid grid-cols-1 sm:grid-cols-[repeat(20,minmax(0,1fr))] ">
+    <div class="max-width padding-x gap-x-8 gap-y-16  md:gap-y-32 grid grid-cols-1 sm:grid-cols-20 ">
       {visibleProjects.map((realisation, index) => {
         const isTrue = [0, 3, 4, 7].includes(index % 8); // Détermine "true" ou "false"
 
         return (
           <a
             class={classNames("col-span-1 row-span-1", {
-              "sm:col-[_span_11_/_span_11] sm:aspect-[10/7] ": isTrue,
-              "sm:col-[_span_9_/_span_9] sm:aspect-[8/9]": !isTrue,
+              "sm:col-span-11 sm:aspect-10/7 ": isTrue,
+              "sm:col-span-9 sm:aspect-8/9": !isTrue,
               "self-end": index % 4 == 0,
               "sm:-mt-[25%] ": index % 4 === 1 && index != 0 && index != 1,
             })}

@@ -117,11 +117,11 @@ export const QAStickyScroll = () => {
               transition={{ duration: 0.25, ease: "easeOut" }}
               className="flex flex-col gap-4"
             >
-              <div className="flex items-center gap-2 text-on-surface-variant/50 text-label-medium">
+              <div className="flex items-center gap-2 text-on-surface-variant text-label-medium">
                 <Icon className="size-4" icon={iChat} />
                 <span>Vous vous demandez…</span>
               </div>
-              <p className="text-headline-small font-medium text-on-surface leading-snug">
+              <p className="text-headline-large">
                 "{items[activeIndex].question}"
               </p>
             </motion.div>
