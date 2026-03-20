@@ -38,6 +38,7 @@ import { iVerifiedUser } from "@udixio/icons-rounded-400/verified_user";
 import { SymbolKind } from "vscode-languageserver-types";
 import { iCheckCircle } from "@udixio/icons-rounded-400/check_circle";
 import { iCheckCircleFilled } from "@udixio/icons-rounded-400/filled/check_circle";
+import { Divider } from "@udixio/ui-react";
 import { icon } from "@fortawesome/fontawesome-svg-core";
 import { motion } from "motion/react";
 import { iClose } from "@udixio/icons-rounded-400/close";
@@ -517,64 +518,103 @@ anim-delay-200
     </Card>
   </section>
 
-  {/* 04. PREUVES - WIDE GALLERY */}
+  {/* 04. PREUVES */}
   <section class="section py-32">
     <div class="max-width padding-x">
-      <div class="flex justify-between items-end mb-8">
+      <div class="flex justify-between items-end mb-12">
         <div>
+          <span class="sub-title">Preuves</span>
           <h2 class="text-headline-large text-on-surface">
-            Des preuves claires, pas des promesses
+            Des preuves concrètes,<br />pas des promesses
           </h2>
           <p class="text-title-medium text-on-surface-variant mt-4 max-w-2xl">
-            Des indicateurs publics, des audits lisibles, et une sobriété
-            mesurée.
+            Des indicateurs mesurables, accessibles et vérifiables sur chaque
+            projet livré.
           </p>
         </div>
-        <Button
-          href="/realisations"
-          label="Tout voir"
-          variant="outlined"
-          className="border-transparent"
-        />
       </div>
 
-      <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div
-          class="p-6 rounded-2xl border border-outline-variant/40 bg-surface"
-        >
-          <h3 class="text-headline-small font-bold mb-2">Qualité mesurée</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-24">
+        <Card variant="outlined" className="p-6  bg-surface-container-low">
+          <h3 class="text-headline-small mb-2">Qualité mesurée</h3>
           <p class="text-body-medium text-on-surface-variant">
             Performance, SEO, accessibilité : des scores partagés pour chaque
             projet livré.
           </p>
-        </div>
-        <div
-          class="p-6 rounded-2xl border border-outline-variant/40 bg-surface"
-        >
-          <h3 class="text-headline-small font-bold mb-2">Audits vérifiables</h3>
+        </Card>
+        <Card variant="outlined" className="p-6  bg-surface-container-low">
+          <h3 class="text-headline-small mb-2">Audits vérifiables</h3>
           <p class="text-body-medium text-on-surface-variant">
-            Résultats lisibles (ex. Lighthouse, Core Web Vitals) pour valider la
+            Lighthouse, Core Web Vitals : des résultats lisibles pour évaluer la
             qualité.
           </p>
-        </div>
-        <div
-          class="p-6 rounded-2xl border border-outline-variant/40 bg-surface"
-        >
-          <h3 class="text-headline-small font-bold mb-2">Sobriété maîtrisée</h3>
+        </Card>
+        <Card variant="outlined" className="p-6  bg-surface-container-low">
+          <h3 class="text-headline-small mb-2">Sobriété maîtrisée</h3>
           <p class="text-body-medium text-on-surface-variant">
-            Poids de page et éco‑indicateurs suivis pour limiter l'empreinte.
+            Poids de page et indicateurs environnementaux suivis pour limiter
+            l'impact.
           </p>
-        </div>
+        </Card>
       </div>
 
-      <ProofsGrid client:visible />
+      <Card
+        variant="outlined"
+        className="mt-12 bg-surface-container-low grid gap-px grid-cols-1 md:grid-cols-2 lg:grid-cols-4 "
+      >
+        {
+          [
+            {
+              title: "Scores de Performance 100/100",
+              description:
+                "Nous visons l'excellence mesurable (Lighthouse) sur la vitesse et le SEO, prouvée sur nos réalisations.",
+              badge: "Qualité mesurée",
+            },
+            {
+              title: "Indépendance Technique Totale",
+              description:
+                "Nous utilisons des outils ouverts et performants (Astro, React, CMS sur-mesure) pour vous libérer des systèmes fermés.",
+              badge: "Propriété Client",
+            },
+            {
+              title: "Outils Développés en Interne",
+              description:
+                "Notre CMS léger Netsimpler et notre propre librairie design Udixio UI garantissent efficacité et personnalisation.",
+              badge: "Créateurs",
+            },
+            {
+              title: "Méthodologie Cadrée et Publique",
+              description:
+                "Notre processus (ateliers, points de validation, garanties post-lancement) est documenté pour avancer en toute confiance.",
+              badge: "Méthodologie",
+            },
+          ].map((proof, index) => (
+            <div class="flex ">
+              {index !== 0 && <Divider orientation="vertical" />}
+              <div class="flex flex-col p-8  h-full">
+                <div class="mb-6 self-start px-3 py-1 rounded-full border border-primary/20 text-primary text-label-small font-mono uppercase tracking-wider">
+                  {proof.badge}
+                </div>
+                <div class="mt-auto">
+                  <h3 class="text-title-large font-bold mb-3 leading-tight">
+                    {proof.title}
+                  </h3>
+                  <p class="text-body-medium text-on-surface-variant/80">
+                    {proof.description}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))
+        }
+      </Card>
 
       <div class="mt-24">
         <div class="flex items-center justify-between mb-10">
           <h3 class="text-headline-large">Dernières réalisations</h3>
           <Button
             href="/realisations"
-            label="Voir toutes les réalisations"
+            label="Voir nos réalisations"
             variant="text"
           />
         </div>
@@ -702,7 +742,7 @@ anim-delay-200
               className="w-10 h-10 fill-on-secondary-container"
             />
           </div>
-          <h3 class="text-headline-small font-bold mb-2">Code Source</h3>
+          <h3 class="text-headline-small mb-2">Code Source</h3>
           <p class="text-body-small text-on-surface-variant">
             Dépôt Git complet
           </p>
@@ -717,7 +757,7 @@ anim-delay-200
           >
             <Icon icon={iKey} className="w-10 h-10 fill-on-primary-container" />
           </div>
-          <h3 class="text-headline-small font-bold mb-2">Accès Admin</h3>
+          <h3 class="text-headline-small mb-2">Accès Admin</h3>
           <p class="text-body-small text-on-surface-variant">
             Contrôle total du CMS
           </p>
@@ -735,7 +775,7 @@ anim-delay-200
               className="w-10 h-10 fill-on-tertiary-container"
             />
           </div>
-          <h3 class="text-headline-small font-bold mb-2">Hébergement</h3>
+          <h3 class="text-headline-small mb-2">Hébergement</h3>
           <p class="text-body-small text-on-surface-variant">
             Propriété directe
           </p>
@@ -832,7 +872,7 @@ anim-delay-200
       >
         {/* Promesse Principale (Large) */}
         <div
-          class="md:col-span-2 md:row-span-1 bg-primary text-on-primary p-12 rounded-[2rem] flex flex-col justify-between transition-transform duration-500"
+          class="md:col-span-2 md:row-span-1 bg-primary text-on-primary p-12 rounded-4xl flex flex-col justify-between transition-transform duration-500"
         >
           <h3 class="text-headline-medium">Hébergement responsable</h3>
           <div class="flex justify-between items-end">
@@ -846,7 +886,7 @@ anim-delay-200
 
         {/* Eco 1 - Sobriété */}
         <div
-          class="bg-surface p-8 rounded-[2rem] border border-[#4CAF50]/30 relative overflow-hidden flex flex-col justify-between group"
+          class="bg-surface p-8 rounded-4xl border border-tertiary/30 relative overflow-hidden flex flex-col justify-between group"
         >
           <div class="absolute top-0 right-0 p-4 opacity-50">
             <span class="transition-all duration-500">
@@ -858,11 +898,11 @@ anim-delay-200
           </div>
           <div>
             <span
-              class="inline-block px-3 py-1 bg-[#4CAF50]/10 text-[#4CAF50] rounded-full text-label-small font-bold mb-4"
+              class="inline-block px-3 py-1 bg-tertiary-container text-on-tertiary-container rounded-full text-label-small mb-4"
             >
               LOW CARBON
             </span>
-            <h4 class="text-headline-small font-bold mb-2 text-[#2E7D32]">
+            <h4 class="text-headline-small mb-2 text-tertiary">
               Sobriété numérique
             </h4>
             <p class="text-body-medium text-on-surface-variant">
@@ -875,18 +915,16 @@ anim-delay-200
               href="/methode"
               label="Voir nos choix"
               variant="text"
-              className="!text-[#2E7D32] hover:!bg-[#4CAF50]/10"
+              className="text-tertiary!"
             />
           </div>
         </div>
 
         {/* Engagement 2 */}
         <div
-          class="bg-surface-container-high p-8 rounded-[2rem] flex flex-col justify-center text-center items-center gap-6"
+          class="bg-surface-container-high p-8 rounded-4xl flex flex-col justify-center text-center items-center gap-6"
         >
-          <h4 class="text-headline-medium font-bold text-primary">
-            Autonomie Client
-          </h4>
+          <h4 class="text-headline-medium text-primary">Autonomie Client</h4>
           <p class="text-body-large">
             Code source et accès vous appartiennent.
           </p>
@@ -895,7 +933,7 @@ anim-delay-200
 
         {/* Eco 2 - Indicateurs */}
         <div
-          class="bg-surface p-8 rounded-[2rem] border border-[#4CAF50]/30 relative overflow-hidden flex flex-col justify-between group"
+          class="bg-surface p-8 rounded-4xl border border-tertiary/30 relative overflow-hidden flex flex-col justify-between group"
         >
           <div class="absolute top-0 right-0 p-4 opacity-50">
             <span class="transition-all duration-500">
@@ -907,11 +945,11 @@ anim-delay-200
           </div>
           <div>
             <span
-              class="inline-block px-3 py-1 bg-[#4CAF50]/10 text-[#4CAF50] rounded-full text-label-small font-bold mb-4"
+              class="inline-block px-3 py-1 bg-tertiary-container text-on-tertiary-container rounded-full text-label-small mb-4"
             >
               ECOINDEX A/B
             </span>
-            <h4 class="text-headline-small font-bold mb-2 text-[#2E7D32]">
+            <h4 class="text-headline-small mb-2 text-tertiary">
               Indicateurs éco-conçus
             </h4>
             <p class="text-body-medium text-on-surface-variant">
@@ -924,14 +962,14 @@ anim-delay-200
               href="/realisations"
               label="Voir des exemples"
               variant="text"
-              className="!text-[#2E7D32] hover:!bg-[#4CAF50]/10"
+              className="text-tertiary!"
             />
           </div>
         </div>
 
         {/* Resource 2 (Large) */}
         <div
-          class="md:col-span-2 bg-on-surface p-12 rounded-[2rem] flex flex-col md:flex-row gap-12 items-center transition-transform duration-500"
+          class="md:col-span-2 bg-on-surface p-12 rounded-4xl flex flex-col md:flex-row gap-12 items-center transition-transform duration-500"
         >
           <div class="flex-1">
             <h3 class="text-headline-medium mb-4 text-primary-fixed">
@@ -989,7 +1027,7 @@ anim-delay-200
       <div class="flex justify-center gap-6">
         <div class="group relative">
           <div
-            class="absolute -inset-1 bg-gradient-to-r from-primary to-tertiary rounded-lg blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"
+            class="absolute -inset-1 bg-linear-to-r from-primary to-tertiary rounded-lg blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"
           >
           </div>
           <div class="relative group">
