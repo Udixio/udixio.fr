@@ -10,6 +10,7 @@ import { FeaturesGrid } from "@components/home/modern/FeaturesGrid";
 import { ProblemSolutionSchema } from "@components/home/modern/ProblemSolutionSchema";
 // import { MethodSteps } from "@components/home/modern/MethodSteps";
 import { ProcessStickyScroll } from "@components/home/modern/ProcessStickyScroll";
+import { QAStickyScroll } from "@components/home/modern/QAStickyScroll";
 import { ProofsGrid } from "@components/home/modern/ProofsGrid";
 import { FaqAccordion } from "@components/home/modern/FaqAccordion";
 import { Card } from "@/components/Card";
@@ -296,7 +297,7 @@ const faqItems = [
                 <span class="text-title-medium absolute -left-[1.35rem] top-0 flex h-10 w-10 items-center justify-center rounded-full bg-surface border-2 border-outline-variant transition-all ">
                   {step.number}
                 </span>
-                <h3 class="text-headline-medium mb-4 text-on-surface">
+                <h3 class="text-headline-small mb-4 text-on-surface">
                   {step.title}
                 </h3>
                 <p class="text-body-large text-on-surface-variant font-light max-w-lg pb-16">
@@ -499,7 +500,7 @@ anim-delay-200
   {/* 03. NOTRE RÉPONSE - DARK MODE IMMERSION */}
   <section class="section">
     <Card
-      className="section dark bg-surface-container  text-on-surface shadow-xl/30"
+      className="section dark bg-surface-container-high  text-on-surface shadow-xl/30"
     >
       <div class="text-center mb-24">
         <span class="sub-title">Notre approche</span>
@@ -512,69 +513,7 @@ anim-delay-200
           Des choix utiles, expliqués et alignés avec vos priorités.
         </p>
       </div>
-      <div
-        class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16 max-w-5xl mx-auto"
-      >
-        {
-          [
-            {
-              id: "cadrage",
-              problem: "Budget flou, dérives possibles",
-              title: "Périmètre défini, devis précis",
-              desc: "Un atelier initial permet de poser vos priorités, cadrer le projet et fixer un devis avant tout développement.",
-            },
-            {
-              id: "transparence",
-              problem: "Manque de visibilité sur le projet",
-              title: "Suivi clair à chaque étape",
-              desc: "Vous suivez l’avancement, validez les étapes et comprenez les décisions prises.",
-            },
-            {
-              id: "expertise",
-              problem: "Site lent ou peu visible",
-              title: "Performance et SEO solides",
-              desc: "Chaque choix technique est pensé pour un site rapide, bien référencé et durable.",
-            },
-            {
-              id: "independance",
-              problem: "Dépendance au prestataire",
-              title: "Contrôle total sur votre site",
-              desc: "Accès, code source, hébergement : vous gardez la main, sans dépendance.",
-            },
-          ].map((item) => (
-            <Card
-              key={item.id}
-              className="p-8 group hover:border-primary/50 transition-colors flex flex-col justify-between"
-            >
-              <div class="flex flex-col gap-6">
-                {/* Le Problème (Atténué, sans être barré) */}
-                <div class="flex items-start gap-3 opacity-60 group-hover:opacity-100 transition-opacity duration-300">
-                  <Icon className="size-6 text-error shrink-0" icon={iClose} />
-                  <span class="text-body-large font-medium text-on-surface-variant pt-0.5">
-                    {item.problem}
-                  </span>
-                </div>
-
-                {/* Ligne séparatrice très subtile */}
-                <div class="w-px h-8 bg-outline-variant/50 ml-3" />
-
-                {/* La Solution (Mise en valeur, positive) */}
-                <div>
-                  <div class="flex items-start gap-3 mb-3 text-primary">
-                    <Icon className="size-7 shrink-0" icon={iCheck} />
-                    <h3 class="text-title-large font-bold text-on-surface pt-0.5">
-                      {item.title}
-                    </h3>
-                  </div>
-                  <p class="text-body-medium text-on-surface-variant pl-10 leading-relaxed">
-                    {item.desc}
-                  </p>
-                </div>
-              </div>
-            </Card>
-          ))
-        }
-      </div>
+      <QAStickyScroll client:visible />
     </Card>
   </section>
 

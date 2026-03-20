@@ -17,7 +17,7 @@ export const Card = ({
       {...restProps}
       className={classNames(
         "rounded-[3rem] bg-surface-container-high/70 bg-radial-[at_90%_90%]" +
-          " from-tertiary-container/20 to-transparent backdrop-blur-xl ",
+          " from-tertiary-container/20 to-transparent backdrop-blur-xl overflow-clip",
         className,
       )}
     >

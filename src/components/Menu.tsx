@@ -1,6 +1,5 @@
-import { Button, classNames, Tab, Tabs } from "@udixio/ui-react";
+import { Button, Card, classNames, Tab, Tabs } from "@udixio/ui-react";
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { Card } from "@components/Card.tsx";
 
 const MENU_TABS: Record<string, string> = {
   "/": "Accueil",
@@ -63,11 +62,13 @@ export const Menu = ({
   return (
     pathName !== null && (
       <Card
-        style={{ "--corner-shape": "superellipse(1)" } as React.CSSProperties}
+        variant={"filled"}
         className={classNames(
-          " max-w-full rounded-full flex items-center transition-all duration-500 ease-in-out z-50 mx-2 overflow-hidden",
+          " max-w-full  rounded-full flex transition-all duration-500 ease-in-out z-50 mx-2 overflow-hidden",
           {
-            "bg-transparent backdrop-blur-none": !isScrolled,
+            "bg-transparent backdrop-blur-none rounded-none": !isScrolled,
+            "bg-surface-container-lowest/80 backdrop-blur-md shadow-md":
+              isScrolled,
           },
           { "opacity-0": !isVisible },
         )}
@@ -91,6 +92,7 @@ export const Menu = ({
                 key={href}
                 className={classNames({
                   "md:hidden block": href === "/contact",
+                  "h-full": isScrolled,
                 })}
                 selected={isSelected}
                 href={href}
@@ -115,4 +117,3 @@ export const Menu = ({
     )
   );
 };
-

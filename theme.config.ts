@@ -1,18 +1,10 @@
 import { defineConfig } from "@udixio/ui-react";
-import { getRotatedHue } from "@udixio/theme";
 
 export default defineConfig({
-  sourceColor: "#478d6e",
+  sourceColor: "#246d50",
   palettes: {
     // tertiary: "#D58A4E",
-    tertiary: ({ sourceColor }) => ({
-      hue: getRotatedHue(
-        sourceColor,
-        [0, 20, 71, 161, 333, 360],
-        [-40, 48, -32, 40, -32],
-      ),
-      chroma: sourceColor.chroma * 0.75,
-    }),
+
     success: "#4CAF50",
     warning: "#FFA726",
     info: "#2196F3",
@@ -24,30 +16,32 @@ export default defineConfig({
   fontStyles: {
     display: {
       large: {
-        fontWeight: 500,
+        fontWeight: 600,
         fontSize: 5,
         lineHeight: 5,
       },
       medium: {
+        fontWeight: 600,
         fontSize: 4,
-        fontWeight: 4,
+        lineHeight: 4,
       },
       small: {
+        fontWeight: 600,
         fontSize: 3,
-        fontWeight: 3,
+        lineHeight: 3,
       },
     },
-    // headline: {
-    //     large: {
-    //         fontWeight: 600,
-    //     },
-    //     medium: {
-    //         fontWeight: 600,
-    //     },
-    //     small: {
-    //         fontWeight: 600,
-    //     },
-    // },
+    headline: {
+      large: {
+        fontWeight: 500,
+      },
+      medium: {
+        fontWeight: 500,
+      },
+      small: {
+        fontWeight: 500,
+      },
+    },
     // title: {
     //     large: {
     //         fontWeight: 500,
