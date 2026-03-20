@@ -39,6 +39,8 @@ import { iCheckCircle } from "@udixio/icons-rounded-400/check_circle";
 import { iCheckCircleFilled } from "@udixio/icons-rounded-400/filled/check_circle";
 import { icon } from "@fortawesome/fontawesome-svg-core";
 import { motion } from "motion/react";
+import { iClose } from "@udixio/icons-rounded-400/close";
+import { iCheck } from "@udixio/icons-rounded-400/check";
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -447,67 +449,67 @@ anim-delay-200
 
   {/* 02c. BENEFICES - VALUE CHIPS */}
   <section class="section py-24 bg-surface">
-    <div class="max-width padding-x">
-      <div class="max-w-4xl mb-12">
-        <h2 class="text-headline-large">
-          Des bénéfices concrets.<br />
-          <span class="text-gradient">Sans détour.</span>
-        </h2>
-      </div>
+    <div class="max-w-4xl mb-12">
+      <h2 class="text-headline-large">
+        Des bénéfices concrets.<br />
+        <span class="text-gradient">Sans détour.</span>
+      </h2>
+    </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {
-          [
-            {
-              icon: iVisibility,
-              title: "Attirer des clients",
-              description:
-                "Un SEO local optimisé pour générer des visites qualifiées chaque jour.",
-            },
-            {
-              icon: iHandshake,
-              title: "Inspirer confiance",
-              description:
-                "Un site professionnel qui crédibilise votre entreprise auprès de prospects et partenaires.",
-            },
-            {
-              icon: iBolt,
-              title: "Gagner du temps",
-              description:
-                "Automatisation de la prise de contact pour libérer vos équipes commerciales.",
-            },
-            {
-              icon: iTrendingUp,
-              title: "Booster votre activité",
-              description:
-                "Des indicateurs clairs pour transformer votre site en levier de croissance mesurable.",
-            },
-          ].map((benefit) => (
-            <Card variant="outlined" className="group p-6">
-              <div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-6 transition-transform">
-                <Icon icon={benefit.icon} className="w-6 h-6 fill-current" />
-              </div>
-              <h3 class="text-headline-small  mb-2">{benefit.title}</h3>
-              <p class="text-on-surface-variant">{benefit.description}</p>
-            </Card>
-          ))
-        }
-      </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {
+        [
+          {
+            icon: iVisibility,
+            title: "Attirer des clients",
+            description:
+              "Un SEO local optimisé pour générer des visites qualifiées chaque jour.",
+          },
+          {
+            icon: iHandshake,
+            title: "Inspirer confiance",
+            description:
+              "Un site professionnel qui crédibilise votre entreprise auprès de prospects et partenaires.",
+          },
+          {
+            icon: iBolt,
+            title: "Gagner du temps",
+            description:
+              "Automatisation de la prise de contact pour libérer vos équipes commerciales.",
+          },
+          {
+            icon: iTrendingUp,
+            title: "Booster votre activité",
+            description:
+              "Des indicateurs clairs pour transformer votre site en levier de croissance mesurable.",
+          },
+        ].map((benefit) => (
+          <Card variant="outlined" className="group p-6">
+            <div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-6 transition-transform">
+              <Icon icon={benefit.icon} className="w-6 h-6 fill-current" />
+            </div>
+            <h3 class="text-headline-small  mb-2">{benefit.title}</h3>
+            <p class="text-on-surface-variant">{benefit.description}</p>
+          </Card>
+        ))
+      }
     </div>
   </section>
 
   {/* 03. NOTRE RÉPONSE - DARK MODE IMMERSION */}
-  <section>
-    <Card className="section dark bg-surface  text-on-surface">
+  <section class="section">
+    <Card
+      className="section dark bg-surface-container  text-on-surface shadow-xl/30"
+    >
       <div class="text-center mb-24">
         <span class="sub-title">Notre approche</span>
         <h2 class="text-headline-large md:text-headline-large">
-          Vos objectifs d'abord :<br /><span class="text-primary-fixed"
+          Vos objectifs d'abord :<br /><span class="text-gradient"
             >des réponses claires</span
           >
         </h2>
         <p class="text-title-medium mt-6">
-          Des choix simples, expliqués et reliés à vos priorités.
+          Des choix utiles, expliqués et alignés avec vos priorités.
         </p>
       </div>
       <div
@@ -517,28 +519,58 @@ anim-delay-200
           [
             {
               id: "cadrage",
-              title: "Budget flou ? Cadrage net.",
-              desc: "Pas de dérives financières. Un atelier initial pose vos priorités, le périmètre et le devis exact avant tout développement.",
+              problem: "Budget flou, dérives possibles",
+              title: "Périmètre défini, devis précis",
+              desc: "Un atelier initial permet de poser vos priorités, cadrer le projet et fixer un devis avant tout développement.",
             },
             {
               id: "transparence",
-              title: "« Boîte noire » ? Suivi limpide.",
-              desc: "Fini le jargon et les dépendances aveugles. Vous suivez chaque étape, validez chaque jalon et comprenez ce qu'on fait.",
+              problem: "Manque de visibilité sur le projet",
+              title: "Suivi clair à chaque étape",
+              desc: "Vous suivez l’avancement, validez les étapes et comprenez les décisions prises.",
             },
             {
               id: "expertise",
-              title: "Site lent ou invisible ? Qualité 100/100.",
-              desc: "On ne sacrifie ni la performance (100 Lighthouse), ni le SEO. Nos choix techniques garantissent des résultats pérennes.",
+              problem: "Site lent ou peu visible",
+              title: "Performance et SEO solides",
+              desc: "Chaque choix technique est pensé pour un site rapide, bien référencé et durable.",
             },
             {
               id: "independance",
-              title: "Prestataire bloquant ? Propriété totale.",
-              desc: "Pas de coûts cachés ou d'abonnement forcé. Code source, accès serveurs : on vous donne les clés et on vous forme.",
+              problem: "Dépendance au prestataire",
+              title: "Contrôle total sur votre site",
+              desc: "Accès, code source, hébergement : vous gardez la main, sans dépendance.",
             },
-          ].map((item, index) => (
-            <Card className="  p-8    ">
-              <h3 class="text-headline-medium mb-3 ">{item.title}</h3>
-              <p class=" ">{item.desc}</p>
+          ].map((item) => (
+            <Card
+              key={item.id}
+              className="p-8 group hover:border-primary/50 transition-colors flex flex-col justify-between"
+            >
+              <div class="flex flex-col gap-6">
+                {/* Le Problème (Atténué, sans être barré) */}
+                <div class="flex items-start gap-3 opacity-60 group-hover:opacity-100 transition-opacity duration-300">
+                  <Icon className="size-6 text-error shrink-0" icon={iClose} />
+                  <span class="text-body-large font-medium text-on-surface-variant pt-0.5">
+                    {item.problem}
+                  </span>
+                </div>
+
+                {/* Ligne séparatrice très subtile */}
+                <div class="w-px h-8 bg-outline-variant/50 ml-3" />
+
+                {/* La Solution (Mise en valeur, positive) */}
+                <div>
+                  <div class="flex items-start gap-3 mb-3 text-primary">
+                    <Icon className="size-7 shrink-0" icon={iCheck} />
+                    <h3 class="text-title-large font-bold text-on-surface pt-0.5">
+                      {item.title}
+                    </h3>
+                  </div>
+                  <p class="text-body-medium text-on-surface-variant pl-10 leading-relaxed">
+                    {item.desc}
+                  </p>
+                </div>
+              </div>
             </Card>
           ))
         }
