@@ -1,10 +1,9 @@
 ---
 import Layout from "@layouts/Layout.astro";
 import { Button } from "@udixio/ui-react";
-
-export const prerender = false;
-
-return Astro.redirect("/");
+import { Hero } from "@components/Hero";
+import CtaSection from "@components/sections/CtaSection.astro";
+import { Card } from "@/components/Card";
 ---
 
 <Layout
@@ -13,82 +12,88 @@ return Astro.redirect("/");
     description:
       "Guides pratiques pour cadrer un projet web, éviter les dérives et garder la maîtrise.",
   }}
+  background={false}
 >
-  <section class="section">
-    <div class="max-width padding-x">
-      <h1 class="text-display-small md:text-display-medium">
-        Ressources &amp; guides pour des projets web clairs
-      </h1>
-      <p class="text-body-large mt-6 max-w-prose">
-        Des contenus utiles pour décider, cadrer et avancer sans flou.
-      </p>
+  <Hero client:load>
+    <div class="flex-1 flex flex-col justify-between gap-12">
+      <div>
+        <span class="sub-title">Ressources</span>
+        <h1
+          class="max-w-2xl text-display-medium text-on-surface-variant anim-fade anim-slide-from-left anim-duration-1000 ease-out anim-delay-100"
+        >
+          Guides pour des projets <span class="text-gradient">sans flou</span>
+        </h1>
+      </div>
+      <div>
+        <p
+          class="text-body-large max-w-96 mb-12 anim-fade anim-slide-from-left anim-duration-1000 ease-out anim-delay-200"
+        >
+          Des contenus pratiques pour décider, cadrer et avancer avec clarté sur
+          votre projet web.
+        </p>
+        <Button href="/contact" shape="squared" label="Demander un diagnostic" />
+      </div>
     </div>
-  </section>
+  </Hero>
 
-  <section class="section">
-    <div class="max-width padding-x">
-      <h2 class="text-display-small">Pages piliers</h2>
-      <div class="mt-8 grid gap-4 md:grid-cols-3">
-        <article
-          class="rounded-2xl border border-outline-variant bg-surface-container-low p-6"
-        >
-          <h3 class="text-title-large">
-            Choisir une agence web : critères &amp; checklist
-          </h3>
-          <p class="text-body-large mt-4">
-            Une grille claire pour comparer, poser les bonnes questions et
-            éviter les pièges.
-          </p>
-          <Button
-            className="mt-6 w-fit"
-            href="/ressources/choisir-agence-web"
-            label="Lire le guide"
-          />
-        </article>
-        <article
-          class="rounded-2xl border border-outline-variant bg-surface-container-low p-6"
-        >
-          <h3 class="text-title-large">
-            Refonte de site : étapes, délais, risques
-          </h3>
-          <p class="text-body-large mt-4">
-            Un plan de route réaliste pour remettre un site à niveau sans
-            dérives.
-          </p>
-          <Button
-            className="mt-6 w-fit"
-            href="/ressources/refonte-site-web"
-            label="Lire le guide"
-          />
-        </article>
-        <article
-          class="rounded-2xl border border-outline-variant bg-surface-container-low p-6"
-        >
-          <h3 class="text-title-large">
-            Cadrage de projet web : méthode simple
-          </h3>
-          <p class="text-body-large mt-4">
-            Le cadrage, c'est la clé : objectifs, périmètre, validations et
-            maîtrise.
-          </p>
-          <Button
-            className="mt-6 w-fit"
-            href="/ressources/cadrage-projet-web"
-            label="Lire le guide"
-          />
-        </article>
+  <section class="py-24 bg-surface">
+    <div class="section">
+      <span class="sub-title anim-in anim-fade">Guides</span>
+      <h2 class="text-headline-large text-on-surface mb-12 anim-in anim-fade anim-delay-150">
+        Tout ce qu'il faut savoir avant de démarrer
+      </h2>
+
+      <div class="grid gap-6 md:grid-cols-3">
+        {
+          [
+            {
+              href: "/ressources/choisir-agence-web",
+              title: "Choisir une agence web : critères & checklist",
+              description:
+                "Une grille claire pour comparer, poser les bonnes questions et éviter les pièges.",
+              tag: "Décision",
+            },
+            {
+              href: "/ressources/refonte-site-web",
+              title: "Refonte de site : étapes, délais, risques",
+              description:
+                "Un plan de route réaliste pour remettre un site à niveau sans dérives budgétaires.",
+              tag: "Refonte",
+            },
+            {
+              href: "/ressources/cadrage-projet-web",
+              title: "Cadrage de projet web : méthode simple",
+              description:
+                "Le cadrage, c'est la clé : objectifs, périmètre, validations et maîtrise.",
+              tag: "Méthode",
+            },
+          ].map((guide, index) => (
+            <Card
+              variant="outlined"
+              className="p-6 flex flex-col bg-surface-container-low anim-in anim-fade anim-slide-from-bottom"
+              style={{ ["--anim-delay"]: `${index * 150}ms` }}
+            >
+              <div class="text-label-small text-primary uppercase tracking-wider mb-3">
+                {guide.tag}
+              </div>
+              <h3 class="text-headline-small mb-3 flex-1">{guide.title}</h3>
+              <p class="text-body-medium text-on-surface-variant mb-6">
+                {guide.description}
+              </p>
+              <Button href={guide.href} label="Lire le guide" variant="outlined" className="w-fit" />
+            </Card>
+          ))
+        }
       </div>
     </div>
   </section>
 
-  <section class="section">
-    <div class="max-width padding-x">
-      <p class="text-body-large">Besoin d'aide pour votre projet ?</p>
-      <Button
-        className="mt-6 w-fit"
-        href="/contact"
-        label="Demander un diagnostic"
-      />
-    </div>
-  </section>
+  <CtaSection
+    title="Un projet en tête ?"
+    description="Décrivez-nous votre besoin, on vous répond rapidement avec un premier retour concret."
+    primaryLabel="Demander un diagnostic"
+    primaryHref="/contact"
+    secondaryLabel="Voir nos services"
+    secondaryHref="/services"
+  />
 </Layout>

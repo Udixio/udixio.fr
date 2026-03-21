@@ -13,6 +13,9 @@ import { iVerifiedUser } from "@udixio/icons-rounded-400/verified_user";
 import { iChecklist } from "@udixio/icons-rounded-400/checklist";
 import { iBolt } from "@udixio/icons-rounded-400/bolt";
 import { iPartnerExchange } from "@udixio/icons-rounded-400/partner_exchange";
+import { iStorefront } from "@udixio/icons-rounded-400/storefront";
+import { iGroups } from "@udixio/icons-rounded-400/groups";
+import { iRocketLaunch } from "@udixio/icons-rounded-400/rocket_launch";
 
 const faqItems = [
   {
@@ -33,6 +36,16 @@ const faqItems = [
   {
     question: "Qui possède le code et les accès ?",
     answer: "Le client. Les livrables et les accès sont remis à la livraison.",
+  },
+  {
+    question: "Quel est le délai moyen de livraison ?",
+    answer:
+      "Cela dépend du périmètre défini lors du cadrage. Un premier noyau fonctionnel est généralement livré en 6 à 12 semaines. Un planning est établi dès la phase de cadrage.",
+  },
+  {
+    question: "Quelle garantie après la mise en ligne ?",
+    answer:
+      "Une période de corrections est incluse après la mise en production. Au-delà, une maintenance évolutive peut être planifiée selon vos priorités.",
   },
 ];
 ---
@@ -206,6 +219,65 @@ const faqItems = [
             ))
           }
         </div>
+      </div>
+    </div>
+  </section>
+
+  {/* POUR QUI ? */}
+  <section class="py-24 bg-surface-container-low">
+    <div class="section text-center">
+      <span class="sub-title anim-in anim-fade">Audience</span>
+      <h2 class="text-headline-large text-on-surface mb-4 anim-in anim-fade anim-delay-150">
+        Ce service est fait pour vous si…
+      </h2>
+      <p class="text-title-medium text-on-surface-variant max-w-2xl mx-auto mb-12 anim-in anim-fade anim-delay-300">
+        Quand un site standard ne suffit plus, nous construisons l'outil qui
+        correspond exactement à vos process et vos besoins.
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {
+          [
+            {
+              icon: iGroups,
+              title: "PME avec des process spécifiques",
+              description:
+                "Vos équipes utilisent des outils dispersés ou des workflows manuels qui pourraient être automatisés.",
+              containerClass: "bg-primary-container",
+              iconClass: "fill-on-primary-container",
+            },
+            {
+              icon: iRocketLaunch,
+              title: "Startups & produits digitaux",
+              description:
+                "Vous lancez une plateforme, une marketplace ou un SaaS et avez besoin d'un développement solide et évolutif.",
+              containerClass: "bg-secondary-container",
+              iconClass: "fill-on-secondary-container",
+            },
+            {
+              icon: iStorefront,
+              title: "E-commerce sur-mesure",
+              description:
+                "Vos besoins dépassent les limites d'un CMS standard : tunnel d'achat personnalisé, espace client, intégrations.",
+              containerClass: "bg-tertiary-container",
+              iconClass: "fill-on-tertiary-container",
+            },
+          ].map((persona, index) => (
+            <div
+              class="bg-surface-container rounded-3xl border border-outline-variant/40 p-8 flex flex-col items-center gap-5 text-center anim-in anim-fade anim-slide-from-bottom"
+              style={{ ["--anim-delay"]: `${index * 150}ms` }}
+            >
+              <div
+                class={`w-16 h-16 rounded-full flex items-center justify-center ${persona.containerClass}`}
+              >
+                <Icon icon={persona.icon} className={`w-8 h-8 ${persona.iconClass}`} />
+              </div>
+              <div>
+                <h3 class="text-headline-small mb-2">{persona.title}</h3>
+                <p class="text-body-medium text-on-surface-variant">{persona.description}</p>
+              </div>
+            </div>
+          ))
+        }
       </div>
     </div>
   </section>

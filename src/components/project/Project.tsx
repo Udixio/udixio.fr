@@ -18,7 +18,8 @@ export type ProjectProps = CollectionEntry<"realisation">['data'] & {
     services?: ReactNode,
     metrics?: {label: string, value: string}[],
     body?: ReactNode,
-    sidebar?: ReactNode
+    sidebar?: ReactNode,
+    testimonial?: ReactNode,
     view?: "mini" | "full";
 
 }
@@ -123,6 +124,7 @@ export const ProjectFull = ({
                                 body,
                                 sidebar,
                                 website,
+                                testimonial,
                             }: ProjectProps) => {
     return (
         <>
@@ -219,6 +221,14 @@ export const ProjectFull = ({
                                 Votre navigateur ne supporte pas l'élément vidéo.
                             </video>}
 
+                        {testimonial && (
+                            <div className="mt-16 px-4">
+                                <p className="text-headline-small uppercase mb-6">Témoignage client</p>
+                                <div className="bg-surface-container rounded-2xl border border-outline-variant/30 p-8">
+                                    {testimonial}
+                                </div>
+                            </div>
+                        )}
 
                     </div>
 

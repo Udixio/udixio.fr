@@ -43,6 +43,9 @@ import { Divider } from "@udixio/ui-react";
 import { icon } from "@fortawesome/fontawesome-svg-core";
 import { motion } from "motion/react";
 import { iClose } from "@udixio/icons-rounded-400/close";
+import { iStorefront } from "@udixio/icons-rounded-400/storefront";
+import { iGroups } from "@udixio/icons-rounded-400/groups";
+import { iRocketLaunch } from "@udixio/icons-rounded-400/rocket_launch";
 import { iCheck } from "@udixio/icons-rounded-400/check";
 import { SectionPadding } from "@/components/SectionPadding";
 
@@ -53,11 +56,25 @@ const jsonLd = {
       "@type": "Organization",
       "@id": "https://www.udixio.fr/#organization",
       name: "Udixio",
+      description:
+        "Agence web spécialisée en création de sites performants et écoresponsables pour TPE/PME en Hauts-de-France et Normandie. Développement sur-mesure, SEO technique et stratégie digitale.",
       url: "https://www.udixio.fr/",
       logo: "https://www.udixio.fr/images/logo.png",
+      image: "https://www.udixio.fr/images/logo.png",
       sameAs: [
         "https://www.linkedin.com/company/udixio",
         "https://github.com/Udixio",
+      ],
+      knowsAbout: [
+        "Création de site web",
+        "Développement web sur-mesure",
+        "SEO technique",
+        "Éco-conception numérique",
+        "Astro",
+        "React",
+        "Stratégie digitale",
+        "Performance web",
+        "Accessibilité WCAG",
       ],
       contactPoint: {
         "@type": "ContactPoint",
@@ -73,6 +90,14 @@ const jsonLd = {
       email: "florian@udixio.fr",
       image: "https://www.udixio.fr/images/logo.png",
       priceRange: "$$",
+      openingHoursSpecification: [
+        {
+          "@type": "OpeningHoursSpecification",
+          dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+          opens: "09:00",
+          closes: "18:00",
+        },
+      ],
       address: [
         {
           "@type": "PostalAddress",
@@ -451,7 +476,70 @@ anim-delay-200
     </div>
   </section>
 
-  {/* 02c. BENEFICES - VALUE CHIPS */}
+  {/* 02c. POUR QUI ? */}
+  <section class="section py-24 bg-surface-container-low">
+    <div class="max-width padding-x">
+      <div class="text-center mb-12">
+        <span class="sub-title anim-in anim-fade">Audience</span>
+        <h2 class="text-headline-large text-on-surface anim-in anim-fade anim-delay-150">
+          À qui s'adresse Udixio ?
+        </h2>
+        <p class="text-title-medium text-on-surface-variant mt-4 max-w-2xl mx-auto anim-in anim-fade anim-delay-300">
+          Nous accompagnons des structures ambitieuses qui veulent un site web
+          qui travaille pour elles, pas contre elles.
+        </p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {
+          [
+            {
+              icon: iStorefront,
+              title: "TPE, artisans & commerçants locaux",
+              description:
+                "Vous avez besoin d'un site professionnel qui vous apporte des clients. Pas de jargon, pas de complexité inutile.",
+              containerClass: "bg-tertiary-container",
+              iconClass: "fill-on-tertiary-container",
+            },
+            {
+              icon: iGroups,
+              title: "PME en croissance",
+              description:
+                "Votre site actuel ne reflète plus votre niveau. Vous voulez un outil évolutif, sans dépendance à un prestataire opaque.",
+              containerClass: "bg-primary-container",
+              iconClass: "fill-on-primary-container",
+            },
+            {
+              icon: iRocketLaunch,
+              title: "Porteurs de projets digitaux",
+              description:
+                "Vous lancez un produit, une plateforme ou un service. Vous avez besoin d'un partenaire technique qui cadre et livre.",
+              containerClass: "bg-secondary-container",
+              iconClass: "fill-on-secondary-container",
+            },
+          ].map((persona, index) => (
+            <div
+              class="bg-surface-container rounded-3xl border border-outline-variant/40 p-8 flex flex-col items-center gap-5 text-center anim-in anim-fade anim-slide-from-bottom"
+              style={{ ["--anim-delay"]: `${index * 150}ms` }}
+            >
+              <div
+                class={`w-16 h-16 rounded-full flex items-center justify-center ${persona.containerClass}`}
+              >
+                <Icon icon={persona.icon} className={`w-8 h-8 ${persona.iconClass}`} />
+              </div>
+              <div>
+                <h3 class="text-headline-small mb-2">{persona.title}</h3>
+                <p class="text-body-medium text-on-surface-variant">
+                  {persona.description}
+                </p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  {/* 02d. BENEFICES - VALUE CHIPS */}
   <section class="section py-24 bg-surface">
     <div class="max-w-4xl mb-12">
       <h2 class="text-headline-large anim-in anim-fade anim-slide-from-left">

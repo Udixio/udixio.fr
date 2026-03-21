@@ -145,71 +145,138 @@ const faqItems = [
   {/* DUO FONDATEUR */}
   <section class="py-32 bg-surface">
     <div class="section">
-        <span class="sub-title">Le duo</span>
-        <h2 class="text-headline-large mb-12">
-          Deux experts, <span class="text-gradient">sans intermédiaire</span>
-        </h2>
+      <span class="sub-title anim-in anim-fade">Le duo</span>
+      <h2 class="text-headline-large mb-4 anim-in anim-fade anim-slide-from-left anim-duration-1000 anim-delay-150">
+        Deux experts, <span class="text-gradient">sans intermédiaire</span>
+      </h2>
+      <p class="text-title-medium text-on-surface-variant max-w-2xl mb-12 anim-in anim-fade anim-delay-300">
+        Votre projet est pris en charge par deux experts complémentaires,
+        de la réflexion à la mise en ligne. Vous échangez directement avec
+        ceux qui le conçoivent et le réalisent.
+      </p>
 
-        <div
-          class="max-w-5xl mx-auto bg-surface-container rounded-3xl p-8 md:p-12 border border-outline-variant/30 flex flex-col md:flex-row items-center gap-12"
-        >
-          <div class="flex-1">
-            <p class="text-body-large text-on-surface-variant mb-8">
-              Votre projet est pris en charge par deux experts complémentaires,
-              de la réflexion à la mise en ligne. Vous échangez directement avec
-              ceux qui le conçoivent et le réalisent.
-            </p>
-            <Button href="/contact" label="Discutons de votre projet" />
-          </div>
-
-          <div class="flex flex-col sm:flex-row gap-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl">
+        {/* Joel */}
+        <div class="bg-surface-container rounded-3xl p-8 border border-outline-variant/30 flex flex-col anim-in anim-fade anim-slide-from-left anim-delay-150">
+          <div class="flex flex-col items-center gap-4 mb-6">
             <div
-              class="flex items-center gap-4 bg-surface-container-lowest p-4 rounded-2xl border border-outline-variant/30"
+              class="h-20 w-20 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center text-headline-medium font-bold border-2 border-primary/20"
             >
-              <div
-                class="h-14 w-14 rounded-full bg-surface-container-high flex items-center justify-center text-title-medium font-bold border border-outline-variant"
-              >
-                JV
-              </div>
-              <div>
-                <div class="text-title-small font-bold text-on-surface">
-                  Joel Vigreux
-                </div>
-                <div
-                  class="text-label-small text-on-surface-variant uppercase tracking-wider"
-                >
-                  Directeur Technique
-                </div>
-                <p class="text-body-small text-on-surface-variant mt-1 max-w-48">
-                  Développement full-stack, architecture, performance.
-                </p>
-              </div>
+              JV
             </div>
-
-            <div
-              class="flex items-center gap-4 bg-surface-container-lowest p-4 rounded-2xl border border-outline-variant/30"
-            >
-              <div
-                class="h-14 w-14 rounded-full bg-surface-container-high flex items-center justify-center text-title-medium font-bold border border-outline-variant"
-              >
-                FV
-              </div>
-              <div>
-                <div class="text-title-small font-bold text-on-surface">
-                  Florian Vigreux
-                </div>
-                <div
-                  class="text-label-small text-on-surface-variant uppercase tracking-wider"
-                >
-                  Directeur Conseil
-                </div>
-                <p class="text-body-small text-on-surface-variant mt-1 max-w-48">
-                  Relation client, cadrage, suivi de projet.
-                </p>
+            <div class="text-center">
+              <div class="text-title-large font-bold text-on-surface">Joel Vigreux</div>
+              <div class="text-label-small text-on-surface-variant uppercase tracking-wider mt-1">
+                Directeur Technique
               </div>
             </div>
           </div>
+          <ul class="space-y-2 text-body-medium text-on-surface-variant mb-6 list-disc pl-5">
+            <li>Développement full-stack</li>
+            <li>Architecture & performance web</li>
+            <li>Outils internes (Udixio UI, Netsimpler)</li>
+          </ul>
+          <Button
+            href="https://www.linkedin.com/in/joel-vigreux/"
+            variant="outlined"
+            label="Profil LinkedIn"
+            className="w-fit mt-auto"
+            target="_blank"
+          />
         </div>
+
+        {/* Florian */}
+        <div class="bg-surface-container rounded-3xl p-8 border border-outline-variant/30 flex flex-col anim-in anim-fade anim-slide-from-right anim-delay-300">
+          <div class="flex flex-col items-center gap-4 mb-6">
+            <div
+              class="h-20 w-20 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center text-headline-medium font-bold border-2 border-secondary/20"
+            >
+              FV
+            </div>
+            <div class="text-center">
+              <div class="text-title-large font-bold text-on-surface">Florian Vigreux</div>
+              <div class="text-label-small text-on-surface-variant uppercase tracking-wider mt-1">
+                Directeur Conseil
+              </div>
+            </div>
+          </div>
+          <ul class="space-y-2 text-body-medium text-on-surface-variant mb-6 list-disc pl-5">
+            <li>Relation client & cadrage</li>
+            <li>Stratégie digitale & conseil</li>
+            <li>Pilotage et suivi de projet</li>
+          </ul>
+          <Button
+            href="https://www.linkedin.com/in/florian-vigreux/"
+            variant="outlined"
+            label="Profil LinkedIn"
+            className="w-fit mt-auto"
+            target="_blank"
+          />
+        </div>
+      </div>
+
+      <Button href="/contact" label="Discutons de votre projet" className="mt-10" />
+    </div>
+  </section>
+
+  {/* CHIFFRES CLÉS */}
+  <section class="py-24 bg-surface-container-low">
+    <div class="section text-center">
+      <span class="sub-title anim-in anim-fade">En chiffres</span>
+      <h2 class="text-headline-large text-on-surface mb-12 anim-in anim-fade anim-delay-150">
+        Notre bilan
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
+        {
+          [
+            { value: "—", label: "projets livrés" },
+            { value: "—", label: "% de satisfaction" },
+            { value: "—", label: "ans d'expérience" },
+          ].map((stat, index) => (
+            <div
+              class="bg-surface rounded-3xl p-8 border border-outline-variant/40 anim-in anim-fade anim-slide-from-bottom"
+              style={{ ["--anim-delay"]: `${index * 150}ms` }}
+            >
+              <div class="text-display-small font-bold text-primary">{stat.value}</div>
+              <div class="text-label-large text-on-surface-variant uppercase tracking-wider mt-2">
+                {stat.label}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  {/* CERTIFICATIONS */}
+  <section class="py-24 bg-surface">
+    <div class="section">
+      <span class="sub-title anim-in anim-fade">Crédibilité</span>
+      <h2 class="text-headline-large text-on-surface mb-4 anim-in anim-fade anim-slide-from-left anim-duration-1000 anim-delay-150">
+        Certifications & expertise
+      </h2>
+      <p class="text-title-medium text-on-surface-variant max-w-2xl mb-12 anim-in anim-fade anim-delay-300">
+        Nos certifications et labels professionnels seront listés ici.
+      </p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {
+          [
+            { type: "Certification", name: "—", org: "—", year: "—" },
+            { type: "Label", name: "—", org: "—", year: "—" },
+          ].map((cert, index) => (
+            <Card
+              variant="outlined"
+              className="p-6 bg-surface-container-low anim-in anim-fade anim-scale"
+              style={{ ["--anim-delay"]: `${index * 150}ms` }}
+            >
+              <div class="text-label-small text-primary uppercase tracking-wider mb-2">
+                {cert.type}
+              </div>
+              <h3 class="text-headline-small mb-1">{cert.name}</h3>
+              <p class="text-body-medium text-on-surface-variant">{cert.org} · {cert.year}</p>
+            </Card>
+          ))
+        }
       </div>
     </div>
   </section>

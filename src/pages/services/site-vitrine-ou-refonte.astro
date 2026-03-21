@@ -13,6 +13,9 @@ import { iTrendingUp } from "@udixio/icons-rounded-400/trending_up";
 import { iChecklist } from "@udixio/icons-rounded-400/checklist";
 import { iKey } from "@udixio/icons-rounded-400/key";
 import { iVerifiedUser } from "@udixio/icons-rounded-400/verified_user";
+import { iStorefront } from "@udixio/icons-rounded-400/storefront";
+import { iGroups } from "@udixio/icons-rounded-400/groups";
+import { iRocketLaunch } from "@udixio/icons-rounded-400/rocket_launch";
 
 const faqItems = [
   {
@@ -32,6 +35,16 @@ const faqItems = [
   {
     question: "Quid du suivi après mise en ligne ?",
     answer: "Un suivi est possible en option, selon vos besoins.",
+  },
+  {
+    question: "Quel est le délai moyen de livraison ?",
+    answer:
+      "En général, 4 à 8 semaines pour un site vitrine selon le périmètre. Un planning détaillé est fourni dès le cadrage.",
+  },
+  {
+    question: "Quelle garantie après la mise en ligne ?",
+    answer:
+      "Une période de corrections est incluse après la mise en ligne pour traiter les ajustements identifiés. Les conditions exactes sont précisées dans le devis.",
   },
 ];
 ---
@@ -210,6 +223,65 @@ const faqItems = [
             ))
           }
         </div>
+      </div>
+    </div>
+  </section>
+
+  {/* POUR QUI ? */}
+  <section class="py-24 bg-surface-container-low">
+    <div class="section text-center">
+      <span class="sub-title anim-in anim-fade">Audience</span>
+      <h2 class="text-headline-large text-on-surface mb-4 anim-in anim-fade anim-delay-150">
+        Ce service est fait pour vous si…
+      </h2>
+      <p class="text-title-medium text-on-surface-variant max-w-2xl mx-auto mb-12 anim-in anim-fade anim-delay-300">
+        Que vous partiez de zéro ou d'un site existant à remettre à niveau, nous
+        cadrons une solution adaptée à votre réalité.
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {
+          [
+            {
+              icon: iStorefront,
+              title: "Artisans & commerçants",
+              description:
+                "Votre activité mérite un site qui inspire confiance et vous amène des clients locaux qualifiés.",
+              containerClass: "bg-tertiary-container",
+              iconClass: "fill-on-tertiary-container",
+            },
+            {
+              icon: iGroups,
+              title: "TPE & PME locales",
+              description:
+                "Votre site actuel est daté, peu performant ou ne reflète plus votre offre. Il est temps de le remettre à niveau.",
+              containerClass: "bg-primary-container",
+              iconClass: "fill-on-primary-container",
+            },
+            {
+              icon: iRocketLaunch,
+              title: "Nouveaux projets",
+              description:
+                "Vous lancez votre activité et avez besoin d'une présence web professionnelle dès le départ.",
+              containerClass: "bg-secondary-container",
+              iconClass: "fill-on-secondary-container",
+            },
+          ].map((persona, index) => (
+            <div
+              class="bg-surface-container rounded-3xl border border-outline-variant/40 p-8 flex flex-col items-center gap-5 text-center anim-in anim-fade anim-slide-from-bottom"
+              style={{ ["--anim-delay"]: `${index * 150}ms` }}
+            >
+              <div
+                class={`w-16 h-16 rounded-full flex items-center justify-center ${persona.containerClass}`}
+              >
+                <Icon icon={persona.icon} className={`w-8 h-8 ${persona.iconClass}`} />
+              </div>
+              <div>
+                <h3 class="text-headline-small mb-2">{persona.title}</h3>
+                <p class="text-body-medium text-on-surface-variant">{persona.description}</p>
+              </div>
+            </div>
+          ))
+        }
       </div>
     </div>
   </section>
