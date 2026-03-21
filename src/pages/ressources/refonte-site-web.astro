@@ -1,87 +1,107 @@
 ---
 import Layout from "@layouts/Layout.astro";
-import {Button} from "@udixio/ui-react";
+import { Button } from "@udixio/ui-react";
 import Faq from "@components/sections/Faq.astro";
 
-export const prerender = false
+export const prerender = false;
 
-return Astro.redirect('/')
+return Astro.redirect("/");
 
 const faqItems = [
-    {
-        question: "Quand faut-il refondre un site ?",
-        answer: "Quand les messages ne sont plus clairs, que le site ne reflète plus votre activité, ou qu'il devient difficile à faire évoluer.",
-    },
-    {
-        question: "Combien de temps prend une refonte ?",
-        answer: "Cela dépend du périmètre. Un planning clair est établi dès le départ, avec des étapes validées.",
-    },
-    {
-        question: "Faut-il repartir de zéro ?",
-        answer: "Pas toujours. Un diagnostic permet de définir ce qui doit être conservé, simplifié ou reconstruit.",
-    },
+  {
+    question: "Quand faut-il refondre un site ?",
+    answer:
+      "Quand les messages ne sont plus clairs, que le site ne reflète plus votre activité, ou qu'il devient difficile à faire évoluer.",
+  },
+  {
+    question: "Combien de temps prend une refonte ?",
+    answer:
+      "Cela dépend du périmètre. Un planning clair est établi dès le départ, avec des étapes validées.",
+  },
+  {
+    question: "Faut-il repartir de zéro ?",
+    answer:
+      "Pas toujours. Un diagnostic permet de définir ce qui doit être conservé, simplifié ou reconstruit.",
+  },
 ];
 ---
 
-<Layout seo={{
+<Layout
+  seo={{
     title: "Refonte de site web : étapes, délais, risques • Udixio",
-    description: "Un plan de route clair pour refondre un site sans dérives : cadrage, design, développement, livraison.",
-}}>
-    <section class="section">
-        <div class="max-width padding-x">
-            <h1 class="text-display-small md:text-display-large">Refonte de site web : étapes, délais, risques</h1>
-            <p class="text-body-large mt-6 max-w-prose">La refonte n'est pas qu'un nouveau design. C'est une remise à
-                plat structurée pour retrouver clarté et efficacité.</p>
-        </div>
-    </section>
+    description:
+      "Un plan de route clair pour refondre un site sans dérives : cadrage, design, développement, livraison.",
+  }}
+>
+  <section class="section">
+    <div class="max-width padding-x">
+      <h1 class="text-display-small md:text-display-medium">
+        Refonte de site web : étapes, délais, risques
+      </h1>
+      <p class="text-body-large mt-6 max-w-prose">
+        La refonte n'est pas qu'un nouveau design. C'est une remise à plat
+        structurée pour retrouver clarté et efficacité.
+      </p>
+    </div>
+  </section>
 
-    <section class="section">
-        <div class="max-width padding-x">
-            <h2 class="text-display-small">Les signes qu'une refonte est nécessaire</h2>
-            <ul class="mt-6 list-disc pl-6 text-body-large max-w-prose">
-                <li>messages confus ou trop techniques</li>
-                <li>site difficile à faire évoluer</li>
-                <li>parcours utilisateur peu clair</li>
-                <li>manque de crédibilité</li>
-            </ul>
-        </div>
-    </section>
+  <section class="section">
+    <div class="max-width padding-x">
+      <h2 class="text-display-small">
+        Les signes qu'une refonte est nécessaire
+      </h2>
+      <ul class="mt-6 list-disc pl-6 text-body-large max-w-prose">
+        <li>messages confus ou trop techniques</li>
+        <li>site difficile à faire évoluer</li>
+        <li>parcours utilisateur peu clair</li>
+        <li>manque de crédibilité</li>
+      </ul>
+    </div>
+  </section>
 
-    <section class="section">
-        <div class="max-width padding-x">
-            <h2 class="text-display-small">Une refonte maîtrisée en 5 étapes</h2>
-            <ol class="mt-6 grid gap-4 text-body-large max-w-prose">
-                <li>1) Cadrage : objectifs, contraintes et périmètre</li>
-                <li>2) Architecture : parcours et structure des pages</li>
-                <li>3) Design : maquettes lisibles et validées</li>
-                <li>4) Développement & tests</li>
-                <li>5) Livraison & passation</li>
-            </ol>
-            <div class="mt-8 flex flex-wrap gap-4">
-                <Button className="w-fit" href="/methode" label="Voir la méthode"/>
-                <Button className="w-fit" variant="outlined" href="/services/site-vitrine-ou-refonte"
-                        label="Voir l'offre"/>
-            </div>
-        </div>
-    </section>
+  <section class="section">
+    <div class="max-width padding-x">
+      <h2 class="text-display-small">Une refonte maîtrisée en 5 étapes</h2>
+      <ol class="mt-6 grid gap-4 text-body-large max-w-prose">
+        <li>1) Cadrage : objectifs, contraintes et périmètre</li>
+        <li>2) Architecture : parcours et structure des pages</li>
+        <li>3) Design : maquettes lisibles et validées</li>
+        <li>4) Développement & tests</li>
+        <li>5) Livraison & passation</li>
+      </ol>
+      <div class="mt-8 flex flex-wrap gap-4">
+        <Button className="w-fit" href="/methode" label="Voir la méthode" />
+        <Button
+          className="w-fit"
+          variant="outlined"
+          href="/services/site-vitrine-ou-refonte"
+          label="Voir l'offre"
+        />
+      </div>
+    </div>
+  </section>
 
-    <section class="section">
-        <div class="max-width padding-x">
-            <h2 class="text-display-small">Les risques à éviter</h2>
-            <ul class="mt-6 list-disc pl-6 text-body-large max-w-prose">
-                <li>un périmètre flou</li>
-                <li>des validations tardives</li>
-                <li>une dépendance sur les accès ou les contenus</li>
-            </ul>
-        </div>
-    </section>
+  <section class="section">
+    <div class="max-width padding-x">
+      <h2 class="text-display-small">Les risques à éviter</h2>
+      <ul class="mt-6 list-disc pl-6 text-body-large max-w-prose">
+        <li>un périmètre flou</li>
+        <li>des validations tardives</li>
+        <li>une dépendance sur les accès ou les contenus</li>
+      </ul>
+    </div>
+  </section>
 
-    <Faq title="FAQ" items={faqItems}/>
+  <Faq title="FAQ" items={faqItems} />
 
-    <section class="section">
-        <div class="max-width padding-x">
-            <p class="text-body-large">Vous envisagez une refonte ?</p>
-            <Button className="mt-6 w-fit" href="/contact" label="Demander un diagnostic"/>
-        </div>
-    </section>
+  <section class="section">
+    <div class="max-width padding-x">
+      <p class="text-body-large">Vous envisagez une refonte ?</p>
+      <Button
+        className="mt-6 w-fit"
+        href="/contact"
+        label="Demander un diagnostic"
+      />
+    </div>
+  </section>
 </Layout>

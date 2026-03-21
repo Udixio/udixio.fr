@@ -1,17 +1,12 @@
 import { defineConfig } from "@udixio/ui-react";
-import { getRotatedHue } from "@udixio/theme";
 
 export default defineConfig({
-  sourceColor: "#246d50",
+  sourceColor: "#42764c",
   palettes: {
     // tertiary: "#D58A4E",
 
     tertiary: ({ sourceColor }) => ({
-      hue: getRotatedHue(
-        sourceColor,
-        [0, 20, 71, 161, 333, 360],
-        [-40, 48, -32, 40, -32],
-      ),
+      hue: 175,
       chroma: sourceColor.chroma * 0.75,
     }),
     success: "#4CAF50",

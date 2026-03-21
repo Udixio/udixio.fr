@@ -1,21 +1,36 @@
 ---
 import Layout from "@layouts/Layout.astro";
-import {Button} from "@udixio/ui-react";
+import { Button } from "@udixio/ui-react";
 ---
 
-<Layout menu={true} seo={{
+<Layout
+  menu={true}
+  seo={{
     noindex: true,
     title: "Création de site internet • Udixio",
-    description: "Page en cours de mise à jour. Retrouvez l'ensemble de nos services et notre méthode.",
-}}>
-    <section class="section">
-        <div class="max-width padding-x">
-            <h1 class="text-display-small md:text-display-large">Création de site internet</h1>
-            <p class="text-body-large mt-6 max-w-prose">Cette page est en cours de mise à jour. Retrouvez l'ensemble de nos services et notre méthode pour choisir la meilleure approche pour votre projet.</p>
-            <div class="mt-8 flex flex-wrap gap-4">
-                <Button className="w-fit" href="/services" label="Voir nos services" />
-                <Button className="w-fit" variant="outlined" href="/methode" label="Voir notre méthode" />
-            </div>
-        </div>
-    </section>
+    description:
+      "Page en cours de mise à jour. Retrouvez l'ensemble de nos services et notre méthode.",
+  }}
+>
+  <section class="section">
+    <div class="max-width padding-x">
+      <h1 class="text-display-small md:text-display-medium">
+        Création de site internet
+      </h1>
+      <p class="text-body-large mt-6 max-w-prose">
+        Cette page est en cours de mise à jour. Retrouvez l'ensemble de nos
+        services et notre méthode pour choisir la meilleure approche pour votre
+        projet.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-4">
+        <Button className="w-fit" href="/services" label="Voir nos services" />
+        <Button
+          className="w-fit"
+          variant="outlined"
+          href="/methode"
+          label="Voir notre méthode"
+        />
+      </div>
+    </div>
+  </section>
 </Layout>

@@ -13,6 +13,7 @@ import { ProcessStickyScroll } from "@components/home/modern/ProcessStickyScroll
 import { QAStickyScroll } from "@components/home/modern/QAStickyScroll";
 import { ProofsGrid } from "@components/home/modern/ProofsGrid";
 import { FaqAccordion } from "@components/home/modern/FaqAccordion";
+import CtaSection from "@components/sections/CtaSection.astro";
 import { Card } from "@/components/Card";
 import { Underline } from "@components/Underline";
 import { Icon } from "@udixio/ui-react";
@@ -43,6 +44,7 @@ import { icon } from "@fortawesome/fontawesome-svg-core";
 import { motion } from "motion/react";
 import { iClose } from "@udixio/icons-rounded-400/close";
 import { iCheck } from "@udixio/icons-rounded-400/check";
+import { SectionPadding } from "@/components/SectionPadding";
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -499,11 +501,11 @@ anim-delay-200
   </section>
 
   {/* 03. NOTRE RÉPONSE - DARK MODE IMMERSION */}
-  <section class="section">
+  <SectionPadding as="section" start client:idle>
     <Card
-      className="section dark bg-surface-container-high  text-on-surface shadow-xl/30"
+      className=" dark bg-surface-container-high rounded-b-none  text-on-surface shadow-xl/30 padding"
     >
-      <div class="text-center mb-24">
+      <div class="text-center mb-24 mt-8">
         <span class="sub-title">Notre approche</span>
         <h2 class="text-headline-large md:text-headline-large">
           Vos objectifs d'abord :<br /><span class="text-gradient"
@@ -516,7 +518,7 @@ anim-delay-200
       </div>
       <QAStickyScroll client:visible />
     </Card>
-  </section>
+  </SectionPadding>
 
   {/* 04. PREUVES */}
   <section class="section py-32">
@@ -772,8 +774,8 @@ anim-delay-200
   </section>
 
   {/* 05b. DUO FONDATEUR - COMPACT TEAM CARD */}
-  <section class="section py-24 bg-surface-container-low">
-    <div class="max-width padding-x">
+  <section class="py-24 bg-surface-container-low">
+    <div class="section">
       <div
         class="max-w-5xl mx-auto bg-surface rounded-3xl p-8 md:p-12 shadow-sm border border-outline-variant/30 flex flex-col md:flex-row items-center gap-12"
       >
@@ -842,13 +844,11 @@ anim-delay-200
   </section>
 
   {/* 05. BENTO GRID - RESOURCES & ENGAGEMENTS */}
-  <section class="section py-32 bg-surface-container">
-    <div class="max-width padding-x">
+  <section class="py-32 bg-surface-container">
+    <div class="section">
       <h2 class="text-headline-large mb-16">Ressources & éco‑conception</h2>
 
-      <div
-        class="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-6 h-auto md:h-[800px]"
-      >
+      <div class="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-6 h-auto">
         {/* Promesse Principale (Large) */}
         <Card
           className="md:col-span-2 md:row-span-1 bg-secondary-container text-on-secondary-container p-12  flex flex-col justify-between"
@@ -911,7 +911,7 @@ anim-delay-200
         {/* Eco 2 - Indicateurs */}
         <Card
           variant="outlined"
-          className="bg-surface-container p-8 rounded-4xl flex flex-col justify-between group"
+          className="bg-surface-container p-8  flex flex-col justify-between group"
         >
           <div class="absolute top-0 right-0 p-4 opacity-50">
             <span class="transition-all duration-500">
@@ -939,8 +939,8 @@ anim-delay-200
             <Button
               href="/realisations"
               label="Voir des exemples"
-              variant="text"
-              className="text-tertiary!"
+              variant="outlined"
+              className="w-fit"
             />
           </div>
         </Card>
@@ -984,21 +984,13 @@ anim-delay-200
     </div>
   </section>
 
-  {/* 07. CTA FINAL - ULTRA MINIMAL */}
-  <section class="section py-36 relative overflow-hidden">
-    <div class="absolute inset-0 bg-primary opacity-5 skew-y-3 scale-110"></div>
-    <div class="max-width padding-x relative z-10 text-center">
-      <h2 class="text-headline-medium mb-8">
-        Prêt à échanger sur votre projet ?
-      </h2>
-      <p class="text-body-largetext-on-surface-variant mb-12 max-w-2xl mx-auto">
-        Décrivez-nous votre besoin, on vous répond rapidement avec un premier
-        retour concret.
-      </p>
-      <div class="flex justify-center gap-6">
-        <Button href="/contact" shape="squared" label="Nous contacter" />
-        <Button href="/services" label="Nos services" variant="outlined" />
-      </div>
-    </div>
-  </section>
+  {/* 07. CTA FINAL */}
+  <CtaSection
+    title="Prêt à échanger sur votre projet ?"
+    description="Décrivez-nous votre besoin, on vous répond rapidement avec un premier retour concret."
+    primaryLabel="Nous contacter"
+    primaryHref="/contact"
+    secondaryLabel="Nos services"
+    secondaryHref="/services"
+  />
 </Layout>

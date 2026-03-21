@@ -1,5 +1,6 @@
 ---
 import { Button } from "@udixio/ui-react";
+import { Card } from "../Card";
 
 interface Props {
   title: string;
@@ -20,28 +21,31 @@ const {
 } = Astro.props;
 ---
 
-<section class="section py-36 relative overflow-hidden">
-  <div class="absolute inset-0 bg-primary opacity-5 skew-y-3 scale-110"></div>
-  <div class="max-width padding-x relative z-10 text-center">
-    <h2 class="text-headline-medium mb-8">{title}</h2>
-    {
-      description && (
-        <p class="text-title-medium text-on-surface-variant mb-12 max-w-2xl mx-auto">
-          {description}
-        </p>
-      )
-    }
-    <div class="flex justify-center gap-6 flex-wrap">
-      <Button href={primaryHref} shape="squared" label={primaryLabel} />
+<section class="">
+  <Card
+    className="section min-h-[50vh] bg-primary-container text-on-primary-container flex items-center relative z-10 text-center justify-center"
+  >
+    <div>
+      <h2 class="text-headline-medium mb-8">{title}</h2>
       {
-        secondaryLabel && secondaryHref && (
-          <Button
-            href={secondaryHref}
-            label={secondaryLabel}
-            variant="outlined"
-          />
+        description && (
+          <p class="text-title-medium text-on-surface-variant mb-12 max-w-2xl mx-auto">
+            {description}
+          </p>
         )
       }
+      <div class="flex justify-center gap-6 flex-wrap">
+        <Button href={primaryHref} shape="squared" label={primaryLabel} />
+        {
+          secondaryLabel && secondaryHref && (
+            <Button
+              href={secondaryHref}
+              label={secondaryLabel}
+              variant="outlined"
+            />
+          )
+        }
+      </div>
     </div>
-  </div>
+  </Card>
 </section>

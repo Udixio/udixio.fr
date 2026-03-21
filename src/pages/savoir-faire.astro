@@ -1,0 +1,56 @@
+---
+import Layout from "@layouts/Layout.astro";
+import { Button } from "@udixio/ui-react";
+import { Hero } from "@components/Hero";
+import CtaSection from "@components/sections/CtaSection.astro";
+---
+
+<Layout
+  seo={{
+    title: "Notre savoir-faire — Technologies & expertise • Udixio",
+    description:
+      "Découvrez les technologies, les pratiques et l'expertise technique d'Udixio pour vos projets web.",
+    noindex: true,
+  }}
+  background={false}
+>
+  <Hero client:load>
+    <div class="flex-1 flex flex-col justify-between gap-12">
+      <div>
+        <span class="sub-title">Savoir-faire</span>
+        <h1
+          class="max-w-2xl text-display-medium text-on-surface-variant anim-fade anim-slide-from-left anim-duration-1000 ease-out anim-delay-100"
+        >
+          Notre expertise, <span class="text-gradient"
+            >au service de votre projet</span
+          >
+        </h1>
+      </div>
+      <div>
+        <p
+          class="text-body-large max-w-96 mb-12 anim-fade anim-slide-from-left anim-duration-1000 ease-out anim-delay-200"
+        >
+          Cette page est en cours de construction. En attendant, découvrez notre
+          méthode de travail ou nos réalisations.
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <Button href="/methode" shape="squared" label="Notre méthode" />
+          <Button
+            href="/realisations"
+            label="Nos réalisations"
+            variant="outlined"
+          />
+        </div>
+      </div>
+    </div>
+  </Hero>
+
+  <CtaSection
+    title="Un projet en tête ?"
+    description="Décrivez-nous votre besoin, on vous répond rapidement."
+    primaryLabel="Demander un diagnostic"
+    primaryHref="/contact"
+    secondaryLabel="Voir nos services"
+    secondaryHref="/services"
+  />
+</Layout>

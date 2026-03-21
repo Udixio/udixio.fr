@@ -81,8 +81,8 @@ importers:
         specifier: ^2.1.17
         version: 2.1.17
       '@udixio/ui-react':
-        specifier: ^2.10.9
-        version: 2.10.9(@types/react@19.2.4)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        specifier: ^2.10.10
+        version: 2.10.10(@types/react@19.2.4)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       aos:
         specifier: ^2.3.4
         version: 2.3.4
@@ -1861,8 +1861,8 @@ packages:
     resolution: {integrity: sha512-9scMYx8SYXBDzR4v6Kz+4hExCrKGgLqlI19zhNnluQXElVdE3riRfpb5981j07zcio8qFj3VTSfL505WdlCTqQ==}
     hasBin: true
 
-  '@udixio/ui-react@2.10.9':
-    resolution: {integrity: sha512-+MtEjtlZZsTZO3Mt/8lkY1eTBgGYD5FAGwbeV/41pcEoiXw+tB25jqnXNqKFNDC2xONe2PYcyzH/ORZgW5/44A==}
+  '@udixio/ui-react@2.10.10':
+    resolution: {integrity: sha512-nWwkbTZw0fpB8B53CfEJ/I73B9EonbRINI9PvwtRhLMqEB/wBIJDVJ0GECPwxhLYivMBMbhNNJNY+Nlefx3uCg==}
     peerDependencies:
       react: '>19.0.0'
       react-dom: '>19.0.0'
@@ -7075,7 +7075,7 @@ snapshots:
       tailwindcss: 4.1.17
       unplugin: 2.3.10
 
-  '@udixio/ui-react@2.10.9(@types/react@19.2.4)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
+  '@udixio/ui-react@2.10.10(@types/react@19.2.4)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
     dependencies:
       '@fortawesome/fontawesome-svg-core': 7.1.0
       '@fortawesome/free-regular-svg-icons': 7.1.0

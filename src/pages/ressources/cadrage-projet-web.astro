@@ -1,73 +1,91 @@
 ---
 import Layout from "@layouts/Layout.astro";
-import {Button} from "@udixio/ui-react";
+import { Button } from "@udixio/ui-react";
 import Faq from "@components/sections/Faq.astro";
 
-export const prerender = false
+export const prerender = false;
 
-return Astro.redirect('/')
+return Astro.redirect("/");
 
 const faqItems = [
-    {
-        question: "Que signifie cadrer un projet web ?",
-        answer: "Clarifier objectifs, contraintes, périmètre et priorités avant de produire quoi que ce soit.",
-    },
-    {
-        question: "Pourquoi c'est indispensable ?",
-        answer: "Parce que le cadrage évite les dérives de budget, de délais et les malentendus.",
-    },
-    {
-        question: "Qu'est-ce qu'on obtient à la fin du cadrage ?",
-        answer: "Une synthèse claire, un plan d'action et des étapes validées.",
-    },
+  {
+    question: "Que signifie cadrer un projet web ?",
+    answer:
+      "Clarifier objectifs, contraintes, périmètre et priorités avant de produire quoi que ce soit.",
+  },
+  {
+    question: "Pourquoi c'est indispensable ?",
+    answer:
+      "Parce que le cadrage évite les dérives de budget, de délais et les malentendus.",
+  },
+  {
+    question: "Qu'est-ce qu'on obtient à la fin du cadrage ?",
+    answer: "Une synthèse claire, un plan d'action et des étapes validées.",
+  },
 ];
 ---
 
-<Layout seo={{
+<Layout
+  seo={{
     title: "Cadrage de projet web : méthode simple • Udixio",
-    description: "Le cadrage est la clé d'un projet web maîtrisé : objectifs, périmètre, validations, priorités.",
-}}>
-    <section class="section">
-        <div class="max-width padding-x">
-            <h1 class="text-display-small md:text-display-large">Cadrage de projet web : méthode simple</h1>
-            <p class="text-body-large mt-6 max-w-prose">Le cadrage, c'est ce qui évite les surprises : un cadre clair
-                avant d'avancer.</p>
-        </div>
-    </section>
+    description:
+      "Le cadrage est la clé d'un projet web maîtrisé : objectifs, périmètre, validations, priorités.",
+  }}
+>
+  <section class="section">
+    <div class="max-width padding-x">
+      <h1 class="text-display-small md:text-display-medium">
+        Cadrage de projet web : méthode simple
+      </h1>
+      <p class="text-body-large mt-6 max-w-prose">
+        Le cadrage, c'est ce qui évite les surprises : un cadre clair avant
+        d'avancer.
+      </p>
+    </div>
+  </section>
 
-    <section class="section">
-        <div class="max-width padding-x">
-            <h2 class="text-display-small">Ce que couvre un bon cadrage</h2>
-            <ul class="mt-6 list-disc pl-6 text-body-large max-w-prose">
-                <li>objectifs et priorités</li>
-                <li>périmètre et contraintes</li>
-                <li>planning et validations</li>
-                <li>rôles et responsabilités</li>
-            </ul>
-        </div>
-    </section>
+  <section class="section">
+    <div class="max-width padding-x">
+      <h2 class="text-display-small">Ce que couvre un bon cadrage</h2>
+      <ul class="mt-6 list-disc pl-6 text-body-large max-w-prose">
+        <li>objectifs et priorités</li>
+        <li>périmètre et contraintes</li>
+        <li>planning et validations</li>
+        <li>rôles et responsabilités</li>
+      </ul>
+    </div>
+  </section>
 
-    <section class="section">
-        <div class="max-width padding-x">
-            <h2 class="text-display-small">Les bénéfices concrets</h2>
-            <ul class="mt-6 list-disc pl-6 text-body-large max-w-prose">
-                <li>des décisions lisibles</li>
-                <li>un projet maîtrisé</li>
-                <li>moins d'allers-retours inutiles</li>
-            </ul>
-            <div class="mt-8 flex flex-wrap gap-4">
-                <Button className="w-fit" href="/services" label="Voir nos services"/>
-                <Button className="w-fit" variant="outlined" href="/methode" label="Voir la méthode"/>
-            </div>
-        </div>
-    </section>
+  <section class="section">
+    <div class="max-width padding-x">
+      <h2 class="text-display-small">Les bénéfices concrets</h2>
+      <ul class="mt-6 list-disc pl-6 text-body-large max-w-prose">
+        <li>des décisions lisibles</li>
+        <li>un projet maîtrisé</li>
+        <li>moins d'allers-retours inutiles</li>
+      </ul>
+      <div class="mt-8 flex flex-wrap gap-4">
+        <Button className="w-fit" href="/services" label="Voir nos services" />
+        <Button
+          className="w-fit"
+          variant="outlined"
+          href="/methode"
+          label="Voir la méthode"
+        />
+      </div>
+    </div>
+  </section>
 
-    <Faq title="FAQ" items={faqItems}/>
+  <Faq title="FAQ" items={faqItems} />
 
-    <section class="section">
-        <div class="max-width padding-x">
-            <p class="text-body-large">Besoin d'un cadrage clair ?</p>
-            <Button className="mt-6 w-fit" href="/contact" label="Demander un diagnostic"/>
-        </div>
-    </section>
+  <section class="section">
+    <div class="max-width padding-x">
+      <p class="text-body-large">Besoin d'un cadrage clair ?</p>
+      <Button
+        className="mt-6 w-fit"
+        href="/contact"
+        label="Demander un diagnostic"
+      />
+    </div>
+  </section>
 </Layout>
