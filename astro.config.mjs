@@ -73,7 +73,11 @@ export default defineConfig({
         plugins: [
             vitePlugin(),
             tailwindcss()
-        ]
+        ],
+        server: {
+            host: true,
+            allowedHosts: ["8b55-2001-861-3482-2610-e5ab-5c43-fe37-372.ngrok-free.app"]
+        }
     },
     adapter: vercel()
 });

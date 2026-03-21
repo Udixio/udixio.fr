@@ -91,34 +91,34 @@ const jsonLd = {
 
 const faqItems = [
   {
-    question: "Combien coûte un site sur-mesure pour PME ?",
+    question: "Combien coûte un site sur mesure pour une PME ?",
     answer:
-      "Un site vitrine complet démarre généralement à parit de 2500€. Avant de signer, nous vous remettons un devis détaillé avec une estimation claire du retour sur investissement et garantie d'aucune surprise financière.",
+      "Un site vitrine complet démarre généralement à partir de 2 500 €. Avant tout engagement, nous vous remettons un devis détaillé avec un périmètre clair.",
   },
   {
-    question: "Avez-vous une agence physique à Amiens ou Le Havre ?",
+    question: "Êtes-vous basés à Amiens ou au Havre ?",
     answer:
-      "Notre ancrage local nous permet de vous accompagner directement en Normandie et dans les Hauts-de-France (notamment autour du Havre et d'Amiens). Nous cadrons chaque projet de visu ou en visio avec vos équipes.",
+      "Nous intervenons en Normandie et dans les Hauts-de-France, notamment autour du Havre et d’Amiens. Les échanges se font en présentiel ou en visio selon vos besoins.",
   },
   {
-    question: "Est-ce que je reste propriétaire du site et de son code ?",
+    question: "Suis-je propriétaire du site et de son code ?",
     answer:
-      "Absolument. Contrairement aux solutions propriétaires (Wix, solutions d'agences fermées), le code source, l'hébergement et toutes les bases de données vous appartiennent à 100%.",
+      "Oui. Le code source, l’hébergement et les données vous appartiennent. Vous n’êtes pas dépendant d’une solution propriétaire.",
   },
   {
-    question: "Générez-vous réellement des leads supplémentaires ?",
+    question: "Un site peut-il vraiment générer des leads ?",
     answer:
-      "Oui. Toute notre démarche vise à optimiser votre acquisition de leads. Le SEO technique, le design et le copywriting sont pensés en priorité pour transformer un visiteur en client qualifié.",
+      "Oui, à condition qu’il soit bien conçu. SEO technique, structure des pages et contenus sont pensés pour attirer et convertir des prospects qualifiés.",
   },
   {
     question: "Que se passe-t-il après la mise en ligne ?",
     answer:
-      "Nous proposons une phase d'hypercare pour stabiliser le lancement, puis nous pouvons définir des engagements de disponibilité (SLA) via des forfaits de maintenance, afin d'assurer l'évolution continue du projet.",
+      "Nous assurons une phase de suivi après le lancement, puis proposons si besoin de la maintenance et des évolutions selon vos objectifs.",
   },
   {
-    question: "Puis-je récupérer mes accès et changer de prestataire ?",
+    question: "Puis-je changer de prestataire facilement ?",
     answer:
-      "Oui. La portabilité est totale et notre politique de réversibilité garantit une documentation claire pour ne jamais dépendre uniquement de nous.",
+      "Oui. Vous disposez de tous les accès et d’une documentation suffisante pour reprendre le projet ou le confier à un autre prestataire.",
   },
 ];
 ---
@@ -623,92 +623,80 @@ anim-delay-200
     </div>
   </section>
 
-  {/* 04b. INVESTISSEMENT & MAITRISE */}
-  {/* 04b. INVESTISSEMENT & MAITRISE - TRANSPARENCY PANEL */}
+  {/* 04b. INVESTISSEMENT */}
   <section class="section py-24 bg-surface">
     <div class="max-width padding-x">
-      <div class="bg-surface-container p-8 md:p-12 rounded-[2.5rem]">
+      <div class="bg-surface-container p-8 md:p-12 rounded-4xl">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
+            <span class="sub-title">Investissement</span>
             <h2
               class="text-headline-medium md:text-headline-large text-on-surface mb-6"
             >
-              Transparence totale<br />sur l'investissement.
+              Des bases claires pour comprendre ce que vous payez.
             </h2>
             <p class="text-title-medium text-on-surface-variant mb-8">
-              Pas de devis flous ou de "frais de dossier" obscurs. Chaque poste
-              est détaillé, chaque choix est expliqué.
+              Selon votre projet, voici les périmètres habituels. Pas de frais
+              de dossier, pas d'abonnement imposé.
             </p>
             <Button
               href="/services"
-              label="Détail des prestations"
+              label="Voir le détail"
               variant="outlined"
-              className="bg-surface"
+              className="w-fit"
             />
           </div>
 
-          {/* Bill Breakdown Visual */}
+          {/* Bill Breakdown */}
           <div
-            class="bg-surface rounded-2xl p-6 shadow-sm border border-outline-variant/30 font-mono text-body-medium"
+            class="bg-surface rounded-2xl p-6 border border-outline-variant/30 font-mono text-body-medium"
           >
-            <div
-              class="flex justify-between border-b border-outline-variant/30 pb-4 mb-4 text-on-surface-variant uppercase tracking-wider text-label-small"
-            >
-              <span>Poste</span>
-              <span>Statut</span>
-            </div>
             <div class="space-y-4">
               <div class="flex justify-between items-center">
-                <span class="font-bold text-on-surface"
-                  >Site Vitrine Performant</span
-                >
+                <span class="text-on-surface">Site vitrine performant</span>
                 <span
                   class="bg-tertiary-container text-on-tertiary-container px-2 py-1 rounded text-label-small whitespace-nowrap"
-                  >Dès 2500€</span
+                  >Dès 2 500€</span
                 >
               </div>
               <p
-                class="text-body-small italic opacity-80 mb-4 pb-4 border-b border-outline-variant/30"
+                class="text-body-small text-on-surface-variant pb-4 border-b border-outline-variant/30"
               >
-                Idéal TPE/PME. Audit commercial, SEO technique, UI sur-mesure et
-                Formation inclus.
+                Pour TPE/PME : audit, SEO technique, design sur-mesure et
+                formation inclus.
               </p>
 
               <div class="flex justify-between items-center">
-                <span class="font-bold text-on-surface"
-                  >Application / E-commerce</span
-                >
+                <span class="text-on-surface">Application / e-commerce</span>
                 <span
-                  class="bg-tertiary-container text-on-tertiary-container px-2 py-1 rounded text-label-small whitespace-nowrap"
-                  >Sur devis (Dès 5k€)</span
+                  class="bg-surface-container text-on-surface-variant px-2 py-1 rounded text-label-small whitespace-nowrap border border-outline-variant/40"
+                  >À partir de 5 000€</span
                 >
               </div>
               <p
-                class="text-body-small italic opacity-80 mb-4 pb-4 border-b border-outline-variant/30"
+                class="text-body-small text-on-surface-variant pb-4 border-b border-outline-variant/30"
               >
-                Plateforme métier complexe, portail client sur-mesure, ou tunnel
-                d'achat complet.
+                Plateforme métier, espace client ou tunnel d'achat sur-mesure.
               </p>
 
-              <div class="flex justify-between items-center opacity-80">
-                <span class="font-bold text-on-surface"
-                  >Maintenance & Évolutions</span
-                >
+              <div class="flex justify-between items-center">
+                <span class="text-on-surface">Maintenance & évolutions</span>
                 <span
-                  class="border border-outline-variant px-2 py-1 rounded text-label-small whitespace-nowrap"
-                  >SUR DEVIS (SLA)</span
+                  class="bg-surface-container text-on-surface-variant px-2 py-1 rounded text-label-small whitespace-nowrap border border-outline-variant/40"
+                  >Sur devis</span
                 >
               </div>
-              <p class="text-body-small italic opacity-60">
-                Temps de réponse garanti, mises à jour techniques et suivi
-                continuel.
+              <p class="text-body-small text-on-surface-variant">
+                Support, mises à jour et évolutions selon vos besoins.
               </p>
             </div>
             <div
-              class="mt-6 pt-4 border-t border-outline-variant/30 flex justify-between items-center text-headline-small text-primary font-sans font-bold"
+              class="mt-6 pt-4 border-t border-outline-variant/30 flex justify-between items-center"
             >
-              <span>Frais ou Coûts cachés</span>
-              <span>0€</span>
+              <span class="text-on-surface-variant text-body-medium"
+                >Frais cachés</span
+              >
+              <span class="text-headline-small text-primary">0€</span>
             </div>
           </div>
         </div>
@@ -716,79 +704,70 @@ anim-delay-200
     </div>
   </section>
 
-  {/* 04c. ANTI-DEPENDANCE - KEYS DELIVERED */}
+  {/* 04c. ANTI-DEPENDANCE */}
   <section class="section py-24 bg-surface">
     <div class="max-width padding-x text-center">
+      <span class="sub-title">Indépendance</span>
       <h2 class="text-headline-large text-on-surface mb-6">
         Vous gardez les clés.
       </h2>
       <p
         class="text-title-medium text-on-surface-variant max-w-2xl mx-auto mb-16"
       >
-        Chez Udixio, pas de "lock-in" propriétaire. Vous êtes chez vous. Voici
-        ce que vous récupérez à la fin du projet :
+        Aucun verrou propriétaire. Votre site vous appartient dès la livraison.
       </p>
 
-      <div class="flex flex-wrap justify-center gap-8">
-        {/* Key Card 1 */}
-        <div
-          class="w-64 aspect-[3/4] bg-surface-container rounded-3xl border border-outline-variant/40 p-6 flex flex-col items-center justify-center shadow-lg"
-        >
-          <div
-            class="w-20 h-20 bg-secondary-container rounded-full flex items-center justify-center mb-6"
-          >
-            <Icon
-              icon={iFolder}
-              className="w-10 h-10 fill-on-secondary-container"
-            />
-          </div>
-          <h3 class="text-headline-small mb-2">Code Source</h3>
-          <p class="text-body-small text-on-surface-variant">
-            Dépôt Git complet
-          </p>
-        </div>
-
-        {/* Key Card 2 */}
-        <div
-          class="w-64 aspect-[3/4] bg-surface-container rounded-3xl border border-outline-variant/40 p-6 flex flex-col items-center justify-center shadow-lg relative z-10 scale-105 border-primary/20"
-        >
-          <div
-            class="w-20 h-20 bg-primary-container rounded-full flex items-center justify-center mb-6"
-          >
-            <Icon icon={iKey} className="w-10 h-10 fill-on-primary-container" />
-          </div>
-          <h3 class="text-headline-small mb-2">Accès Admin</h3>
-          <p class="text-body-small text-on-surface-variant">
-            Contrôle total du CMS
-          </p>
-        </div>
-
-        {/* Key Card 3 */}
-        <div
-          class="w-64 aspect-[3/4] bg-surface-container rounded-3xl border border-outline-variant/40 p-6 flex flex-col items-center justify-center shadow-lg"
-        >
-          <div
-            class="w-20 h-20 bg-tertiary-container rounded-full flex items-center justify-center mb-6"
-          >
-            <Icon
-              icon={iCloud}
-              className="w-10 h-10 fill-on-tertiary-container"
-            />
-          </div>
-          <h3 class="text-headline-small mb-2">Hébergement</h3>
-          <p class="text-body-small text-on-surface-variant">
-            Propriété directe
-          </p>
-        </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {
+          [
+            {
+              icon: iFolder,
+              containerClass: "bg-secondary-container",
+              iconClass: "fill-on-secondary-container",
+              title: "Code source complet",
+              desc: "Dépôt Git accessible et exploitable",
+            },
+            {
+              icon: iKey,
+              containerClass: "bg-primary-container",
+              iconClass: "fill-on-primary-container",
+              title: "Accès administrateur",
+              desc: "Contrôle total du CMS",
+            },
+            {
+              icon: iCloud,
+              containerClass: "bg-tertiary-container",
+              iconClass: "fill-on-tertiary-container",
+              title: "Hébergement",
+              desc: "Propriété directe, sans dépendance",
+            },
+          ].map((item) => (
+            <div class="bg-surface-container rounded-3xl border border-outline-variant/40 p-8 flex flex-col items-center gap-5">
+              <div
+                class={`w-16 h-16 rounded-full flex items-center justify-center ${item.containerClass}`}
+              >
+                <Icon
+                  icon={item.icon}
+                  className={`w-8 h-8 ${item.iconClass}`}
+                />
+              </div>
+              <div>
+                <h3 class="text-headline-small mb-2">{item.title}</h3>
+                <p class="text-body-medium text-on-surface-variant">
+                  {item.desc}
+                </p>
+              </div>
+            </div>
+          ))
+        }
       </div>
 
-      <div class="mt-16">
-        <Button
-          href="/methode"
-          label="Notre politique de réversibilité"
-          variant="text"
-        />
-      </div>
+      <Button
+        href="/methode"
+        label="Voir la politique de réversibilité"
+        variant="tonal"
+        className="mt-12 w-fit mx-auto"
+      />
     </div>
   </section>
 
@@ -799,13 +778,13 @@ anim-delay-200
         class="max-w-5xl mx-auto bg-surface rounded-3xl p-8 md:p-12 shadow-sm border border-outline-variant/30 flex flex-col md:flex-row items-center gap-12"
       >
         <div class="flex-1">
-          <h2 class="text-headline-medium text-on-surface mb-4">
-            Un duo impliqué,<br />en accès direct.
+          <h2 class="text-headline-medium mb-4">
+            Deux experts, sans intermédiaire
           </h2>
-          <p class="text-body-large text-on-surface-variant mb-8">
-            Vous ne déléguez pas à une structure impersonnelle. Vous confiez
-            votre projet à un duo d'experts (stratégie et tech) qui le pilote en
-            direct, du premier café jusqu'à la mise en ligne.
+          <p class="text-body-medium text-on-surface-variant mb-8">
+            Votre projet est pris en charge par deux experts, de la réflexion à
+            la mise en ligne. Vous échangez directement avec ceux qui le
+            conçoivent et le réalisent.
           </p>
           <Button
             href="/agence"
@@ -871,8 +850,8 @@ anim-delay-200
         class="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-6 h-auto md:h-[800px]"
       >
         {/* Promesse Principale (Large) */}
-        <div
-          class="md:col-span-2 md:row-span-1 bg-primary text-on-primary p-12 rounded-4xl flex flex-col justify-between transition-transform duration-500"
+        <Card
+          className="md:col-span-2 md:row-span-1 bg-secondary-container text-on-secondary-container p-12  flex flex-col justify-between"
         >
           <h3 class="text-headline-medium">Hébergement responsable</h3>
           <div class="flex justify-between items-end">
@@ -880,20 +859,18 @@ anim-delay-200
               Choix d'infrastructures sobres, sécurité maîtrisée et impact
               limité, sans compromis sur la performance.
             </p>
-            <span class="text-headline-large opacity-20 font-mono">01</span>
+            <span class="text-headline-large opacity-20">01</span>
           </div>
-        </div>
+        </Card>
 
         {/* Eco 1 - Sobriété */}
-        <div
-          class="bg-surface p-8 rounded-4xl border border-tertiary/30 relative overflow-hidden flex flex-col justify-between group"
+        <Card
+          variant="outlined"
+          className="bg-surface-container p-8 rounded-4xl   flex flex-col justify-between group"
         >
           <div class="absolute top-0 right-0 p-4 opacity-50">
             <span class="transition-all duration-500">
-              <Icon
-                icon={iForest}
-                className="w-8 h-8 fill-on-surface-variant/40"
-              />
+              <Icon icon={iForest} className="w-8 h-8 fill-outline" />
             </span>
           </div>
           <div>
@@ -918,22 +895,23 @@ anim-delay-200
               className="text-tertiary!"
             />
           </div>
-        </div>
+        </Card>
 
         {/* Engagement 2 */}
-        <div
-          class="bg-surface-container-high p-8 rounded-4xl flex flex-col justify-center text-center items-center gap-6"
+        <Card
+          className="bg-surface-container-high p-8  flex flex-col justify-center text-center items-center gap-6"
         >
           <h4 class="text-headline-medium text-primary">Autonomie Client</h4>
           <p class="text-body-large">
             Code source et accès vous appartiennent.
           </p>
           <Button href="/methode" label="En savoir plus" variant="outlined" />
-        </div>
+        </Card>
 
         {/* Eco 2 - Indicateurs */}
-        <div
-          class="bg-surface p-8 rounded-4xl border border-tertiary/30 relative overflow-hidden flex flex-col justify-between group"
+        <Card
+          variant="outlined"
+          className="bg-surface-container p-8 rounded-4xl flex flex-col justify-between group"
         >
           <div class="absolute top-0 right-0 p-4 opacity-50">
             <span class="transition-all duration-500">
@@ -965,11 +943,11 @@ anim-delay-200
               className="text-tertiary!"
             />
           </div>
-        </div>
+        </Card>
 
         {/* Resource 2 (Large) */}
-        <div
-          class="md:col-span-2 bg-on-surface p-12 rounded-4xl flex flex-col md:flex-row gap-12 items-center transition-transform duration-500"
+        <Card
+          className="md:col-span-2 dark bg-surface-container text-on-surface p-12  flex flex-col md:flex-row gap-12 items-center "
         >
           <div class="flex-1">
             <h3 class="text-headline-medium mb-4 text-primary-fixed">
@@ -979,12 +957,8 @@ anim-delay-200
               Evitez les dérives budgétaires avec notre guide de stratégie.
             </p>
           </div>
-          <Button
-            href="/ressources"
-            label="Lire le guide"
-            className="bg-primary-fixed text-on-primary-fixed whitespace-nowrap"
-          />
-        </div>
+          <Button href="/ressources" label="Lire le guide" variant="outlined" />
+        </Card>
       </div>
     </div>
   </section>
@@ -993,18 +967,15 @@ anim-delay-200
   <section class="section py-32">
     <div class="max-width padding-x grid md:grid-cols-2 gap-16">
       <div>
-        <span
-          class="text-headline-large font-black text-outline-variant/20 block -mb-8"
-          >?</span
-        >
-        <h2 class="text-headline-large mb-8">Questions<br />utiles</h2>
+        <h2 class="text-headline-large mb-8">Vous avez des questions ?</h2>
         <p class="text-title-medium text-on-surface-variant mb-8">
-          Sans tabou. On répond à tout avant même le premier appel.
+          Voici des réponses concrètes avant d’aller plus loin.
         </p>
         <Button
           href="/contact"
           label="Poser une autre question"
           variant="outlined"
+          className="w-fit"
         />
       </div>
       <div>
@@ -1017,55 +988,16 @@ anim-delay-200
   <section class="section py-36 relative overflow-hidden">
     <div class="absolute inset-0 bg-primary opacity-5 skew-y-3 scale-110"></div>
     <div class="max-width padding-x relative z-10 text-center">
-      <h2 class="text-headline-large mb-8">Prêt à structurer votre projet ?</h2>
-      <p
-        class="text-headline-small text-on-surface-variant mb-12 max-w-2xl mx-auto"
-      >
-        Racontez-nous vos enjeux autour d'un (vrai ou faux) café. C'est Florian
-        qui vous répondra en premier 😉.
+      <h2 class="text-headline-medium mb-8">
+        Prêt à échanger sur votre projet ?
+      </h2>
+      <p class="text-body-largetext-on-surface-variant mb-12 max-w-2xl mx-auto">
+        Décrivez-nous votre besoin, on vous répond rapidement avec un premier
+        retour concret.
       </p>
       <div class="flex justify-center gap-6">
-        <div class="group relative">
-          <div
-            class="absolute -inset-1 bg-linear-to-r from-primary to-tertiary rounded-lg blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"
-          >
-          </div>
-          <div class="relative group">
-            <Button
-              href="/contact"
-              shape="squared"
-              label="Obtenir un diagnostic"
-              className="bg-primary text-on-primary"
-            />
-            {/* Annotation Arrow - Absolute Position (Top Right) */}
-            <div
-              class="hidden sm:flex flex-col items-center absolute bottom-full -right-4 translate-x-1/4 mb-1 w-max pointer-events-none group-hover:-translate-y-1 transition-transform duration-300"
-            >
-              <span
-                class="text-tertiary font-bold -rotate-6 text-title-small"
-                style="font-family: 'Comforter', cursive;"
-              >
-                (100% Offert !)
-              </span>
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                class="text-tertiary -mt-1 -ml-8"
-              >
-                <path
-                  d="M18 2C16 8 10 16 4 20M4 20L10 18M4 20L8 14"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"></path>
-              </svg>
-            </div>
-          </div>
-        </div>
-        <Button href="/services" label="Nos services" variant="text" />
+        <Button href="/contact" shape="squared" label="Nous contacter" />
+        <Button href="/services" label="Nos services" variant="outlined" />
       </div>
     </div>
   </section>
