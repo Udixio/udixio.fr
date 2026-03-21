@@ -101,6 +101,7 @@ const ShowcaseItem = ({ project }: { project: ProjectProps }) => {
       {/* Background Image */}
       <div className="absolute inset-0 bg-surface-container-low animate-pulse" />
       <img
+        loading="lazy"
         src={project.images.background.src}
         alt={project.title}
         className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"

@@ -248,8 +248,8 @@ const faqItems = [
         {/* Sticky Title */}
         <div class="md:col-span-4 relative">
           <div class="sticky top-32">
-            <span class="sub-title">Le processus</span>
-            <h2 class="text-headline-large leading-tight">
+            <span class="sub-title anim-in anim-fade">Le processus</span>
+            <h2 class="text-headline-large leading-tight anim-in anim-fade anim-slide-from-left anim-duration-1000 anim-delay-150">
               Une <span class="text-gradient">collaboration directe</span>, du
               cadrage au lancement.
             </h2>
@@ -326,9 +326,9 @@ const faqItems = [
     <div class="section">
       <div class="flex flex-col md:flex-row gap-16 md:gap-32 items-start">
         <div class="md:w-1/3 sticky top-32">
-          <span class="sub-title">Les bases</span>
-          <h2 class="text-headline-large">Ce qui fait la différence</h2>
-          <p class="mt-8 text-body-large max-w-xs anim-fade-up">
+          <span class="sub-title anim-in anim-fade">Les bases</span>
+          <h2 class="text-headline-large anim-in anim-fade anim-slide-from-left anim-duration-1000 anim-delay-150">Ce qui fait la différence</h2>
+          <p class="mt-8 text-body-large max-w-xs anim-in anim-fade anim-delay-300">
             Beaucoup de projets bloquent ou dérivent sans cadre simple. Ce qui
             change vraiment :
           </p>
@@ -402,16 +402,16 @@ anim-delay-200
     <div class="max-width padding-x">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
         <div>
-          <h2 class="text-headline-large text-on-surface">
+          <h2 class="text-headline-large text-on-surface anim-in anim-fade anim-slide-from-left">
             Comment nous créons votre site
           </h2>
-          <p class="text-title-medium text-on-surface-variant mt-6">
+          <p class="text-title-medium text-on-surface-variant mt-6 anim-in anim-fade anim-delay-150">
             Chaque étape de votre projet web est accompagnée par nos deux
             experts, du plan stratégique à la mise en ligne. Vous gardez la
             maîtrise et la visibilité, avec un accompagnement complet et
             cohérent.
           </p>
-          <div class="mt-8 flex flex-wrap gap-4">
+          <div class="mt-8 flex flex-wrap gap-4 anim-in anim-fade anim-delay-300">
             <Button href="/services" label="Voir nos services" />
             <Button href="/methode" label="Notre méthode" variant="outlined" />
           </div>
@@ -419,7 +419,7 @@ anim-delay-200
 
         {/* Visual Checklist Card */}
         <Card
-          className="bg-secondary-container text-on-secondary-container p-8"
+          className="bg-secondary-container text-on-secondary-container p-8 anim-in anim-fade anim-slide-from-right"
         >
           <div
             class="absolute top-4 right-4 bg-primary/10 text-primary px-3 py-1 rounded-full text-label-small uppercase"
@@ -454,7 +454,7 @@ anim-delay-200
   {/* 02c. BENEFICES - VALUE CHIPS */}
   <section class="section py-24 bg-surface">
     <div class="max-w-4xl mb-12">
-      <h2 class="text-headline-large">
+      <h2 class="text-headline-large anim-in anim-fade anim-slide-from-left">
         Des bénéfices concrets.<br />
         <span class="text-gradient">Sans détour.</span>
       </h2>
@@ -487,8 +487,8 @@ anim-delay-200
             description:
               "Des indicateurs clairs pour transformer votre site en levier de croissance mesurable.",
           },
-        ].map((benefit) => (
-          <Card variant="outlined" className="group p-6">
+        ].map((benefit, index) => (
+          <Card variant="outlined" className="group p-6 anim-in anim-fade anim-scale" style={{ ["--anim-delay"]: `${index * 100}ms` }}>
             <div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-6 transition-transform">
               <Icon icon={benefit.icon} className="w-6 h-6 fill-current" />
             </div>
@@ -506,13 +506,13 @@ anim-delay-200
       className=" dark bg-surface-container-high rounded-b-none  text-on-surface shadow-xl/30 padding"
     >
       <div class="text-center mb-24 mt-8">
-        <span class="sub-title">Notre approche</span>
-        <h2 class="text-headline-large md:text-headline-large">
+        <span class="sub-title anim-in anim-fade">Notre approche</span>
+        <h2 class="text-headline-large md:text-headline-large anim-in anim-fade anim-slide-from-bottom anim-duration-1000 anim-delay-150">
           Vos objectifs d'abord :<br /><span class="text-gradient"
             >des réponses claires</span
           >
         </h2>
-        <p class="text-title-medium mt-6">
+        <p class="text-title-medium mt-6 anim-in anim-fade anim-delay-300">
           Des choix utiles, expliqués et alignés avec vos priorités.
         </p>
       </div>
@@ -525,11 +525,11 @@ anim-delay-200
     <div class="max-width padding-x">
       <div class="flex justify-between items-end mb-12">
         <div>
-          <span class="sub-title">Preuves</span>
-          <h2 class="text-headline-large text-on-surface">
+          <span class="sub-title anim-in anim-fade">Preuves</span>
+          <h2 class="text-headline-large text-on-surface anim-in anim-fade anim-slide-from-left anim-duration-1000 anim-delay-150">
             Des preuves concrètes,<br />pas des promesses
           </h2>
-          <p class="text-title-medium text-on-surface-variant mt-4 max-w-2xl">
+          <p class="text-title-medium text-on-surface-variant mt-4 max-w-2xl anim-in anim-fade anim-delay-300">
             Des indicateurs mesurables, accessibles et vérifiables sur chaque
             projet livré.
           </p>
@@ -537,21 +537,21 @@ anim-delay-200
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-24">
-        <Card variant="outlined" className="p-6  bg-surface-container-low">
+        <Card variant="outlined" className="p-6  bg-surface-container-low anim-in anim-fade anim-slide-from-bottom">
           <h3 class="text-headline-small mb-2">Qualité mesurée</h3>
           <p class="text-body-medium text-on-surface-variant">
             Performance, SEO, accessibilité : des scores partagés pour chaque
             projet livré.
           </p>
         </Card>
-        <Card variant="outlined" className="p-6  bg-surface-container-low">
+        <Card variant="outlined" className="p-6  bg-surface-container-low anim-in anim-fade anim-slide-from-bottom anim-delay-150">
           <h3 class="text-headline-small mb-2">Audits vérifiables</h3>
           <p class="text-body-medium text-on-surface-variant">
             Lighthouse, Core Web Vitals : des résultats lisibles pour évaluer la
             qualité.
           </p>
         </Card>
-        <Card variant="outlined" className="p-6  bg-surface-container-low">
+        <Card variant="outlined" className="p-6  bg-surface-container-low anim-in anim-fade anim-slide-from-bottom anim-delay-300">
           <h3 class="text-headline-small mb-2">Sobriété maîtrisée</h3>
           <p class="text-body-medium text-on-surface-variant">
             Poids de page et indicateurs environnementaux suivis pour limiter
@@ -613,7 +613,7 @@ anim-delay-200
 
       <section class="section">
         <div class="flex items-center justify-between mb-10">
-          <h3 class="text-headline-large">Dernières réalisations</h3>
+          <h3 class="text-headline-large anim-in anim-fade anim-slide-from-left">Dernières réalisations</h3>
           <Button
             href="/realisations"
             label="Voir nos réalisations"
@@ -631,13 +631,13 @@ anim-delay-200
       <div class="bg-surface-container p-8 md:p-12 rounded-4xl">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
-            <span class="sub-title">Investissement</span>
+            <span class="sub-title anim-in anim-fade">Investissement</span>
             <h2
-              class="text-headline-medium md:text-headline-large text-on-surface mb-6"
+              class="text-headline-medium md:text-headline-large text-on-surface mb-6 anim-in anim-fade anim-slide-from-left anim-duration-1000 anim-delay-150"
             >
               Des bases claires pour comprendre ce que vous payez.
             </h2>
-            <p class="text-title-medium text-on-surface-variant mb-8">
+            <p class="text-title-medium text-on-surface-variant mb-8 anim-in anim-fade anim-delay-300">
               Selon votre projet, voici les périmètres habituels. Pas de frais
               de dossier, pas d'abonnement imposé.
             </p>
@@ -651,7 +651,7 @@ anim-delay-200
 
           {/* Bill Breakdown */}
           <div
-            class="bg-surface rounded-2xl p-6 border border-outline-variant/30 font-mono text-body-medium"
+            class="bg-surface rounded-2xl p-6 border border-outline-variant/30 font-mono text-body-medium anim-in anim-fade anim-slide-from-right"
           >
             <div class="space-y-4">
               <div class="flex justify-between items-center">
@@ -709,12 +709,12 @@ anim-delay-200
   {/* 04c. ANTI-DEPENDANCE */}
   <section class="section py-24 bg-surface">
     <div class="max-width padding-x text-center">
-      <span class="sub-title">Indépendance</span>
-      <h2 class="text-headline-large text-on-surface mb-6">
+      <span class="sub-title anim-in anim-fade">Indépendance</span>
+      <h2 class="text-headline-large text-on-surface mb-6 anim-in anim-fade anim-delay-150">
         Vous gardez les clés.
       </h2>
       <p
-        class="text-title-medium text-on-surface-variant max-w-2xl mx-auto mb-16"
+        class="text-title-medium text-on-surface-variant max-w-2xl mx-auto mb-16 anim-in anim-fade anim-delay-300"
       >
         Aucun verrou propriétaire. Votre site vous appartient dès la livraison.
       </p>
@@ -743,8 +743,8 @@ anim-delay-200
               title: "Hébergement",
               desc: "Propriété directe, sans dépendance",
             },
-          ].map((item) => (
-            <div class="bg-surface-container rounded-3xl border border-outline-variant/40 p-8 flex flex-col items-center gap-5">
+          ].map((item, index) => (
+            <div class="bg-surface-container rounded-3xl border border-outline-variant/40 p-8 flex flex-col items-center gap-5 anim-in anim-fade anim-slide-from-bottom" style={{ ["--anim-delay"]: `${index * 150}ms` }}>
               <div
                 class={`w-16 h-16 rounded-full flex items-center justify-center ${item.containerClass}`}
               >
@@ -780,10 +780,10 @@ anim-delay-200
         class="max-w-5xl mx-auto bg-surface rounded-3xl p-8 md:p-12 shadow-sm border border-outline-variant/30 flex flex-col md:flex-row items-center gap-12"
       >
         <div class="flex-1">
-          <h2 class="text-headline-medium mb-4">
+          <h2 class="text-headline-medium mb-4 anim-in anim-fade anim-slide-from-left">
             Deux experts, sans intermédiaire
           </h2>
-          <p class="text-body-medium text-on-surface-variant mb-8">
+          <p class="text-body-medium text-on-surface-variant mb-8 anim-in anim-fade anim-delay-150">
             Votre projet est pris en charge par deux experts, de la réflexion à
             la mise en ligne. Vous échangez directement avec ceux qui le
             conçoivent et le réalisent.
@@ -799,7 +799,7 @@ anim-delay-200
         <div class="flex flex-col sm:flex-row gap-6">
           {/* Joel */}
           <div
-            class="flex items-center gap-4 bg-surface-container-lowest p-4 rounded-2xl border border-outline-variant/30"
+            class="flex items-center gap-4 bg-surface-container-lowest p-4 rounded-2xl border border-outline-variant/30 anim-in anim-fade anim-slide-from-left anim-delay-300"
           >
             <div
               class="h-14 w-14 rounded-full bg-surface-container-high flex items-center justify-center text-title-medium font-bold border border-outline-variant"
@@ -820,7 +820,7 @@ anim-delay-200
 
           {/* Florian */}
           <div
-            class="flex items-center gap-4 bg-surface-container-lowest p-4 rounded-2xl border border-outline-variant/30"
+            class="flex items-center gap-4 bg-surface-container-lowest p-4 rounded-2xl border border-outline-variant/30 anim-in anim-fade anim-slide-from-right anim-delay-500"
           >
             <div
               class="h-14 w-14 rounded-full bg-surface-container-high flex items-center justify-center text-title-medium font-bold border border-outline-variant"
@@ -846,12 +846,12 @@ anim-delay-200
   {/* 05. BENTO GRID - RESOURCES & ENGAGEMENTS */}
   <section class="py-32 bg-surface-container">
     <div class="section">
-      <h2 class="text-headline-large mb-16">Ressources & éco‑conception</h2>
+      <h2 class="text-headline-large mb-16 anim-in anim-fade anim-slide-from-left">Ressources & éco‑conception</h2>
 
       <div class="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-6 h-auto">
         {/* Promesse Principale (Large) */}
         <Card
-          className="md:col-span-2 md:row-span-1 bg-secondary-container text-on-secondary-container p-12  flex flex-col justify-between"
+          className="md:col-span-2 md:row-span-1 bg-secondary-container text-on-secondary-container p-12  flex flex-col justify-between anim-in anim-fade anim-slide-from-left"
         >
           <h3 class="text-headline-medium">Hébergement responsable</h3>
           <div class="flex justify-between items-end">
@@ -866,7 +866,7 @@ anim-delay-200
         {/* Eco 1 - Sobriété */}
         <Card
           variant="outlined"
-          className="bg-surface-container p-8 rounded-4xl   flex flex-col justify-between group"
+          className="bg-surface-container p-8 rounded-4xl   flex flex-col justify-between group anim-in anim-fade anim-slide-from-right anim-delay-150"
         >
           <div class="absolute top-0 right-0 p-4 opacity-50">
             <span class="transition-all duration-500">
@@ -899,7 +899,7 @@ anim-delay-200
 
         {/* Engagement 2 */}
         <Card
-          className="bg-surface-container-high p-8  flex flex-col justify-center text-center items-center gap-6"
+          className="bg-surface-container-high p-8  flex flex-col justify-center text-center items-center gap-6 anim-in anim-fade anim-slide-from-left anim-delay-150"
         >
           <h4 class="text-headline-medium text-primary">Autonomie Client</h4>
           <p class="text-body-large">
@@ -911,7 +911,7 @@ anim-delay-200
         {/* Eco 2 - Indicateurs */}
         <Card
           variant="outlined"
-          className="bg-surface-container p-8  flex flex-col justify-between group"
+          className="bg-surface-container p-8  flex flex-col justify-between group anim-in anim-fade anim-scale anim-delay-300"
         >
           <div class="absolute top-0 right-0 p-4 opacity-50">
             <span class="transition-all duration-500">
@@ -947,7 +947,7 @@ anim-delay-200
 
         {/* Resource 2 (Large) */}
         <Card
-          className="md:col-span-2 dark bg-surface-container-highest text-on-surface p-12  flex flex-col md:flex-row gap-12 items-center "
+          className="md:col-span-2 dark bg-surface-container-highest text-on-surface p-12  flex flex-col md:flex-row gap-12 items-center anim-in anim-fade anim-slide-from-right anim-delay-300"
         >
           <div class="flex-1">
             <h3 class="text-headline-medium mb-4 text-primary-fixed">
@@ -967,18 +967,18 @@ anim-delay-200
   <section class="section py-32">
     <div class="max-width padding-x grid md:grid-cols-2 gap-16">
       <div>
-        <h2 class="text-headline-large mb-8">Vous avez des questions ?</h2>
-        <p class="text-title-medium text-on-surface-variant mb-8">
+        <h2 class="text-headline-large mb-8 anim-in anim-fade anim-slide-from-left">Vous avez des questions ?</h2>
+        <p class="text-title-medium text-on-surface-variant mb-8 anim-in anim-fade anim-delay-150">
           Voici des réponses concrètes avant d’aller plus loin.
         </p>
         <Button
           href="/contact"
           label="Poser une autre question"
           variant="outlined"
-          className="w-fit"
+          className="w-fit anim-in anim-fade anim-delay-300"
         />
       </div>
-      <div>
+      <div class="anim-in anim-fade anim-slide-from-right">
         <FaqAccordion client:visible items={faqItems} />
       </div>
     </div>
