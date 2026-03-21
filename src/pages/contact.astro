@@ -1,56 +1,123 @@
 ---
 import Layout from "@layouts/Layout.astro";
-import {FormContact} from "@components/FormContact";
-import {Button} from "@udixio/ui-react";
-import Faq from "@components/sections/Faq.astro";
+import { FormContact } from "@components/FormContact";
+import { Button, Icon } from "@udixio/ui-react";
+import { Card } from "@/components/Card";
+import { Hero } from "@components/Hero";
+import { SectionPadding } from "@components/SectionPadding";
+import FaqSection from "@components/sections/FaqSection.astro";
+import CtaSection from "@components/sections/CtaSection.astro";
+import { iChat } from "@udixio/icons-rounded-400/chat";
+import { iBolt } from "@udixio/icons-rounded-400/bolt";
+import { iInfo } from "@udixio/icons-rounded-400/info";
 
 const faqItems = [
-    {
-        question: "Que se passe-t-il après l'envoi ?",
-        answer: "Nous revenons vers vous rapidement pour clarifier le besoin et proposer un cadre d'échange. Pas de pression commerciale.",
-    },
-    {
-        question: "Faut-il un brief complet ?",
-        answer: "Non. Quelques éléments suffisent : objectifs, contexte, contraintes. On vous aide à structurer le reste.",
-    },
-    {
-        question: "Est-ce que vous répondez vite ?",
-        answer: "Oui. En général sous 1 jour ouvré.",
-    },
-    {
-        question: "Je préfère un échange direct, c'est possible ?",
-        answer: "Oui, vous pouvez nous écrire ou nous appeler. Le formulaire est là pour vous simplifier la vie, pas pour vous enfermer.",
-    },
+  {
+    question: "Que se passe-t-il après l'envoi ?",
+    answer:
+      "Nous revenons vers vous rapidement pour clarifier le besoin et proposer un cadre d'échange. Pas de pression commerciale.",
+  },
+  {
+    question: "Faut-il un brief complet ?",
+    answer:
+      "Non. Quelques éléments suffisent : objectifs, contexte, contraintes. On vous aide à structurer le reste.",
+  },
+  {
+    question: "Est-ce que vous répondez vite ?",
+    answer: "Oui. En général sous 1 jour ouvré.",
+  },
+  {
+    question: "Je préfère un échange direct, c'est possible ?",
+    answer:
+      "Oui, vous pouvez nous écrire directement. Le formulaire est là pour vous simplifier la vie, pas pour vous enfermer.",
+  },
 ];
 ---
 
-<Layout seo={{
+<Layout
+  seo={{
     title: "Contact — un échange clair et cadré • Udixio",
-    description: "Parlez-nous de votre projet : on clarifie le besoin, puis on vous propose un cadre simple.",
-}}>
-    <section class="section">
-        <div class="max-width padding-x">
-            <h1 class="text-display-small md:text-display-large">Parlons de votre projet</h1>
-            <h2 class="text-headline-medium mt-8">Un échange clair, sans jargon</h2>
-            <div class="text-body-large mt-6 max-w-prose space-y-4">
-                <p>Décrivez votre contexte, vos objectifs et vos contraintes. Nous vous aidons à cadrer le reste.</p>
-                <p>Vous recevrez un retour rapide pour organiser un échange utile.</p>
-            </div>
-            <div id="contact-form" class="mt-8">
-                <FormContact client:only="react" />
-            </div>
-            <div class="text-body-large mt-8 max-w-prose">
-                <p>Préférez un contact direct ? Écrivez-nous à contact@udixio.fr ou appelez le [téléphone] (du lundi au vendredi, 9h-18h).</p>
-            </div>
+    description:
+      "Parlez-nous de votre projet : on clarifie le besoin, puis on vous propose un cadre simple.",
+  }}
+  background={false}
+>
+  <Hero client:load>
+    <div class="flex-1 flex flex-col md:flex-row gap-12 items-start">
+      <div class="flex-1">
+        <span class="sub-title">Contact</span>
+        <h1
+          class="max-w-xl text-display-large text-on-surface-variant anim-fade anim-slide-from-left anim-duration-1000 ease-out anim-delay-100"
+        >
+          Parlons de votre <span class="text-gradient">projet</span>
+        </h1>
+        <p
+          class="text-body-large mt-8 max-w-96 anim-fade anim-slide-from-left anim-duration-1000 ease-out anim-delay-200"
+        >
+          Un échange clair, sans jargon. Décrivez votre contexte, vos objectifs
+          et vos contraintes.
+        </p>
+        <div class="mt-8 flex flex-col gap-3">
+          {
+            [
+              { icon: iBolt, label: "Réponse sous 1 jour ouvré" },
+              { icon: iInfo, label: "Pas de brief complet nécessaire" },
+              { icon: iChat, label: "Diagnostic gratuit et sans engagement" },
+            ].map((item) => (
+              <div class="flex items-center gap-3 text-body-large text-on-surface-variant">
+                <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                  <Icon icon={item.icon} className="w-4 h-4 fill-current" />
+                </div>
+                {item.label}
+              </div>
+            ))
+          }
         </div>
-    </section>
+      </div>
 
-    <Faq title="FAQ contact" items={faqItems} />
+      <div
+        class="flex-1 w-full anim-fade anim-slide-from-right anim-duration-1000 anim-delay-300"
+      >
+        <Card className="p-8" id="contact-form">
+          <FormContact client:only="react" />
+        </Card>
+      </div>
+    </div>
+  </Hero>
 
-    <section class="section">
-        <div class="max-width padding-x">
-            <p class="text-body-large">Besoin d'un cadre clair ? On vous répond rapidement.</p>
-            <Button className="mt-6 w-fit" href="#contact-form" label="Demander un diagnostic" />
-        </div>
-    </section>
+  {/* CONTACT DIRECT */}
+  <SectionPadding client:visible start end as="section">
+    <div class="py-24 bg-surface-container-low">
+      <div class="section text-center">
+        <h2 class="text-headline-large mb-4">
+          Préférez un <span class="text-gradient">contact direct</span> ?
+        </h2>
+        <p
+          class="text-title-medium text-on-surface-variant max-w-xl mx-auto mb-8"
+        >
+          Écrivez-nous directement à <a
+            href="mailto:contact@udixio.fr"
+            class="text-primary hover:underline">contact@udixio.fr</a
+          >. Disponibles du lundi au vendredi, 9h–18h.
+        </p>
+      </div>
+    </div>
+  </SectionPadding>
+
+  <FaqSection
+    title="FAQ contact"
+    description="Des questions sur la prise de contact ? Voici les réponses les plus courantes."
+    ctaLabel="Envoyer un message"
+    ctaHref="#contact-form"
+    items={faqItems}
+  />
+
+  <CtaSection
+    title="Besoin d'un cadre clair ?"
+    description="On vous répond rapidement. Pas de pression commerciale, juste un échange utile."
+    primaryLabel="Demander un diagnostic"
+    primaryHref="#contact-form"
+    secondaryLabel="Voir nos services"
+    secondaryHref="/services"
+  />
 </Layout>

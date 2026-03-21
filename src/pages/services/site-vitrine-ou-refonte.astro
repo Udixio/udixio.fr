@@ -1,91 +1,300 @@
 ---
 import Layout from "@layouts/Layout.astro";
-import {Button} from "@udixio/ui-react";
-import Faq from "@components/sections/Faq.astro";
+import { Button, Icon } from "@udixio/ui-react";
+import { Card } from "@/components/Card";
+import { Hero } from "@components/Hero";
+import { SectionPadding } from "@components/SectionPadding";
+import FaqSection from "@components/sections/FaqSection.astro";
+import CtaSection from "@components/sections/CtaSection.astro";
+import { iCheckCircleFilled } from "@udixio/icons-rounded-400/filled/check_circle";
+import { iVisibility } from "@udixio/icons-rounded-400/visibility";
+import { iHandshake } from "@udixio/icons-rounded-400/handshake";
+import { iTrendingUp } from "@udixio/icons-rounded-400/trending_up";
+import { iChecklist } from "@udixio/icons-rounded-400/checklist";
+import { iKey } from "@udixio/icons-rounded-400/key";
+import { iVerifiedUser } from "@udixio/icons-rounded-400/verified_user";
 
 const faqItems = [
-    {
-        question: "Que comprend la prestation ?",
-        answer: "Cadrage, architecture de pages, design, intégration, développement, tests et mise en ligne. Le périmètre exact est défini ensemble.",
-    },
-    {
-        question: "Fournissez-vous les contenus ?",
-        answer: "Vous pouvez nous fournir vos contenus. Si besoin, nous vous aidons à les structurer et à les clarifier.",
-    },
-    {
-        question: "Le site m'appartient-il ?",
-        answer: "Oui. Les livrables et les accès sont remis au client.",
-    },
-    {
-        question: "Quid du suivi après mise en ligne ?",
-        answer: "Un suivi est possible en option, selon vos besoins.",
-    },
+  {
+    question: "Que comprend la prestation ?",
+    answer:
+      "Cadrage, architecture de pages, design, intégration, développement, tests et mise en ligne. Le périmètre exact est défini ensemble.",
+  },
+  {
+    question: "Fournissez-vous les contenus ?",
+    answer:
+      "Vous pouvez nous fournir vos contenus. Si besoin, nous vous aidons à les structurer et à les clarifier.",
+  },
+  {
+    question: "Le site m'appartient-il ?",
+    answer: "Oui. Les livrables et les accès sont remis au client.",
+  },
+  {
+    question: "Quid du suivi après mise en ligne ?",
+    answer: "Un suivi est possible en option, selon vos besoins.",
+  },
 ];
 ---
 
-<Layout seo={{
+<Layout
+  seo={{
     title: "Création & refonte de site web • Udixio",
-    description: "Une offre claire pour un site vitrine ou une refonte maîtrisée : cadrage, design, développement, mise en ligne.",
-}}>
-    <section class="section">
-        <div class="max-width padding-x">
-            <h1 class="text-display-small md:text-display-large">Création &amp; refonte de site web</h1>
-            <p class="text-body-large mt-6 max-w-prose">Un site clair, crédible et simple à faire évoluer, avec un cadre sans flou.</p>
-            <Button className="mt-8 w-fit" href="/contact" label="Demander un diagnostic" />
+    description:
+      "Une offre claire pour un site vitrine ou une refonte maîtrisée : cadrage, design, développement, mise en ligne.",
+  }}
+  background={false}
+>
+  <Hero client:load>
+    <div class="flex-1 flex flex-col justify-between gap-12">
+      <div>
+        <span class="sub-title">Site web</span>
+        <h1
+          class="max-w-2xl text-display-large text-on-surface-variant anim-fade anim-slide-from-left anim-duration-1000 ease-out anim-delay-100"
+        >
+          Création & refonte de <span class="text-gradient">site web</span>
+        </h1>
+      </div>
+      <div>
+        <p
+          class="text-body-large max-w-96 mb-12 anim-fade anim-slide-from-left anim-duration-1000 ease-out anim-delay-200"
+        >
+          Un site clair, crédible et simple à faire évoluer, avec un cadre sans
+          flou.
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <Button href="/contact" shape="squared" label="Demander un diagnostic" />
+          <Button href="/methode" label="Notre méthode" variant="outlined" />
         </div>
-    </section>
+      </div>
+    </div>
+  </Hero>
 
-    <section class="section">
-        <div class="max-width padding-x">
-            <h2 class="text-display-small">Le problème que l'on résout</h2>
-            <div class="text-body-large mt-6 max-w-prose space-y-4">
-                <p>Site confus, messages flous, structure vieillissante : tout cela nuit à la crédibilité et aux demandes entrantes.</p>
-                <p>Notre objectif : remettre de l'ordre et construire une base durable.</p>
+  {/* PROBLÈME + APPROCHE */}
+  <SectionPadding client:visible start end as="section">
+    <div class="py-32 bg-surface-container-low">
+      <div class="section">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-24">
+          <div class="md:col-span-4 relative">
+            <div class="sticky top-32">
+              <span class="sub-title">Le problème</span>
+              <h2 class="text-headline-large leading-tight">
+                Des sites qui <span class="text-gradient">nuisent</span> à votre
+                crédibilité
+              </h2>
+              <p class="mt-6 text-body-large text-on-surface-variant">
+                Site confus, messages flous, structure vieillissante. Notre
+                objectif : remettre de l'ordre et construire une base durable.
+              </p>
             </div>
-        </div>
-    </section>
+          </div>
 
-    <section class="section">
-        <div class="max-width padding-x">
-            <h2 class="text-display-small">Notre approche</h2>
-            <ul class="mt-6 list-disc pl-6 text-body-large max-w-prose">
-                <li>cadrage des objectifs et du périmètre</li>
-                <li>architecture claire des pages et parcours</li>
-                <li>design lisible, aligné avec votre image</li>
-                <li>développement fiable et tests</li>
-                <li>mise en ligne et passation</li>
-            </ul>
-            <Button className="mt-8 w-fit" href="/methode" label="Voir la méthode" />
-        </div>
-    </section>
+          <div class="md:col-span-8 space-y-8">
+            <span class="sub-title">Notre approche</span>
+            {
+              [
+                {
+                  number: 1,
+                  title: "Cadrage des objectifs",
+                  description:
+                    "On clarifie vos objectifs, votre cible et le périmètre exact du projet. Rien n'est engagé sans validation.",
+                },
+                {
+                  number: 2,
+                  title: "Architecture claire",
+                  description:
+                    "Architecture de pages et parcours utilisateur pensés pour guider vos visiteurs vers l'action.",
+                },
+                {
+                  number: 3,
+                  title: "Design aligné avec votre image",
+                  description:
+                    "Interface lisible, professionnelle et cohérente avec votre identité visuelle.",
+                },
+                {
+                  number: 4,
+                  title: "Développement fiable & tests",
+                  description:
+                    "Code performant, accessible et testé. Performance Lighthouse et Core Web Vitals optimisés.",
+                },
+                {
+                  number: 5,
+                  title: "Mise en ligne & passation",
+                  description:
+                    "Mise en production maîtrisée. Vous récupérez tous les accès et la documentation.",
+                },
+              ].map((step) => (
+                <div class="group relative pl-8 border-l-2 border-outline-variant transition-colors duration-500 anim-fade-up delay-200">
+                  <span class="text-title-medium absolute -left-[1.35rem] top-0 flex h-10 w-10 items-center justify-center rounded-full bg-surface border-2 border-outline-variant transition-all">
+                    {step.number}
+                  </span>
+                  <h3 class="text-headline-small mb-4 text-on-surface">
+                    {step.title}
+                  </h3>
+                  <p class="text-body-large text-on-surface-variant font-light max-w-lg pb-16">
+                    {step.description}
+                  </p>
+                </div>
+              ))
+            }
 
-    <section class="section">
-        <div class="max-width padding-x">
-            <h2 class="text-display-small">Bénéfices</h2>
-            <ul class="mt-6 list-disc pl-6 text-body-large max-w-prose">
-                <li>un site qui inspire confiance</li>
-                <li>une structure pensée pour la conversion</li>
-                <li>un socle durable et maîtrisé</li>
-            </ul>
+            <Button
+              href="/methode"
+              label="Voir la méthode complète"
+              variant="outlined"
+              className="w-fit"
+            />
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
+  </SectionPadding>
 
-    <section class="section">
-        <div class="max-width padding-x">
-            <h2 class="text-display-small">Investissement</h2>
-            <div class="text-body-large mt-6 max-w-prose space-y-4">
-                <p>Le budget dépend du nombre de pages, du contenu, des intégrations et du niveau de personnalisation.</p>
-                <p>Après un cadrage rapide, nous vous proposons une estimation claire avec des options.</p>
+  {/* BÉNÉFICES */}
+  <section class="py-24 bg-surface">
+      <div class="section">
+        <div class="max-w-4xl mb-12">
+          <span class="sub-title">Bénéfices</span>
+          <h2 class="text-headline-large">
+            Des résultats concrets.<br />
+            <span class="text-gradient">Sans détour.</span>
+          </h2>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {
+            [
+              {
+                icon: iVisibility,
+                title: "Inspirer confiance",
+                description:
+                  "Un site professionnel qui crédibilise votre entreprise auprès des prospects et partenaires.",
+              },
+              {
+                icon: iTrendingUp,
+                title: "Générer des leads",
+                description:
+                  "Structure de pages et SEO optimisés pour transformer vos visiteurs en contacts qualifiés.",
+              },
+              {
+                icon: iHandshake,
+                title: "Maîtriser votre image",
+                description:
+                  "Un design aligné avec votre identité, sans dépendance à des templates génériques.",
+              },
+              {
+                icon: iKey,
+                title: "Garder la main",
+                description:
+                  "Vous êtes propriétaire du code, de l'hébergement et des contenus. Aucun verrou.",
+              },
+              {
+                icon: iVerifiedUser,
+                title: "Base durable",
+                description:
+                  "Construit pour évoluer facilement, sans repartir de zéro à chaque mise à jour.",
+              },
+              {
+                icon: iChecklist,
+                title: "Périmètre maîtrisé",
+                description:
+                  "Vous savez exactement ce qui est inclus, ce qui ne l'est pas, et pourquoi.",
+              },
+            ].map((benefit) => (
+              <Card variant="outlined" className="group p-6">
+                <div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-6">
+                  <Icon icon={benefit.icon} className="w-6 h-6 fill-current" />
+                </div>
+                <h3 class="text-headline-small mb-2">{benefit.title}</h3>
+                <p class="text-on-surface-variant">{benefit.description}</p>
+              </Card>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* INVESTISSEMENT */}
+  <section class="py-24 bg-surface-container-low">
+      <div class="section">
+        <div class="bg-surface-container p-8 md:p-12 rounded-4xl">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <span class="sub-title">Investissement</span>
+              <h2
+                class="text-headline-medium md:text-headline-large text-on-surface mb-6"
+              >
+                Des bases claires pour comprendre ce que vous payez.
+              </h2>
+              <p class="text-title-medium text-on-surface-variant mb-8">
+                Le budget dépend du nombre de pages, du contenu, des
+                intégrations et du niveau de personnalisation. Après un cadrage
+                rapide, nous vous proposons une estimation claire.
+              </p>
+              <Button
+                href="/contact"
+                label="Demander une estimation"
+                variant="outlined"
+                className="w-fit"
+              />
             </div>
-        </div>
-    </section>
 
-    <Faq title="Questions fréquentes" items={faqItems} />
-
-    <section class="section">
-        <div class="max-width padding-x">
-            <p class="text-body-large">Vous voulez un site clair et maîtrisé ?</p>
-            <Button className="mt-6 w-fit" href="/contact" label="Discutons de votre projet" />
+            <div
+              class="bg-surface rounded-2xl p-6 border border-outline-variant/30 font-mono text-body-medium"
+            >
+              <div class="space-y-4">
+                <div class="flex justify-between items-center">
+                  <span class="text-on-surface">Site vitrine performant</span>
+                  <span
+                    class="bg-tertiary-container text-on-tertiary-container px-2 py-1 rounded text-label-small whitespace-nowrap"
+                    >Dès 2 500€</span
+                  >
+                </div>
+                <p
+                  class="text-body-small text-on-surface-variant pb-4 border-b border-outline-variant/30"
+                >
+                  Pour TPE/PME : audit, SEO technique, design sur-mesure et
+                  formation inclus.
+                </p>
+                <div class="flex justify-between items-center">
+                  <span class="text-on-surface">Refonte complète</span>
+                  <span
+                    class="bg-surface-container text-on-surface-variant px-2 py-1 rounded text-label-small whitespace-nowrap border border-outline-variant/40"
+                    >À partir de 3 500€</span
+                  >
+                </div>
+                <p class="text-body-small text-on-surface-variant">
+                  Audit de l'existant, reprise du design et du contenu,
+                  optimisation technique complète.
+                </p>
+              </div>
+              <div
+                class="mt-6 pt-4 border-t border-outline-variant/30 flex justify-between items-center"
+              >
+                <span class="text-on-surface-variant text-body-medium"
+                  >Frais cachés</span
+                >
+                <span class="text-headline-small text-primary">0€</span>
+              </div>
+            </div>
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
+
+  <FaqSection
+    title="Questions fréquentes"
+    description="Voici des réponses concrètes sur cette prestation."
+    items={faqItems}
+  />
+
+  <CtaSection
+    title="Vous voulez un site clair et maîtrisé ?"
+    description="Décrivez-nous votre projet, on vous répond rapidement avec un premier retour concret."
+    primaryLabel="Demander un diagnostic"
+    primaryHref="/contact"
+    secondaryLabel="Voir nos réalisations"
+    secondaryHref="/realisations"
+  />
 </Layout>

@@ -1,54 +1,125 @@
 ---
 import Layout from "@layouts/Layout.astro";
-import {Button} from "@udixio/ui-react";
+import { Button, Icon } from "@udixio/ui-react";
+import { Card } from "@/components/Card";
+import { Hero } from "@components/Hero";
+import { SectionPadding } from "@components/SectionPadding";
 import Realisations from "@components/Realisations.astro";
-import Faq from "@components/sections/Faq.astro";
+import FaqSection from "@components/sections/FaqSection.astro";
+import CtaSection from "@components/sections/CtaSection.astro";
 
 const faqItems = [
-    {
-        question: "Pourquoi n'y a-t-il pas plus de projets clients affichés ?",
-        answer: "Nous lançons l'agence, et certains projets récents ne sont pas encore en ligne ou sont couverts par des accords de confidentialité temporaires. Nous préférons montrer peu de projets mais qui reflètent vraiment notre savoir-faire, plutôt que d'en lister trop tôt. Dans les mois qui viennent, d'autres réalisations client viendront s'ajouter dès qu'elles seront finalisées et publiables.",
-    },
-    {
-        question: "Puis-je contacter vos premiers clients pour avoir leur avis ?",
-        answer: "Si vous le souhaitez, nous pouvons vous mettre en relation avec l'un de nos premiers clients en privé, une fois qu'ils auront donné leur accord. Comme nous débutons, chaque collaboration est précieuse - nous sommes convaincus qu'un dialogue direct vaut toutes les études de cas du monde. Demandez-nous, et nous organiserons cela.",
-    },
-    {
-        question: "Et si mon secteur d'activité n'apparaît pas ici ?",
-        answer: "Pas d'inquiétude : notre expertise est transversale. Les principes qui marchent (beau design, site rapide, messages clairs, etc.) s'appliquent à tous les secteurs. On adore découvrir de nouveaux domaines ! Par ailleurs, notre méthode consiste toujours à faire une recherche sur votre secteur en amont, pour comprendre vos spécificités. Donc même sans exemple direct à vous montrer, on saura s'adapter à votre univers.",
-    },
+  {
+    question: "Pourquoi n'y a-t-il pas plus de projets clients affichés ?",
+    answer:
+      "Nous lançons l'agence, et certains projets récents ne sont pas encore en ligne ou sont couverts par des accords de confidentialité temporaires. Nous préférons montrer peu de projets mais qui reflètent vraiment notre savoir-faire. Dans les mois qui viennent, d'autres réalisations client viendront s'ajouter.",
+  },
+  {
+    question: "Puis-je contacter vos premiers clients pour avoir leur avis ?",
+    answer:
+      "Si vous le souhaitez, nous pouvons vous mettre en relation avec l'un de nos premiers clients en privé, une fois qu'ils auront donné leur accord. Demandez-nous, et nous organiserons cela.",
+  },
+  {
+    question: "Et si mon secteur d'activité n'apparaît pas ici ?",
+    answer:
+      "Pas d'inquiétude : notre expertise est transversale. Les principes qui marchent (beau design, site rapide, messages clairs) s'appliquent à tous les secteurs. Notre méthode consiste toujours à faire une recherche sur votre secteur en amont.",
+  },
 ];
 ---
 
-<Layout seo={{
+<Layout
+  seo={{
     title: "Nos réalisations : démonstrations de notre savoir-faire • Udixio",
-    description: "Un aperçu de projets et de démonstrations internes qui reflètent notre expertise.",
-}}>
-    <section class="section">
-        <div class="max-width padding-x">
-            <h1 class="text-display-small md:text-display-large">Nos réalisations : démonstrations de notre savoir-faire</h1>
-            <h2 class="text-headline-medium mt-6">Un aperçu de ce que nous savons faire</h2>
-            <div class="text-body-large mt-6 max-w-prose space-y-4">
-                <p>En tant que jeune agence, nous sommes fiers de vous montrer quelques projets sur lesquels nous avons travaillé, que ce soit pour nos premiers clients ou des démonstrations internes qui reflètent notre expertise.</p>
-                <p>Chaque réalisation est l'occasion de mettre en avant une problématique et la solution apportée.</p>
-                <p>Ici vous trouverez aussi des outils que nous avons développés nous-mêmes - preuve de notre engagement à innover pour mieux vous servir.</p>
-            </div>
-            <Button className="mt-8 w-fit" href="/contact" label="Discutons de votre projet" />
-        </div>
-    </section>
+    description:
+      "Un aperçu de projets et de démonstrations internes qui reflètent notre expertise.",
+  }}
+  background={false}
+>
+  <Hero client:load>
+    <div class="flex-1 flex flex-col justify-between gap-12">
+      <div>
+        <span class="sub-title">Réalisations</span>
+        <h1
+          class="max-w-2xl text-display-large text-on-surface-variant anim-fade anim-slide-from-left anim-duration-1000 ease-out anim-delay-100"
+        >
+          Démonstrations de notre <span class="text-gradient">savoir-faire</span
+          >
+        </h1>
+      </div>
+      <div>
+        <p
+          class="text-body-large max-w-96 mb-12 anim-fade anim-slide-from-left anim-duration-1000 ease-out anim-delay-200"
+        >
+          Un aperçu de projets sur lesquels nous avons travaillé. Chaque
+          réalisation illustre une problématique et la solution apportée.
+        </p>
+        <Button
+          href="/contact"
+          shape="squared"
+          label="Discutons de votre projet"
+        />
+      </div>
+    </div>
+  </Hero>
 
-    <section class="section">
-        <div class="max-width padding-x">
-            <Realisations />
+  {/* PREUVES */}
+  <section class="py-24 bg-surface-container-low">
+      <div class="section">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {
+            [
+              {
+                title: "Qualité mesurée",
+                desc: "Performance, SEO, accessibilité : des scores partagés pour chaque projet livré.",
+              },
+              {
+                title: "Audits vérifiables",
+                desc: "Lighthouse, Core Web Vitals : des résultats lisibles pour évaluer la qualité.",
+              },
+              {
+                title: "Sobriété maîtrisée",
+                desc: "Poids de page et indicateurs environnementaux suivis pour limiter l'impact.",
+              },
+            ].map((item) => (
+              <Card variant="outlined" className="p-6 bg-surface-container-low">
+                <h3 class="text-headline-small mb-2">{item.title}</h3>
+                <p class="text-body-medium text-on-surface-variant">
+                  {item.desc}
+                </p>
+              </Card>
+            ))
+          }
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <Faq title="Questions fréquentes sur nos références" items={faqItems} />
-
-    <section class="section">
-        <div class="max-width padding-x">
-            <p class="text-body-large">Votre projet pourrait être le prochain sur la liste et bénéficier de toute notre attention.</p>
-            <Button className="mt-6 w-fit" href="/contact" label="Contactez-nous pour devenir notre prochaine réussite" />
+  {/* PROJETS */}
+  <SectionPadding client:visible start end as="section">
+    <div class="py-24 bg-surface">
+      <div class="section">
+        <div class="flex items-center justify-between mb-10">
+          <h2 class="text-headline-large">Nos projets</h2>
         </div>
-    </section>
+        <Realisations />
+      </div>
+    </div>
+  </section>
+
+  <FaqSection
+    title="Questions sur nos références"
+    description="Votre projet pourrait être le prochain sur la liste."
+    ctaLabel="Nous contacter"
+    ctaHref="/contact"
+    items={faqItems}
+  />
+
+  <CtaSection
+    title="Votre projet, notre prochaine réussite."
+    description="Décrivez-nous votre besoin, on vous répond rapidement avec un premier retour concret."
+    primaryLabel="Nous contacter"
+    primaryHref="/contact"
+    secondaryLabel="Voir nos services"
+    secondaryHref="/services"
+  />
 </Layout>

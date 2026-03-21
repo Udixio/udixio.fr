@@ -1,120 +1,321 @@
 ---
 import Layout from "@layouts/Layout.astro";
-import {Button} from "@udixio/ui-react";
-import Faq from "@components/sections/Faq.astro";
+import { Button, Icon } from "@udixio/ui-react";
+import { Card } from "@/components/Card";
+import { Hero } from "@components/Hero";
+import { SectionPadding } from "@components/SectionPadding";
+import FaqSection from "@components/sections/FaqSection.astro";
+import CtaSection from "@components/sections/CtaSection.astro";
+import { iFolder } from "@udixio/icons-rounded-400/folder";
+import { iKey } from "@udixio/icons-rounded-400/key";
+import { iCloud } from "@udixio/icons-rounded-400/cloud";
+import { iCheckCircleFilled } from "@udixio/icons-rounded-400/filled/check_circle";
+
 const faqItems = [
-    {
-        question: "Comment assurez-vous que le projet reste cadré ?",
-        answer: "Chaque étape a des objectifs clairs et des validations. Le périmètre est défini ensemble, et toute évolution est discutée avant d'être engagée.",
-    },
-    {
-        question: "Comment se passent les décisions techniques ?",
-        answer: "Nous expliquons chaque choix avec des mots simples et un impact concret. Rien n'est imposé sans échange.",
-    },
-    {
-        question: "Puis-je demander des modifications en cours de route ?",
-        answer: "Oui. Les ajustements sont possibles à chaque étape. S'il s'agit d'un changement majeur, on le recadre ensemble pour protéger le planning et le budget.",
-    },
-    {
-        question: "Quels sont les délais ?",
-        answer: "Ils dépendent du périmètre. Nous fournissons un planning clair dès le départ, avec des étapes validées ensemble.",
-    },
-    {
-        question: "Que dois-je fournir côté client ?",
-        answer: "Les éléments clés (contenus, visuels, contraintes métier) et vos retours de validation. Nous vous guidons pour que ce soit fluide.",
-    },
-    {
-        question: "À qui appartiennent les livrables et les accès ?",
-        answer: "À vous. Le code, les fichiers et les accès sont remis au client. Vous restez maître de vos outils.",
-    },
-    {
-        question: "Travaillez-vous à distance ?",
-        answer: "Oui, avec des échanges réguliers. Des rendez-vous en présentiel sont possibles dans les Hauts-de-France.",
-    },
-    {
-        question: "Y a-t-il un support après la mise en ligne ?",
-        answer: "Oui, un accompagnement est possible après lancement, selon vos besoins.",
-    },
+  {
+    question: "Comment assurez-vous que le projet reste cadré ?",
+    answer:
+      "Chaque étape a des objectifs clairs et des validations. Le périmètre est défini ensemble, et toute évolution est discutée avant d'être engagée.",
+  },
+  {
+    question: "Comment se passent les décisions techniques ?",
+    answer:
+      "Nous expliquons chaque choix avec des mots simples et un impact concret. Rien n'est imposé sans échange.",
+  },
+  {
+    question: "Puis-je demander des modifications en cours de route ?",
+    answer:
+      "Oui. Les ajustements sont possibles à chaque étape. S'il s'agit d'un changement majeur, on le recadre ensemble pour protéger le planning et le budget.",
+  },
+  {
+    question: "Quels sont les délais ?",
+    answer:
+      "Ils dépendent du périmètre. Nous fournissons un planning clair dès le départ, avec des étapes validées ensemble.",
+  },
+  {
+    question: "Que dois-je fournir côté client ?",
+    answer:
+      "Les éléments clés (contenus, visuels, contraintes métier) et vos retours de validation. Nous vous guidons pour que ce soit fluide.",
+  },
+  {
+    question: "À qui appartiennent les livrables et les accès ?",
+    answer:
+      "À vous. Le code, les fichiers et les accès sont remis au client. Vous restez maître de vos outils.",
+  },
+  {
+    question: "Travaillez-vous à distance ?",
+    answer:
+      "Oui, avec des échanges réguliers. Des rendez-vous en présentiel sont possibles dans les Hauts-de-France.",
+  },
+  {
+    question: "Y a-t-il un support après la mise en ligne ?",
+    answer:
+      "Oui, un accompagnement est possible après lancement, selon vos besoins.",
+  },
 ];
 ---
 
-<Layout seo={{
+<Layout
+  seo={{
     title: "Notre méthode : transparence, rigueur et résultats • Udixio",
-    description: "Une méthode claire en 5 étapes pour cadrer, livrer et vous laisser la maîtrise.",
-}}>
-    <section class="section">
-        <div class="max-width padding-x">
-            <h1 class="text-display-small md:text-display-large">Notre méthode : transparence, rigueur et résultats</h1>
-            <h2 class="text-headline-medium mt-8">Une approche structurée pour sécuriser votre projet</h2>
-            <div class="text-body-large mt-6 max-w-prose space-y-4">
-                <p>Beaucoup de projets web échouent à cause d'un manque de cadrage ou de communication. Chez Udixio, nous avons formalisé une méthode de travail qui élimine les zones d'ombre.</p>
-                <p>Visibilité sur l'avancement, décisions claires, et maîtrise du périmètre.</p>
-                <p>Collaboration, validation continue, pédagogie.</p>
+    description:
+      "Une méthode claire en 5 étapes pour cadrer, livrer et vous laisser la maîtrise.",
+  }}
+  background={false}
+>
+  <Hero client:load>
+    <div class="flex-1 flex flex-col justify-between gap-12">
+      <div>
+        <span class="sub-title">La méthode</span>
+        <h1
+          class="max-w-2xl text-display-large text-on-surface-variant anim-fade anim-slide-from-left anim-duration-1000 ease-out anim-delay-100"
+        >
+          Transparence, rigueur <span class="text-gradient">et résultats</span>
+        </h1>
+      </div>
+      <div>
+        <p
+          class="text-body-large max-w-96 mb-12 anim-fade anim-slide-from-left anim-duration-1000 ease-out anim-delay-200"
+        >
+          Une approche structurée pour sécuriser votre projet. Visibilité sur
+          l'avancement, décisions claires, maîtrise du périmètre.
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <Button href="#etapes" shape="squared" label="Voir les étapes" />
+          <Button
+            href="/contact"
+            label="Demander un échange"
+            variant="outlined"
+          />
+        </div>
+      </div>
+    </div>
+  </Hero>
+
+  {/* LES 5 ÉTAPES */}
+  <SectionPadding client:visible start end as="section" id="etapes">
+    <div class="py-32 bg-surface-container-low">
+      <div class="section">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-24">
+          <div class="md:col-span-4 relative">
+            <div class="sticky top-32">
+              <span class="sub-title">Le processus</span>
+              <h2 class="text-headline-large leading-tight">
+                Une <span class="text-gradient">collaboration directe</span>, du
+                cadrage au lancement.
+              </h2>
+              <p class="mt-6 text-body-large text-on-surface-variant">
+                On avance ensemble, pas à pas. Vous validez chaque étape avant
+                de passer à la suivante.
+              </p>
+              <div class="mt-8 hidden md:block">
+                <svg
+                  class="w-12 h-12 text-primary animate-bounce-slow"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                >
+                  <path d="M12 5v14M5 12l7 7 7-7"></path>
+                </svg>
+              </div>
             </div>
-            <Button className="mt-8 w-fit" href="#etapes" label="Voir les étapes du projet" />
-        </div>
-    </section>
+          </div>
 
-    <section id="etapes" class="section">
-        <div class="max-width padding-x">
-            <h2 class="text-display-small">Nos 5 étapes clés</h2>
-            <div class="mt-8 grid gap-6">
-                <div class="rounded-2xl border border-outline-variant bg-surface-container-low p-6">
-                    <h3 class="text-title-large">Étape 1 - Cadrage</h3>
-                    <p class="text-body-large mt-4">On clarifie objectifs, contraintes et périmètre. Livrables : synthèse de cadrage et plan d'action.</p>
+          <div class="md:col-span-8 space-y-8">
+            {
+              [
+                {
+                  number: 1,
+                  title: "Cadrage",
+                  description:
+                    "On clarifie objectifs, contraintes et périmètre. Livrables : synthèse de cadrage et plan d'action. Rien n'est engagé sans validation.",
+                },
+                {
+                  number: 2,
+                  title: "Design & Structure",
+                  description:
+                    "Architecture des pages et maquettes compréhensibles. Vous validez le design avant que le développement commence.",
+                },
+                {
+                  number: 3,
+                  title: "Développement & Tests",
+                  description:
+                    "Intégration et développement sur une base fiable, avec contrôles de qualité. Accès disponible pour suivre l'avancement.",
+                },
+                {
+                  number: 4,
+                  title: "Livraison",
+                  description:
+                    "Mise en ligne, remise des accès et documentation. Vous gardez la main sur votre site dès le premier jour.",
+                },
+                {
+                  number: 5,
+                  title: "Hypercare",
+                  description:
+                    "On sécurise les premières semaines post-lancement et restons disponibles pour les ajustements nécessaires.",
+                },
+              ].map((step) => (
+                <div class="group relative pl-8 border-l-2 border-outline-variant transition-colors duration-500 anim-fade-up delay-200">
+                  <span class="text-title-medium absolute -left-[1.35rem] top-0 flex h-10 w-10 items-center justify-center rounded-full bg-surface border-2 border-outline-variant transition-all">
+                    {step.number}
+                  </span>
+                  <h3 class="text-headline-small mb-4 text-on-surface">
+                    {step.title}
+                  </h3>
+                  <p class="text-body-large text-on-surface-variant font-light max-w-lg pb-16">
+                    {step.description}
+                  </p>
                 </div>
-                <div class="rounded-2xl border border-outline-variant bg-surface-container-low p-6">
-                    <h3 class="text-title-large">Étape 2 - Design &amp; structure</h3>
-                    <p class="text-body-large mt-4">Architecture des pages et maquettes compréhensibles. Livrables : maquettes validées avant production.</p>
-                </div>
-                <div class="rounded-2xl border border-outline-variant bg-surface-container-low p-6">
-                    <h3 class="text-title-large">Étape 3 - Développement &amp; tests</h3>
-                    <p class="text-body-large mt-4">Intégration et développement sur une base fiable, avec contrôles de qualité avant validation.</p>
-                </div>
-                <div class="rounded-2xl border border-outline-variant bg-surface-container-low p-6">
-                    <h3 class="text-title-large">Étape 4 - Livraison</h3>
-                    <p class="text-body-large mt-4">Mise en ligne, remise des accès et documentation. Vous gardez la main.</p>
-                </div>
-                <div class="rounded-2xl border border-outline-variant bg-surface-container-low p-6">
-                    <h3 class="text-title-large">Étape 5 - Hypercare</h3>
-                    <p class="text-body-large mt-4">On sécurise les premières semaines et on reste disponible si besoin.</p>
-                </div>
+              ))
+            }
+
+            <Button
+              href="/contact"
+              label="Demander un échange"
+              variant="outlined"
+              className="w-fit"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </SectionPadding>
+
+  {/* OUTILS & QUALITÉ */}
+  <section class="py-24 bg-surface">
+      <div class="section">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          <div>
+            <span class="sub-title">Qualité</span>
+            <h2 class="text-headline-large text-on-surface">
+              Des outils et des bonnes pratiques
+            </h2>
+            <p class="text-title-medium text-on-surface-variant mt-6">
+              Suivi partagé, documents clairs et échanges réguliers. Qualité et
+              bonnes pratiques : accessibilité, performance, SEO on-page,
+              sécurité et tests avant mise en ligne.
+            </p>
+            <p class="text-body-large text-on-surface-variant mt-4">
+              Notre code est documenté et conçu pour durer : facile à faire
+              évoluer par n'importe quel développeur compétent.
+            </p>
+          </div>
+
+          <Card
+            className="bg-secondary-container text-on-secondary-container p-8"
+          >
+            <div
+              class="absolute top-4 right-4 bg-primary/10 text-primary px-3 py-1 rounded-full text-label-small uppercase"
+            >
+              Inclus
             </div>
-            <p class="text-body-large mt-8 max-w-prose">On avance ensemble, pas à pas. Vous validez chaque étape.</p>
-            <Button className="mt-8 w-fit" href="/contact" label="Demander un échange" />
+            <ul class="space-y-4 mt-2">
+              {
+                [
+                  "Performance & Core Web Vitals",
+                  "SEO technique on-page",
+                  "Accessibilité WCAG",
+                  "Tests avant mise en ligne",
+                  "Documentation à la livraison",
+                ].map((item) => (
+                  <li class="flex items-center gap-3">
+                    <Icon
+                      className="size-6 rounded-full text-secondary"
+                      icon={iCheckCircleFilled}
+                    />
+                    <span class="text-title-medium">{item}</span>
+                  </li>
+                ))
+              }
+            </ul>
+          </Card>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <section class="section">
-        <div class="max-width padding-x">
-            <h2 class="text-display-small">Nos outils de travail &amp; gages de qualité</h2>
-            <div class="text-body-large mt-6 max-w-prose space-y-4">
-                <p>Suivi partagé, documents clairs, et échanges réguliers. Vous voyez l'avancement en continu.</p>
-                <p>Qualité et bonnes pratiques : accessibilité, performance, SEO on-page, sécurité, tests avant mise en ligne.</p>
-                <p>Notre code est documenté, votre site est conçu pour durer : facile à faire évoluer par n'importe quel développeur compétent, ou par nous dans le cadre d'un partenariat long terme.</p>
-            </div>
+  {/* ANTI-DÉPENDANCE */}
+  <section class="py-24 bg-surface-container-low">
+      <div class="section text-center">
+        <span class="sub-title">Indépendance</span>
+        <h2 class="text-headline-large text-on-surface mb-6">
+          Vous gardez les clés.
+        </h2>
+        <p
+          class="text-title-medium text-on-surface-variant max-w-2xl mx-auto mb-16"
+        >
+          Les livrables et les accès vous appartiennent. La documentation et la
+          passation font partie de la livraison.
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {
+            [
+              {
+                icon: iFolder,
+                containerClass: "bg-secondary-container",
+                iconClass: "fill-on-secondary-container",
+                title: "Code source complet",
+                desc: "Dépôt Git accessible et exploitable par vous ou un autre prestataire",
+              },
+              {
+                icon: iKey,
+                containerClass: "bg-primary-container",
+                iconClass: "fill-on-primary-container",
+                title: "Accès administrateur",
+                desc: "Contrôle total du CMS, de l'hébergement et de chaque outil",
+              },
+              {
+                icon: iCloud,
+                containerClass: "bg-tertiary-container",
+                iconClass: "fill-on-tertiary-container",
+                title: "Hébergement",
+                desc: "Propriété directe, sans dépendance à notre infrastructure",
+              },
+            ].map((item) => (
+              <div class="bg-surface-container rounded-3xl border border-outline-variant/40 p-8 flex flex-col items-center gap-5">
+                <div
+                  class={`w-16 h-16 rounded-full flex items-center justify-center ${item.containerClass}`}
+                >
+                  <Icon
+                    icon={item.icon}
+                    className={`w-8 h-8 ${item.iconClass}`}
+                  />
+                </div>
+                <div>
+                  <h3 class="text-headline-small mb-2">{item.title}</h3>
+                  <p class="text-body-medium text-on-surface-variant">
+                    {item.desc}
+                  </p>
+                </div>
+              </div>
+            ))
+          }
         </div>
-    </section>
 
-    <section class="section">
-        <div class="max-width padding-x">
-            <h2 class="text-display-small">Anti-dépendance : vous gardez la maîtrise</h2>
-            <div class="text-body-large mt-6 max-w-prose space-y-4">
-                <p>Les livrables et les accès vous appartiennent. Vous gardez la main sur vos comptes et vos données.</p>
-                <p>La documentation et la passation font partie de la livraison, pour garantir la réversibilité.</p>
-            </div>
-        </div>
-    </section>
+        <Button
+          href="/contact"
+          label="Demander un appel découverte"
+          variant="tonal"
+          className="mt-12 w-fit mx-auto"
+        />
+      </div>
+    </div>
+  </section>
 
-    <Faq
-        title="Questions fréquentes sur notre manière de travailler"
-        items={faqItems}
-    />
+  <FaqSection
+    title="Questions sur notre manière de travailler"
+    description="Voici des réponses concrètes sur notre méthode avant d'aller plus loin."
+    items={faqItems}
+  />
 
-    <section class="section">
-        <div class="max-width padding-x">
-            <p class="text-body-large">Vous avez d'autres questions sur notre méthode ? Contactez-nous, nous sommes transparents !</p>
-            <Button className="mt-6 w-fit" href="/contact" label="Demandez un appel découverte" />
-        </div>
-    </section>
+  <CtaSection
+    title="Prêt à démarrer un projet cadré ?"
+    description="Décrivez-nous votre besoin, on vous répond rapidement avec un premier retour concret."
+    primaryLabel="Demander un diagnostic"
+    primaryHref="/contact"
+    secondaryLabel="Voir nos services"
+    secondaryHref="/services"
+  />
 </Layout>

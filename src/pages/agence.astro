@@ -1,93 +1,329 @@
 ---
 import Layout from "@layouts/Layout.astro";
-import {Button} from "@udixio/ui-react";
-import Faq from "@components/sections/Faq.astro";
+import { Button, Icon } from "@udixio/ui-react";
+import { Card } from "@/components/Card";
+import { Hero } from "@components/Hero";
+import { SectionPadding } from "@components/SectionPadding";
+import FaqSection from "@components/sections/FaqSection.astro";
+import CtaSection from "@components/sections/CtaSection.astro";
+import { iVisibility } from "@udixio/icons-rounded-400/visibility";
+import { iChecklist } from "@udixio/icons-rounded-400/checklist";
+import { iInfo } from "@udixio/icons-rounded-400/info";
+import { iHandshake } from "@udixio/icons-rounded-400/handshake";
+import { iPartnerExchange } from "@udixio/icons-rounded-400/partner_exchange";
+import { iVerifiedUser } from "@udixio/icons-rounded-400/verified_user";
+import { iCheckCircleFilled } from "@udixio/icons-rounded-400/filled/check_circle";
+import { iKey } from "@udixio/icons-rounded-400/key";
 
 const faqItems = [
-    {
-        question: "Depuis quand existe l'agence ?",
-        answer: "Udixio a été fondée en 2024. Nous sommes jeunes en tant que structure : cette fraîcheur est notre force, avec une approche claire, pragmatique et orientée résultats.",
-    },
-    {
-        question: "Pourquoi le nom Udixio ?",
-        answer: "Udixio = vous + digital (UX, UI) + io (référence à l'univers technologique). En somme, on marie l'humain et la tech.",
-    },
-    {
-        question: "Quelle est votre structure juridique ?",
-        answer: "Udixio opère via ACCESSWEB LIMITED (Private Company Limited by Shares, Ltd), enregistrée en Irlande. CRN : 760413.",
-    },
-    {
-        question: "Qui pilote les projets ?",
-        answer: "Les fondateurs restent impliqués et l'équipe s'élargit selon les besoins. Vous savez toujours qui fait quoi.",
-    },
+  {
+    question: "Depuis quand existe l'agence ?",
+    answer:
+      "Udixio a été fondée en 2024. Nous sommes jeunes en tant que structure : cette fraîcheur est notre force, avec une approche claire, pragmatique et orientée résultats.",
+  },
+  {
+    question: "Pourquoi le nom Udixio ?",
+    answer:
+      "Udixio = vous + digital (UX, UI) + io (référence à l'univers technologique). En somme, on marie l'humain et la tech.",
+  },
+  {
+    question: "Quelle est votre structure juridique ?",
+    answer:
+      "Udixio opère via ACCESSWEB LIMITED (Private Company Limited by Shares, Ltd), enregistrée en Irlande. CRN : 760413.",
+  },
+  {
+    question: "Qui pilote les projets ?",
+    answer:
+      "Les fondateurs restent impliqués et l'équipe s'élargit selon les besoins. Vous savez toujours qui fait quoi.",
+  },
 ];
 ---
 
-<Layout seo={{
+<Layout
+  seo={{
     title: "Udixio — Clarté & Maîtrise, duo fondateur • Udixio",
-    description: "Une agence à taille humaine, fondée par deux frères, pour des projets web cadrés et transparents.",
-}}>
-    <section class="section">
-        <div class="max-width padding-x">
-            <h1 class="text-display-small md:text-display-large">Udixio : clarté, maîtrise et duo fondateur</h1>
+    description:
+      "Une agence à taille humaine, fondée par deux frères, pour des projets web cadrés et transparents.",
+  }}
+  background={false}
+>
+  <Hero client:load>
+    <div class="flex-1 flex flex-col justify-between gap-12">
+      <div>
+        <span class="sub-title">L'agence</span>
+        <h1
+          class="max-w-2xl text-display-large text-on-surface-variant anim-fade anim-slide-from-left anim-duration-1000 ease-out anim-delay-100"
+        >
+          Clarté, maîtrise et <span class="text-gradient">duo fondateur</span>
+        </h1>
+      </div>
+      <div>
+        <p
+          class="text-body-large max-w-96 mb-12 anim-fade anim-slide-from-left anim-duration-1000 ease-out anim-delay-200"
+        >
+          Une agence à taille humaine, fondée par deux frères, pour des projets
+          web cadrés et transparents.
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <Button href="/contact" shape="squared" label="Nous contacter" />
+          <Button href="/methode" label="Notre méthode" variant="outlined" />
         </div>
-    </section>
+      </div>
+    </div>
+  </Hero>
 
-    <section class="section">
-        <div class="max-width padding-x">
-            <h2 class="text-display-small">Notre mission</h2>
-            <div class="text-body-large mt-6 max-w-prose space-y-4">
-                <p>Udixio est née d'un constat : trop de projets web avancent dans le flou. Notre mission est d'apporter de la clarté, de la structure et de la maîtrise côté client.</p>
-                <p>Transparence : pas de jargon, des décisions expliquées.</p>
-                <p>Rigueur : un cadre clair, des étapes validées.</p>
-                <p>Pédagogie : on rend la technique compréhensible.</p>
-                <p>Engagement : on s'implique réellement, du cadrage à la livraison.</p>
+  {/* MISSION */}
+  <SectionPadding client:visible start end as="section">
+    <div class="py-32 bg-surface-container-low">
+      <div class="section">
+        <div class="flex flex-col md:flex-row gap-16 md:gap-32 items-start">
+          <div class="md:w-1/3 sticky top-32">
+            <span class="sub-title">Notre mission</span>
+            <h2 class="text-headline-large">
+              Apporter de la <span class="text-gradient">clarté</span> à chaque
+              projet
+            </h2>
+            <p class="mt-8 text-body-large max-w-xs text-on-surface-variant">
+              Trop de projets web avancent dans le flou. Nous avons formalisé
+              une approche pour changer ça.
+            </p>
+          </div>
+          <Card className="md:w-2/3 w-full p-8 md:p-12 anim-slide-from-right">
+            <div class="flex flex-col gap-4 mt-4">
+              {
+                [
+                  {
+                    title: "Transparence",
+                    description:
+                      "Pas de jargon, des décisions expliquées. Vous savez toujours pourquoi et comment.",
+                    icon: iVisibility,
+                  },
+                  {
+                    title: "Rigueur",
+                    description:
+                      "Un cadre clair, des étapes validées. Le projet avance sans zones d'ombre.",
+                    icon: iChecklist,
+                  },
+                  {
+                    title: "Pédagogie",
+                    description:
+                      "On rend la technique compréhensible pour que vous gardiez la maîtrise.",
+                    icon: iInfo,
+                  },
+                  {
+                    title: "Engagement",
+                    description:
+                      "On s'implique réellement, du cadrage à la livraison. Pas de sous-traitance opaque.",
+                    icon: iHandshake,
+                  },
+                ].map((value, index) => (
+                  <div
+                    style={{ ["--anim-delay"]: `${100 * index}ms` }}
+                    class="group flex gap-6 items-start p-4 rounded-2xl anim-in-fade anim-slide-from-right anim-duration-1000 anim-delay-200"
+                  >
+                    <div class="p-4 aspect-square rounded-xl bg-surface-container-highest text-on-surface-variant flex items-center justify-center">
+                      <Icon className="size-8" icon={value.icon} />
+                    </div>
+                    <div>
+                      <h3 class="text-headline-small text-on-surface mb-1">
+                        {value.title}
+                      </h3>
+                      <p class="text-body-medium text-on-surface-variant">
+                        {value.description}
+                      </p>
+                    </div>
+                  </div>
+                ))
+              }
             </div>
+          </Card>
         </div>
-    </section>
+      </div>
+    </div>
+  </SectionPadding>
 
-    <section class="section">
-        <div class="max-width padding-x">
-            <h2 class="text-display-small">Le duo fondateur (et une équipe qui s'élargit)</h2>
-            <div class="text-body-large mt-6 max-w-prose space-y-4">
-                <p><strong>Joël Vigreux</strong> — Co-fondateur, Développement full-stack : développement front-end et back-end, architecture technique, performance, qualité et maintenabilité.</p>
-                <p><strong>Florian Vigreux</strong> — Co-fondateur, Développement commercial &amp; pilotage : relation client, cadrage des besoins, suivi de projet, coordination et traduction des enjeux business vers la technique.</p>
-                <p>Une agence lancée récemment, mais structurée autour d'un binôme complémentaire. L'équipe s'élargit selon les projets, sans perdre la clarté du pilotage.</p>
+  {/* DUO FONDATEUR */}
+  <section class="py-32 bg-surface">
+    <div class="section">
+        <span class="sub-title">Le duo</span>
+        <h2 class="text-headline-large mb-12">
+          Deux experts, <span class="text-gradient">sans intermédiaire</span>
+        </h2>
+
+        <div
+          class="max-w-5xl mx-auto bg-surface-container rounded-3xl p-8 md:p-12 border border-outline-variant/30 flex flex-col md:flex-row items-center gap-12"
+        >
+          <div class="flex-1">
+            <p class="text-body-large text-on-surface-variant mb-8">
+              Votre projet est pris en charge par deux experts complémentaires,
+              de la réflexion à la mise en ligne. Vous échangez directement avec
+              ceux qui le conçoivent et le réalisent.
+            </p>
+            <Button href="/contact" label="Discutons de votre projet" />
+          </div>
+
+          <div class="flex flex-col sm:flex-row gap-6">
+            <div
+              class="flex items-center gap-4 bg-surface-container-lowest p-4 rounded-2xl border border-outline-variant/30"
+            >
+              <div
+                class="h-14 w-14 rounded-full bg-surface-container-high flex items-center justify-center text-title-medium font-bold border border-outline-variant"
+              >
+                JV
+              </div>
+              <div>
+                <div class="text-title-small font-bold text-on-surface">
+                  Joel Vigreux
+                </div>
+                <div
+                  class="text-label-small text-on-surface-variant uppercase tracking-wider"
+                >
+                  Directeur Technique
+                </div>
+                <p class="text-body-small text-on-surface-variant mt-1 max-w-48">
+                  Développement full-stack, architecture, performance.
+                </p>
+              </div>
             </div>
-            <Button className="mt-6 w-fit" href="/contact" label="Envie d'en savoir plus ? Discutons ensemble." />
-        </div>
-    </section>
 
-    <section class="section">
-        <div class="max-width padding-x">
-            <h2 class="text-display-small">Où sommes-nous ?</h2>
-            <div class="text-body-large mt-6 max-w-prose space-y-4">
-                <p>Basée dans les Hauts-de-France, avec présence à Amiens et Le Havre.</p>
-                <p>Nous travaillons principalement à distance, ce qui nous permet d'être flexibles. Des rendez-vous physiques sont possibles sur demande.</p>
-                <p>Préférez un contact direct ? Écrivez-nous à contact@udixio.fr ou appelez le [téléphone] (du lundi au vendredi, 9h-18h).</p>
+            <div
+              class="flex items-center gap-4 bg-surface-container-lowest p-4 rounded-2xl border border-outline-variant/30"
+            >
+              <div
+                class="h-14 w-14 rounded-full bg-surface-container-high flex items-center justify-center text-title-medium font-bold border border-outline-variant"
+              >
+                FV
+              </div>
+              <div>
+                <div class="text-title-small font-bold text-on-surface">
+                  Florian Vigreux
+                </div>
+                <div
+                  class="text-label-small text-on-surface-variant uppercase tracking-wider"
+                >
+                  Directeur Conseil
+                </div>
+                <p class="text-body-small text-on-surface-variant mt-1 max-w-48">
+                  Relation client, cadrage, suivi de projet.
+                </p>
+              </div>
             </div>
-            <Button className="mt-6 w-fit" href="/contact" label="Contactez-nous" />
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <section class="section">
-        <div class="max-width padding-x">
-            <h2 class="text-display-small">Nos engagements concrets</h2>
-            <ul class="mt-6 list-disc pl-6 text-body-large max-w-prose">
-                <li>périmètre clarifié avant démarrage</li>
-                <li>validations à chaque étape clé</li>
-                <li>accès et livrables remis au client</li>
-                <li>explications claires des choix techniques</li>
+  {/* ENGAGEMENTS */}
+  <section class="py-24 bg-surface-container-low">
+      <div class="section">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          <div>
+            <span class="sub-title">Nos engagements</span>
+            <h2 class="text-headline-large text-on-surface">
+              Des bases claires <span class="text-gradient">dès le départ</span>
+            </h2>
+            <p class="text-title-medium text-on-surface-variant mt-6">
+              Chaque projet démarre avec un cadre explicite. Vous savez ce qui
+              est inclus, ce qui ne l'est pas, et comment ça avance.
+            </p>
+            <div class="mt-8 flex flex-wrap gap-4">
+              <Button href="/methode" label="Voir notre méthode" />
+              <Button
+                href="/contact"
+                label="Nous contacter"
+                variant="outlined"
+              />
+            </div>
+          </div>
+
+          <Card
+            className="bg-secondary-container text-on-secondary-container p-8"
+          >
+            <ul class="space-y-4 mt-2">
+              {
+                [
+                  "Périmètre clarifié avant démarrage",
+                  "Validations à chaque étape clé",
+                  "Accès et livrables remis au client",
+                  "Explications claires des choix techniques",
+                  "Réversibilité garantie dès la livraison",
+                ].map((item) => (
+                  <li class="flex items-center gap-3">
+                    <Icon
+                      className="size-6 rounded-full text-secondary"
+                      icon={iCheckCircleFilled}
+                    />
+                    <span class="text-title-medium">{item}</span>
+                  </li>
+                ))
+              }
             </ul>
+          </Card>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <Faq title="Questions fréquentes sur Udixio" items={faqItems} />
+  {/* LOCALISATION */}
+  <section class="py-24 bg-surface">
+      <div class="section text-center">
+        <span class="sub-title">Où sommes-nous ?</span>
+        <h2 class="text-headline-large text-on-surface mb-6">
+          Hauts-de-France & <span class="text-gradient">Normandie</span>
+        </h2>
+        <p
+          class="text-title-medium text-on-surface-variant max-w-2xl mx-auto mb-16"
+        >
+          Basés entre Amiens et Le Havre. Nous travaillons principalement à
+          distance, avec des rendez-vous physiques possibles sur demande.
+        </p>
 
-    <section class="section">
-        <div class="max-width padding-x">
-            <p class="text-body-large">Envie de nous rencontrer ? Contactez-nous !</p>
-            <Button className="mt-6 w-fit" href="/contact" label="Contactez-nous" />
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {
+            [
+              {
+                icon: iPartnerExchange,
+                title: "Contact direct",
+                desc: "Vous échangez directement avec les fondateurs, sans interlocuteur intermédiaire.",
+              },
+              {
+                icon: iVerifiedUser,
+                title: "Flexibilité totale",
+                desc: "Échanges en présentiel ou en visio selon vos besoins. Disponibles du lundi au vendredi, 9h–18h.",
+              },
+              {
+                icon: iKey,
+                title: "Réponse rapide",
+                desc: "Nous revenons vers vous sous 1 jour ouvré. Écrivez-nous à contact@udixio.fr.",
+              },
+            ].map((item) => (
+              <Card variant="outlined" className="group p-8">
+                <div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-6">
+                  <Icon icon={item.icon} className="w-6 h-6 fill-current" />
+                </div>
+                <h3 class="text-headline-small mb-2">{item.title}</h3>
+                <p class="text-on-surface-variant">{item.desc}</p>
+              </Card>
+            ))
+          }
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
+
+  <FaqSection
+    title="Questions fréquentes sur Udixio"
+    description="Tout ce que vous voulez savoir sur notre agence avant d'aller plus loin."
+    items={faqItems}
+  />
+
+  <CtaSection
+    title="Envie de nous rencontrer ?"
+    description="Décrivez-nous votre projet, on vous répond rapidement avec un premier retour concret."
+    primaryLabel="Nous contacter"
+    primaryHref="/contact"
+    secondaryLabel="Voir nos réalisations"
+    secondaryHref="/realisations"
+  />
 </Layout>
