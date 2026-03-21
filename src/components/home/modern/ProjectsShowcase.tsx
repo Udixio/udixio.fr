@@ -18,7 +18,7 @@ export const ProjectsShowcase = ({
   const next = () => setIndex((i) => Math.min(total - 1, i + step));
 
   return (
-    <div className="w-full">
+    <div className="w-full padding">
       <Carousel
         variant="hero"
         scrollSensitivity={0.8}
@@ -28,6 +28,8 @@ export const ProjectsShowcase = ({
           setStep(m.stepHalf);
           setVisible({ approx: m.visibleApprox, full: m.visibleFull });
         }}
+        outputRange={[42, 400]}
+        className="h-[500px]"
       >
         {projects.map((project, i) => {
           // Alternate sizes logic for dynamic grid look (optional, but requested in example)
@@ -57,8 +59,8 @@ export const ProjectsShowcase = ({
 
         {/* CTA Card as last item */}
         <CarouselItem key="cta">
-          <div className="h-full flex flex-col justify-center items-center p-12 rounded-4xl bg-surface-container hover:bg-surface-container-high transition-colors border border-outline-variant/30 group min-w-[300px] min-h-[400px]">
-            <p className="text-headline-small text-on-surface  mb-6">
+          <div className="h-full flex flex-col justify-center gap-8 p-12 rounded-4xl bg-surface-container hover:bg-surface-container-high transition-colors border border-outline-variant/30 group min-w-[300px] min-h-[400px]">
+            <p className="text-headline-small text-on-surface  ">
               Et si le prochain projet, c'était le vôtre ?
             </p>
             <Button
@@ -71,7 +73,7 @@ export const ProjectsShowcase = ({
         </CarouselItem>
       </Carousel>
 
-      <div className="w-full mt-8 flex items-center justify-end gap-3">
+      <div className="max-width padding-x w-full mt-8 flex items-center justify-end gap-3">
         <div className="flex gap-4">
           <Button
             variant="outlined"
