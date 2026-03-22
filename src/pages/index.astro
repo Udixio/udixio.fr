@@ -1,53 +1,23 @@
 ---
 import Layout from "@layouts/Layout.astro";
-import { Button, Chip } from "@udixio/ui-react";
+import { Button, Icon } from "@udixio/ui-react";
 import { Hero } from "@components/Hero.tsx";
-// import { HeroPaper } from "@components/home/HeroPaper";
-import { Logo } from "@components/Logo";
 import Realisations from "@components/Realisations.astro";
-import { FeaturesGrid } from "@components/home/modern/FeaturesGrid";
-// import { ValueProp } from "@components/home/modern/ValueProp";
-import { ProblemSolutionSchema } from "@components/home/modern/ProblemSolutionSchema";
-// import { MethodSteps } from "@components/home/modern/MethodSteps";
-import { ProcessStickyScroll } from "@components/home/modern/ProcessStickyScroll";
 import { QAStickyScroll } from "@components/home/modern/QAStickyScroll";
-import { ProofsGrid } from "@components/home/modern/ProofsGrid";
-import { FaqAccordion } from "@components/home/modern/FaqAccordion";
+import FaqSection from "@components/sections/FaqSection.astro";
 import CtaSection from "@components/sections/CtaSection.astro";
 import { Card } from "@/components/Card";
-import { Underline } from "@components/Underline";
-import { Icon } from "@udixio/ui-react";
+import { SectionPadding } from "@/components/SectionPadding";
 
-import { iVisibility } from "@udixio/icons-rounded-400/visibility";
-import { iHandshake } from "@udixio/icons-rounded-400/handshake";
-import { iBolt } from "@udixio/icons-rounded-400/bolt";
-import { iTrendingUp } from "@udixio/icons-rounded-400/trending_up";
-import { iFolder } from "@udixio/icons-rounded-400/folder";
-import { iKey } from "@udixio/icons-rounded-400/key";
-import { iCloud } from "@udixio/icons-rounded-400/cloud";
-import { iForest } from "@udixio/icons-rounded-400/forest";
-import { iBarChart } from "@udixio/icons-rounded-400/bar_chart";
-import { iTune } from "@udixio/icons-rounded-400/tune";
-import { number } from "zod";
-import { iInfo } from "@udixio/icons-rounded-400/info";
-import { iChat } from "@udixio/icons-rounded-400/chat";
-import { iLock } from "@udixio/icons-rounded-400/lock";
-import { iVisibilityOff } from "@udixio/icons-rounded-400/visibility_off";
 import { iPartnerExchange } from "@udixio/icons-rounded-400/partner_exchange";
 import { iChecklist } from "@udixio/icons-rounded-400/checklist";
 import { iVerifiedUser } from "@udixio/icons-rounded-400/verified_user";
-import { SymbolKind } from "vscode-languageserver-types";
-import { iCheckCircle } from "@udixio/icons-rounded-400/check_circle";
-import { iCheckCircleFilled } from "@udixio/icons-rounded-400/filled/check_circle";
-import { Divider } from "@udixio/ui-react";
-import { icon } from "@fortawesome/fontawesome-svg-core";
-import { motion } from "motion/react";
-import { iClose } from "@udixio/icons-rounded-400/close";
+import { iKey } from "@udixio/icons-rounded-400/key";
+import { iVisibility } from "@udixio/icons-rounded-400/visibility";
+import { iTune } from "@udixio/icons-rounded-400/tune";
 import { iStorefront } from "@udixio/icons-rounded-400/storefront";
 import { iGroups } from "@udixio/icons-rounded-400/groups";
 import { iRocketLaunch } from "@udixio/icons-rounded-400/rocket_launch";
-import { iCheck } from "@udixio/icons-rounded-400/check";
-import { SectionPadding } from "@/components/SectionPadding";
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -119,34 +89,19 @@ const jsonLd = {
 
 const faqItems = [
   {
-    question: "Combien coûte un site sur mesure pour une PME ?",
+    question: "Combien ça coûte ?",
     answer:
-      "Un site vitrine complet démarre généralement à partir de 2 500 €. Avant tout engagement, nous vous remettons un devis détaillé avec un périmètre clair.",
+      "À partir de 2 500€ pour un site vitrine. Chaque projet démarre par une estimation gratuite, après un échange sur votre besoin.",
   },
   {
-    question: "Êtes-vous basés à Amiens ou au Havre ?",
+    question: "Suis-je propriétaire du site ?",
     answer:
-      "Nous intervenons en Normandie et dans les Hauts-de-France, notamment autour du Havre et d’Amiens. Les échanges se font en présentiel ou en visio selon vos besoins.",
+      "Oui. Code source, hébergement et accès CMS sont remis à la livraison — sans condition et sans dépendance à notre infrastructure.",
   },
   {
-    question: "Suis-je propriétaire du site et de son code ?",
+    question: "En combien de temps ?",
     answer:
-      "Oui. Le code source, l’hébergement et les données vous appartiennent. Vous n’êtes pas dépendant d’une solution propriétaire.",
-  },
-  {
-    question: "Un site peut-il vraiment générer des leads ?",
-    answer:
-      "Oui, à condition qu’il soit bien conçu. SEO technique, structure des pages et contenus sont pensés pour attirer et convertir des prospects qualifiés.",
-  },
-  {
-    question: "Que se passe-t-il après la mise en ligne ?",
-    answer:
-      "Nous assurons une phase de suivi après le lancement, puis proposons si besoin de la maintenance et des évolutions selon vos objectifs.",
-  },
-  {
-    question: "Puis-je changer de prestataire facilement ?",
-    answer:
-      "Oui. Vous disposez de tous les accès et d’une documentation suffisante pour reprendre le projet ou le confier à un autre prestataire.",
+      "4 à 8 semaines pour un site vitrine selon le périmètre. Un planning détaillé est fourni dès la phase de cadrage.",
   },
 ];
 ---
@@ -164,13 +119,14 @@ const faqItems = [
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </Fragment>
 
+  {/* HERO */}
   <Hero client:load className="self-stretch flex  min-h-[60vh]">
     <div class="flex-1 flex flex-col justify-between">
       <h1
         class="max-w-2xl text-display-large anim-fade anim-slide-from-left anim-duration-1000 ease-out anim-delay-100"
       >
         Pensez juste.<br />
-        <span class="text-secondary">On s’occupe du reste.</span>
+        <span class="text-secondary">On s'occupe du reste.</span>
       </h1>
 
       <div class="flex gap-8 j">
@@ -189,7 +145,7 @@ const faqItems = [
               label="Obtenir un diagnostic"
               className=" w-fit"
             />
-            {/* Annotation Arrow - Absolute Position (Top Right) */}
+            {/* Annotation Arrow */}
             <div
               class="hidden sm:flex flex-row items-end absolute -top-8 -right-2 translate-x-full w-max pointer-events-none gap-1"
             >
@@ -213,16 +169,21 @@ const faqItems = [
               </span>
             </div>
           </div>
+
+          {/* Preuve immédiate */}
+          <div
+            class="flex gap-3 flex-wrap mt-8 text-label-small text-on-surface-variant font-mono anim-fade anim-duration-1000 ease-out anim-delay-400"
+          >
+            <span>100/100 Lighthouse</span>
+            <span class="text-outline-variant">·</span>
+            <span>5 projets livrés</span>
+            <span class="text-outline-variant">·</span>
+            <span>Hauts-de-France & Normandie</span>
+          </div>
         </div>
         <div
           class="flex flex-2 justify-end w-full gap-4 anim-fade anim-slide-from-right anim-duration-1000 ease-out anim-delay-400"
         >
-          <!--<Card-->
-          <!--  className="w-1/3 p-6 flex flex-col items-center gap-4 justify-center text-center bg-tertiary-container text-on-tertiary-container "-->
-          <!--&gt;-->
-          <!--  <Icon className="size-16" icon={iTune} />-->
-          <!--  <p class="text-title-large">Approche<br /> sur-mesure</p>-->
-          <!--</Card>-->
           <Card
             className="w-2/3 p-8 bg-surface-container   flex flex-col justify-center  "
           >
@@ -238,7 +199,7 @@ const faqItems = [
               }
             </div>
             <h2 class="text-headline-medium my-2 text-on-surface">
-              Obtenez un site efficace et adaptable.
+              Un site qui génère des résultats — pas juste une présence en ligne.
             </h2>
             <Button
               variant="tonal"
@@ -268,158 +229,212 @@ const faqItems = [
     </div>
   </Hero>
 
-  {/* 01. LA MÉTHODE - VISUAL MANIFESTO */}
-  <section class="section py-32">
-    <div class="max-width padding-x">
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-24">
-        {/* Sticky Title */}
-        <div class="md:col-span-4 relative">
-          <div class="sticky top-32">
-            <span class="sub-title anim-in anim-fade">Le processus</span>
-            <h2
-              class="text-headline-large leading-tight anim-in anim-fade anim-slide-from-left anim-duration-1000 anim-delay-150"
+  {/* 01. PROBLÈMES TYPIQUES */}
+  <section class="py-24 bg-surface-container-low">
+    <div class="section">
+      <span class="sub-title anim-in anim-fade">Situations courantes</span>
+      <h2
+        class="text-headline-large text-on-surface mb-12 anim-in anim-fade anim-delay-150"
+      >
+        Ce qui bloque aujourd'hui votre projet web
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {
+          [
+            {
+              icon: iVisibility,
+              problem: "Votre site existe mais ne génère aucun contact",
+              consequence:
+                "Vous perdez des prospects chaque jour au profit de concurrents mieux positionnés.",
+              cta: "Voir le service site web",
+              href: "/services/site-vitrine-ou-refonte",
+            },
+            {
+              icon: iTune,
+              problem:
+                "Vos process internes reposent sur des tableurs ou des outils manuels",
+              consequence:
+                "Vos équipes perdent du temps, font des erreurs, et votre croissance est bridée par vos outils.",
+              cta: "Voir le développement sur-mesure",
+              href: "/services/developpement-sur-mesure",
+            },
+            {
+              icon: iChecklist,
+              problem: "Vous avez un projet web mais pas de cadre clair",
+              consequence:
+                "Sans périmètre défini, les dérives de budget et de délais sont la règle, pas l'exception.",
+              cta: "Demander un diagnostic",
+              href: "/contact",
+            },
+          ].map((item, index) => (
+            <Card
+              variant="outlined"
+              className="p-8 flex flex-col gap-6 bg-surface-container-low anim-in anim-fade anim-slide-from-bottom"
+              style={{ ["--anim-delay"]: `${index * 150}ms` }}
             >
-              Une <span class="text-gradient">collaboration directe</span>, du
-              cadrage au lancement.
-            </h2>
-            <div class="mt-8 hidden md:block">
-              <svg
-                class="w-12 h-12 text-primary animate-bounce-slow"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.5"
-              >
-                <path d="M12 5v14M5 12l7 7 7-7"></path>
-              </svg>
-            </div>
-          </div>
-        </div>
-
-        {/* Vertical Steps */}
-        <div class="md:col-span-8 space-y-8">
-          {
-            [
-              {
-                number: 1,
-                title: "Audit & Plan",
-                description:
-                  "On échange pour comprendre vos objectifs, puis on pose un cadre simple : ce qu'on fait, dans quel ordre, et pourquoi.",
-              },
-              {
-                number: 2,
-                title: "Design & Prototype",
-                description:
-                  "On conçoit une interface adaptée à votre activité, que vous validez rapidement avant de passer au développement.",
-              },
-              {
-                number: 3,
-                title: "Développement & Tests",
-                description:
-                  "Le site est développé étape par étape, avec un accès pour suivre l'avancement et tester avant la mise en ligne.",
-              },
-              {
-                number: 4,
-                title: "Lancement & Suivi",
-                description:
-                  "Mise en ligne maîtrisée, puis accompagnement pour la prise en main et les ajustements nécessaires.",
-              },
-            ].map((step) => (
-              <div class="group relative pl-8 border-l-2 border-outline-variant transition-colors duration-500 anim-fade-up delay-200">
-                <span class="text-title-medium absolute -left-[1.35rem] top-0 flex h-10 w-10 items-center justify-center rounded-full bg-surface border-2 border-outline-variant transition-all ">
-                  {step.number}
-                </span>
-                <h3 class="text-headline-small mb-4 text-on-surface">
-                  {step.title}
+              <div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+                <Icon icon={item.icon} className="w-6 h-6 fill-current" />
+              </div>
+              <div>
+                <h3 class="text-headline-small text-on-surface mb-3">
+                  {item.problem}
                 </h3>
-                <p class="text-body-large text-on-surface-variant font-light max-w-lg pb-16">
-                  {step.description}
+                <p class="text-body-large text-on-surface-variant">
+                  {item.consequence}
                 </p>
               </div>
-            ))
-          }
-
-          <Button
-            href="/savoir-faire"
-            label="Explorer notre savoir-faire"
-            variant="outlined"
-            className="w-fit"
-          />
-        </div>
+              <Button
+                href={item.href}
+                label={item.cta}
+                variant="outlined"
+                className="mt-auto w-fit"
+              />
+            </Card>
+          ))
+        }
       </div>
     </div>
   </section>
 
-  {/* 02. LES BASES - ASYMMETRIC SPLIT */}
+  {/* 02. Q/A - CE QUE VOUS OBTENEZ CONCRÈTEMENT */}
+  <SectionPadding as="section" start client:idle>
+    <Card
+      className=" dark bg-surface-container-high rounded-b-none  text-on-surface shadow-xl/30 padding"
+    >
+      <div class="text-center mb-24 mt-8">
+        <span class="sub-title anim-in anim-fade">Ce que ça change</span>
+        <h2
+          class="text-headline-large md:text-headline-large anim-in anim-fade anim-slide-from-bottom anim-duration-1000 anim-delay-150"
+        >
+          Concrètement,<br /><span class="text-gradient"
+            >ce que vous obtenez</span
+          >
+        </h2>
+        <p class="text-title-medium mt-6 anim-in anim-fade anim-delay-300">
+          Quatre questions que vous vous posez — ce qu'on fait pour y répondre.
+        </p>
+      </div>
+      <QAStickyScroll client:visible />
+    </Card>
+  </SectionPadding>
+
+  {/* 03. RÉALISATIONS */}
+  <section class="">
+    <div class="flex section items-center justify-between mb-10">
+      <h2 class="text-headline-large anim-in anim-fade anim-slide-from-left">
+        Des projets réels, avec des résultats mesurables
+      </h2>
+      <Button
+        href="/realisations"
+        label="Voir nos réalisations"
+        variant="tonal"
+      />
+    </div>
+    <Realisations max={5} />
+  </section>
+
+  {/* 04. POURQUOI NOUS - MÉCANISMES CONCRETS + DUO */}
   <section class="py-32 bg-surface-container-low">
     <div class="section">
       <div class="flex flex-col md:flex-row gap-16 md:gap-32 items-start">
         <div class="md:w-1/3 sticky top-32">
-          <span class="sub-title anim-in anim-fade">Les bases</span>
+          <span class="sub-title anim-in anim-fade">Pourquoi nous</span>
           <h2
             class="text-headline-large anim-in anim-fade anim-slide-from-left anim-duration-1000 anim-delay-150"
           >
-            Ce qui fait la différence
+            Ce qui change<br /><span class="text-gradient">quand vous travaillez avec nous</span
+            >
           </h2>
           <p
-            class="mt-8 text-body-large max-w-xs anim-in anim-fade anim-delay-300"
+            class="mt-8 text-body-large max-w-xs text-on-surface-variant anim-in anim-fade anim-delay-300"
           >
-            Beaucoup de projets bloquent ou dérivent sans cadre simple. Ce qui
-            change vraiment :
+            Quatre garanties concrètes, vérifiables sur chaque livraison.
           </p>
-          <ul
-            class="mt-4 space-y-2 text-body-large text-on-surface-variant list-disc pl-6"
-          >
-            <li>savoir où on va</li>
-            <li>comment on y va</li>
-            <li>et qui fait quoi</li>
-          </ul>
+          <div class="mt-8 flex flex-col gap-3">
+            {
+              [
+                {
+                  initials: "JV",
+                  name: "Joël Vigreux",
+                  role: "Dev full-stack",
+                  containerClass:
+                    "bg-primary-container text-on-primary-container",
+                },
+                {
+                  initials: "FV",
+                  name: "Florian Vigreux",
+                  role: "Conseil & cadrage",
+                  containerClass:
+                    "bg-secondary-container text-on-secondary-container",
+                },
+              ].map((person) => (
+                <div class="flex items-center gap-3">
+                  <div
+                    class={`h-10 w-10 rounded-full flex items-center justify-center text-label-large font-bold ${person.containerClass}`}
+                  >
+                    {person.initials}
+                  </div>
+                  <div>
+                    <div class="text-title-small font-bold text-on-surface">
+                      {person.name}
+                    </div>
+                    <div class="text-label-small text-on-surface-variant">
+                      {person.role}
+                    </div>
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+          <Button
+            href="/agence"
+            label="Découvrir l'équipe"
+            variant="outlined"
+            className="mt-6 w-fit"
+          />
         </div>
-        <Card className="md:w-2/3 w-full p-8 md:p-12   anim-slide-from-right">
+
+        <Card className="md:w-2/3 w-full p-8 md:p-12 anim-slide-from-right">
           <div class="flex flex-col gap-4 mt-4">
             {
               [
                 {
-                  title: "Deux interlocuteurs, pas d’intermédiaire",
-                  description: `Vous échangez directement avec nous, du début à la fin.
-Les décisions sont prises plus vite, sans perte d’information.`,
+                  title: "Vous échangez directement avec Joël ou Florian",
+                  description:
+                    "Celui qui conçoit votre site est celui à qui vous parlez. Pas de chef de projet intermédiaire, pas de perte d'information.",
                   icon: iPartnerExchange,
                 },
                 {
-                  title: "Un projet cadré dès le départ",
+                  title: "Périmètre validé avant toute ligne de code",
                   description:
-                    "Chaque étape est posée simplement : vous savez ce qui est fait, ce qui vient ensuite, et pourquoi.",
+                    "Un document de cadrage est rédigé et partagé avant tout démarrage. Rien n'avance sans votre accord explicite.",
                   icon: iChecklist,
                 },
                 {
-                  title: "Expertise & Fiabilité",
+                  title: "Scores Lighthouse 100/100 sur nos livrables",
                   description:
-                    "Des choix techniques solides, pensés pour durer et évoluer sans repartir de zéro.",
+                    "Performance, SEO, accessibilité : des résultats mesurables, vérifiables sur chaque réalisation publiée.",
                   icon: iVerifiedUser,
                 },
                 {
-                  title: "Vous gardez la main",
+                  title: "Git, hébergement et CMS remis à la livraison",
                   description:
-                    "Vous gardez l’accès, la compréhension et la maîtrise de votre site, sans dépendre de nous.",
+                    "Dépôt Git, accès admin, hébergement documenté — tout vous appartient sans condition dès la mise en ligne.",
                   icon: iKey,
                 },
               ].map((feature, index) => (
                 <div
                   style={{ ["--anim-delay"]: `${100 * index}ms` }}
-                  class="group flex gap-6 items-start p-4 rounded-2xl border border-transparent  anim-in-fade
-anim-slide-from-right
-anim-duration-1000
-anim-delay-200
- "
+                  class="group flex gap-6 items-start p-4 rounded-2xl anim-in-fade anim-slide-from-right anim-duration-1000 anim-delay-200"
                 >
-                  <div class=" p-4 aspect-square rounded-xl bg-surface-container-highest text-on-surface-variant flex items-center justify-center ">
+                  <div class="p-4 aspect-square rounded-xl bg-surface-container-highest text-on-surface-variant flex items-center justify-center">
                     <Icon className="size-8" icon={feature.icon} />
                   </div>
                   <div>
                     <h3 class="text-headline-small text-on-surface mb-1">
                       {feature.title}
                     </h3>
-                    <p class="text-body-medium text-on-surface-variant ">
+                    <p class="text-body-medium text-on-surface-variant">
                       {feature.description}
                     </p>
                   </div>
@@ -432,81 +447,21 @@ anim-delay-200
     </div>
   </section>
 
-  {/* 02b. OFFRE CLAIRE - COMPACT SPLIT WITH VISUAL CHECKLIST */}
-  <section class="section py-24 bg-surface overflow-hidden">
-    <div class="max-width padding-x">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-        <div>
-          <h2
-            class="text-headline-large text-on-surface anim-in anim-fade anim-slide-from-left"
-          >
-            Comment nous créons votre site
-          </h2>
-          <p
-            class="text-title-medium text-on-surface-variant mt-6 anim-in anim-fade anim-delay-150"
-          >
-            Chaque étape de votre projet web est accompagnée par nos deux
-            experts, du plan stratégique à la mise en ligne. Vous gardez la
-            maîtrise et la visibilité, avec un accompagnement complet et
-            cohérent.
-          </p>
-          <div
-            class="mt-8 flex flex-wrap gap-4 anim-in anim-fade anim-delay-300"
-          >
-            <Button href="/services" label="Voir nos services" />
-            <Button href="/methode" label="Notre méthode" variant="outlined" />
-          </div>
-        </div>
-
-        {/* Visual Checklist Card */}
-        <Card
-          className="bg-secondary-container text-on-secondary-container p-8 anim-in anim-fade anim-slide-from-right"
-        >
-          <div
-            class="absolute top-4 right-4 bg-primary/10 text-primary px-3 py-1 rounded-full text-label-small uppercase"
-          >
-            Inclus
-          </div>
-          <ul class="space-y-4 mt-2">
-            {
-              [
-                "Audit & Stratégie digitale",
-                "Design UI/UX sur-mesure",
-                "Développement performant",
-                "Optimisation SEO Technique",
-                "Formation & Autonomie",
-              ].map((item) => (
-                <li class="flex items-center gap-3">
-                  <Icon
-                    className="size-6 rounded-full text-secondary"
-                    icon={iCheckCircleFilled}
-                  />
-
-                  <span class="text-title-medium ">{item}</span>
-                </li>
-              ))
-            }
-          </ul>
-        </Card>
-      </div>
-    </div>
-  </section>
-
-  {/* 02c. POUR QUI ? */}
+  {/* 05. POUR QUI */}
   <section class="section py-24 bg-surface-container-low">
     <div class="max-width padding-x">
       <div class="text-center mb-12">
-        <span class="sub-title anim-in anim-fade">Audience</span>
+        <span class="sub-title anim-in anim-fade">Pour qui</span>
         <h2
           class="text-headline-large text-on-surface anim-in anim-fade anim-delay-150"
         >
-          À qui s'adresse Udixio ?
+          Les profils pour lesquels ça fonctionne vraiment
         </h2>
         <p
           class="text-title-medium text-on-surface-variant mt-4 max-w-2xl mx-auto anim-in anim-fade anim-delay-300"
         >
-          Nous accompagnons des structures ambitieuses qui veulent un site web
-          qui travaille pour elles, pas contre elles.
+          Nous travaillons avec des structures qui ont un besoin précis et
+          veulent un partenaire qui cadre, livre et explique.
         </p>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -562,586 +517,47 @@ anim-delay-200
     </div>
   </section>
 
-  {/* 02d. BENEFICES - VALUE CHIPS */}
-  <section class="section py-24 bg-surface">
-    <div class="max-w-4xl mb-12">
-      <h2 class="text-headline-large anim-in anim-fade anim-slide-from-left">
-        Des bénéfices concrets.<br />
-        <span class="text-gradient">Sans détour.</span>
-      </h2>
-    </div>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      {
-        [
-          {
-            icon: iVisibility,
-            title: "Attirer des clients",
-            description:
-              "Un SEO local optimisé pour générer des visites qualifiées chaque jour.",
-          },
-          {
-            icon: iHandshake,
-            title: "Inspirer confiance",
-            description:
-              "Un site professionnel qui crédibilise votre entreprise auprès de prospects et partenaires.",
-          },
-          {
-            icon: iBolt,
-            title: "Gagner du temps",
-            description:
-              "Automatisation de la prise de contact pour libérer vos équipes commerciales.",
-          },
-          {
-            icon: iTrendingUp,
-            title: "Booster votre activité",
-            description:
-              "Des indicateurs clairs pour transformer votre site en levier de croissance mesurable.",
-          },
-        ].map((benefit, index) => (
-          <Card
-            variant="outlined"
-            className="group p-6 anim-in anim-fade anim-scale"
-            style={{ ["--anim-delay"]: `${index * 100}ms` }}
-          >
-            <div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-6 transition-transform">
-              <Icon icon={benefit.icon} className="w-6 h-6 fill-current" />
-            </div>
-            <h3 class="text-headline-small  mb-2">{benefit.title}</h3>
-            <p class="text-on-surface-variant">{benefit.description}</p>
-          </Card>
-        ))
-      }
-    </div>
-  </section>
-
-  {/* 03. NOTRE RÉPONSE - DARK MODE IMMERSION */}
-  <SectionPadding as="section" start client:idle>
-    <Card
-      className=" dark bg-surface-container-high rounded-b-none  text-on-surface shadow-xl/30 padding"
-    >
-      <div class="text-center mb-24 mt-8">
-        <span class="sub-title anim-in anim-fade">Notre approche</span>
-        <h2
-          class="text-headline-large md:text-headline-large anim-in anim-fade anim-slide-from-bottom anim-duration-1000 anim-delay-150"
-        >
-          Vos objectifs d'abord :<br /><span class="text-gradient"
-            >des réponses claires</span
-          >
-        </h2>
-        <p class="text-title-medium mt-6 anim-in anim-fade anim-delay-300">
-          Des choix utiles, expliqués et alignés avec vos priorités.
-        </p>
-      </div>
-      <QAStickyScroll client:visible />
-    </Card>
-  </SectionPadding>
-
-  {/* 04. PREUVES */}
-  <section class="section py-32">
-    <div class="max-width padding-x">
-      <div class="flex justify-between items-end mb-12">
-        <div>
-          <span class="sub-title anim-in anim-fade">Preuves</span>
-          <h2
-            class="text-headline-large text-on-surface anim-in anim-fade anim-slide-from-left anim-duration-1000 anim-delay-150"
-          >
-            Des preuves concrètes,<br />pas des promesses
-          </h2>
-          <p
-            class="text-title-medium text-on-surface-variant mt-4 max-w-2xl anim-in anim-fade anim-delay-300"
-          >
-            Des indicateurs mesurables, accessibles et vérifiables sur chaque
-            projet livré.
-          </p>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-24">
-        <Card
-          variant="outlined"
-          className="p-6  bg-surface-container-low anim-in anim-fade anim-slide-from-bottom"
-        >
-          <h3 class="text-headline-small mb-2">Qualité mesurée</h3>
-          <p class="text-body-medium text-on-surface-variant">
-            Performance, SEO, accessibilité : des scores partagés pour chaque
-            projet livré.
-          </p>
-        </Card>
-        <Card
-          variant="outlined"
-          className="p-6  bg-surface-container-low anim-in anim-fade anim-slide-from-bottom anim-delay-150"
-        >
-          <h3 class="text-headline-small mb-2">Audits vérifiables</h3>
-          <p class="text-body-medium text-on-surface-variant">
-            Lighthouse, Core Web Vitals : des résultats lisibles pour évaluer la
-            qualité.
-          </p>
-        </Card>
-        <Card
-          variant="outlined"
-          className="p-6  bg-surface-container-low anim-in anim-fade anim-slide-from-bottom anim-delay-300"
-        >
-          <h3 class="text-headline-small mb-2">Sobriété maîtrisée</h3>
-          <p class="text-body-medium text-on-surface-variant">
-            Poids de page et indicateurs environnementaux suivis pour limiter
-            l'impact.
-          </p>
-        </Card>
-      </div>
-
-      <Card
-        variant="outlined"
-        className="mt-12 bg-surface-container-low grid gap-px grid-cols-1 md:grid-cols-2 lg:grid-cols-4 "
-      >
-        {
-          [
-            {
-              title: "Scores de Performance 100/100",
-              description:
-                "Nous visons l'excellence mesurable (Lighthouse) sur la vitesse et le SEO, prouvée sur nos réalisations.",
-              badge: "Qualité mesurée",
-            },
-            {
-              title: "Indépendance Technique Totale",
-              description:
-                "Nous utilisons des outils ouverts et performants (Astro, React, CMS sur-mesure) pour vous libérer des systèmes fermés.",
-              badge: "Propriété Client",
-            },
-            {
-              title: "Outils Développés en Interne",
-              description:
-                "Notre CMS léger Netsimpler et notre propre librairie design Udixio UI garantissent efficacité et personnalisation.",
-              badge: "Créateurs",
-            },
-            {
-              title: "Méthodologie Cadrée et Publique",
-              description:
-                "Notre processus (ateliers, points de validation, garanties post-lancement) est documenté pour avancer en toute confiance.",
-              badge: "Méthodologie",
-            },
-          ].map((proof, index) => (
-            <div class="flex ">
-              {index !== 0 && <Divider orientation="vertical" />}
-              <div class="flex flex-col p-8  h-full">
-                <div class="mb-6 self-start px-3 py-1 rounded-full border border-primary/20 text-primary text-label-small font-mono uppercase tracking-wider">
-                  {proof.badge}
-                </div>
-                <div class="mt-auto">
-                  <h3 class="text-title-large font-bold mb-3 leading-tight">
-                    {proof.title}
-                  </h3>
-                  <p class="text-body-medium text-on-surface-variant/80">
-                    {proof.description}
-                  </p>
-                </div>
-              </div>
-            </div>
-          ))
-        }
-      </Card>
-    </div>
-  </section>
-  <section class="">
-    <div class="flex section items-center justify-between mb-10">
-      <h3 class="text-headline-large anim-in anim-fade anim-slide-from-left">
-        Dernières réalisations
-      </h3>
-      <Button
-        href="/realisations"
-        label="Voir nos réalisations"
-        variant="tonal"
-      />
-    </div>
-    <Realisations max={5} />
-  </section>
-  {/* 04b. INVESTISSEMENT */}
-  <section class="section py-24 bg-surface">
-    <div class="max-width padding-x">
-      <div class="bg-surface-container p-8 md:p-12 rounded-4xl">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <span class="sub-title anim-in anim-fade">Investissement</span>
-            <h2
-              class="text-headline-medium md:text-headline-large text-on-surface mb-6 anim-in anim-fade anim-slide-from-left anim-duration-1000 anim-delay-150"
-            >
-              Des bases claires pour comprendre ce que vous payez.
-            </h2>
-            <p
-              class="text-title-medium text-on-surface-variant mb-8 anim-in anim-fade anim-delay-300"
-            >
-              Selon votre projet, voici les périmètres habituels. Pas de frais
-              de dossier, pas d'abonnement imposé.
-            </p>
-            <Button
-              href="/services"
-              label="Voir le détail"
-              variant="outlined"
-              className="w-fit"
-            />
-          </div>
-
-          {/* Bill Breakdown */}
-          <div
-            class="bg-surface rounded-2xl p-6 border border-outline-variant/30 font-mono text-body-medium anim-in anim-fade anim-slide-from-right"
-          >
-            <div class="space-y-4">
-              <div class="flex justify-between items-center">
-                <span class="text-on-surface">Site vitrine performant</span>
-                <span
-                  class="bg-tertiary-container text-on-tertiary-container px-2 py-1 rounded text-label-small whitespace-nowrap"
-                  >Dès 2 500€</span
-                >
-              </div>
-              <p
-                class="text-body-small text-on-surface-variant pb-4 border-b border-outline-variant/30"
-              >
-                Pour TPE/PME : audit, SEO technique, design sur-mesure et
-                formation inclus.
-              </p>
-
-              <div class="flex justify-between items-center">
-                <span class="text-on-surface">Application / e-commerce</span>
-                <span
-                  class="bg-surface-container text-on-surface-variant px-2 py-1 rounded text-label-small whitespace-nowrap border border-outline-variant/40"
-                  >À partir de 5 000€</span
-                >
-              </div>
-              <p
-                class="text-body-small text-on-surface-variant pb-4 border-b border-outline-variant/30"
-              >
-                Plateforme métier, espace client ou tunnel d'achat sur-mesure.
-              </p>
-
-              <div class="flex justify-between items-center">
-                <span class="text-on-surface">Maintenance & évolutions</span>
-                <span
-                  class="bg-surface-container text-on-surface-variant px-2 py-1 rounded text-label-small whitespace-nowrap border border-outline-variant/40"
-                  >Sur devis</span
-                >
-              </div>
-              <p class="text-body-small text-on-surface-variant">
-                Support, mises à jour et évolutions selon vos besoins.
-              </p>
-            </div>
-            <div
-              class="mt-6 pt-4 border-t border-outline-variant/30 flex justify-between items-center"
-            >
-              <span class="text-on-surface-variant text-body-medium"
-                >Frais cachés</span
-              >
-              <span class="text-headline-small text-primary">0€</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  {/* 04c. ANTI-DEPENDANCE */}
-  <section class="section py-24 bg-surface">
-    <div class="max-width padding-x text-center">
-      <span class="sub-title anim-in anim-fade">Indépendance</span>
-      <h2
-        class="text-headline-large text-on-surface mb-6 anim-in anim-fade anim-delay-150"
-      >
-        Vous gardez les clés.
-      </h2>
-      <p
-        class="text-title-medium text-on-surface-variant max-w-2xl mx-auto mb-16 anim-in anim-fade anim-delay-300"
-      >
-        Aucun verrou propriétaire. Votre site vous appartient dès la livraison.
-      </p>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {
-          [
-            {
-              icon: iFolder,
-              containerClass: "bg-secondary-container",
-              iconClass: "fill-on-secondary-container",
-              title: "Code source complet",
-              desc: "Dépôt Git accessible et exploitable",
-            },
-            {
-              icon: iKey,
-              containerClass: "bg-primary-container",
-              iconClass: "fill-on-primary-container",
-              title: "Accès administrateur",
-              desc: "Contrôle total du CMS",
-            },
-            {
-              icon: iCloud,
-              containerClass: "bg-tertiary-container",
-              iconClass: "fill-on-tertiary-container",
-              title: "Hébergement",
-              desc: "Propriété directe, sans dépendance",
-            },
-          ].map((item, index) => (
-            <div
-              class="bg-surface-container rounded-3xl border border-outline-variant/40 p-8 flex flex-col items-center gap-5 anim-in anim-fade anim-slide-from-bottom"
-              style={{ ["--anim-delay"]: `${index * 150}ms` }}
-            >
-              <div
-                class={`w-16 h-16 rounded-full flex items-center justify-center ${item.containerClass}`}
-              >
-                <Icon
-                  icon={item.icon}
-                  className={`w-8 h-8 ${item.iconClass}`}
-                />
-              </div>
-              <div>
-                <h3 class="text-headline-small mb-2">{item.title}</h3>
-                <p class="text-body-medium text-on-surface-variant">
-                  {item.desc}
-                </p>
-              </div>
-            </div>
-          ))
-        }
-      </div>
-
-      <Button
-        href="/methode"
-        label="Voir la politique de réversibilité"
-        variant="tonal"
-        className="mt-12 w-fit mx-auto"
-      />
-    </div>
-  </section>
-
-  {/* 05b. DUO FONDATEUR - COMPACT TEAM CARD */}
-  <section class="py-24 bg-surface-container-low">
+  {/* 06. PRIX RÉSUMÉ */}
+  <section class="py-12 bg-surface">
     <div class="section">
       <div
-        class="max-w-5xl mx-auto bg-surface rounded-3xl p-8 md:p-12 shadow-sm border border-outline-variant/30 flex flex-col md:flex-row items-center gap-12"
+        class="flex flex-wrap items-center justify-between gap-4 bg-surface-container rounded-2xl p-6 border border-outline-variant/30"
       >
-        <div class="flex-1">
-          <h2
-            class="text-headline-medium mb-4 anim-in anim-fade anim-slide-from-left"
+        <div class="flex flex-wrap gap-6 font-mono text-body-medium">
+          <span
+            >Site vitrine <strong class="text-primary">dès 2 500€</strong></span
           >
-            Deux experts, sans intermédiaire
-          </h2>
-          <p
-            class="text-body-medium text-on-surface-variant mb-8 anim-in anim-fade anim-delay-150"
+          <span class="text-outline-variant">·</span>
+          <span>Application <strong>dès 5 000€</strong></span>
+          <span class="text-outline-variant">·</span>
+          <span
+            >Frais cachés <strong class="text-primary">0€</strong></span
           >
-            Votre projet est pris en charge par deux experts, de la réflexion à
-            la mise en ligne. Vous échangez directement avec ceux qui le
-            conçoivent et le réalisent.
-          </p>
-          <Button
-            href="/agence"
-            label="Découvrir l'équipe"
-            variant="outlined"
-          />
         </div>
-
-        {/* Founders Visual */}
-        <div class="flex flex-col sm:flex-row gap-6">
-          {/* Joel */}
-          <div
-            class="flex items-center gap-4 bg-surface-container-lowest p-4 rounded-2xl border border-outline-variant/30 anim-in anim-fade anim-slide-from-left anim-delay-300"
-          >
-            <div
-              class="h-14 w-14 rounded-full bg-surface-container-high flex items-center justify-center text-title-medium font-bold border border-outline-variant"
-            >
-              JV
-            </div>
-            <div>
-              <div class="text-title-small font-bold text-on-surface">
-                Joel Vigreux
-              </div>
-              <div
-                class="text-label-small text-on-surface-variant uppercase tracking-wider"
-              >
-                Directeur Technique
-              </div>
-            </div>
-          </div>
-
-          {/* Florian */}
-          <div
-            class="flex items-center gap-4 bg-surface-container-lowest p-4 rounded-2xl border border-outline-variant/30 anim-in anim-fade anim-slide-from-right anim-delay-500"
-          >
-            <div
-              class="h-14 w-14 rounded-full bg-surface-container-high flex items-center justify-center text-title-medium font-bold border border-outline-variant"
-            >
-              FV
-            </div>
-            <div>
-              <div class="text-title-small font-bold text-on-surface">
-                Florian Vigreux
-              </div>
-              <div
-                class="text-label-small text-on-surface-variant uppercase tracking-wider"
-              >
-                Directeur Conseil
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  {/* 05. BENTO GRID - RESOURCES & ENGAGEMENTS */}
-  <section class="py-32 bg-surface-container">
-    <div class="section">
-      <h2
-        class="text-headline-large mb-16 anim-in anim-fade anim-slide-from-left"
-      >
-        Ressources & éco‑conception
-      </h2>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-6 h-auto">
-        {/* Promesse Principale (Large) */}
-        <Card
-          className="md:col-span-2 md:row-span-1 bg-secondary-container text-on-secondary-container p-12  flex flex-col justify-between anim-in anim-fade anim-slide-from-left"
-        >
-          <h3 class="text-headline-medium">Hébergement responsable</h3>
-          <div class="flex justify-between items-end">
-            <p class="max-w-md text-title-medium opacity-90">
-              Choix d'infrastructures sobres, sécurité maîtrisée et impact
-              limité, sans compromis sur la performance.
-            </p>
-            <span class="text-headline-large opacity-20">01</span>
-          </div>
-        </Card>
-
-        {/* Eco 1 - Sobriété */}
-        <Card
-          variant="outlined"
-          className="bg-surface-container p-8 rounded-4xl   flex flex-col justify-between group anim-in anim-fade anim-slide-from-right anim-delay-150"
-        >
-          <div class="absolute top-0 right-0 p-4 opacity-50">
-            <span class="transition-all duration-500">
-              <Icon icon={iForest} className="w-8 h-8 fill-outline" />
-            </span>
-          </div>
-          <div>
-            <span
-              class="inline-block px-3 py-1 bg-tertiary-container text-on-tertiary-container rounded-full text-label-small mb-4"
-            >
-              LOW CARBON
-            </span>
-            <h4 class="text-headline-small mb-2 text-tertiary">
-              Sobriété numérique
-            </h4>
-            <p class="text-body-medium text-on-surface-variant">
-              Design frugal, code léger et médias optimisés pour réduire le
-              poids des pages.
-            </p>
-          </div>
-          <div class="mt-6">
-            <Button
-              href="/methode"
-              label="Voir nos choix"
-              variant="text"
-              className="text-tertiary!"
-            />
-          </div>
-        </Card>
-
-        {/* Engagement 2 */}
-        <Card
-          className="bg-surface-container-high p-8  flex flex-col justify-center text-center items-center gap-6 anim-in anim-fade anim-slide-from-left anim-delay-150"
-        >
-          <h4 class="text-headline-medium text-primary">Autonomie Client</h4>
-          <p class="text-body-large">
-            Code source et accès vous appartiennent.
-          </p>
-          <Button href="/methode" label="En savoir plus" variant="outlined" />
-        </Card>
-
-        {/* Eco 2 - Indicateurs */}
-        <Card
-          variant="outlined"
-          className="bg-surface-container p-8  flex flex-col justify-between group anim-in anim-fade anim-scale anim-delay-300"
-        >
-          <div class="absolute top-0 right-0 p-4 opacity-50">
-            <span class="transition-all duration-500">
-              <Icon
-                icon={iBarChart}
-                className="w-8 h-8 fill-on-surface-variant/40"
-              />
-            </span>
-          </div>
-          <div>
-            <span
-              class="inline-block px-3 py-1 bg-tertiary-container text-on-tertiary-container rounded-full text-label-small mb-4"
-            >
-              ECOINDEX A/B
-            </span>
-            <h4 class="text-headline-small mb-2 text-tertiary">
-              Indicateurs éco-conçus
-            </h4>
-            <p class="text-body-medium text-on-surface-variant">
-              Poids de page, EcoIndex et bonnes pratiques suivis pour limiter
-              l'empreinte.
-            </p>
-          </div>
-          <div class="mt-6">
-            <Button
-              href="/realisations"
-              label="Voir des exemples"
-              variant="outlined"
-              className="w-fit"
-            />
-          </div>
-        </Card>
-
-        {/* Resource 2 (Large) */}
-        <Card
-          className="md:col-span-2 dark bg-surface-container-highest text-on-surface p-12  flex flex-col md:flex-row gap-12 items-center anim-in anim-fade anim-slide-from-right anim-delay-300"
-        >
-          <div class="flex-1">
-            <h3 class="text-headline-medium mb-4 text-primary-fixed">
-              Refonte sereine et cadrée
-            </h3>
-            <p class="text-title-medium">
-              Evitez les dérives budgétaires avec notre guide de stratégie.
-            </p>
-          </div>
-          <Button href="/ressources" label="Lire le guide" variant="outlined" />
-        </Card>
-      </div>
-    </div>
-  </section>
-
-  {/* 06. FAQ - SPLIT INTERACTIVE */}
-  <section class="section py-32">
-    <div class="max-width padding-x grid md:grid-cols-2 gap-16">
-      <div>
-        <h2
-          class="text-headline-large mb-8 anim-in anim-fade anim-slide-from-left"
-        >
-          Vous avez des questions ?
-        </h2>
-        <p
-          class="text-title-medium text-on-surface-variant mb-8 anim-in anim-fade anim-delay-150"
-        >
-          Voici des réponses concrètes avant d’aller plus loin.
-        </p>
         <Button
-          href="/contact"
-          label="Poser une autre question"
+          href="/services"
+          label="Voir le détail des tarifs"
           variant="outlined"
-          className="w-fit anim-in anim-fade anim-delay-300"
+          className="shrink-0"
         />
       </div>
-      <div class="anim-in anim-fade anim-slide-from-right">
-        <FaqAccordion client:visible items={faqItems} />
-      </div>
     </div>
   </section>
 
-  {/* 07. CTA FINAL */}
+  {/* 07. FAQ */}
+  <FaqSection
+    title="Les points à clarifier avant de démarrer"
+    description="Trois questions fréquentes — avec des réponses directes."
+    items={faqItems}
+  />
+
+  {/* 08. CTA FINAL */}
   <CtaSection
-    title="Prêt à échanger sur votre projet ?"
-    description="Décrivez-nous votre besoin, on vous répond rapidement avec un premier retour concret."
-    primaryLabel="Nous contacter"
+    title="On cadre votre projet en 30 minutes"
+    description="Décrivez-nous votre besoin, on vous répond avec un premier retour concret — et un périmètre clair dès le départ."
+    primaryLabel="Demander un diagnostic"
     primaryHref="/contact"
-    secondaryLabel="Nos services"
+    secondaryLabel="Voir nos services"
     secondaryHref="/services"
   />
 </Layout>

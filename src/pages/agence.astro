@@ -12,7 +12,6 @@ import { iInfo } from "@udixio/icons-rounded-400/info";
 import { iHandshake } from "@udixio/icons-rounded-400/handshake";
 import { iPartnerExchange } from "@udixio/icons-rounded-400/partner_exchange";
 import { iVerifiedUser } from "@udixio/icons-rounded-400/verified_user";
-import { iCheckCircleFilled } from "@udixio/icons-rounded-400/filled/check_circle";
 import { iKey } from "@udixio/icons-rounded-400/key";
 
 const faqItems = [
@@ -288,57 +287,6 @@ const faqItems = [
             </Card>
           ))
         }
-      </div>
-    </div>
-  </section>
-
-  {/* ENGAGEMENTS */}
-  <section class="py-24 bg-surface-container-low">
-      <div class="section">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          <div>
-            <span class="sub-title">Nos engagements</span>
-            <h2 class="text-headline-large text-on-surface">
-              Des bases claires <span class="text-gradient">dès le départ</span>
-            </h2>
-            <p class="text-title-medium text-on-surface-variant mt-6">
-              Chaque projet démarre avec un cadre explicite. Vous savez ce qui
-              est inclus, ce qui ne l'est pas, et comment ça avance.
-            </p>
-            <div class="mt-8 flex flex-wrap gap-4">
-              <Button href="/methode" label="Voir notre méthode" />
-              <Button
-                href="/contact"
-                label="Nous contacter"
-                variant="outlined"
-              />
-            </div>
-          </div>
-
-          <Card
-            className="bg-secondary-container text-on-secondary-container p-8"
-          >
-            <ul class="space-y-4 mt-2">
-              {
-                [
-                  "Périmètre clarifié avant démarrage",
-                  "Validations à chaque étape clé",
-                  "Accès et livrables remis au client",
-                  "Explications claires des choix techniques",
-                  "Réversibilité garantie dès la livraison",
-                ].map((item) => (
-                  <li class="flex items-center gap-3">
-                    <Icon
-                      className="size-6 rounded-full text-secondary"
-                      icon={iCheckCircleFilled}
-                    />
-                    <span class="text-title-medium">{item}</span>
-                  </li>
-                ))
-              }
-            </ul>
-          </Card>
-        </div>
       </div>
     </div>
   </section>

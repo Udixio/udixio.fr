@@ -107,33 +107,21 @@ const faqItems = [
               [
                 {
                   number: 1,
-                  title: "Cadrage des objectifs",
+                  title: "Cadrage & objectifs",
                   description:
-                    "On clarifie vos objectifs, votre cible et le périmètre exact du projet. Rien n'est engagé sans validation.",
+                    "Périmètre écrit et validé avant toute production. Vous savez exactement ce qui est inclus, ce qui ne l'est pas, et pourquoi.",
                 },
                 {
                   number: 2,
-                  title: "Architecture claire",
+                  title: "Design & développement",
                   description:
-                    "Architecture de pages et parcours utilisateur pensés pour guider vos visiteurs vers l'action.",
+                    "Maquettes validées avant développement. Code testé, performant (Lighthouse 100/100) et accessible.",
                 },
                 {
                   number: 3,
-                  title: "Design aligné avec votre image",
+                  title: "Livraison & passation",
                   description:
-                    "Interface lisible, professionnelle et cohérente avec votre identité visuelle.",
-                },
-                {
-                  number: 4,
-                  title: "Développement fiable & tests",
-                  description:
-                    "Code performant, accessible et testé. Performance Lighthouse et Core Web Vitals optimisés.",
-                },
-                {
-                  number: 5,
-                  title: "Mise en ligne & passation",
-                  description:
-                    "Mise en production maîtrisée. Vous récupérez tous les accès et la documentation.",
+                    "Mise en ligne maîtrisée. Dépôt Git, accès admin, hébergement documenté — tout vous est remis.",
                 },
               ].map((step) => (
                 <div class="group relative pl-8 border-l-2 border-outline-variant transition-colors duration-500 anim-fade-up delay-200">
@@ -166,10 +154,10 @@ const faqItems = [
   <section class="py-24 bg-surface">
       <div class="section">
         <div class="max-w-4xl mb-12">
-          <span class="sub-title">Bénéfices</span>
+          <span class="sub-title">Ce que vous obtenez</span>
           <h2 class="text-headline-large">
-            Des résultats concrets.<br />
-            <span class="text-gradient">Sans détour.</span>
+            Des résultats mesurables.<br />
+            <span class="text-gradient">Pas des promesses.</span>
           </h2>
         </div>
 
@@ -178,39 +166,39 @@ const faqItems = [
             [
               {
                 icon: iVisibility,
-                title: "Inspirer confiance",
+                title: "Design aligné avec votre identité",
                 description:
-                  "Un site professionnel qui crédibilise votre entreprise auprès des prospects et partenaires.",
+                  "Interface conçue à partir de votre image — pas un template générique. Vos prospects vous identifient immédiatement.",
               },
               {
                 icon: iTrendingUp,
-                title: "Générer des leads",
+                title: "Architecture SEO + pages qui convertissent",
                 description:
-                  "Structure de pages et SEO optimisés pour transformer vos visiteurs en contacts qualifiés.",
+                  "Structure de pages pensée pour le référencement et le parcours utilisateur — pour transformer vos visiteurs en contacts.",
               },
               {
                 icon: iHandshake,
-                title: "Maîtriser votre image",
+                title: "Développement testé, Lighthouse 100/100",
                 description:
-                  "Un design aligné avec votre identité, sans dépendance à des templates génériques.",
+                  "Code performant, accessible, optimisé. Des scores vérifiables sur chaque livraison.",
               },
               {
                 icon: iKey,
-                title: "Garder la main",
+                title: "Git, hébergement et CMS : tout vous appartient",
                 description:
-                  "Vous êtes propriétaire du code, de l'hébergement et des contenus. Aucun verrou.",
+                  "Dépôt Git, accès admin et hébergement documentés — remis à la livraison, sans condition.",
               },
               {
                 icon: iVerifiedUser,
-                title: "Base durable",
+                title: "Base évolutive, sans repartir de zéro",
                 description:
-                  "Construit pour évoluer facilement, sans repartir de zéro à chaque mise à jour.",
+                  "Architecture modulaire documentée. Un autre prestataire peut reprendre sans difficulté.",
               },
               {
                 icon: iChecklist,
-                title: "Périmètre maîtrisé",
+                title: "Périmètre écrit avant tout démarrage",
                 description:
-                  "Vous savez exactement ce qui est inclus, ce qui ne l'est pas, et pourquoi.",
+                  "Un document de cadrage précise ce qui est inclus, les délais et le budget. Rien n'avance sans votre accord.",
               },
             ].map((benefit) => (
               <Card variant="outlined" className="group p-6">
@@ -227,10 +215,10 @@ const faqItems = [
     </div>
   </section>
 
-  {/* POUR QUI ? */}
+  {/* CAS D'USAGE */}
   <section class="py-24 bg-surface-container-low">
     <div class="section text-center">
-      <span class="sub-title anim-in anim-fade">Audience</span>
+      <span class="sub-title anim-in anim-fade">Cas d'usage</span>
       <h2 class="text-headline-large text-on-surface mb-4 anim-in anim-fade anim-delay-150">
         Ce service est fait pour vous si…
       </h2>
@@ -243,41 +231,41 @@ const faqItems = [
           [
             {
               icon: iStorefront,
-              title: "Artisans & commerçants",
+              title: "Votre site existe mais ne génère aucun contact",
               description:
-                "Votre activité mérite un site qui inspire confiance et vous amène des clients locaux qualifiés.",
+                "Vos concurrents captent les leads à votre place. On restructure le parcours et le SEO pour que votre site travaille pour vous.",
               containerClass: "bg-tertiary-container",
               iconClass: "fill-on-tertiary-container",
             },
             {
               icon: iGroups,
-              title: "TPE & PME locales",
+              title: "Votre design est daté, il ne reflète plus votre niveau",
               description:
-                "Votre site actuel est daté, peu performant ou ne reflète plus votre offre. Il est temps de le remettre à niveau.",
+                "Vous perdez en crédibilité avant même le premier échange. On repart de votre identité pour une interface qui inspire confiance.",
               containerClass: "bg-primary-container",
               iconClass: "fill-on-primary-container",
             },
             {
               icon: iRocketLaunch,
-              title: "Nouveaux projets",
+              title: "Vous lancez votre activité et avez besoin d'une base solide",
               description:
-                "Vous lancez votre activité et avez besoin d'une présence web professionnelle dès le départ.",
+                "Un mauvais départ est coûteux à corriger. On cadre le minimum viable qui vous ouvre le marché, sans sur-investir.",
               containerClass: "bg-secondary-container",
               iconClass: "fill-on-secondary-container",
             },
-          ].map((persona, index) => (
+          ].map((cas, index) => (
             <div
               class="bg-surface-container rounded-3xl border border-outline-variant/40 p-8 flex flex-col items-center gap-5 text-center anim-in anim-fade anim-slide-from-bottom"
               style={{ ["--anim-delay"]: `${index * 150}ms` }}
             >
               <div
-                class={`w-16 h-16 rounded-full flex items-center justify-center ${persona.containerClass}`}
+                class={`w-16 h-16 rounded-full flex items-center justify-center ${cas.containerClass}`}
               >
-                <Icon icon={persona.icon} className={`w-8 h-8 ${persona.iconClass}`} />
+                <Icon icon={cas.icon} className={`w-8 h-8 ${cas.iconClass}`} />
               </div>
               <div>
-                <h3 class="text-headline-small mb-2">{persona.title}</h3>
-                <p class="text-body-medium text-on-surface-variant">{persona.description}</p>
+                <h3 class="text-headline-small mb-2">{cas.title}</h3>
+                <p class="text-body-medium text-on-surface-variant">{cas.description}</p>
               </div>
             </div>
           ))

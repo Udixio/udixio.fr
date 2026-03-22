@@ -109,27 +109,21 @@ const faqItems = [
               [
                 {
                   number: 1,
-                  title: "Cadrage précis & priorisation",
+                  title: "Cadrage & priorisation",
                   description:
-                    "On identifie le problème réel, on priorise les fonctionnalités indispensables et on définit un périmètre maîtrisable.",
+                    "On identifie le problème réel, on priorise les fonctionnalités indispensables et on écrit un périmètre validé avant tout démarrage.",
                 },
                 {
                   number: 2,
-                  title: "Conception orientée usage",
+                  title: "Développement par étapes",
                   description:
-                    "Architecture et interface pensées pour vos utilisateurs réels. Maquettes validées avant développement.",
+                    "Livraisons progressives et testables. Vous accédez à l'outil en cours de développement et validez à chaque étape.",
                 },
                 {
                   number: 3,
-                  title: "Développement par étapes",
+                  title: "Tests & passation",
                   description:
-                    "Livraisons progressives et testables. Vous voyez l'avancement et pouvez valider à chaque étape.",
-                },
-                {
-                  number: 4,
-                  title: "Tests & livraison",
-                  description:
-                    "Tests fonctionnels complets avant mise en production. Documentation et passation incluses.",
+                    "Tests fonctionnels complets avant mise en production. Dépôt Git, accès admin et documentation remis à la livraison.",
                 },
               ].map((step) => (
                 <div class="group relative pl-8 border-l-2 border-outline-variant transition-colors duration-500 anim-fade-up delay-200">
@@ -162,10 +156,10 @@ const faqItems = [
   <section class="py-24 bg-surface">
       <div class="section">
         <div class="max-w-4xl mb-12">
-          <span class="sub-title">Bénéfices</span>
+          <span class="sub-title">Ce que vous obtenez</span>
           <h2 class="text-headline-large">
             Un outil taillé pour vous.<br />
-            <span class="text-gradient">Évolutif par nature.</span>
+            <span class="text-gradient">Vérifiable à chaque étape.</span>
           </h2>
         </div>
 
@@ -174,39 +168,39 @@ const faqItems = [
             [
               {
                 icon: iTune,
-                title: "Adapté à vos process",
+                title: "Chaque fonctionnalité couvre un usage réel",
                 description:
-                  "Chaque fonctionnalité répond à un besoin réel de vos équipes, pas à un template préfabriqué.",
+                  "On développe ce que vos équipes utilisent vraiment — pas un template préfabriqué avec des options inutiles.",
               },
               {
                 icon: iBolt,
-                title: "Livraisons progressives",
+                title: "Premier noyau utilisable en 6 à 12 semaines",
                 description:
-                  "On livre par étapes pour que vous puissiez valider et utiliser rapidement, sans attendre la version finale.",
+                  "On livre par étapes pour que vous validiez et utilisiez rapidement, sans attendre une version finale hypothétique.",
               },
               {
                 icon: iVerifiedUser,
-                title: "Décisions expliquées",
+                title: "Chaque choix technique est expliqué",
                 description:
-                  "Chaque choix technique est expliqué avec un impact concret. Rien n'est imposé sans échange.",
+                  "Vous comprenez pourquoi chaque décision est prise et quel impact elle a sur votre outil. Rien n'est imposé.",
               },
               {
                 icon: iKey,
-                title: "Vous gardez la main",
+                title: "Git, hébergement, accès : tout vous appartient",
                 description:
-                  "Code source, accès et documentation vous appartiennent. Aucune dépendance à notre infrastructure.",
+                  "Code source, accès admin et documentation remis à la livraison — sans condition ni dépendance à notre infrastructure.",
               },
               {
                 icon: iPartnerExchange,
-                title: "Sans intermédiaire",
+                title: "Vous échangez directement avec Joël ou Florian",
                 description:
-                  "Vous travaillez directement avec les développeurs. Les décisions sont prises plus vite.",
+                  "Celui qui développe est celui à qui vous parlez. Pas de chef de projet intermédiaire, pas de déperdition.",
               },
               {
                 icon: iChecklist,
-                title: "Évolutif sans verrou",
+                title: "Architecture modulaire documentée",
                 description:
-                  "Architecture pensée pour grandir avec vos besoins, par étapes et sans repartir de zéro.",
+                  "Conçu pour grandir par étapes selon vos priorités. Un autre prestataire peut reprendre sans repartir de zéro.",
               },
             ].map((benefit) => (
               <Card variant="outlined" className="group p-6">
@@ -223,10 +217,10 @@ const faqItems = [
     </div>
   </section>
 
-  {/* POUR QUI ? */}
+  {/* CAS D'USAGE */}
   <section class="py-24 bg-surface-container-low">
     <div class="section text-center">
-      <span class="sub-title anim-in anim-fade">Audience</span>
+      <span class="sub-title anim-in anim-fade">Cas d'usage</span>
       <h2 class="text-headline-large text-on-surface mb-4 anim-in anim-fade anim-delay-150">
         Ce service est fait pour vous si…
       </h2>
@@ -239,41 +233,41 @@ const faqItems = [
           [
             {
               icon: iGroups,
-              title: "PME avec des process spécifiques",
+              title: "Vous gérez vos données clients dans des tableurs",
               description:
-                "Vos équipes utilisent des outils dispersés ou des workflows manuels qui pourraient être automatisés.",
+                "Risque d'erreur, perte de temps, scalabilité nulle. On construit l'outil qui automatise ce que vous faites à la main.",
               containerClass: "bg-primary-container",
               iconClass: "fill-on-primary-container",
             },
             {
               icon: iRocketLaunch,
-              title: "Startups & produits digitaux",
+              title: "Vous lancez une plateforme ou un SaaS",
               description:
-                "Vous lancez une plateforme, une marketplace ou un SaaS et avez besoin d'un développement solide et évolutif.",
+                "Un développement non cadré dépasse toujours le budget. On livre un noyau fonctionnel en 6 à 12 semaines, puis on itère.",
               containerClass: "bg-secondary-container",
               iconClass: "fill-on-secondary-container",
             },
             {
               icon: iStorefront,
-              title: "E-commerce sur-mesure",
+              title: "Votre CMS e-commerce est trop limité",
               description:
-                "Vos besoins dépassent les limites d'un CMS standard : tunnel d'achat personnalisé, espace client, intégrations.",
+                "Tunnel d'achat bridé, intégrations impossibles. On conçoit le parcours exact dont vos clients ont besoin.",
               containerClass: "bg-tertiary-container",
               iconClass: "fill-on-tertiary-container",
             },
-          ].map((persona, index) => (
+          ].map((cas, index) => (
             <div
               class="bg-surface-container rounded-3xl border border-outline-variant/40 p-8 flex flex-col items-center gap-5 text-center anim-in anim-fade anim-slide-from-bottom"
               style={{ ["--anim-delay"]: `${index * 150}ms` }}
             >
               <div
-                class={`w-16 h-16 rounded-full flex items-center justify-center ${persona.containerClass}`}
+                class={`w-16 h-16 rounded-full flex items-center justify-center ${cas.containerClass}`}
               >
-                <Icon icon={persona.icon} className={`w-8 h-8 ${persona.iconClass}`} />
+                <Icon icon={cas.icon} className={`w-8 h-8 ${cas.iconClass}`} />
               </div>
               <div>
-                <h3 class="text-headline-small mb-2">{persona.title}</h3>
-                <p class="text-body-medium text-on-surface-variant">{persona.description}</p>
+                <h3 class="text-headline-small mb-2">{cas.title}</h3>
+                <p class="text-body-medium text-on-surface-variant">{cas.description}</p>
               </div>
             </div>
           ))
