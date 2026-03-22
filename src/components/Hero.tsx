@@ -242,7 +242,7 @@ export const Hero = ({
     >
       <div
         ref={heroRef}
-        className="relative min-h-screen flex  items-center justify-center bg-surface-container-low text-on-surface overflow-hidden h-full pt-16"
+        className="relative min-h-screen flex  items-center justify-center bg-secondary-container text-on-secondary-container overflow-hidden h-full pt-16"
       >
         {/* --- PAPER TEXTURE OVERLAY --- */}
         <div className="absolute inset-0 z-10 pointer-events-none  opacity-40">

@@ -1,14 +1,17 @@
 import { defineConfig } from "@udixio/ui-react";
+import { Hct } from "@material/material-color-utilities";
+import { Context } from "@udixio/theme";
 
 export default defineConfig({
-  sourceColor: "#42764c",
+  sourceColor: ({ isDark }: Context) => Hct.from(165, 30, isDark ? 70 : 49),
+  contrastLevel: -0.1,
   palettes: {
     // tertiary: "#D58A4E",
 
-    tertiary: ({ sourceColor }) => ({
-      hue: 175,
-      chroma: sourceColor.chroma * 0.75,
-    }),
+    // tertiary: ({ sourceColor }) => ({
+    //   hue: 180,
+    //   // chroma: sourceColor.chroma * 0.8,
+    // }),
     success: "#4CAF50",
     warning: "#FFA726",
     info: "#2196F3",
@@ -20,17 +23,17 @@ export default defineConfig({
   fontStyles: {
     display: {
       large: {
-        fontWeight: 500,
+        fontWeight: 600,
         fontSize: 5,
         lineHeight: 5,
       },
       medium: {
-        fontWeight: 500,
+        fontWeight: 600,
         fontSize: 4,
         lineHeight: 4,
       },
       small: {
-        fontWeight: 500,
+        fontWeight: 600,
         fontSize: 3,
         lineHeight: 3,
       },
