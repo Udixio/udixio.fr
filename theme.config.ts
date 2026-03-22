@@ -3,15 +3,15 @@ import { Hct } from "@material/material-color-utilities";
 import { Context } from "@udixio/theme";
 
 export default defineConfig({
-  sourceColor: ({ isDark }: Context) => Hct.from(165, 30, isDark ? 70 : 49),
-  contrastLevel: -0.1,
+  sourceColor: ({ isDark }: Context) => Hct.from(161, 25, isDark ? 70 : 49),
+
   palettes: {
     // tertiary: "#D58A4E",
 
-    // tertiary: ({ sourceColor }) => ({
-    //   hue: 180,
-    //   // chroma: sourceColor.chroma * 0.8,
-    // }),
+    tertiary: ({ sourceColor }) => ({
+      hue: 185,
+      chroma: sourceColor.chroma,
+    }),
     success: "#4CAF50",
     warning: "#FFA726",
     info: "#2196F3",
