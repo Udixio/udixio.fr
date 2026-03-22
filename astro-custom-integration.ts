@@ -15,7 +15,7 @@ import path from "node:path";
 async function getAllMDXFiles(realisationsDir: string) {
     try {
         const files = await fs.readdir(realisationsDir);
-        const mdxFiles = files.filter(file => file.endsWith('.mdx'));
+        const mdxFiles = files.filter(file => file.endsWith('.mdx') && !file.startsWith('_'));
         console.log('📄 Found MDX files:', mdxFiles);
         return mdxFiles;
     } catch (error) {

@@ -229,9 +229,9 @@ const faqItems = [
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
         {
           [
-            { value: "—", label: "projets livrés" },
-            { value: "—", label: "% de satisfaction" },
-            { value: "—", label: "ans d'expérience" },
+            { value: "5+", label: "projets livrés" },
+            { value: "100/100", label: "Lighthouse — notre standard" },
+            { value: "8 ans+", label: "d'expérience cumulée" },
           ].map((stat, index) => (
             <div
               class="bg-surface rounded-3xl p-8 border border-outline-variant/40 anim-in anim-fade anim-slide-from-bottom"
@@ -248,21 +248,31 @@ const faqItems = [
     </div>
   </section>
 
-  {/* CERTIFICATIONS */}
+  {/* FORMATIONS */}
   <section class="py-24 bg-surface">
     <div class="section">
-      <span class="sub-title anim-in anim-fade">Crédibilité</span>
+      <span class="sub-title anim-in anim-fade">Parcours</span>
       <h2 class="text-headline-large text-on-surface mb-4 anim-in anim-fade anim-slide-from-left anim-duration-1000 anim-delay-150">
-        Certifications & expertise
+        Formations & expertise
       </h2>
       <p class="text-title-medium text-on-surface-variant max-w-2xl mb-12 anim-in anim-fade anim-delay-300">
-        Nos certifications et labels professionnels seront listés ici.
+        Nos parcours de formation et compétences reconnues.
       </p>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {
           [
-            { type: "Certification", name: "—", org: "—", year: "—" },
-            { type: "Label", name: "—", org: "—", year: "—" },
+            {
+              type: "Formation diplômante",
+              name: "Développeur Web et Web Mobile",
+              org: "Titre professionnel niveau 5 (bac +2)",
+              year: "Joël Vigreux",
+            },
+            {
+              type: "Bootcamp",
+              name: "Commerce & Marketing digital",
+              org: "Rocket School",
+              year: "Florian Vigreux · 2023",
+            },
           ].map((cert, index) => (
             <Card
               variant="outlined"
@@ -273,7 +283,8 @@ const faqItems = [
                 {cert.type}
               </div>
               <h3 class="text-headline-small mb-1">{cert.name}</h3>
-              <p class="text-body-medium text-on-surface-variant">{cert.org} · {cert.year}</p>
+              <p class="text-body-medium text-on-surface-variant">{cert.org}</p>
+              <p class="text-body-small text-on-surface-variant mt-1">{cert.year}</p>
             </Card>
           ))
         }
