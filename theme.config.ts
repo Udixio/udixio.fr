@@ -3,7 +3,7 @@ import { Hct } from "@material/material-color-utilities";
 import { Context } from "@udixio/theme";
 
 export default defineConfig({
-  sourceColor: ({ isDark }: Context) => Hct.from(161, 25, isDark ? 70 : 49),
+  sourceColor: ({ isDark }: Context) => Hct.from(161, 30, isDark ? 70 : 49),
 
   palettes: {
     // tertiary: "#D58A4E",
