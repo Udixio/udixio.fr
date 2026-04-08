@@ -2,19 +2,20 @@ import { defineConfig } from "@udixio/ui-react";
 import { Hct } from "@material/material-color-utilities";
 import { Context } from "@udixio/theme";
 
-export default defineConfig({
-  sourceColor: ({ isDark }: Context) => Hct.from(161, 30, isDark ? 70 : 49),
+export const sourceColor =
+  (hue: number = 161) =>
+  ({ isDark }: Context) =>
+    Hct.from(hue, 30, isDark ? 70 : 49);
 
+export default defineConfig({
+  sourceColor: sourceColor(),
   palettes: {
     // tertiary: "#D58A4E",
     secondary: ({ sourceColor }) => ({
       hue: sourceColor.hue,
       chroma: sourceColor.chroma * 0.66,
     }),
-    tertiary: ({ sourceColor }) => ({
-      hue: 185,
-      chroma: sourceColor.chroma,
-    }),
+
     success: "#4CAF50",
     warning: "#FFA726",
     info: "#2196F3",
