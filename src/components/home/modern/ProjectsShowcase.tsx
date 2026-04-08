@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { Button, Carousel, CarouselItem, IconButton } from "@udixio/ui-react";
 import { iArrowRight } from "@udixio/icons-rounded-400/arrow_right";
 import type { ProjectProps } from "../../project/Project";
+import { iArrowLeft } from "@udixio/icons-rounded-400/arrow_left";
+import { Card } from "@/components/Card";
 
 export const ProjectsShowcase = ({
   projects,
@@ -14,21 +17,81 @@ export const ProjectsShowcase = ({
   const [step, setStep] = useState(1);
   const [visible, setVisible] = useState({ approx: 0, full: 0 });
 
-  const prev = () => setIndex((i) => Math.max(0, i - step));
-  const next = () => setIndex((i) => Math.min(total - 1, i + step));
+  const lastInteractionRef = useRef<number>(Date.now());
+
+  const [displayedIndex, setDisplayedIndex] = useState(0);
+  const [opacity, setOpacity] = useState(1);
+  const [portalTarget, setPortalTarget] = useState<Element | null>(null);
+
+  useEffect(() => {
+    setPortalTarget(document.getElementById("showcase-hero-portal"));
+  }, []);
+
+  useEffect(() => {
+    setOpacity(0);
+    const t = setTimeout(() => {
+      setDisplayedIndex(index);
+      setOpacity(1);
+    }, 300);
+    return () => clearTimeout(t);
+  }, [index]);
+
+  const prev = () => {
+    lastInteractionRef.current = Date.now();
+    setIndex((i) => Math.max(0, i - step));
+  };
+  const next = () => {
+    lastInteractionRef.current = Date.now();
+    setIndex((i) => Math.min(total - 1, i + step));
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const timeSinceLastInteraction = Date.now() - lastInteractionRef.current;
+      if (timeSinceLastInteraction >= 2000) {
+        setIndex((i) => {
+          const nextIndex = i + step;
+          if (nextIndex >= total) {
+            return 0; // Loop back to start
+          }
+          return nextIndex;
+        });
+      }
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [step, total]);
+
+  const heroPortal =
+    portalTarget && projects[displayedIndex]
+      ? createPortal(
+          <Card
+            variant="elevated"
+            className="ml-auto w-6/10 p-0 h-[175%] pointer-events-auto"
+            style={{ transition: "opacity 0.3s ease", opacity }}
+          >
+            <ShowcaseItem project={projects[displayedIndex]} />
+          </Card>,
+          portalTarget,
+        )
+      : null;
 
   return (
-    <div className="w-full padding">
+    <div className="w-full ">
+      {heroPortal}
       <Carousel
         variant="hero"
         scrollSensitivity={0.8}
         index={index}
-        onChange={setIndex}
+        onChange={(newIndex) => {
+          lastInteractionRef.current = Date.now();
+          setIndex(newIndex);
+        }}
         onMetricsChange={(m) => {
           setStep(m.stepHalf);
           setVisible({ approx: m.visibleApprox, full: m.visibleFull });
         }}
-        outputRange={[42, 400]}
+        outputRange={[100, 600]}
         className="h-[500px]"
       >
         {projects.map((project, i) => {
@@ -56,38 +119,28 @@ export const ProjectsShowcase = ({
             </CarouselItem>
           );
         })}
-
-        {/* CTA Card as last item */}
-        <CarouselItem key="cta">
-          <div className="h-full flex flex-col justify-center gap-8 p-12 rounded-4xl bg-surface-container hover:bg-surface-container-high transition-colors border border-outline-variant/30 group min-w-[300px] min-h-[400px]">
-            <p className="text-headline-small text-on-surface  ">
-              Et si le prochain projet, c'était le vôtre ?
-            </p>
-            <Button
-              href="/contact"
-              label="Lancer mon projet"
-              icon={iArrowRight}
-              iconPosition="right"
-            />
-          </div>
-        </CarouselItem>
       </Carousel>
 
-      <div className="max-width padding-x w-full mt-8 flex items-center justify-end gap-3">
-        <div className="flex gap-4">
-          <Button
-            variant="outlined"
-            label="Précédent"
-            onClick={prev}
-            disabled={index === 0}
-          />
-          <Button
-            variant="filled"
-            label="Suivant"
-            onClick={next}
-            disabled={index >= total - 1}
-          />
-        </div>
+      <div className=" w-full mt-8 flex items-center justify-end gap-3">
+        <Button
+          href="/realisations"
+          label="Voir nos réalisations"
+          variant="text"
+        />
+        <IconButton
+          variant="outlined"
+          label="Précédent"
+          icon={iArrowLeft}
+          onClick={prev}
+          disabled={index === 0}
+        />
+        <IconButton
+          variant="tonal"
+          label="Suivant"
+          icon={iArrowRight}
+          onClick={next}
+          disabled={index >= total - 1}
+        />
       </div>
     </div>
   );

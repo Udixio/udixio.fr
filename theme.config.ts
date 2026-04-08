@@ -7,7 +7,10 @@ export default defineConfig({
 
   palettes: {
     // tertiary: "#D58A4E",
-
+    secondary: ({ sourceColor }) => ({
+      hue: sourceColor.hue,
+      chroma: sourceColor.chroma * 0.66,
+    }),
     tertiary: ({ sourceColor }) => ({
       hue: 185,
       chroma: sourceColor.chroma,
@@ -25,28 +28,34 @@ export default defineConfig({
       large: {
         fontWeight: 600,
         fontSize: 5,
-        lineHeight: 5,
+        lineHeight: 5.8,
       },
       medium: {
         fontWeight: 600,
         fontSize: 4,
-        lineHeight: 4,
+        lineHeight: 4.5,
       },
       small: {
         fontWeight: 600,
         fontSize: 3,
-        lineHeight: 3,
+        lineHeight: 3.5,
       },
     },
     headline: {
       large: {
         fontWeight: 500,
+        fontSize: 2.5,
+        lineHeight: 3.5,
       },
       medium: {
         fontWeight: 500,
+        fontSize: 2,
+        lineHeight: 2.6,
       },
       small: {
         fontWeight: 500,
+        fontSize: 1.5,
+        lineHeight: 2,
       },
     },
     // title: {
