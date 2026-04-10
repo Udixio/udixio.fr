@@ -12,7 +12,13 @@ import "@fontsource/montserrat/700.css";
 import "@fontsource/montserrat/600.css";
 import defaultImage from "@assets/images/img.png";
 import { ClientRouter } from "astro:transitions";
-import { SmoothScroll, animateOnScroll } from "@udixio/ui-react";
+import {
+  SmoothScroll,
+  animateOnScroll,
+  generateThemeCss,
+} from "@udixio/ui-react";
+import { argbFromHex, Hct } from "@material/material-color-utilities";
+import defaultConfig, { sourceColor } from "../../theme.config";
 
 import { BackgroundColor } from "@components/three/BackgroundColor";
 import Font from "astro/components/Font.astro";
@@ -98,6 +104,7 @@ interface Props {
   footer: boolean;
   background: boolean;
   menu: boolean;
+  defaultSourceColor?: string;
 }
 
 const {
@@ -105,7 +112,19 @@ const {
   footer = true,
   menu = true,
   background = true,
+  defaultSourceColor,
 }: Props = Astro.props;
+
+const configForCss = defaultSourceColor
+  ? {
+      ...defaultConfig,
+      sourceColor: sourceColor(
+        Hct.fromInt(argbFromHex(defaultSourceColor)).hue,
+      ),
+    }
+  : defaultConfig;
+const themeCss = await generateThemeCss(configForCss);
+
 // const domain = Astro.url.origin;
 
 const titleDefault = `Joël Vigreux - Développeur Full-Stack`;
@@ -174,7 +193,11 @@ const seoDefault: SEOProps = {
       <slot />
     </main>
 
-    <ThemeProvider client:load transition:name="theme-provider" />
+    <ThemeProvider
+      initialCss={themeCss}
+      client:idle
+      transition:name="theme-provider"
+    />
 
     {footer && <Footer />}
     <!--</SmoothScroll>-->

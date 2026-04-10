@@ -1,7 +1,5 @@
-import {
-  themeConfigStore,
-  themeServiceStore,
-} from "@/stores/themeConfigStore.ts";
+import { useState } from "react";
+import { themeConfigStore, themeServiceStore } from "@/stores/themeConfigStore.ts";
 import { useStore } from "@nanostores/react";
 import { ThemeProvider as Theme } from "@udixio/ui-react";
 import { argbFromHex, Hct } from "@material/material-color-utilities";
@@ -24,18 +22,27 @@ export const updateThemeFromHex = (hex?: string) => {
   }
 };
 
-export const ThemeProvider = () => {
+export const ThemeProvider = ({ initialCss }: { initialCss?: string }) => {
+  const [showInitialCss, setShowInitialCss] = useState(!!initialCss);
+
   const $themeConfig = useStore(themeConfigStore);
 
-  console.log("ThemeProvider", $themeConfig.sourceColor);
   return (
-    <Theme
-      onLoad={(api) => {
-        api.context.darkMode = $themeConfig.isDark ?? false;
-        themeServiceStore.set(api);
-        console.log("Theme loaded", api.context.sourceColor);
-      }}
-      config={$themeConfig}
-    />
+    <>
+      {showInitialCss && (
+        <style
+          id="udixio-theme-ssr"
+          dangerouslySetInnerHTML={{ __html: initialCss! }}
+        />
+      )}
+      <Theme
+        onLoad={(api) => {
+          setShowInitialCss(false);
+          api.context.darkMode = $themeConfig.isDark ?? false;
+          themeServiceStore.set(api);
+        }}
+        config={$themeConfig}
+      />
+    </>
   );
 };

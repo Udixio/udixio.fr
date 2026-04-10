@@ -3,6 +3,7 @@ import Layout from "@layouts/Layout.astro";
 import { Button, Icon } from "@udixio/ui-react";
 import { Hero } from "@components/Hero.tsx";
 import Realisations from "@components/Realisations.astro";
+import { getCollection } from "astro:content";
 import { QAStickyScroll } from "@components/home/modern/QAStickyScroll";
 import FaqSection from "@components/sections/FaqSection.astro";
 import CtaSection from "@components/sections/CtaSection.astro";
@@ -20,6 +21,10 @@ import { iStorefront } from "@udixio/icons-rounded-400/storefront";
 import { iGroups } from "@udixio/icons-rounded-400/groups";
 import { iRocketLaunch } from "@udixio/icons-rounded-400/rocket_launch";
 import { iArrowRight } from "@udixio/icons-rounded-400/arrow_right";
+
+const realisations = await getCollection("realisation");
+realisations.sort((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infinity));
+const firstProjectSourceColor = realisations[0]?.data?.images?.background?.sourceColor;
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -116,6 +121,7 @@ const faqItems = [
       "Udixio accompagne les TPE/PME avec une approche web sur-mesure et écoresponsable axée sur l'acquisition de trafic et de croissance. Agence en Normandie et Hauts-de-France.",
   }}
   background={false}
+  defaultSourceColor={firstProjectSourceColor}
 >
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
