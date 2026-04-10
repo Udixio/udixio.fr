@@ -1,6 +1,6 @@
 import { defineConfig } from "@udixio/ui-react";
-import { Hct } from "@material/material-color-utilities";
-import { Context } from "@udixio/theme";
+
+import { Context, Hct } from "@udixio/theme";
 
 export const sourceColor =
   (hue: number = 161) =>
@@ -15,7 +15,10 @@ export default defineConfig({
       hue: sourceColor.hue,
       chroma: sourceColor.chroma * 0.66,
     }),
-
+    tertiary: ({ sourceColor }) => ({
+      hue: sourceColor.hue + 25,
+      chroma: sourceColor.chroma,
+    }),
     success: "#4CAF50",
     warning: "#FFA726",
     info: "#2196F3",
@@ -78,7 +81,6 @@ export default defineConfig({
   subThemes: {
     warning: "#e5bb79",
     success: "#2ec038",
-    default: "#a2afff",
     // purple: "#7852A9",
     // orange: '#F5704B'
   },

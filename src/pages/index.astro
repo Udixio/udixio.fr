@@ -106,8 +106,6 @@ const faqItems = [
       "4 à 8 semaines pour un site vitrine selon le périmètre. Un planning détaillé est fourni dès la phase de cadrage.",
   },
 ];
-
-
 ---
 
 <Layout
@@ -180,7 +178,8 @@ const faqItems = [
     <div
       id="showcase-hero-portal"
       class="absolute bottom-0 section inset-x-0 h-1/2 pointer-events-none"
-    />
+    >
+    </div>
   </div>
   {
     /* ═══════════════════════════════════════════
@@ -213,19 +212,71 @@ const faqItems = [
         </div>
       </div>
 
-      <Card
-        className=" flex flex-1 mt-48  bg-primary-container text-on-primary-container flex-col justify-evenly gap-8 p-12"
-      >
-        <p class="text-headline-medium">
-          Et si le prochain projet, était le vôtre ?
-        </p>
-        <Button
-          href="/contact"
-          label="Lancer mon projet"
-          icon={iArrowRight}
-          iconPosition="right"
-        />
-      </Card>
+      <div class="relative flex pr-16 mt-48">
+        <Card className="flex group      justify-evenly gap-8 p-12">
+          <div class="flex-1 flex flex-col gap-8 justify-between">
+            <div>
+              <p class="text-headline-medium">
+                Et si le prochain projet, était le vôtre ?
+              </p>
+              <p class="mt-4">
+                Un site web de qualité transforme votre visibilité en
+                opportunités, attire des clients et soutient durablement votre
+                croissance.
+              </p>
+            </div>
+
+            <Button
+              href="/contact"
+              label="Lancer mon projet"
+              icon={iArrowRight}
+              iconPosition="right"
+            />
+          </div>
+
+          <div
+            class="grid flex-1 border-t-2 border-dashed border-outline-variant md:border-t-0 md:border-l-2"
+          >
+            {
+              [
+                {
+                  value: "+87%",
+                  description: "Acquisition continue de nouveaux clients",
+                },
+                {
+                  value: "×5%",
+                  description: "Accélération de la croissance commerciale",
+                },
+                {
+                  value: "+14,2%",
+                  description: "Gain de productivité au quotidien",
+                },
+              ].map(({ value, description }) => (
+                <div class="border-b-2 border-dashed border-outline-variant p-6 last:border-0">
+                  <>
+                    <p class="text-headline-medium fi text-primary">{value}</p>
+                    <p class="">{description}</p>
+                  </>
+                </div>
+              ))
+            }
+          </div>
+        </Card>
+        <div
+          style="transform: translateX(100%)"
+          class="absolute bottom-0 right-0 -rotate-90 origin-bottom-right"
+        >
+          <a
+            href="https://www.intracen.org/file/itcsmeco2025pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Consulter le rapport officiel de l'ITC (PDF)"
+            class="text-body-small whitespace-nowrap text-primary underline translate-y-full"
+          >
+            Source : SME Competitiveness Outlook (ITC - ONU/OMC)
+          </a>
+        </div>
+      </div>
     </div>
 
     <div class="section pt-0"></div>
@@ -242,7 +293,7 @@ const faqItems = [
       <div class="grid grid-cols-1 md:grid-cols-5 md:grid-rows-2 gap-6">
         {/* Card 1 — Large, spans 2 rows */}
         <Card
-          className="relative md:col-span-3 md:row-span-2 p-10 md:p-12 flex flex-col gap-8  anim-in anim-fade anim-slide-from-bottom"
+          className="relative md:col-span-2 md:row-span-2 p-10 md:p-12 flex flex-col gap-8  anim-in anim-fade anim-slide-from-bottom"
         >
           <div class="relative z-10 flex flex-col gap-6 h-full">
             <div
@@ -271,7 +322,7 @@ const faqItems = [
 
         {/* Card 2 */}
         <Card
-          className="relative md:col-span-2 p-8 flex flex-col gap-6   anim-in anim-fade anim-slide-from-bottom anim-delay-150"
+          className="relative  md:col-span-3 p-8 flex flex-col gap-6   anim-in anim-fade anim-slide-from-bottom anim-delay-150"
         >
           <div class="relative z-10 flex flex-col gap-4 h-full">
             <div
@@ -297,7 +348,7 @@ const faqItems = [
 
         {/* Card 3 */}
         <Card
-          className="relative md:col-span-2 p-8 flex flex-col gap-6 duration-500 anim-in anim-fade anim-slide-from-bottom anim-delay-300"
+          className="relative md:col-span-3 p-8 flex flex-col gap-6 duration-500 anim-in anim-fade anim-slide-from-bottom anim-delay-300"
         >
           <div class="relative z-10 flex flex-col gap-4 h-full">
             <div
@@ -331,7 +382,7 @@ const faqItems = [
   }
   <SectionPadding as="section" start client:idle>
     <Card
-      className="dark bg-surface-container-high rounded-b-none text-on-surface shadow-xl/30 padding"
+      className="dark bg-surface-container-low rounded-b-none text-on-surface shadow-xl/30 padding"
     >
       <div class="text-center mb-24 mt-8">
         <span class="sub-title text-center anim-in anim-fade"

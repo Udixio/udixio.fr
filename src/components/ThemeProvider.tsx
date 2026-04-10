@@ -1,4 +1,7 @@
-import { themeConfigStore, themeServiceStore } from "@/stores/themeConfigStore.ts";
+import {
+  themeConfigStore,
+  themeServiceStore,
+} from "@/stores/themeConfigStore.ts";
 import { useStore } from "@nanostores/react";
 import { ThemeProvider as Theme } from "@udixio/ui-react";
 import { argbFromHex, Hct } from "@material/material-color-utilities";
@@ -24,9 +27,9 @@ export const updateThemeFromHex = (hex?: string) => {
 export const ThemeProvider = () => {
   const $themeConfig = useStore(themeConfigStore);
 
+  console.log("ThemeProvider", $themeConfig.sourceColor);
   return (
     <Theme
-      throttleDelay={300}
       onLoad={(api) => {
         api.context.darkMode = $themeConfig.isDark ?? false;
         themeServiceStore.set(api);

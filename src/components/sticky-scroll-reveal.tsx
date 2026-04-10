@@ -156,18 +156,15 @@ export const StickyScroll = () => {
         }
         setDisplayText(latest > 0);
         setActiveCard(closestBreakpointIndex);
-        const themeChangeEvent = new CustomEvent("themeChange", {
-            detail: "theme-" + content[closestBreakpointIndex].theme,
-        });
-        window.dispatchEvent(themeChangeEvent);
+
+
     });
 
     return (
         <>
             <motion.div
                 className={
-                    "flex relative padding-x rounded-md z-20 " +
-                    (activeCard != null ? "theme-" + content[activeCard!]?.theme : "")
+                    "flex relative padding-x rounded-md z-20 "
                 }
                 ref={ref}
             >

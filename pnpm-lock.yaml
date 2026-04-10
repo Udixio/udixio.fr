@@ -75,14 +75,14 @@ importers:
         specifier: ^0.1.1
         version: 0.1.1
       '@udixio/tailwind':
-        specifier: ^2.4.18
-        version: 2.4.18
+        specifier: ^2.4.20
+        version: 2.4.20
       '@udixio/theme':
-        specifier: ^2.1.18
-        version: 2.1.18
+        specifier: ^2.1.20
+        version: 2.1.20
       '@udixio/ui-react':
-        specifier: ^2.10.11
-        version: 2.10.11(@types/react@19.2.4)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        specifier: ^2.10.17
+        version: 2.10.17(@types/react@19.2.4)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       aos:
         specifier: ^2.3.4
         version: 2.3.4
@@ -1857,15 +1857,15 @@ packages:
   '@udixio/icons-rounded-400@0.1.1':
     resolution: {integrity: sha512-ofE8A+AqMCt7dwJVVdjoR8XCeSgc+M3VSg+t5ZiYMC8+utqVSw64Mliuzlw6qZCJBYhLnfdGAXXL0KMuWMVjaA==}
 
-  '@udixio/tailwind@2.4.18':
-    resolution: {integrity: sha512-V4otbLaSHDuO0OMEFBXI1rTV318RhvHQRs1iEGsT+MnkRStdWiiaotw0kcu7ydNLzEwvBz1+GMiG61tfL0xuHg==}
+  '@udixio/tailwind@2.4.20':
+    resolution: {integrity: sha512-RpAzUyQGL9yxIKJ5UNgNxJcHZy9czwHpNQn9/qXfVGo6cFUSo57ebKMa0lfBI1KIB57fP/JCrlkjEOpv4DKFFQ==}
 
-  '@udixio/theme@2.1.18':
-    resolution: {integrity: sha512-O4eyQfFUHgonxoJRfjdhiPY2L1hIn5iF0j7GkPf7z74uwmNIA8hNzm6K78vDuoMupnZ2w5sAhcwMTvby/QE0/g==}
+  '@udixio/theme@2.1.20':
+    resolution: {integrity: sha512-NRED3DVyNEFc683znFakWMuD8KpVARLR8XDLb/LXxo+FrKn2WlkdkqSdDIHjJq4+433LZUNt2GdQyHwgv6vSgA==}
     hasBin: true
 
-  '@udixio/ui-react@2.10.11':
-    resolution: {integrity: sha512-F24ekQyqPVtPzWsgnwmMvfRK4ABEuE5PR6r3JBbMkFrk2jacaz1lnCQfxVvOXDkeAi3zbcW2IszcXlgtfaJnLA==}
+  '@udixio/ui-react@2.10.17':
+    resolution: {integrity: sha512-vPgPgFwoYfRoIaRsel/vagpsQLA/zJb2Vq3d2mGWxSM/fPFILRk1J1d/p08i7UDION35MZbeaOoLwyOryMfpNQ==}
     peerDependencies:
       react: '>19.0.0'
       react-dom: '>19.0.0'
@@ -7059,16 +7059,16 @@ snapshots:
 
   '@udixio/icons-rounded-400@0.1.1': {}
 
-  '@udixio/tailwind@2.4.18':
+  '@udixio/tailwind@2.4.20':
     dependencies:
-      '@udixio/theme': 2.1.18
+      '@udixio/theme': 2.1.20
       chalk: 5.6.2
       pathe: 2.0.3
       tailwindcss: 4.1.17
       text-case: 1.2.9
       tslib: 2.8.1
 
-  '@udixio/theme@2.1.18':
+  '@udixio/theme@2.1.20':
     dependencies:
       '@material/material-color-utilities': 0.3.0
       awilix: 12.0.5
@@ -7082,7 +7082,7 @@ snapshots:
       tailwindcss: 4.1.17
       unplugin: 2.3.10
 
-  '@udixio/ui-react@2.10.11(@types/react@19.2.4)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
+  '@udixio/ui-react@2.10.17(@types/react@19.2.4)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
     dependencies:
       '@fortawesome/fontawesome-svg-core': 7.1.0
       '@fortawesome/free-regular-svg-icons': 7.1.0
