@@ -32,7 +32,7 @@ const projectsProps: ProjectProps[] = await Promise.all(
       const background = await getImage({
         src: imageEntry,
         format: "webp",
-        width: 800,
+        width: max ? 600 : 800,
       });
 
       realisation.data.images.background = {

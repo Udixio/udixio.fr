@@ -21,6 +21,7 @@ export const ProjectsShowcase = ({
   const [visible, setVisible] = useState({ approx: 0, full: 0 });
 
   const lastInteractionRef = useRef<number>(Date.now());
+  const isHoveringRef = useRef(false);
 
   // heroIndex : mis à jour uniquement lors de navigations intentionnelles (prev/next/auto-play)
   // Pour le scroll manuel, debounce dans onChange — jamais via l'effet réactif sur index
@@ -63,6 +64,16 @@ export const ProjectsShowcase = ({
     setIsVisible(nowVisible);
   });
 
+  // Arrête l'auto-play quand le bas du carousel dépasse le centre de l'écran
+  const { scrollYProgress: carouselBottomProgress } = useScroll({
+    target: carouselRef,
+    offset: ["end 0.5", "end start"],
+  });
+  const isScrolledPastRef = useRef(false);
+  useMotionValueEvent(carouselBottomProgress, "change", (latest) => {
+    isScrolledPastRef.current = latest > 0;
+  });
+
   useEffect(() => {
     if (!isVisible) return;
     const currentProject = projects[heroIndex];
@@ -98,7 +109,7 @@ export const ProjectsShowcase = ({
   useEffect(() => {
     const interval = window.setInterval(() => {
       const timeSinceLastInteraction = Date.now() - lastInteractionRef.current;
-      if (timeSinceLastInteraction >= 2000) {
+      if (timeSinceLastInteraction >= 2000 && !isHoveringRef.current && !isScrolledPastRef.current) {
         const nextIndex = indexRef.current + stepRef.current;
         goToIndex(nextIndex >= total ? 0 : nextIndex);
       }
@@ -115,8 +126,10 @@ export const ProjectsShowcase = ({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 1.5 }}
+              transition={{ duration: 0.3 }}
               className="ml-auto w-6/10 p-0 h-[175%] pointer-events-auto"
+              onMouseEnter={() => { isHoveringRef.current = true; }}
+              onMouseLeave={() => { isHoveringRef.current = false; }}
             >
               <Card
                 variant="elevated"
@@ -128,10 +141,10 @@ export const ProjectsShowcase = ({
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    transition={{ duration: 1.5 }}
+                    transition={{ duration: 1 }}
                     className="absolute inset-0"
                   >
-                    <ShowcaseItem project={projects[heroIndex]} />
+                    <ShowcaseItem project={projects[heroIndex]} eager />
                   </motion.div>
                 </AnimatePresence>
               </Card>
@@ -145,7 +158,12 @@ export const ProjectsShowcase = ({
   return (
     <div className="w-full">
       {heroPortal}
-      <div ref={carouselRef} className="group">
+      <div
+        ref={carouselRef}
+        className="group"
+        onMouseEnter={() => { isHoveringRef.current = true; }}
+        onMouseLeave={() => { isHoveringRef.current = false; }}
+      >
         <Carousel
           variant="hero"
           scrollSensitivity={0.8}
@@ -212,7 +230,7 @@ export const ProjectsShowcase = ({
   );
 };
 
-const ShowcaseItem = ({ project }: { project: ProjectProps }) => {
+const ShowcaseItem = ({ project, eager }: { project: ProjectProps; eager?: boolean }) => {
   return (
     <a
       href={`/realisations/${project.slug}`}
@@ -221,7 +239,7 @@ const ShowcaseItem = ({ project }: { project: ProjectProps }) => {
     >
       <div className="absolute inset-0 bg-surface-container-low animate-pulse" />
       <img
-        loading="lazy"
+        loading={eager ? "eager" : "lazy"}
         src={project.images.background.src}
         alt={project.title}
         className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover/showcase:scale-105"
