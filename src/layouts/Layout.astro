@@ -174,7 +174,7 @@ const seoDefault: SEOProps = {
       <slot />
     </main>
 
-    <ThemeProvider client:idle transition:name="theme-provider" />
+    <ThemeProvider client:load transition:name="theme-provider" />
 
     {footer && <Footer />}
     <!--</SmoothScroll>-->

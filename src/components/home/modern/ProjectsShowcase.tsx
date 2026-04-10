@@ -6,7 +6,6 @@ import { iArrowRight } from "@udixio/icons-rounded-400/arrow_right";
 import type { ProjectProps } from "../../project/Project";
 import { iArrowLeft } from "@udixio/icons-rounded-400/arrow_left";
 import { Card } from "@/components/Card";
-import { FastAverageColor } from "fast-average-color";
 import { updateThemeFromHex } from "@/components/ThemeProvider";
 
 export const ProjectsShowcase = ({
@@ -46,9 +45,6 @@ export const ProjectsShowcase = ({
   useEffect(() => { indexRef.current = index; }, [index]);
   useEffect(() => { stepRef.current = step; }, [step]);
 
-  const [fac] = useState(() =>
-    typeof window !== "undefined" ? new FastAverageColor() : null,
-  );
   const [showHero, setShowHero] = useState(true);
   const [isVisible, setIsVisible] = useState(true);
 
@@ -76,16 +72,8 @@ export const ProjectsShowcase = ({
 
   useEffect(() => {
     if (!isVisible) return;
-    const currentProject = projects[heroIndex];
-    if (fac && currentProject?.images?.background?.src) {
-      fac
-        .getColorAsync(currentProject.images.background.src, {
-          crossOrigin: "anonymous",
-        })
-        .then((color) => updateThemeFromHex(color.hex))
-        .catch(() => {});
-    }
-  }, [heroIndex, isVisible, projects, fac]);
+    updateThemeFromHex(projects[heroIndex]?.images?.background?.sourceColor);
+  }, [heroIndex, isVisible, projects]);
 
   const goToIndex = (newIndex: number) => {
     isProgrammaticRef.current = true;

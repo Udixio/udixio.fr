@@ -1,5 +1,4 @@
 // fichier: astro-custom-integration.ts
-// fichier: astro-custom-integration.ts
 import type {AstroIntegration} from 'astro';
 import {promises as fs} from "fs";
 import matter from 'gray-matter';
@@ -8,9 +7,33 @@ import puppeteer from "puppeteer";
 import {PuppeteerScreenRecorder} from "puppeteer-screen-recorder";
 import ffmpeg from 'fluent-ffmpeg';
 import path from "node:path";
+import sharp from 'sharp';
+import {argbFromRgb, hexFromArgb, QuantizerCelebi, Score} from '@material/material-color-utilities';
 
-// Prisma runtime models export (no DB access needed)
 
+/**
+ * Extrait la source color Material You d'une image locale.
+ * Même pipeline que sourceColorFromImage() du navigateur, mais en Node.js via sharp.
+ */
+async function extractSourceColor(imagePath: string): Promise<string> {
+    const {data, info} = await sharp(imagePath)
+        .resize(112, 112, {fit: 'cover'})
+        .raw()
+        .ensureAlpha()
+        .toBuffer({resolveWithObject: true});
+
+    const pixels: number[] = [];
+    const channels = info.channels; // 4 avec ensureAlpha
+    for (let i = 0; i < data.length; i += channels) {
+        const a = data[i + 3];
+        if (a < 255) continue;
+        pixels.push(argbFromRgb(data[i], data[i + 1], data[i + 2]));
+    }
+
+    const result = QuantizerCelebi.quantize(pixels, 128);
+    const ranked = Score.score(result);
+    return hexFromArgb(ranked[0]);
+}
 
 async function getAllMDXFiles(realisationsDir: string) {
     try {
@@ -222,6 +245,40 @@ export default function customIntegration(): AstroIntegration {
                     }
                 }
                 logger.info(`🎉 All video processing complete!`);
+
+                // Extraction source color Material You pour chaque projet
+                logger.info(`🎨 Extracting source colors from project images...`);
+                for (const file of mdxFiles) {
+                    const filePath = join(realisationsDir, file);
+                    const slug = file.replace('.mdx', '');
+                    const content = await fs.readFile(filePath, 'utf-8');
+                    const parsed = matter(content);
+                    const backgroundSrc = parsed.data.images?.background?.src;
+                    if (!backgroundSrc) {
+                        logger.warn(`⚠️  No background image defined for ${slug}, skipping color extraction`);
+                        continue;
+                    }
+                    // backgroundSrc est un chemin public ex: /images/realisations/foo.webp
+                    const imagePath = join('public', backgroundSrc);
+
+                    try {
+                        if (parsed.data.images?.background?.sourceColor) {
+                            logger.info(`✅ sourceColor already set for ${slug}: ${parsed.data.images.background.sourceColor}`);
+                            continue;
+                        }
+
+                        const hex = await extractSourceColor(imagePath);
+                        parsed.data.images = {
+                            ...parsed.data.images,
+                            background: {...parsed.data.images?.background, sourceColor: hex},
+                        };
+                        await fs.writeFile(filePath, matter.stringify(parsed.content, parsed.data), 'utf-8');
+                        logger.info(`🎨 Set images.background.sourceColor for ${slug}: ${hex}`);
+                    } catch (err) {
+                        logger.error(`❌ Color extraction failed for ${slug}: ${err}`);
+                    }
+                }
+                logger.info(`🎨 Source color extraction complete!`);
             },
         },
     };
