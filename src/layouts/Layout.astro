@@ -105,6 +105,7 @@ interface Props {
   background: boolean;
   menu: boolean;
   defaultSourceColor?: string;
+  resetColorOnPageLoad?: boolean;
 }
 
 const {
@@ -113,6 +114,7 @@ const {
   menu = true,
   background = true,
   defaultSourceColor,
+  resetColorOnPageLoad = true,
 }: Props = Astro.props;
 
 const configForCss = defaultSourceColor
@@ -179,7 +181,11 @@ const seoDefault: SEOProps = {
     <slot name="head" />
     <ClientRouter />
   </head>
-  <body class="dynamic bg-surface text-on-surface">
+  <body
+    class="dynamic bg-surface text-on-surface"
+    data-source-color={defaultSourceColor ?? ""}
+    data-reset-color-on-page-load={resetColorOnPageLoad ? "" : undefined}
+  >
     {menu && <Header />}
 
     <!--<SmoothScroll-->
@@ -195,7 +201,6 @@ const seoDefault: SEOProps = {
 
     <ThemeProvider
       initialCss={themeCss}
-      defaultSourceColor={defaultSourceColor}
       client:idle
       transition:name="theme-provider"
     />
@@ -205,9 +210,15 @@ const seoDefault: SEOProps = {
 
     <script>
       import { animateOnScroll } from "@udixio/ui-react";
+      import { updateThemeFromHex } from "@/components/ThemeProvider";
 
       document.addEventListener("astro:page-load", () => {
         animateOnScroll();
+
+        const { sourceColor, resetColorOnPageLoad } = document.body.dataset;
+        if (resetColorOnPageLoad !== undefined) {
+          updateThemeFromHex(sourceColor || undefined);
+        }
       });
     </script>
   </body>

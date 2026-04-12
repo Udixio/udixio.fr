@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { themeConfigStore, themeServiceStore, currentSourceHexStore } from "@/stores/themeConfigStore.ts";
+import { useEffect, useState } from "react";
+import { currentSourceHexStore, themeConfigStore, themeServiceStore } from "@/stores/themeConfigStore.ts";
 import { useStore } from "@nanostores/react";
 import { ThemeProvider as Theme } from "@udixio/ui-react";
 import { argbFromHex, Hct } from "@material/material-color-utilities";
@@ -25,19 +25,8 @@ export const updateThemeFromHex = (hex?: string) => {
   }
 };
 
-export const ThemeProvider = ({
-  initialCss,
-  defaultSourceColor,
-}: {
-  initialCss?: string;
-  defaultSourceColor?: string;
-}) => {
+export const ThemeProvider = ({ initialCss }: { initialCss?: string }) => {
   const [showInitialCss, setShowInitialCss] = useState(!!initialCss);
-
-  // Initialise le hex courant depuis le SSR pour éviter un recalcul inutile
-  if (defaultSourceColor && currentSourceHexStore.get() === undefined) {
-    currentSourceHexStore.set(defaultSourceColor);
-  }
 
   const $themeConfig = useStore(themeConfigStore);
 
