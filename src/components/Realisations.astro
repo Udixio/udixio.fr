@@ -57,7 +57,7 @@ const visibleProjects = max ? projectsProps.slice(0, max) : projectsProps;
 
 {
   max ? (
-    <ProjectsShowcase projects={visibleProjects} client:load />
+    <ProjectsShowcase projects={visibleProjects} client:idle />
   ) : (
     <div class="max-width padding-x gap-x-8 gap-y-16  md:gap-y-32 grid grid-cols-1 sm:grid-cols-20 ">
       {visibleProjects.map((realisation, index) => {

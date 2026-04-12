@@ -58,7 +58,7 @@ export const SectionPadding = ({
       <div
         style={{ cornerShape: "superellipse(2)" }}
         className={classNames(
-          "overflow-hidden mx-auto max-w-full transition-all duration-700 ",
+          "overflow-clip mx-auto max-w-full transition-all duration-700 ",
           {
             "min-[1920px]:rounded-[3rem] scale-100 max-w-full ":
               animation == "max",

@@ -4,12 +4,62 @@ import { Button, Icon } from "@udixio/ui-react";
 import { Hero } from "@components/Hero.tsx";
 import Realisations from "@components/Realisations.astro";
 import { getCollection } from "astro:content";
-import { QAStickyScroll } from "@components/home/modern/QAStickyScroll";
+import { getImage } from "astro:assets";
+import {
+  StickyScroll,
+  type StickyScrollItem,
+} from "@components/sticky-scroll-reveal";
+
+import imgContract from "@assets/images/project estimate contract signing desk pen.avif";
+import imgTeam from "@assets/images/team collaboration laptop kanban board progress.avif";
+import imgPerformance from "@assets/images/web analytics dashboard speed performance charts laptop  .avif";
+import imgIndependence from "@assets/images/person hands laptop keyboard ownership freedom workspace.avif";
+
+const [optContract, optTeam, optPerformance, optIndependence] =
+  await Promise.all([
+    getImage({ src: imgContract, format: "avif", width: 800 }),
+    getImage({ src: imgTeam, format: "avif", width: 800 }),
+    getImage({ src: imgPerformance, format: "avif", width: 800 }),
+    getImage({ src: imgIndependence, format: "avif", width: 800 }),
+  ]);
+
+const stickyScrollItems: StickyScrollItem[] = [
+  {
+    title: "Périmètre défini, devis précis",
+    description:
+      "Un atelier initial permet de cadrer le projet et fixer un devis ferme avant tout développement. Pas de mauvaise surprise sur la facture finale.",
+    imageSrc: optContract.src,
+    imageAlt: "Périmètre et devis",
+  },
+  {
+    title: "Suivi clair à chaque étape",
+    description:
+      "Vous suivez l'avancement en temps réel, validez chaque étape et comprenez les décisions prises — sans jargon, sans zone d'ombre.",
+    imageSrc: optTeam.src,
+    imageAlt: "Suivi de projet",
+  },
+  {
+    title: "Performance et SEO solides",
+    description:
+      "Chaque choix technique vise un site rapide, bien référencé et durable — Lighthouse 100/100 comme objectif de base, pas comme exception.",
+    imageSrc: optPerformance.src,
+    imageAlt: "Performance et SEO",
+  },
+  {
+    title: "Contrôle total sur votre site",
+    description:
+      "Accès complet, code source livré, hébergement à votre main : vous restez indépendant après la livraison, sans abonnement imposé.",
+    imageSrc: optIndependence.src,
+    imageAlt: "Indépendance et contrôle",
+  },
+];
 import FaqSection from "@components/sections/FaqSection.astro";
 import CtaSection from "@components/sections/CtaSection.astro";
 import { Card } from "@/components/Card";
 import { SectionPadding } from "@/components/SectionPadding";
 import { AnimatedCounter } from "@/components/home/AnimatedCounter";
+import { ShowcaseHero } from "@/components/home/modern/ShowcaseHero";
+import type { ProjectProps } from "@/components/project/Project";
 
 import { iPartnerExchange } from "@udixio/icons-rounded-400/partner_exchange";
 import { iChecklist } from "@udixio/icons-rounded-400/checklist";
@@ -23,8 +73,20 @@ import { iRocketLaunch } from "@udixio/icons-rounded-400/rocket_launch";
 import { iArrowRight } from "@udixio/icons-rounded-400/arrow_right";
 
 const realisations = await getCollection("realisation");
-realisations.sort((a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infinity));
-const firstProjectSourceColor = realisations[0]?.data?.images?.background?.sourceColor;
+realisations.sort(
+  (a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infinity),
+);
+const firstProjectSourceColor =
+  realisations[0]?.data?.images?.background?.sourceColor;
+
+const showcaseProjects: ProjectProps[] = realisations.slice(0, 10).map((r) => ({
+  slug: r.id,
+  ...r.data,
+  images: {
+    ...r.data.images,
+    background: r.data.images.background!,
+  },
+}));
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -128,7 +190,7 @@ const faqItems = [
   </Fragment>
 
   <div class="relative">
-    <Hero client:load className="self-stretch flex flex-col min-h-[65vh]">
+    <Hero client:idle className="self-stretch flex flex-col min-h-[65vh]">
       {/* Headline - full width, massive */}
       <h1 class="mb-6 md:mb-12 text-display-large">
         <span class="text-gradient">Agence web</span><br />
@@ -180,11 +242,12 @@ const faqItems = [
         </div>
       </div>
     </Hero>
-    {/* RIGHT — Value Card (portal cible pour ProjectsShowcase) */}
+    {/* RIGHT — Hero showcase synchronisé via nanoStore */}
     <div
       id="showcase-hero-portal"
       class="absolute bottom-0 section inset-x-0 h-1/2 pointer-events-none"
     >
+      <ShowcaseHero projects={showcaseProjects} client:idle />
     </div>
   </div>
   {
@@ -388,27 +451,29 @@ const faqItems = [
   }
   <SectionPadding as="section" start client:idle>
     <Card
-      className="dark bg-surface-container-low rounded-b-none text-on-surface shadow-xl/30 padding"
+      className="dark bg-surface-container-low rounded-b-none text-on-surface shadow-xl/30"
     >
-      <div class="text-center mb-24 mt-8">
-        <span class="sub-title text-center anim-in anim-fade"
-          >Ce que ça change</span
-        >
-        <h2
-          class="text-display-small anim-in anim-fade anim-slide-from-bottom anim-duration-700 anim-delay-150"
-        >
-          Concrètement,<br /><span class="text-gradient"
-            >ce que vous obtenez</span
+      <div class="section">
+        <div class="text-center mb-24 mt-8">
+          <span class="sub-title text-center anim-in anim-fade"
+            >Ce que ça change</span
           >
-        </h2>
-        <p
-          class="text-title-medium text-on-surface-variant mt-6 max-w-xl mx-auto anim-in anim-fade anim-delay-300"
-        >
-          Quatre questions que vous vous posez — et ce qu'on fait pour y
-          répondre.
-        </p>
+          <h2
+            class="text-display-small anim-in anim-fade anim-slide-from-bottom anim-duration-700 anim-delay-150"
+          >
+            Concrètement,<br /><span class="text-gradient"
+              >ce que vous obtenez</span
+            >
+          </h2>
+          <p
+            class="text-title-medium text-on-surface-variant mt-6 max-w-xl mx-auto anim-in anim-fade anim-delay-300"
+          >
+            Quatre questions que vous vous posez — et ce qu'on fait pour y
+            répondre.
+          </p>
+        </div>
+        <StickyScroll items={stickyScrollItems} client:visible />
       </div>
-      <QAStickyScroll client:visible />
     </Card>
   </SectionPadding>
 
