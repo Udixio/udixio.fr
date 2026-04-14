@@ -85,6 +85,11 @@ export default function customIntegration(): AstroIntegration {
 
                     if (parsed.data.images?.background) continue;
 
+                    if (!parsed.data.title || !parsed.data.description) {
+                        logger.warn(`⚠️  Skipping ${slug} — frontmatter incomplete (title/description missing, check YAML indentation)`);
+                        continue;
+                    }
+
                     logger.info(`🖼️  No background for ${slug} — generating mockup via OpenRouter...`);
 
                     try {
