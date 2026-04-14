@@ -10,6 +10,9 @@ images:
     src: /images/realisations/background-1.webp
     alt: La Mouette Coop — site vitrine
     sourceColor: '#454a4c'
+  logo:
+    src: /images/realisations/la-mouette-logo.png
+    alt: Illustration du projet avec un point principal.
 website: 'https://lamouette-coop.fr/'
 summary: >-
   Site vitrine conçu pour une coopérative locale : image professionnelle, clarté
@@ -22,7 +25,8 @@ services:
   - Web design
   - Développement web
 ---
-import Project from "@components/project/Project.astro"
+
+import Project from "@components/project/Project.astro";
 
 <Project {...{id: "lamouette-coop",data: frontmatter}}>
 <fragment slot="sidebar">
