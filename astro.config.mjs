@@ -13,6 +13,8 @@ import mdx from "@astrojs/mdx";
 import customIntegration from "./astro-custom-integration";
 import { vitePlugin } from "@udixio/theme";
 
+import crittersRs from "@critters-rs/astro";
+
 // https://astro.build/config
 export default defineConfig({
   site: "https://www.udixio.fr/",
@@ -80,9 +82,10 @@ export default defineConfig({
     react(),
     sitemap(),
     robotsTxt(),
+    crittersRs(),
+    mdx(),
     compress(),
     compressor(),
-    mdx(),
     customIntegration(),
   ],
   vite: {

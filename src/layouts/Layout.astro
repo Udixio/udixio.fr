@@ -2,21 +2,16 @@
 import Footer from "./Footer.astro";
 import "../styles/base.css";
 import Header from "@layouts/Header.astro";
-import { Cursor } from "@components/Cursor";
+
 import { SEO } from "astro-seo";
 import { getImage } from "astro:assets";
 
-import "@fontsource/roboto/400.css";
-import "@fontsource/roboto/500.css";
-import "@fontsource/montserrat/700.css";
-import "@fontsource/montserrat/600.css";
 import defaultImage from "@assets/images/img.png";
 import { ClientRouter } from "astro:transitions";
-import { SmoothScroll, animateOnScroll, generateThemeCss } from "@udixio/ui-react";
+import { generateThemeCss } from "@udixio/ui-react";
 import { argbFromHex, Hct } from "@material/material-color-utilities";
 import defaultConfig, { sourceColor } from "../../theme.config";
 
-import { BackgroundColor } from "@components/three/BackgroundColor";
 import Font from "astro/components/Font.astro";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
@@ -116,7 +111,9 @@ const {
 const themeCss = defaultSourceColor
   ? await generateThemeCss({
       ...defaultConfig,
-      sourceColor: sourceColor(Hct.fromInt(argbFromHex(defaultSourceColor)).hue),
+      sourceColor: sourceColor(
+        Hct.fromInt(argbFromHex(defaultSourceColor)).hue,
+      ),
     })
   : undefined;
 
