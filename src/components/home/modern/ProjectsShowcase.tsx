@@ -1,6 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { useMotionValueEvent, useScroll } from "motion/react";
-import { Button, Carousel, CarouselItem, classNames, IconButton } from "@udixio/ui-react";
+import {
+  Button,
+  Carousel,
+  CarouselItem,
+  classNames,
+  IconButton,
+} from "@udixio/ui-react";
 import { iArrowRight } from "@udixio/icons-rounded-400/arrow_right";
 import type { ProjectProps } from "../../project/Project";
 import { iArrowLeft } from "@udixio/icons-rounded-400/arrow_left";
@@ -26,7 +32,9 @@ export const ProjectsShowcase = ({
   const heroTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   // Pendant une navigation programmatique, on ignore les onChange du carousel (feedback d'animation)
   const isProgrammaticRef = useRef(false);
-  const programmaticTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const programmaticTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
   // Refs pour lire index/step à jour dans setInterval sans stale closure
   const indexRef = useRef(0);
   const stepRef = useRef(1);
@@ -41,8 +49,12 @@ export const ProjectsShowcase = ({
     portalRef.current = document.getElementById("showcase-hero-portal");
   }, []);
 
-  useEffect(() => { indexRef.current = index; }, [index]);
-  useEffect(() => { stepRef.current = step; }, [step]);
+  useEffect(() => {
+    indexRef.current = index;
+  }, [index]);
+  useEffect(() => {
+    stepRef.current = step;
+  }, [step]);
 
   const [isVisible, setIsVisible] = useState(true);
 
@@ -55,7 +67,7 @@ export const ProjectsShowcase = ({
     const showHero = latest < 0.05;
     showcaseStore.set({ ...showcaseStore.get(), showHero });
     const nowVisible = latest < 1;
-    if (!nowVisible) updateThemeFromHex();
+    if (!nowVisible) updateThemeFromHex(null);
     setIsVisible(nowVisible);
   });
 
@@ -81,7 +93,8 @@ export const ProjectsShowcase = ({
 
   const goToIndex = (newIndex: number) => {
     isProgrammaticRef.current = true;
-    if (programmaticTimerRef.current) clearTimeout(programmaticTimerRef.current);
+    if (programmaticTimerRef.current)
+      clearTimeout(programmaticTimerRef.current);
     programmaticTimerRef.current = setTimeout(() => {
       isProgrammaticRef.current = false;
     }, PROGRAMMATIC_LOCK);
@@ -102,7 +115,11 @@ export const ProjectsShowcase = ({
     const interval = window.setInterval(() => {
       const timeSinceLastInteraction = Date.now() - lastInteractionRef.current;
       const { isHovering } = showcaseStore.get();
-      if (timeSinceLastInteraction >= 2000 && !isHovering && !isScrolledPastRef.current) {
+      if (
+        timeSinceLastInteraction >= 2000 &&
+        !isHovering &&
+        !isScrolledPastRef.current
+      ) {
         const nextIndex = indexRef.current + stepRef.current;
         goToIndex(nextIndex >= total ? 0 : nextIndex);
       }
@@ -115,8 +132,12 @@ export const ProjectsShowcase = ({
       <div
         ref={carouselRef}
         className="group"
-        onMouseEnter={() => showcaseStore.set({ ...showcaseStore.get(), isHovering: true })}
-        onMouseLeave={() => showcaseStore.set({ ...showcaseStore.get(), isHovering: false })}
+        onMouseEnter={() =>
+          showcaseStore.set({ ...showcaseStore.get(), isHovering: true })
+        }
+        onMouseLeave={() =>
+          showcaseStore.set({ ...showcaseStore.get(), isHovering: false })
+        }
       >
         <Carousel
           variant="hero"

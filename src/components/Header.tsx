@@ -63,7 +63,7 @@ export const Header = () => {
       transition={{ duration: 0.5 }}
     >
       <Fab
-        variant={"tertiary"}
+        variant={"tertiaryContainer"}
         onMouseEnter={() => setFabIsHovered(true)}
         onMouseLeave={() => setFabIsHovered(false)}
         title={"Contacter Joël VIGREUX"}

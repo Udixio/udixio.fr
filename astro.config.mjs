@@ -1,4 +1,5 @@
 import { defineConfig, fontProviders } from "astro/config";
+import { visualizer } from "rollup-plugin-visualizer";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import robotsTxt from "astro-robots-txt";
@@ -88,7 +89,19 @@ export default defineConfig({
     ssr: {
       noExternal: [],
     },
-    plugins: [vitePlugin(), tailwindcss()],
+    plugins: [
+      vitePlugin(),
+      tailwindcss(),
+      visualizer({
+        open: true,
+        filename: "dist/stats.html",
+        gzipSize: true,
+        brotliSize: true,
+      }),
+    ],
+    build: {
+      assetsInlineLimit: 0,
+    },
     optimizeDeps: {
       exclude: ["@udixio/ui-react", "@udixio/ui-react/theme-worker"],
     },

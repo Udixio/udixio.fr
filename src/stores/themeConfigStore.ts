@@ -1,8 +1,12 @@
-import { atom } from 'nanostores';
-import config from '../../theme.config';
-import { API, type ConfigInterface } from '@udixio/theme';
+import { atom } from "nanostores";
+import config from "../../theme.config";
+import { API, type ConfigInterface } from "@udixio/theme";
 
-export const themeConfigStore = atom<ConfigInterface>(config);
+export const themeConfigStore = atom<
+  Omit<ConfigInterface, "sourceColor"> & {
+    sourceColor: ConfigInterface["sourceColor"] | null;
+  }
+>(config);
 
 export const themeServiceStore = atom<API | null>(null);
 

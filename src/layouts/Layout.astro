@@ -12,11 +12,7 @@ import "@fontsource/montserrat/700.css";
 import "@fontsource/montserrat/600.css";
 import defaultImage from "@assets/images/img.png";
 import { ClientRouter } from "astro:transitions";
-import {
-  SmoothScroll,
-  animateOnScroll,
-  generateThemeCss,
-} from "@udixio/ui-react";
+import { SmoothScroll, animateOnScroll, generateThemeCss } from "@udixio/ui-react";
 import { argbFromHex, Hct } from "@material/material-color-utilities";
 import defaultConfig, { sourceColor } from "../../theme.config";
 
@@ -117,15 +113,12 @@ const {
   resetColorOnPageLoad = true,
 }: Props = Astro.props;
 
-const configForCss = defaultSourceColor
-  ? {
+const themeCss = defaultSourceColor
+  ? await generateThemeCss({
       ...defaultConfig,
-      sourceColor: sourceColor(
-        Hct.fromInt(argbFromHex(defaultSourceColor)).hue,
-      ),
-    }
-  : defaultConfig;
-const themeCss = await generateThemeCss(configForCss);
+      sourceColor: sourceColor(Hct.fromInt(argbFromHex(defaultSourceColor)).hue),
+    })
+  : undefined;
 
 // const domain = Astro.url.origin;
 
@@ -217,7 +210,7 @@ const seoDefault: SEOProps = {
 
         const { sourceColor, resetColorOnPageLoad } = document.body.dataset;
         if (resetColorOnPageLoad !== undefined) {
-          updateThemeFromHex(sourceColor || undefined);
+          updateThemeFromHex(sourceColor || null);
         }
       });
     </script>
