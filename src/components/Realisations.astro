@@ -6,11 +6,16 @@ import { BackgroundColor } from "@components/BackgroundColor";
 
 import type { ProjectProps } from "./project/Project";
 import { ProjectsShowcase } from "./home/modern/ProjectsShowcase";
-import { ShowcaseManager } from "./home/modern/ShowcaseManager";
+import ShowcaseManager from "./home/modern/ShowcaseManager.astro";
 import { getImage } from "astro:assets";
 import { Project } from "./project/Project.tsx";
 
-const { max } = Astro.props;
+interface Props {
+  max?: number;
+  manageShowcase?: boolean;
+}
+
+const { max, manageShowcase = true }: Props = Astro.props;
 
 const realisations = await getCollection("realisation");
 realisations.sort(
@@ -59,11 +64,12 @@ const visibleProjects = max ? projectsProps.slice(0, max) : projectsProps;
 {
   max ? (
     <>
-      <ShowcaseManager 
-        total={visibleProjects.length} 
-        colors={visibleProjects.map(p => p.images?.background?.sourceColor)} 
-        client:idle 
-      />
+      {manageShowcase && (
+        <ShowcaseManager
+          total={visibleProjects.length}
+          colors={visibleProjects.map((p) => p.images?.background?.sourceColor)}
+        />
+      )}
       <ProjectsShowcase projects={visibleProjects} client:visible />
     </>
   ) : (

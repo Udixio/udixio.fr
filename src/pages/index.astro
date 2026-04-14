@@ -59,7 +59,7 @@ import { Card } from "@/components/Card";
 import { SectionPadding } from "@/components/SectionPadding";
 import { AnimatedCounter } from "@/components/home/AnimatedCounter";
 import { ShowcaseHero } from "@/components/home/modern/ShowcaseHero";
-import { ShowcaseManager } from "@/components/home/modern/ShowcaseManager";
+import ShowcaseManager from "@/components/home/modern/ShowcaseManager.astro";
 import type { ProjectProps } from "@/components/project/Project";
 
 import { iPartnerExchange } from "@udixio/icons-rounded-400/partner_exchange";
@@ -190,10 +190,9 @@ const faqItems = [
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </Fragment>
 
-  <ShowcaseManager 
-    total={showcaseProjects.length} 
-    colors={showcaseProjects.map(p => p.images?.background?.sourceColor)} 
-    client:idle 
+  <ShowcaseManager
+    total={showcaseProjects.length}
+    colors={showcaseProjects.map((p) => p.images?.background?.sourceColor)}
   />
   <div class="relative">
     <Hero client:idle className="self-stretch flex flex-col min-h-[65vh]">
@@ -282,7 +281,7 @@ const faqItems = [
           class="absolute h-full right-0 w-screen max-w-[calc(50vw+50%-2rem)]"
         >
           <div>
-            <Realisations max={10} />
+            <Realisations max={10} manageShowcase={false} />
           </div>
         </div>
       </div>

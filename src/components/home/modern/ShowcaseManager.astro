@@ -1,0 +1,35 @@
+---
+interface Props {
+  total: number;
+  colors: (string | undefined)[];
+}
+
+const { total, colors }: Props = Astro.props;
+---
+
+<script
+  type="application/json"
+  data-showcase-manager-config
+  set:html={JSON.stringify({ total, colors })}
+></script>
+
+<script>
+  import { startShowcaseManager } from './showcaseManagerClient';
+
+  const configs = document.querySelectorAll<HTMLScriptElement>(
+    'script[data-showcase-manager-config]:not([data-showcase-manager-bound])',
+  );
+
+  const config = configs[configs.length - 1];
+
+  if (config?.textContent) {
+    configs.forEach((entry) => entry.setAttribute('data-showcase-manager-bound', ''));
+
+    const options = JSON.parse(config.textContent) as {
+      total: number;
+      colors: (string | undefined)[];
+    };
+
+    startShowcaseManager(options);
+  }
+</script>
