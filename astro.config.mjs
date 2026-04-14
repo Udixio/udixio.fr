@@ -10,7 +10,7 @@ import tailwindcss from "@tailwindcss/vite";
 import compress from "astro-compress";
 
 import mdx from "@astrojs/mdx";
-import customIntegration from "./astro-custom-integration";
+import { customIntegration } from "./integrations";
 import { vitePlugin } from "@udixio/theme";
 
 import crittersRs from "@critters-rs/astro";
