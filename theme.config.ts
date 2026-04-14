@@ -16,7 +16,7 @@ export default defineConfig({
       chroma: sourceColor.chroma * 0.66,
     }),
     tertiary: ({ sourceColor }) => ({
-      hue: sourceColor.hue + 25,
+      hue: sourceColor.hue + 40,
       chroma: sourceColor.chroma,
     }),
     success: "#4CAF50",

@@ -2,14 +2,14 @@ import { useStore } from "@nanostores/react";
 import { AnimatePresence, motion } from "motion/react";
 import { Card } from "@/components/Card";
 import { ShowcaseItem } from "./ShowcaseItem";
-import { showcaseStore } from "@/stores/showcaseStore";
+import { setShowcaseHovering, showcaseStore } from "@/stores/showcaseStore";
 import type { ProjectProps } from "@/components/project/Project";
 
 export const ShowcaseHero = ({ projects }: { projects: ProjectProps[] }) => {
   const { heroIndex, showHero } = useStore(showcaseStore);
 
   const setHovering = (value: boolean) => {
-    showcaseStore.set({ ...showcaseStore.get(), isHovering: value });
+    setShowcaseHovering(value);
   };
 
   return (

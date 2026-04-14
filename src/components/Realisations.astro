@@ -6,6 +6,7 @@ import { BackgroundColor } from "@components/BackgroundColor";
 
 import type { ProjectProps } from "./project/Project";
 import { ProjectsShowcase } from "./home/modern/ProjectsShowcase";
+import { ShowcaseManager } from "./home/modern/ShowcaseManager";
 import { getImage } from "astro:assets";
 import { Project } from "./project/Project.tsx";
 
@@ -57,7 +58,14 @@ const visibleProjects = max ? projectsProps.slice(0, max) : projectsProps;
 
 {
   max ? (
-    <ProjectsShowcase projects={visibleProjects} client:idle />
+    <>
+      <ShowcaseManager 
+        total={visibleProjects.length} 
+        colors={visibleProjects.map(p => p.images?.background?.sourceColor)} 
+        client:idle 
+      />
+      <ProjectsShowcase projects={visibleProjects} client:visible />
+    </>
   ) : (
     <div class="max-width padding-x gap-x-8 gap-y-16  md:gap-y-32 grid grid-cols-1 sm:grid-cols-20 ">
       {visibleProjects.map((realisation, index) => {

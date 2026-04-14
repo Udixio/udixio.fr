@@ -1,62 +1,40 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useMotionValueEvent, useScroll } from "motion/react";
-import {
-  Button,
-  Carousel,
-  CarouselItem,
-  classNames,
-  IconButton,
-} from "@udixio/ui-react";
-import { iArrowRight } from "@udixio/icons-rounded-400/arrow_right";
+import { Button, Carousel, CarouselItem, classNames, IconButton } from "@udixio/ui-react";
 import type { ProjectProps } from "../../project/Project";
-import { iArrowLeft } from "@udixio/icons-rounded-400/arrow_left";
 import { ShowcaseItem } from "./ShowcaseItem";
-import { updateThemeFromHex } from "@/components/ThemeProvider";
-import { showcaseStore } from "@/stores/showcaseStore";
+import {
+  setShowcaseAutoPlayState,
+  setShowcaseHeroIndex,
+  setShowcaseHovering,
+  setShowcaseIndex,
+  setShowcaseScrollState,
+  setShowcaseStep,
+  showcaseStore,
+} from "@/stores/showcaseStore";
+import { iChevronRight } from "@udixio/icons-rounded-400/chevron_right";
+import { iChevronLeft } from "@udixio/icons-rounded-400/chevron_left";
+import { useStore } from "@nanostores/react";
 
 export const ProjectsShowcase = ({
   projects,
 }: {
   projects: ProjectProps[];
 }) => {
-  const total = projects.length + 1; // one for the CTA
+  const { index } = useStore(showcaseStore);
 
-  const [index, setIndex] = useState(0);
-  const [step, setStep] = useState(1);
-
-  const lastInteractionRef = useRef<number>(Date.now());
-
-  // heroIndex : mis à jour uniquement lors de navigations intentionnelles (prev/next/auto-play)
-  // Pour le scroll manuel, debounce dans onChange — jamais via l'effet réactif sur index
-  const [heroIndex, setHeroIndex] = useState(0);
   const heroTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   // Pendant une navigation programmatique, on ignore les onChange du carousel (feedback d'animation)
   const isProgrammaticRef = useRef(false);
   const programmaticTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
     null,
   );
-  // Refs pour lire index/step à jour dans setInterval sans stale closure
-  const indexRef = useRef(0);
-  const stepRef = useRef(1);
+
   const PROGRAMMATIC_LOCK = 1000;
   const HERO_DEBOUNCE = 400;
 
   const carouselRef = useRef<HTMLDivElement>(null);
-  // Ref vers le portail hero pour gérer sa visibilité au scroll
-  const portalRef = useRef<Element | null>(null);
-
-  useEffect(() => {
-    portalRef.current = document.getElementById("showcase-hero-portal");
-  }, []);
-
-  useEffect(() => {
-    indexRef.current = index;
-  }, [index]);
-  useEffect(() => {
-    stepRef.current = step;
-  }, [step]);
-
-  const [isVisible, setIsVisible] = useState(true);
 
   const { scrollYProgress } = useScroll({
     target: carouselRef,
@@ -64,11 +42,10 @@ export const ProjectsShowcase = ({
   });
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    const showHero = latest < 0.05;
-    showcaseStore.set({ ...showcaseStore.get(), showHero });
-    const nowVisible = latest < 1;
-    if (!nowVisible) updateThemeFromHex(null);
-    setIsVisible(nowVisible);
+    setShowcaseScrollState({
+      showHero: latest < 0.05,
+      isVisible: latest < 1,
+    });
   });
 
   // Arrête l'auto-play quand le bas du carousel dépasse le centre de l'écran
@@ -76,20 +53,17 @@ export const ProjectsShowcase = ({
     target: carouselRef,
     offset: ["end 0.5", "end start"],
   });
-  const isScrolledPastRef = useRef(false);
+
   useMotionValueEvent(carouselBottomProgress, "change", (latest) => {
-    isScrolledPastRef.current = latest > 0;
+    setShowcaseAutoPlayState(latest > 0);
   });
 
   useEffect(() => {
-    if (!isVisible) return;
-    updateThemeFromHex(projects[heroIndex]?.images?.background?.sourceColor);
-  }, [heroIndex, isVisible, projects]);
-
-  // Synchronise heroIndex dans le store
-  useEffect(() => {
-    showcaseStore.set({ ...showcaseStore.get(), heroIndex });
-  }, [heroIndex]);
+    return () => {
+      if (heroTimerRef.current) clearTimeout(heroTimerRef.current);
+      if (programmaticTimerRef.current) clearTimeout(programmaticTimerRef.current);
+    };
+  }, []);
 
   const goToIndex = (newIndex: number) => {
     isProgrammaticRef.current = true;
@@ -98,46 +72,34 @@ export const ProjectsShowcase = ({
     programmaticTimerRef.current = setTimeout(() => {
       isProgrammaticRef.current = false;
     }, PROGRAMMATIC_LOCK);
-    setIndex(newIndex);
-    setHeroIndex(Math.min(projects.length - 1, newIndex));
+
+    setShowcaseIndex(newIndex, {
+      syncHero: true,
+      markInteraction: true,
+      total: projects.length,
+    });
   };
 
   const prev = () => {
-    lastInteractionRef.current = Date.now();
+    const { step } = showcaseStore.get();
     goToIndex(Math.max(0, index - step));
   };
   const next = () => {
-    lastInteractionRef.current = Date.now();
+    const { step } = showcaseStore.get();
     goToIndex(Math.min(projects.length - 1, index + step));
   };
-
-  useEffect(() => {
-    const interval = window.setInterval(() => {
-      const timeSinceLastInteraction = Date.now() - lastInteractionRef.current;
-      const { isHovering } = showcaseStore.get();
-      if (
-        timeSinceLastInteraction >= 2000 &&
-        !isHovering &&
-        !isScrolledPastRef.current
-      ) {
-        const nextIndex = indexRef.current + stepRef.current;
-        goToIndex(nextIndex >= total ? 0 : nextIndex);
-      }
-    }, 4000);
-    return () => window.clearInterval(interval);
-  }, [total]);
 
   return (
     <div className="w-full">
       <div
         ref={carouselRef}
         className="group"
-        onMouseEnter={() =>
-          showcaseStore.set({ ...showcaseStore.get(), isHovering: true })
-        }
-        onMouseLeave={() =>
-          showcaseStore.set({ ...showcaseStore.get(), isHovering: false })
-        }
+        onMouseEnter={() => {
+          setShowcaseHovering(true);
+        }}
+        onMouseLeave={() => {
+          setShowcaseHovering(false);
+        }}
       >
         <Carousel
           variant="hero"
@@ -145,15 +107,21 @@ export const ProjectsShowcase = ({
           index={index}
           onChange={(newIndex) => {
             if (isProgrammaticRef.current) return;
-            lastInteractionRef.current = Date.now();
-            setIndex(newIndex);
+            const state = showcaseStore.get();
+            if (state.index === newIndex) return;
+
+            setShowcaseIndex(newIndex, {
+              markInteraction: true,
+              total: projects.length,
+            });
+
             if (heroTimerRef.current) clearTimeout(heroTimerRef.current);
             heroTimerRef.current = setTimeout(() => {
-              setHeroIndex(newIndex);
+              setShowcaseHeroIndex(newIndex, projects.length);
             }, HERO_DEBOUNCE);
           }}
           onMetricsChange={(m) => {
-            setStep(m.stepHalf);
+            setShowcaseStep(m.stepHalf);
           }}
           outputRange={[100, 600]}
           className="h-[500px]"
@@ -185,20 +153,24 @@ export const ProjectsShowcase = ({
           label="Voir nos réalisations"
           variant="text"
         />
-        <IconButton
-          variant="outlined"
-          label="Précédent"
-          icon={iArrowLeft}
-          onClick={prev}
-          disabled={index === 0}
-        />
-        <IconButton
-          variant="tonal"
-          label="Suivant"
-          icon={iArrowRight}
-          onClick={next}
-          disabled={index >= projects.length - 1}
-        />
+        <div className="flex items-center gap-2 bg-surface-container-low rounded-full p-1">
+          <IconButton
+            width={"wide"}
+            variant="standard"
+            label="Précédent"
+            icon={iChevronLeft}
+            onClick={prev}
+            disabled={index === 0}
+          />
+          <IconButton
+            width={"wide"}
+            variant="standard"
+            label="Suivant"
+            icon={iChevronRight}
+            onClick={next}
+            disabled={index >= projects.length - 1}
+          />
+        </div>
       </div>
     </div>
   );
