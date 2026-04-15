@@ -1,0 +1,43 @@
+{
+  "logoGraphicRegister": "minimal",
+  "logoKeyShapes": "simple wordmark, sans-serif typography",
+  "logoVisualSymbol": "text-only company name, no icon or symbol",
+  "logoStyleNotes": "clean minimal wordmark in dark gray, no decorative elements or distinctive graphic treatment",
+  "brandPhysicalMaterials": [
+    "freshly mowed grass",
+    "garden soil and mulch",
+    "pruning shears and garden tools",
+    "wooden garden stakes",
+    "natural stone pavers",
+    "terracotta pots",
+    "hedge trimming equipment",
+    "wheelbarrow",
+    "watering equipment",
+    "landscape fabric"
+  ],
+  "brandAtmosphere": "outdoor garden workspace at golden hour with dappled natural light filtering through foliage",
+  "emotionalKeywords": [
+    "professionnel",
+    "naturel",
+    "soigné"
+  ],
+  "emotionVisualTranslations": [
+    "soft directional natural light creating gentle shadows on grass and foliage",
+    "rich texture of dark green leaves and freshly turned soil with visible grain",
+    "shallow depth of field focusing on garden tools with blurred greenery background"
+  ],
+  "includeScreenshot": true,
+  "includeLogo": false,
+  "assetIntegrationNote": "tablet or phone lying flat on weathered wooden garden table or propped against terracotta pot, screen reflecting ambient outdoor light, surrounded by garden tools and fresh cuttings",
+  "colorDominanceApproach": "photograph dense dark green foliage (boxwood, yew, or similar evergreen hedges) as the primary subject filling 60-70% of frame, with natural moss-covered stone and dark soil providing supporting tones in the #374836 range",
+  "complementaryTones": [
+    "warm brown soil",
+    "weathered wood",
+    "terracotta orange",
+    "sage green accents"
+  ],
+  "foregroundDescriptor": "professional pruning shears and garden gloves resting on dark green moss, sharp focus with visible texture and water droplets",
+  "midgroundDescriptor": "tablet device displaying website propped against stacked terracotta pots on wooden potting bench, surrounded by small potted seedlings",
+  "backgroundDescriptor": "soft bokeh of dense dark green hedge wall (buxus or taxus) creating natural backdrop in #374836 tone, dappled with golden hour sunlight",
+  "backgroundAlt": "Outils de jardinage professionnels sur fond de haie verte"
+}

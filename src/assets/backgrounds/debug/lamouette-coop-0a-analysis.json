@@ -1,0 +1,43 @@
+{
+  "logoGraphicRegister": "stencil",
+  "logoKeyShapes": "circular badge, simplified seagull silhouette, geometric letterforms with stencil cutouts",
+  "logoVisualSymbol": "seagull (mouette) in profile within circle, representing coastal location and cooperative freedom",
+  "logoStyleNotes": "clean stencil aesthetic with negative space cutouts in letterforms, flat two-color design, maritime coastal identity",
+  "brandPhysicalMaterials": [
+    "raw wood shelving and crates",
+    "kraft paper bags",
+    "glass jars for bulk goods",
+    "linen fabric tote bags",
+    "unfinished pine surfaces",
+    "ceramic containers",
+    "woven wicker baskets",
+    "natural cotton muslin",
+    "recycled cardboard boxes",
+    "sage-green painted wood panels"
+  ],
+  "brandAtmosphere": "warm cooperative grocery store interior with natural materials, soft daylight through windows, organized bulk goods in glass and wood containers, community-focused sustainable retail space",
+  "emotionalKeywords": [
+    "accessible",
+    "collaborative",
+    "natural"
+  ],
+  "emotionVisualTranslations": [
+    "soft diffused natural window light creating gentle shadows on wood surfaces",
+    "tactile close-up focus on raw material textures with shallow depth of field blurring background shelves",
+    "eye-level perspective showing organized layers of bulk containers and natural packaging materials"
+  ],
+  "includeScreenshot": true,
+  "includeLogo": true,
+  "assetIntegrationNote": "Place tablet/phone on wooden counter or shelf surface among bulk goods containers. Logo can appear as printed stencil on kraft paper bag, wooden crate side, or fabric tote in scene. Natural overhead/window lighting. Device screen shows website at slight angle, partially obscured by glass jar or product in foreground.",
+  "colorDominanceApproach": "Photograph sage-green painted wooden shelving units, panels, or storage crates as primary architectural elements. Include natural linen/cotton fabrics in similar green tone. Soft green-tinted natural light filtering through space. Green glass bottles. Painted wood surfaces occupy 60-70% of frame.",
+  "complementaryTones": [
+    "warm natural wood grain",
+    "off-white kraft paper",
+    "cream ceramic",
+    "soft amber glass"
+  ],
+  "foregroundDescriptor": "shallow depth of field close-up of glass jar with bulk goods, kraft paper bag with stenciled logo, or woven basket edge on sage-green painted wooden surface",
+  "midgroundDescriptor": "wooden shelf or counter displaying organized bulk containers, ceramic jars, and linen bags, with tablet showing website casually placed among products",
+  "backgroundDescriptor": "soft-focus sage-green painted wooden shelving units with blurred rows of bulk goods containers, natural window light creating gentle gradient",
+  "backgroundAlt": "Produits bio en vrac sur étagères bois vert-sauge"
+}
