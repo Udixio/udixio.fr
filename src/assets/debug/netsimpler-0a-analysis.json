@@ -1,0 +1,40 @@
+{
+  "logoGraphicRegister": "flat",
+  "logoKeyShapes": "rounded rectangle with cursor arrow, clean sans-serif typography",
+  "logoVisualSymbol": "cursor pointer integrated into brand name, suggesting digital interaction and simplicity",
+  "logoStyleNotes": "modern flat design with bold geometric shapes, friendly rounded corners, emphasis on digital/web interface metaphor",
+  "brandPhysicalMaterials": [
+    "glossy blue acrylic panels",
+    "frosted glass screens",
+    "brushed aluminum laptop surfaces",
+    "LED-backlit interfaces",
+    "smooth plastic device casings",
+    "reflective monitor displays",
+    "fiber optic cables with blue glow"
+  ],
+  "brandAtmosphere": "clean modern workspace with digital tools, professional yet accessible tech environment, bright and organized",
+  "emotionalKeywords": [
+    "accessible",
+    "efficient",
+    "professional"
+  ],
+  "emotionVisualTranslations": [
+    "soft diffused natural light from large windows creating approachable atmosphere",
+    "sharp focus on foreground elements with subtle depth of field suggesting clarity and precision",
+    "clean reflective surfaces and organized composition conveying streamlined efficiency"
+  ],
+  "includeScreenshot": true,
+  "includeLogo": true,
+  "assetIntegrationNote": "Place laptop/tablet screen at 45-degree angle in midground showing NetSimpler interface, logo visible on device or as subtle reflection on glossy blue surface. Screen should be naturally lit by ambient light with slight screen glow. Integrate into workspace setting on blue acrylic desk surface.",
+  "colorDominanceApproach": "Primary surfaces are glossy cobalt blue acrylic desk/panels occupying 65% of frame, supplemented by blue-lit fiber optics and blue screen glows. Natural material is the blue acrylic and painted surfaces, not a filter.",
+  "complementaryTones": [
+    "white",
+    "silver",
+    "soft gray",
+    "warm ambient light"
+  ],
+  "foregroundDescriptor": "Glossy cobalt blue acrylic desk surface with subtle reflections, wireless mouse and smartphone with blue interface elements in sharp focus",
+  "midgroundDescriptor": "Laptop at 45-degree angle displaying NetSimpler dashboard, aluminum frame catching light, surrounded by blue translucent acrylic organizers and LED-lit elements",
+  "backgroundDescriptor": "Frosted glass partition with blue gradient, soft-focus modern office environment with diffused natural window light",
+  "backgroundAlt": "Bureau numérique bleu avec écrans et surfaces acryliques réfléchissantes"
+}

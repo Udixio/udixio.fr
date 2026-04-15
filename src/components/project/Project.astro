@@ -25,21 +25,26 @@ interface Props extends CollectionEntry<"realisation"> {
 const {id: slug, data} = Astro.props;
 const {title, technologies, services, description, order, theme, images, website, summary} = data
 
-const renderImages = import.meta.glob('@assets/renders/*.webp', {eager: true});
+const renderImages     = import.meta.glob('@assets/renders/*.webp',     {eager: true});
+const backgroundImages = import.meta.glob('@assets/backgrounds/*.webp', {eager: true});
 
-if (!images.background) {
+// Priorité : background src/assets/backgrounds/ → render src/assets/renders/ → src MDX brut
+const bgEntry =
+    (Object.entries(backgroundImages).find(([path]) => path.endsWith(`${slug}-background.webp`))?.[1] as any)?.default
+    ?? (Object.entries(renderImages).find(([path]) => path.endsWith(`${slug}.webp`))?.[1] as any)?.default;
 
-    const imageFileName = `${slug}.webp`;
+const resolvedBgSrc = bgEntry
+    ? (await getImage({ src: bgEntry, format: 'webp' })).src
+    : (images.background?.src ?? "");
 
-    const imageEntry = ((Object.entries(renderImages).find(([path]) =>
-        path.endsWith(imageFileName)
-    ))?.[1] as any).default;
-    const background = await getImage({src: imageEntry, format: 'webp'})
-    images.background = {
-        src: (background).src,
-        alt: ""
-    }
-}
+const resolvedImages = {
+    ...images,
+    background: {
+        src: resolvedBgSrc,
+        alt: images.background?.alt ?? "",
+        sourceColor: images.background?.sourceColor,
+    },
+};
 ---
 <style is:global>
     .right, .left {
@@ -53,7 +58,7 @@ if (!images.background) {
 <section id="projets"
          class=" tab-menu  pt-32 flex items-center relative padding ">
     <Project client:load
-             {...{...data, images, technologies: undefined, services, slug }}>
+             {...{...data, images: resolvedImages, technologies: undefined, services, slug }}>
         <Fragment slot="services">
             {
                 services && services.map((name) => (

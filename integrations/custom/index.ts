@@ -78,12 +78,33 @@ export default function customIntegration(): AstroIntegration {
                 logger.info(`🖼️  Checking for missing background images...`);
 
                 for (const file of mdxFiles) {
-                    const filePath = join(realisationsDir, file);
-                    const slug     = file.replace('.mdx', '');
-                    const content  = await fs.readFile(filePath, 'utf-8');
-                    const parsed   = matter(content);
+                    const filePath         = join(realisationsDir, file);
+                    const slug             = file.replace('.mdx', '');
+                    const content          = await fs.readFile(filePath, 'utf-8');
+                    const parsed           = matter(content);
+                    const newBackgroundPath = join('src', 'assets', 'backgrounds', `${slug}-background.webp`);
 
-                    if (parsed.data.images?.background) continue;
+                    // Vérifie l'existence du fichier dans src/assets/backgrounds/ (nouvelle localisation)
+                    const expectedRelPath = `../../assets/backgrounds/${slug}-background.webp`;
+                    try {
+                        await fs.access(newBackgroundPath);
+                        // Fichier présent — s'assure que le MDX référence bien le chemin relatif correct
+                        if (parsed.data.images?.background?.src !== expectedRelPath) {
+                            logger.info(`🔄 Migrating background path for ${slug}...`);
+                            parsed.data.images = {
+                                ...parsed.data.images,
+                                background: {
+                                    src: expectedRelPath,
+                                    alt: parsed.data.images?.background?.alt ?? "",
+                                    sourceColor: parsed.data.images?.background?.sourceColor,
+                                },
+                            };
+                            await fs.writeFile(filePath, matter.stringify(parsed.content, parsed.data), 'utf-8');
+                        } else {
+                            logger.info(`✅ Background already generated: ${slug}`);
+                        }
+                        continue;
+                    } catch { /* pas encore généré */ }
 
                     if (!parsed.data.title || !parsed.data.description) {
                         logger.warn(`⚠️  Skipping ${slug} — frontmatter incomplete (title/description missing, check YAML indentation)`);
@@ -108,12 +129,12 @@ export default function customIntegration(): AstroIntegration {
                             parsed.data.images = {
                                 ...parsed.data.images,
                                 background: {
-                                    src: backgroundSrc,
-                                    alt: `${parsed.data.title} — ${parsed.data.description}`,
+                                    src: backgroundSrc.src,  // chemin relatif ../../assets/backgrounds/...
+                                    alt: backgroundSrc.alt,
                                 },
                             };
                             await fs.writeFile(filePath, matter.stringify(parsed.content, parsed.data), 'utf-8');
-                            logger.info(`✅ Background set for ${slug}: ${backgroundSrc}`);
+                            logger.info(`✅ Background set for ${slug}: ${backgroundSrc.src}`);
                         }
                     } catch (err) {
                         logger.error(`❌ Background generation failed for ${slug}: ${err}`);
@@ -125,14 +146,16 @@ export default function customIntegration(): AstroIntegration {
                 logger.info(`🎨 Extracting source colors from project images...`);
 
                 for (const file of mdxFiles) {
-                    const filePath    = join(realisationsDir, file);
-                    const slug        = file.replace('.mdx', '');
-                    const content     = await fs.readFile(filePath, 'utf-8');
-                    const parsed      = matter(content);
-                    const backgroundSrc = parsed.data.images?.background?.src;
+                    const filePath         = join(realisationsDir, file);
+                    const slug             = file.replace('.mdx', '');
+                    const content          = await fs.readFile(filePath, 'utf-8');
+                    const parsed           = matter(content);
+                    const backgroundFilePath = join('src', 'assets', 'backgrounds', `${slug}-background.webp`);
 
-                    if (!backgroundSrc) {
-                        logger.warn(`⚠️  No background image for ${slug}, skipping color extraction`);
+                    try {
+                        await fs.access(backgroundFilePath);
+                    } catch {
+                        logger.warn(`⚠️  No background at new location for ${slug}, skipping color extraction`);
                         continue;
                     }
 
@@ -142,7 +165,7 @@ export default function customIntegration(): AstroIntegration {
                     }
 
                     try {
-                        const hex = await extractSourceColor(join('public', backgroundSrc));
+                        const hex = await extractSourceColor(backgroundFilePath);
                         parsed.data.images = {
                             ...parsed.data.images,
                             background: {...parsed.data.images.background, sourceColor: hex},

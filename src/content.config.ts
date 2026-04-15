@@ -13,7 +13,7 @@ const realisation = defineCollection({
         }),
         images: z.object({
             background: z.object({
-                src: z.string(),
+                src: z.string().optional(),
                 alt: z.string(),
                 sourceColor: z.string().optional(),
             }).optional(),

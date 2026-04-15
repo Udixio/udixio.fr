@@ -1,0 +1,41 @@
+{
+  "logoGraphicRegister": "flat",
+  "logoKeyShapes": "circular profile frame with orbital tech icons",
+  "logoVisualSymbol": "developer portrait surrounded by floating technology symbols in circular arrangement",
+  "logoStyleNotes": "modern flat design with soft blue circular frame, minimalist tech iconography, clean digital aesthetic",
+  "brandPhysicalMaterials": [
+    "brushed aluminum laptop surfaces",
+    "matte black mechanical keyboards",
+    "frosted glass panels",
+    "blue LED-lit server racks",
+    "fiber optic cables with blue light transmission",
+    "polished chrome connectors",
+    "carbon fiber textures",
+    "backlit blue acrylic panels"
+  ],
+  "brandAtmosphere": "professional tech workspace with cool blue ambient lighting, clean modern surfaces, subtle technological glow",
+  "emotionalKeywords": [
+    "performant",
+    "accessible",
+    "modern"
+  ],
+  "emotionVisualTranslations": [
+    "sharp focus on foreground tech elements with subtle blue rim lighting suggesting speed and precision",
+    "soft diffused blue key light creating approachable warmth while maintaining professional clarity",
+    "shallow depth of field isolating crisp modern components against smoothly blurred background"
+  ],
+  "includeScreenshot": true,
+  "includeLogo": true,
+  "assetIntegrationNote": "Place laptop screen at 45-degree angle in midground showing the website UI, naturally lit by its own blue-tinted display glow. Position the circular logo as a physical embossed element on a metallic surface or as a backlit acrylic badge in the foreground, catching blue LED light from the environment. Ensure screen content is legible but integrated naturally into the workspace scene with realistic reflections and ambient occlusion.",
+  "colorDominanceApproach": "Use blue LED strip lighting illuminating aluminum and glass surfaces, blue-tinted monitor glow as primary light source, frosted acrylic panels in #91BCED tone, fiber optic cables with blue light transmission throughout the frame, creating natural color dominance through photographed materials rather than filters",
+  "complementaryTones": [
+    "deep charcoal blacks",
+    "cool silver metallics",
+    "soft white highlights",
+    "subtle purple-blue shadows"
+  ],
+  "foregroundDescriptor": "Shallow focus on brushed aluminum laptop edge with blue LED indicator lights, mechanical keyboard with blue backlighting, chrome USB-C cable catching blue ambient light",
+  "midgroundDescriptor": "Angled laptop screen displaying the portfolio website UI with blue accent colors, circular logo badge on metallic stand, frosted glass panel with blue edge lighting",
+  "backgroundDescriptor": "Softly blurred server rack with blue LED status lights, fiber optic cables creating bokeh light points, dark matte surfaces with blue ambient glow",
+  "backgroundAlt": "Écran d'ordinateur et surfaces métalliques illuminées en bleu technologique"
+}

@@ -1,0 +1,41 @@
+{
+  "logoGraphicRegister": "minimal",
+  "logoKeyShapes": "simple text wordmark, sans-serif typography, clean horizontal layout",
+  "logoVisualSymbol": "text-based identity with no icon or symbol",
+  "logoStyleNotes": "minimalist typographic logo, neutral and professional, relies on clean sans-serif letterforms",
+  "brandPhysicalMaterials": [
+    "freshly mowed grass lawns",
+    "dense green hedges and shrubs",
+    "ornamental trees and flowering plants",
+    "natural stone pathways",
+    "garden soil and mulch",
+    "wooden garden structures",
+    "terracotta planters",
+    "pruning tools and equipment"
+  ],
+  "brandAtmosphere": "professional outdoor landscaping environment with manicured gardens, natural sunlight, fresh air, and living greenery",
+  "emotionalKeywords": [
+    "naturel",
+    "professionnel",
+    "serein"
+  ],
+  "emotionVisualTranslations": [
+    "soft natural daylight with gentle shadows across grass and foliage",
+    "rich textural detail in plant leaves, bark, and soil with medium depth of field",
+    "calm atmospheric perspective showing layered garden depth from foreground to background"
+  ],
+  "includeScreenshot": false,
+  "includeLogo": false,
+  "assetIntegrationNote": "No logo integration needed. Focus on photorealistic garden materials and landscapes that embody the brand naturally through color and subject matter.",
+  "colorDominanceApproach": "Photograph dense evergreen foliage, dark green hedges, moss-covered surfaces, and shade-grown plants that naturally exhibit the deep forest green #374836. Capture in soft overcast light or shaded areas to emphasize the darker green tones rather than bright sunlit grass.",
+  "complementaryTones": [
+    "rich brown soil",
+    "natural stone gray",
+    "bark texture brown",
+    "subtle sage green highlights"
+  ],
+  "foregroundDescriptor": "close-up textured elements: dark green hedge leaves with visible detail, garden tools partially visible, or rich dark soil with small plants emerging",
+  "midgroundDescriptor": "manicured garden bed with dense dark green shrubs and ornamental plants, professional landscaping work in progress or completed",
+  "backgroundDescriptor": "soft-focused layered garden depth with trees, additional plantings, and natural outdoor atmosphere creating professional landscape context",
+  "backgroundAlt": "Haies et végétaux verts foncés dans jardin paysagé professionnel"
+}

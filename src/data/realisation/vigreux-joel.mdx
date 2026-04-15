@@ -1,15 +1,23 @@
 ---
 title: vigreux-joel.fr
-description: Portfolio personnel d’un développeur full-stack freelance
+description: >-
+  Portfolio de Joël Vigreux, un développeur full stack qui aide les entreprises
+  et développeurs à créer des applications web performantes et multiplateformes.
+  Il se spécialise dans les technologies Astro, React et NestJS pour fournir des
+  solutions de développement web complètes, du front-end au back-end. Son
+  objectif est de concevoir des applications adaptées aux besoins spécifiques de
+  chaque client, en tirant parti des technologies modernes.
 order: 1
 theme:
   isDark: true
-  source: '#4F4060'
+  source: '#91BCED'
 images:
   background:
-    src: /images/realisations/vigreux-joel-background.webp
-    alt: 'Portfolio de Joël Vigreux, développeur full-stack'
-    sourceColor: '#5a4437'
+    src: ../../assets/backgrounds/vigreux-joel-background.webp
+    alt: >-
+      vigreux-joel.fr — Écran d'ordinateur et surfaces métalliques illuminées en
+      bleu technologique
+    sourceColor: '#1863c1'
 website: 'https://vigreux-joel.fr/'
 summary: >-
   Un portfolio conçu pour mettre en avant une expertise full-stack freelance,
@@ -33,7 +41,16 @@ services:
   - Web design
   - Développement web
 ---
-import Project from "@components/project/Project.astro"
+
+
+
+
+
+
+
+
+
+import Project from "@components/project/Project.astro";
 
 <Project {...{id: "vigreux-joel",data: frontmatter}}>
 <fragment slot="sidebar">
