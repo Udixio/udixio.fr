@@ -99,19 +99,31 @@ export async function generateBackgroundMockup(
     })());
 
   // ── Étape 1 : Génération (FLUX pur ou Gemini avec assets) ─────────────────
+  // Normalisation à 1920×1080 : FLUX sort en 2K (downscale propre),
+  // Gemini sort souvent en ~1024px (upscale nécessaire).
+  const TARGET_W = 1920;
+  const TARGET_H = 1080;
+
   let buffer =
     (await loadImageDebug(slug, "1-background")) ??
     (await (async () => {
-      const b = hasAssets
+      const raw = hasAssets
         ? await generateWithAssets(apiKey, backgroundPrompt, analysis, renderPath, logoSrc)
         : await generateBaseImage(apiKey, backgroundPrompt);
+      const { width: rawW = 0, height: rawH = 0 } = await sharp(raw).metadata();
+      const b = (rawW !== TARGET_W || rawH !== TARGET_H)
+        ? await sharp(raw).resize(TARGET_W, TARGET_H, { fit: "cover", position: "centre" }).toBuffer()
+        : raw;
       await saveDebugStep(b, slug, "1-background");
       return b;
     })());
 
-  // ── Étape 2 : Cadre abstrait SVG ─────────────────────────────────────────
-  buffer = await applyFrame(buffer, themeSource, analysis.logoGraphicRegister, slug);
-  await saveDebugStep(buffer, slug, "2-frame");
+  // ── Étape 2 : Cadre abstrait généré par LLM ──────────────────────────────
+  // debug/${slug}-2-frame-layer.svg  → SVG brut (supprimable → force regen LLM)
+  // debug/${slug}-2-frame-layer.png  → PNG rendu  (supprimable → force re-render)
+  // debug/${slug}-3-composite.webp   → résultat final avant export
+  buffer = await applyFrame(apiKey, buffer, themeSource, analysis.frameMotif, analysis, slug);
+  await saveDebugStep(buffer, slug, "3-composite");
 
   const src = await saveAsWebP(buffer, slug);
   const alt = `${title} — ${analysis.backgroundAlt}`;
@@ -164,6 +176,9 @@ const BrandAnalysisSchema = z.object({
   midgroundDescriptor: z.string(),
   backgroundDescriptor: z.string(),
 
+  // Motif du calque de cadre abstrait
+  frameMotif: z.enum(["botanical", "paint_splash", "flowing_wave", "geometric_shard", "organic_blob", "dot_cluster"]),
+
   // Alt text en français pour l'image générée
   backgroundAlt: z.string(),
 });
@@ -202,10 +217,11 @@ Analyze:
 3. Exactly 3 emotional keywords and their photorealistic visual translation (light quality, texture, depth of field, etc.)
 4. Whether a website screenshot should be integrated as a device mockup. Set true if the brand's physical environment naturally contains surfaces or settings where a device could be casually placed. Set false if no credible surface exists in this brand's world.
 5. Whether the logo should be integrated into the scene. Set true if the logo has a distinctive graphic register (illustrated, stencil, handdrawn, geometric) that contributes visually to the composition. Set false if it is a plain wordmark that would look pasted-on.
-6. A note on how to integrate the logo/screen naturally: surface, angle, lighting, material interaction with the environment
+6. Describe a precise editorial scenario for placing the device: choose the device type (laptop, tablet or phone) that fits the brand lifestyle, and place it on a surface that belongs to the client's world — not the tradesperson's workspace. Think lifestyle photography: where would a client or admirer of this brand naturally have a screen nearby? The scenario must feel authentic to the brand atmosphere, not staged or technical. Then describe how the logo could appear as a physical element in the same scene.
 7. How to make ${themeSource} dominant as the natural color of the photographed materials/environment (60–70% of frame) — not as a filter
 8. Describe concrete foreground, midground, and background photographic elements
-9. Write a short alt text in FRENCH (max 12 words) describing the visual content of the generated background — what will be photographically represented (e.g. "Produits bio en vrac sur fond vert-sauge texturé")
+9. Choose the abstract decorative motif for the frame overlay — pick the one that best translates this brand's visual vocabulary into non-figurative form: "botanical" (nature/organic/plant world), "paint_splash" (creative/artisanal/expressive), "flowing_wave" (digital/fluid/modern), "geometric_shard" (technical/precise/architectural), "organic_blob" (friendly/human/rounded), "dot_cluster" (pattern-based/data/playful)
+10. Write a short alt text in FRENCH (max 12 words) describing the visual content of the generated background — what will be photographically represented (e.g. "Produits bio en vrac sur fond vert-sauge texturé")
 
 Be specific and faithful to what you actually see.`,
     },
@@ -395,7 +411,8 @@ RULES:
 - ${isDark ? "Dark, moody, dramatic lighting" : "Natural soft light — depth from texture and composition, never pure white"}
 - Left third: minimal, space for title overlay
 - Assets appear as physical objects naturally belonging to the scene (correct perspective, lighting, shadows)
-- Website shown on a device at a natural angle — the device rests on a surface that makes sense in this brand's world
+- The device rests on a surface that belongs to the CLIENT's world, not a trade workspace — think lifestyle editorial photography
+- The screen must be clearly legible and occupy a significant portion of the frame (roughly 40–50% of image width), slightly angled for depth — never small or tucked away
 - NO text, labels, signs, readable writing, people, faces, or hands
 - 150 words max, natural prose, English only
 - Output the instruction ONLY`,
@@ -448,7 +465,7 @@ async function generateWithAssets(
     if (screenBase64) content.push({ type: "image_url", image_url: { url: screenBase64 } });
   }
 
-  content.push({ type: "text", text: prompt });
+  content.push({ type: "text", text: `${prompt}\n\nOutput a high-resolution 16:9 landscape image (target 1920×1080px or higher).` });
 
   const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
     method: "POST",
@@ -551,78 +568,185 @@ async function integrateAssets(
   return extractImageBuffer(await res.json());
 }
 
-// ─── Étape 4 : Cadre SVG abstrait ─────────────────────────────────────────────
+// ─── Étape 2 : Calque de cadre — généré par Gemini (image) ──────────────────
 
-function buildFrameSVG(
+/**
+ * Gemini génère un calque overlay de bords : fond noir + éléments décoratifs
+ * en couleur de marque. Sharp composite avec blend "screen" : le noir disparaît,
+ * les éléments colorés s'ajoutent en lumière au-dessus du fond.
+ *
+ * Mis en cache sous debug/${slug}-2-frame-layer.webp — supprimable
+ * indépendamment pour forcer une régénération sans relancer l'étape 1.
+ */
+/**
+ * Analyse le fond généré (Sharp, sans appel API) et retourne les 2–3 coins
+ * les moins chargés visuellement — ceux où placer la décoration sans couvrir
+ * le sujet principal.
+ */
+async function findAvailableCorners(buffer: Buffer): Promise<string[]> {
+  const { width = 1920, height = 1080 } = await sharp(buffer).metadata();
+  const zw = Math.round(width  * 0.28);
+  const zh = Math.round(height * 0.28);
+
+  const zones = [
+    { name: "top-left",     left: 0,           top: 0 },
+    { name: "top-right",    left: width  - zw,  top: 0 },
+    { name: "bottom-left",  left: 0,           top: height - zh },
+    { name: "bottom-right", left: width  - zw,  top: height - zh },
+  ] as const;
+
+  const scores = await Promise.all(
+    zones.map(async ({ name, left, top }) => {
+      const { data } = await sharp(buffer)
+        .extract({ left, top, width: zw, height: zh })
+        .greyscale()
+        .raw()
+        .toBuffer({ resolveWithObject: true });
+      // Score = luminosité moyenne × variance (zones très sombres ET uniformes = plus disponibles)
+      const vals = Array.from(data as Uint8Array);
+      const avg  = vals.reduce((s, v) => s + v, 0) / vals.length;
+      const variance = vals.reduce((s, v) => s + (v - avg) ** 2, 0) / vals.length;
+      // score bas = zone sombre et peu détaillée → idéale pour le calque
+      return { name, score: avg * 0.6 + Math.sqrt(variance) * 0.4 };
+    }),
+  );
+
+  scores.sort((a, b) => a.score - b.score);
+  // 2 coins toujours, parfois 3 (quand le 3e est proche du 2e)
+  const picked = scores.slice(0, 2);
+  if (scores[2].score < scores[1].score * 1.35) picked.push(scores[2]);
+  return picked.map(s => s.name);
+}
+
+async function generateFrameOverlay(
+  apiKey: string,
   w: number,
   h: number,
   color: string,
-  register: string,
-  slug: string,
-): string {
-  let s =
-    [...slug].reduce((a, c) => ((a << 5) - a + c.charCodeAt(0)) | 0, 0) >>> 0 ||
-    1;
-  const rng = (): number => {
-    s ^= s << 13;
-    s ^= s >> 17;
-    s ^= s << 5;
-    return (s >>> 0) / 0x100000000;
+  frameMotif: BrandAnalysis["frameMotif"],
+  analysis: BrandAnalysis,
+  placementCorners: string[],
+): Promise<Buffer> {
+  // Caractère visuel selon le registre graphique — qualité, pas exemple de forme
+  const registerCharacter: Record<BrandAnalysis["logoGraphicRegister"], string> = {
+    flat:          "precise, clean",
+    geometric:     "structured, balanced",
+    handdrawn:     "loose, organic",
+    illustrated:   "expressive, varied",
+    minimal:       "restrained, simple",
+    abstract:      "non-representational, free",
+    stencil:       "bold, high-contrast",
+    photographic:  "natural, grounded",
   };
 
-  const isGeometric = ["geometric", "stencil"].includes(register);
+  const cornersLabel = placementCorners.join(" and ");
 
-  const anchors = [
-    {
-      cx: -50,
-      cy: h + 50,
-      baseR: 200 + rng() * 60,
-      opacity: 0.88 + rng() * 0.08,
-    },
-    {
-      cx: w * 0.2 + (rng() - 0.5) * 60,
-      cy: h + 35 + (rng() - 0.5) * 30,
-      baseR: 130 + rng() * 50,
-      opacity: 0.65 + rng() * 0.15,
-    },
-    {
-      cx: w * 0.8 + (rng() - 0.5) * 60,
-      cy: h + 20 + (rng() - 0.5) * 30,
-      baseR: 90 + rng() * 40,
-      opacity: 0.55 + rng() * 0.15,
-    },
-    {
-      cx: w + 30,
-      cy: -(20 + rng() * 40),
-      baseR: 70 + rng() * 35,
-      opacity: 0.5 + rng() * 0.15,
-    },
-  ];
+  const prompt = `${w}×${h}px image. Pure black (#000000) background. Single color: ${color}.
 
-  const shapes = anchors.map(({ cx, cy, baseR, opacity }) => {
-    const op = Math.min(1, opacity).toFixed(2);
-    if (isGeometric) {
-      const rot = ((rng() - 0.5) * 40).toFixed(1);
-      const rx = (baseR * 0.25).toFixed(0);
-      return `<rect x="${(cx - baseR * 0.5).toFixed(0)}" y="${(cy - baseR * 0.55).toFixed(0)}" width="${baseR.toFixed(0)}" height="${(baseR * 0.85).toFixed(0)}" rx="${rx}" fill="${color}" opacity="${op}" transform="rotate(${rot},${cx.toFixed(0)},${cy.toFixed(0)})"/>`;
-    }
-    return `<circle cx="${cx.toFixed(0)}" cy="${cy.toFixed(0)}" r="${baseR.toFixed(0)}" fill="${color}" opacity="${op}"/>`;
+Abstract ${color} shapes placed ONLY at these specific corners: ${cornersLabel}. Shapes bleed off the canvas edges at those corners. All other corners and the center remain empty black — black must be clearly dominant.
+
+Shape character: ${registerCharacter[analysis.logoGraphicRegister]}.
+Personality: ${analysis.emotionalKeywords.join(", ")}.
+Brand essence to abstractly evoke through form and rhythm (do not illustrate literally): ${analysis.brandAtmosphere}.
+Abstract formal inspiration (translate into pure shape, not symbol): ${analysis.logoVisualSymbol}.
+
+Composition:
+- 5 to 10 distinct shapes, each substantial — no fragmented small details
+- Total colored area: at most 15–20% of the canvas
+- Shapes may carry a vague impression or mood but must not depict any recognizable specific object
+
+Strict visual rules — no exceptions:
+- All shape edges must be curved — no straight lines, no right angles, no sharp corners.
+- Flat solid ${color} only. No texture, no grain, no paper or fabric effect.
+- No shadow, no outline, no stroke.
+- No gradient, no glow, no blur, no 3D or depth effect.`;
+
+
+  const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      model: "black-forest-labs/flux.2-pro",
+      messages: [{ role: "user", content: prompt }],
+      modalities: ["image"],
+      image_config: { aspect_ratio: "16:9", image_size: "1K" },
+    }),
   });
 
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}">\n${shapes.join("\n")}\n</svg>`;
+  if (!res.ok)
+    throw new Error(`Frame overlay API error ${res.status}: ${await res.text()}`);
+
+  return extractImageBuffer(await res.json());
+}
+
+async function loadLayerDebug(slug: string): Promise<Buffer | null> {
+  const p = join(DEBUG_DIR, `${slug}-2-frame-layer.webp`);
+  try {
+    await fs.access(p);
+    console.log(`🐛 Reusing frame layer: ${p}`);
+    return fs.readFile(p);
+  } catch {
+    return null;
+  }
+}
+
+async function saveLayerDebug(buffer: Buffer, slug: string): Promise<void> {
+  await ensureDebugDir();
+  const p = join(DEBUG_DIR, `${slug}-2-frame-layer.webp`);
+  await sharp(buffer).webp({ quality: 90 }).toFile(p);
+  console.log(`🐛 Frame layer saved: ${p}`);
 }
 
 async function applyFrame(
+  apiKey: string,
   buffer: Buffer,
   themeSource: string,
-  register: string,
+  frameMotif: BrandAnalysis["frameMotif"],
+  analysis: BrandAnalysis,
   slug: string,
 ): Promise<Buffer> {
   const { width = 1920, height = 1080 } = await sharp(buffer).metadata();
-  const svg = buildFrameSVG(width, height, themeSource, register, slug);
-  const frameBuffer = await sharp(Buffer.from(svg)).png().toBuffer();
+
+  // Analyse les coins du fond pour trouver les zones disponibles
+  const placementCorners = await findAvailableCorners(buffer);
+  console.log(`🎨 Frame placement corners for ${slug}: ${placementCorners.join(", ")}`);
+
+  // Charge ou génère le calque (supprimable indépendamment dans debug)
+  const rawFrame =
+    (await loadLayerDebug(slug)) ??
+    (await (async () => {
+      const overlay = await generateFrameOverlay(apiKey, width, height, themeSource, frameMotif, analysis, placementCorners);
+      const resized = await sharp(overlay)
+        .resize(width, height, { fit: "fill" })
+        .toBuffer();
+      await saveLayerDebug(resized, slug);
+      return resized;
+    })());
+
+  // Convertit le fond noir en alpha transparent.
+  // Seuil dur (< 35 → transparent) pour éliminer le halo noir aux bords des formes.
+  const { data, info } = await sharp(rawFrame)
+    .ensureAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+
+  for (let i = 0; i < data.length; i += 4) {
+    const brightness = Math.max(data[i], data[i + 1], data[i + 2]);
+    data[i + 3] = brightness < 35 ? 0 : 255;
+  }
+
+  const frameWithAlpha = await sharp(Buffer.from(data), {
+    raw: { width: info.width, height: info.height, channels: 4 },
+  })
+    .png()
+    .toBuffer();
+
+  // "over" blend : les formes colorées s'appliquent à pleine opacité sur le fond
   return sharp(buffer)
-    .composite([{ input: frameBuffer, blend: "over" }])
+    .composite([{ input: frameWithAlpha, blend: "over" }])
     .toBuffer();
 }
 
