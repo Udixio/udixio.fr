@@ -1,43 +1,41 @@
 {
-  "logoGraphicRegister": "stencil",
-  "logoKeyShapes": "circular badge, simplified seagull silhouette, geometric letterforms with stencil cutouts",
-  "logoVisualSymbol": "seagull (mouette) in profile within circle, representing coastal location and cooperative freedom",
-  "logoStyleNotes": "clean stencil aesthetic with negative space cutouts in letterforms, flat two-color design, maritime coastal identity",
+  "logoGraphicRegister": "flat",
+  "logoKeyShapes": "circular badge, simplified seagull silhouette, clean geometric letterforms",
+  "logoVisualSymbol": "seagull in circular frame representing coastal location and cooperative freedom",
+  "logoStyleNotes": "minimal flat design with solid color fill, maritime coastal identity, accessible and community-focused aesthetic",
   "brandPhysicalMaterials": [
-    "raw wood shelving and crates",
-    "kraft paper bags",
-    "glass jars for bulk goods",
-    "linen fabric tote bags",
-    "unfinished pine surfaces",
-    "ceramic containers",
-    "woven wicker baskets",
-    "natural cotton muslin",
-    "recycled cardboard boxes",
-    "sage-green painted wood panels"
+    "natural wood kitchen surfaces",
+    "woven shopping baskets",
+    "glass jars and containers",
+    "linen produce bags",
+    "ceramic bowls",
+    "raw vegetables and grains"
   ],
-  "brandAtmosphere": "warm cooperative grocery store interior with natural materials, soft daylight through windows, organized bulk goods in glass and wood containers, community-focused sustainable retail space",
+  "brandAtmosphere": "warm domestic kitchen with natural light, organized and calm, sustainable living made practical and beautiful",
   "emotionalKeywords": [
-    "accessible",
-    "collaborative",
-    "natural"
+    "empowered",
+    "aligned",
+    "grounded"
   ],
   "emotionVisualTranslations": [
-    "soft diffused natural window light creating gentle shadows on wood surfaces",
-    "tactile close-up focus on raw material textures with shallow depth of field blurring background shelves",
-    "eye-level perspective showing organized layers of bulk containers and natural packaging materials"
+    "soft natural window light creating gentle shadows, shallow depth of field on foreground elements",
+    "tactile textures of wood grain, woven fibers, matte ceramic surfaces in sharp detail",
+    "warm color temperature with sage green as environmental dominant, earth tones in supporting elements"
   ],
   "includeScreenshot": true,
   "includeLogo": true,
-  "assetIntegrationNote": "Place tablet/phone on wooden counter or shelf surface among bulk goods containers. Logo can appear as printed stencil on kraft paper bag, wooden crate side, or fabric tote in scene. Natural overhead/window lighting. Device screen shows website at slight angle, partially obscured by glass jar or product in foreground.",
-  "colorDominanceApproach": "Photograph sage-green painted wooden shelving units, panels, or storage crates as primary architectural elements. Include natural linen/cotton fabrics in similar green tone. Soft green-tinted natural light filtering through space. Green glass bottles. Painted wood surfaces occupy 60-70% of frame.",
+  "assetIntegrationNote": "The seagull logo's flat graphic style works as a subtle decorative element in the botanical frame overlay, reinforcing coastal cooperative identity without competing with the photorealistic scene",
+  "devicePosition": "center-right",
+  "colorDominanceApproach": "The sage green #71A887 dominates through painted kitchen cabinetry or a large wooden cutting board in that tone, natural light reflecting off green-toned surfaces, and fresh produce like kale, herbs, and green vegetables filling the frame. The color feels organic and earned, not artificial.",
   "complementaryTones": [
-    "warm natural wood grain",
-    "off-white kraft paper",
-    "cream ceramic",
-    "soft amber glass"
+    "warm natural wood honey tones",
+    "off-white linen and ceramic",
+    "deep earth browns from whole grains",
+    "muted terracotta from root vegetables"
   ],
-  "foregroundDescriptor": "shallow depth of field close-up of glass jar with bulk goods, kraft paper bag with stenciled logo, or woven basket edge on sage-green painted wooden surface",
-  "midgroundDescriptor": "wooden shelf or counter displaying organized bulk containers, ceramic jars, and linen bags, with tablet showing website casually placed among products",
-  "backgroundDescriptor": "soft-focus sage-green painted wooden shelving units with blurred rows of bulk goods containers, natural window light creating gentle gradient",
-  "backgroundAlt": "Produits bio en vrac sur étagères bois vert-sauge"
+  "foregroundDescriptor": "Tablet device at 30-degree angle on wooden kitchen counter occupying 25% of right-center frame, displaying La Mouette website with product catalog visible, one hand naturally resting near device holding a reusable linen bag, sharp focus on screen and immediate counter surface with scattered organic almonds and a small glass jar",
+  "midgroundDescriptor": "Sage green painted wooden cutting board leaning against wall, woven basket filled with fresh vegetables (leeks, kale, carrots), open glass jar of bulk lentils, ceramic bowl with loose-leaf herbs, all arranged naturally as if mid-preparation for a meal",
+  "backgroundDescriptor": "Soft-focus kitchen wall in warm white with floating wooden shelves holding glass storage jars filled with bulk goods (pasta, grains, legumes), diffused natural window light from left creating gentle shadows, suggestion of hanging herbs, domestic and lived-in but organized",
+  "frameMotif": "botanical",
+  "backgroundAlt": "Cuisine domestique avec tablette, produits bio en vrac et verdure"
 }

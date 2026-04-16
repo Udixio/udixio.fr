@@ -23,7 +23,7 @@ export const ShowcaseItem = ({
         alt={project.title}
         className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover/showcase:scale-105"
       />
-      <div className="absolute inset-x-0 bottom-0 h-2/3 bg-linear-to-t from-inverse-surface/80 via-inverse-surface/60 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-inverse-surface/80 via-inverse-surface/40 to-transparent" />
       <div className="absolute dark bottom-0 left-0 p-8 w-full text-on-surface">
         <div className="flex justify-between items-end">
           <div className="flex-1">

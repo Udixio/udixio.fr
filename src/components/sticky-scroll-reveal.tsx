@@ -4,26 +4,42 @@ import { motion, useMotionValueEvent, useScroll } from "motion/react";
 
 import { classNames } from "@udixio/ui-react";
 
+import { updateThemeFromHex } from "@/components/ThemeProvider";
+
 export type StickyScrollItem = {
-  title: string;
-  description: string;
-  imageSrc: string;
+  title: string | React.ReactNode;
+  description: string | React.ReactNode;
+  content?: React.ReactNode;
+  media?: React.ReactNode;
+  imageSrc?: string;
   imageAlt?: string;
+  themeColorHex?: string;
 };
 
 export const StickyScroll = ({ items }: { items: StickyScrollItem[] }) => {
   const content = items.map((item) => ({
     text: (
       <>
-        <h4 className="text-headline-medium text-primary">{item.title}</h4>
-        <p className="lg:mt-6 mt-2 text-body-large">{item.description}</p>
+        {typeof item.title === "string" ? (
+          <h4 className="text-headline-medium text-primary">{item.title}</h4>
+        ) : (
+          item.title
+        )}
+        {typeof item.description === "string" ? (
+          <p className="lg:mt-6 mt-2 text-body-large">{item.description}</p>
+        ) : (
+          item.description
+        )}
+        {item.content && <div className="mt-8">{item.content}</div>}
       </>
     ),
-    media: (
+    media: item.media ? (
+      item.media
+    ) : (
       <img
         className="w-full md:h-[320px] h-[200px] lg:h-full object-cover"
         src={item.imageSrc}
-        alt={item.imageAlt ?? item.title}
+        alt={item.imageAlt ?? (typeof item.title === "string" ? item.title : "")}
         loading="lazy"
       />
     ),
@@ -70,7 +86,14 @@ export const StickyScroll = ({ items }: { items: StickyScrollItem[] }) => {
       closestBreakpointIndex = i;
     }
     setDisplayText(latest > 0);
-    setActiveCard(closestBreakpointIndex);
+    
+    if (activeCard !== closestBreakpointIndex) {
+      setActiveCard(closestBreakpointIndex);
+      const newColor = items[closestBreakpointIndex]?.themeColorHex;
+      if (newColor !== undefined) {
+        updateThemeFromHex(newColor);
+      }
+    }
   });
 
   return (

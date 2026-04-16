@@ -1,43 +1,41 @@
 {
   "logoGraphicRegister": "minimal",
   "logoKeyShapes": "simple wordmark, sans-serif typography",
-  "logoVisualSymbol": "text-only company name, no icon or symbol",
-  "logoStyleNotes": "clean minimal wordmark in dark gray, no decorative elements or distinctive graphic treatment",
+  "logoVisualSymbol": "text-only company name, no icon",
+  "logoStyleNotes": "clean minimal wordmark in dark gray, professional and understated",
   "brandPhysicalMaterials": [
-    "freshly mowed grass",
-    "garden soil and mulch",
-    "pruning shears and garden tools",
-    "wooden garden stakes",
-    "natural stone pavers",
-    "terracotta pots",
-    "hedge trimming equipment",
-    "wheelbarrow",
-    "watering equipment",
-    "landscape fabric"
+    "natural stone paving",
+    "lush green grass",
+    "wooden garden furniture",
+    "terracotta planters",
+    "gravel pathways",
+    "outdoor cushions"
   ],
-  "brandAtmosphere": "outdoor garden workspace at golden hour with dappled natural light filtering through foliage",
+  "brandAtmosphere": "peaceful residential garden space with professional landscaping, natural afternoon light filtering through mature trees, sense of accomplished outdoor living transformation",
   "emotionalKeywords": [
-    "professionnel",
-    "naturel",
-    "soigné"
+    "sérénité",
+    "fierté",
+    "ressourcement"
   ],
   "emotionVisualTranslations": [
-    "soft directional natural light creating gentle shadows on grass and foliage",
-    "rich texture of dark green leaves and freshly turned soil with visible grain",
-    "shallow depth of field focusing on garden tools with blurred greenery background"
+    "soft dappled natural light through foliage creating gentle shadows",
+    "rich tactile textures of natural materials - smooth stone, soft grass blades",
+    "shallow depth of field with sharp device focus, softly blurred garden background"
   ],
   "includeScreenshot": true,
   "includeLogo": false,
-  "assetIntegrationNote": "tablet or phone lying flat on weathered wooden garden table or propped against terracotta pot, screen reflecting ambient outdoor light, surrounded by garden tools and fresh cuttings",
-  "colorDominanceApproach": "photograph dense dark green foliage (boxwood, yew, or similar evergreen hedges) as the primary subject filling 60-70% of frame, with natural moss-covered stone and dark soil providing supporting tones in the #374836 range",
+  "assetIntegrationNote": "minimal wordmark does not warrant decorative integration, device screenshot is natural on outdoor garden table",
+  "devicePosition": "center-right",
+  "colorDominanceApproach": "the deep green #374836 dominates naturally as the color of a lush, well-maintained lawn and dense foliage surrounding the garden seating area, with shadows under trees and hedges reinforcing the dark green presence throughout 60-70% of frame",
   "complementaryTones": [
-    "warm brown soil",
-    "weathered wood",
+    "warm beige stone",
+    "natural wood brown",
     "terracotta orange",
-    "sage green accents"
+    "sky blue accent"
   ],
-  "foregroundDescriptor": "professional pruning shears and garden gloves resting on dark green moss, sharp focus with visible texture and water droplets",
-  "midgroundDescriptor": "tablet device displaying website propped against stacked terracotta pots on wooden potting bench, surrounded by small potted seedlings",
-  "backgroundDescriptor": "soft bokeh of dense dark green hedge wall (buxus or taxus) creating natural backdrop in #374836 tone, dappled with golden hour sunlight",
-  "backgroundAlt": "Outils de jardinage professionnels sur fond de haie verte"
+  "foregroundDescriptor": "tablet resting at slight angle on natural teak garden table surface, displaying the landscaping website with garden imagery, homeowner's hand visible at edge of frame holding coffee cup, sharp focus on screen, warm wood grain texture visible",
+  "midgroundDescriptor": "comfortable outdoor seating area with cushioned chairs, potted plants on stone paving, garden tools leaning casually against planter, all bathed in dappled afternoon sunlight",
+  "backgroundDescriptor": "professionally landscaped garden with dominant deep green lawn stretching back, mature hedges and ornamental shrubs in #374836 tones, wooden pergola structure partially visible, soft bokeh of flowering plants",
+  "frameMotif": "botanical",
+  "backgroundAlt": "Tablette sur table de jardin montrant site paysagiste, pelouse verdoyante"
 }

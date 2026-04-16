@@ -1,0 +1,38 @@
+{
+  "logoGraphicRegister": "minimal",
+  "logoKeyShapes": "circular profile frame with orbital tech icons",
+  "logoVisualSymbol": "developer portrait with technology symbols orbiting",
+  "logoStyleNotes": "clean minimal design with light blue accent circle and tech iconography",
+  "brandPhysicalMaterials": [
+    "matte laptop aluminum",
+    "soft ambient screen glow",
+    "modern office desk surface",
+    "subtle blue LED lighting"
+  ],
+  "brandAtmosphere": "focused professional workspace with modern tech ambiance, calm evening productivity",
+  "emotionalKeywords": [
+    "confiant",
+    "efficace",
+    "serein"
+  ],
+  "emotionVisualTranslations": [
+    "soft directional blue-tinted light from screen creating confidence and focus",
+    "shallow depth of field with sharp device focus showing efficiency",
+    "smooth matte textures and clean surfaces evoking serenity"
+  ],
+  "includeScreenshot": true,
+  "includeLogo": false,
+  "assetIntegrationNote": "laptop displaying the live web application sits naturally on modern desk, screen clearly visible showing the working product",
+  "devicePosition": "center-left",
+  "colorDominanceApproach": "the ambient environment is bathed in soft blue light from multiple sources: the laptop screen glow, subtle LED desk lighting, and cool evening window light creating a cohesive #91BCED atmosphere throughout the workspace",
+  "complementaryTones": [
+    "deep charcoal desk surface",
+    "warm subtle amber task light accent",
+    "soft white secondary screen glow"
+  ],
+  "foregroundDescriptor": "laptop keyboard and trackpad in sharp focus, hands naturally positioned typing or reviewing, matte aluminum surface catching blue ambient light",
+  "midgroundDescriptor": "laptop screen displaying clean modern web interface, secondary monitor partially visible showing code editor, wireless mouse on desk pad",
+  "backgroundDescriptor": "softly blurred modern office environment with blue-tinted ambient lighting, window showing evening sky, minimal desk accessories suggesting organized productivity",
+  "frameMotif": "flowing_wave",
+  "backgroundAlt": "Développeur utilisant application web moderne sur laptop dans bureau éclairé"
+}

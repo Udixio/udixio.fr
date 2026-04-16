@@ -1,0 +1,42 @@
+{
+  "logoGraphicRegister": "minimal",
+  "logoKeyShapes": "clean sans-serif letterforms, horizontal text lockup",
+  "logoVisualSymbol": "simple wordmark with location tagline",
+  "logoStyleNotes": "corporate minimal wordmark, no distinctive graphic element",
+  "brandPhysicalMaterials": [
+    "cardboard moving boxes",
+    "wooden furniture",
+    "soft textiles and cushions",
+    "warm interior lighting",
+    "clean painted walls",
+    "polished wood floors"
+  ],
+  "brandAtmosphere": "A freshly settled home where everything has found its place — the relief and satisfaction of being moved in, organized, and ready to start the next chapter. Natural afternoon light streaming through windows onto unpacked belongings now arranged with care.",
+  "emotionalKeywords": [
+    "sérénité",
+    "installé",
+    "nouveau départ"
+  ],
+  "emotionVisualTranslations": [
+    "soft natural window light creating gentle shadows, warm color temperature around 4500K",
+    "tactile textures of fabric, wood grain, and matte cardboard with shallow depth of field on foreground elements",
+    "medium depth of field keeping both device and immediate surroundings sharp while background softly blurs"
+  ],
+  "includeScreenshot": true,
+  "includeLogo": false,
+  "assetIntegrationNote": "Device rests naturally on a wooden surface or coffee table in the newly arranged living space, showing the moving company website as a completed task — the client reviewing their successful move or perhaps leaving a review.",
+  "devicePosition": "center-left",
+  "colorDominanceApproach": "The brand orange #FF601D appears as warm sunset light flooding through large windows, casting the entire room in golden-orange hour glow. This natural light bathes the walls, reflects off wooden surfaces, and creates warm highlights on cardboard boxes and furniture. The orange is environmental and atmospheric, not artificial — it's the warm embrace of home at the perfect time of day.",
+  "complementaryTones": [
+    "warm cream walls",
+    "natural wood tones in honey and amber",
+    "soft beige cardboard",
+    "navy blue accent in a throw pillow or cushion",
+    "warm white window light"
+  ],
+  "foregroundDescriptor": "Laptop at 45-degree angle on wooden coffee table surface, screen clearly visible showing the LH Déménageur website, a hand resting naturally beside the trackpad or holding a phone, warm orange light creating highlights on the device edges and wood grain texture in sharp focus",
+  "midgroundDescriptor": "Partially visible unpacked moving boxes in soft focus, a cozy armchair or sofa corner with fabric texture, a small stack of books or a table lamp, all bathed in the warm orange-golden light creating a lived-in, just-settled atmosphere",
+  "backgroundDescriptor": "Large window with sheer curtains diffusing warm sunset light, blurred interior walls in cream tones, suggestion of organized shelving or furniture placement, soft bokeh from the window light creating dreamy orange orbs in the out-of-focus areas",
+  "frameMotif": "organic_blob",
+  "backgroundAlt": "Intérieur chaleureux au coucher du soleil après un déménagement réussi"
+}

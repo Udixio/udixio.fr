@@ -154,18 +154,20 @@ const BrandAnalysisSchema = z.object({
   logoVisualSymbol: z.string(),
   logoStyleNotes: z.string(),
 
-  // Univers de marque (utilisé pour l'étape 1 — valeurs/atmosphère)
+  // Monde aspirationnel du CLIENT (pas l'univers opérationnel de la marque)
   brandPhysicalMaterials: z.array(z.string()),
   brandAtmosphere: z.string(),
 
-  // Registre émotionnel
+  // Registre émotionnel — du point de vue du client
   emotionalKeywords: z.array(z.string()),
   emotionVisualTranslations: z.array(z.string()),
 
-  // Décision assets (étape 2)
+  // Décision assets + scène éditoriale complète
   includeScreenshot: z.boolean(),
   includeLogo: z.boolean(),
-  assetIntegrationNote: z.string(),
+  assetIntegrationNote: z.string(), // description précise de la scène
+  // Position horizontale du device dans le cadre — utilisée pour placer le calque décoratif à l'opposé
+  devicePosition: z.enum(["left", "center-left", "center", "center-right", "right", "none"]),
 
   // Stratégie couleur
   colorDominanceApproach: z.string(),
@@ -201,7 +203,7 @@ async function buildAnalysisContent(
   const content: ContentItem[] = [
     {
       type: "text",
-      text: `You are a senior art director planning a 4-step AI pipeline to create a portfolio card background.
+      text: `You are a senior art director planning an AI pipeline to create a photorealistic portfolio card background.
 Study the website screenshot and brand logo carefully. Return a precise JSON analysis.
 
 Project: "${title}"
@@ -209,21 +211,24 @@ Description: ${description}
 Brand color: ${themeSource}
 Theme: ${isDark ? "dark" : "light"}
 
-The background will always be a photorealistic/atmospheric image (FLUX's strength). Brand identity is expressed through dominant color, physical materials, and logo integration — NOT through graphic style transfer.
+CORE PRINCIPLE: The background is seen by the brand's CLIENTS, not the brand itself. It must evoke the experience or outcome the client gains — what their life looks like after using this service. This aspiration must be specific and honest: it comes from what this brand concretely delivers, not from a generic lifestyle fantasy. A homeowner enjoying their newly landscaped garden is authentic aspiration. A millionaire on a yacht is not.
+
+The device (laptop, tablet, or phone) is ALWAYS the primary visual element — it must occupy at least 20–25% of the image surface and be in clear focus. Everything else in the scene is context that supports it.
 
 Analyze:
-1. The logo's graphic register and style (flat/stencil/illustrated/geometric/etc.) — used only for the SVG frame shape choice
-2. The physical materials, objects, textures, and environments that naturally belong to this brand's world (be very specific and concrete)
-3. Exactly 3 emotional keywords and their photorealistic visual translation (light quality, texture, depth of field, etc.)
-4. Whether a website screenshot should be integrated as a device mockup. Set true if the brand's physical environment naturally contains surfaces or settings where a device could be casually placed. Set false if no credible surface exists in this brand's world.
-5. Whether the logo should be integrated into the scene. Set true if the logo has a distinctive graphic register (illustrated, stencil, handdrawn, geometric) that contributes visually to the composition. Set false if it is a plain wordmark that would look pasted-on.
-6. Describe a precise editorial scenario for placing the device: choose the device type (laptop, tablet or phone) that fits the brand lifestyle, and place it on a surface that belongs to the client's world — not the tradesperson's workspace. Think lifestyle photography: where would a client or admirer of this brand naturally have a screen nearby? The scenario must feel authentic to the brand atmosphere, not staged or technical. Then describe how the logo could appear as a physical element in the same scene.
-7. How to make ${themeSource} dominant as the natural color of the photographed materials/environment (60–70% of frame) — not as a filter
-8. Describe concrete foreground, midground, and background photographic elements
-9. Choose the abstract decorative motif for the frame overlay — pick the one that best translates this brand's visual vocabulary into non-figurative form: "botanical" (nature/organic/plant world), "paint_splash" (creative/artisanal/expressive), "flowing_wave" (digital/fluid/modern), "geometric_shard" (technical/precise/architectural), "organic_blob" (friendly/human/rounded), "dot_cluster" (pattern-based/data/playful)
-10. Write a short alt text in FRENCH (max 12 words) describing the visual content of the generated background — what will be photographically represented (e.g. "Produits bio en vrac sur fond vert-sauge texturé")
+1. Logo graphic register (flat/stencil/illustrated/geometric/handdrawn/photographic/minimal/abstract) — used only for the decorative frame overlay style
+2. Who are the clients of this brand, and what does their world look like after engaging with this service? Identify the physical environment, materials, and atmosphere that authentically represent the CLIENT's transformed reality — specific to what this brand delivers, not generic success imagery.
+3. Exactly 3 emotional keywords (what the client feels thanks to this brand) and their photorealistic visual translation (light quality, texture, depth of field)
+4. Should a website screenshot be integrated? Set true if the scene naturally includes a surface where a device would realistically rest. Set false otherwise.
+5. Should the logo be integrated? Set true only for distinctive graphic registers (illustrated, stencil, handdrawn, geometric). Set false for plain wordmarks.
+6. Describe the precise scene from the client's perspective: a specific, authentic moment that captures the outcome this brand delivers. The device is the hero — describe its exact position, surface, angle, and how much of the frame it occupies. Human presence is welcome and natural (hands, a partial arm, a relaxed posture) but avoid clichéd "success" props (luxury watch, yacht deck, tropical beach, generic coffee cup on marble). The scene must be unmistakably tied to THIS brand's specific value, not interchangeable with any other service.
+7. Where is the device positioned horizontally in the frame? (left / center-left / center / center-right / right) — the decorative overlay will be placed on the opposite side to avoid covering it.
+8. How to make ${themeSource} dominant (60–70% of frame) as the natural color of the client's environment
+9. Concrete foreground, midground, and background photographic elements
+10. Choose the abstract decorative motif for the frame overlay: "botanical" (nature/organic), "paint_splash" (creative/artisanal), "flowing_wave" (digital/fluid/modern), "geometric_shard" (technical/architectural), "organic_blob" (friendly/human), "dot_cluster" (pattern/data/playful)
+11. Short alt text in FRENCH (max 12 words) describing what will be shown
 
-Be specific and faithful to what you actually see.`,
+The scene should feel like an authentic editorial photograph — aspirational but grounded in the specific reality of what this brand actually changes for its clients.`,
     },
     {
       type: "image_url",
@@ -305,35 +310,39 @@ async function craftBackgroundPrompt(
           role: "system",
           content: `You are writing a FLUX image generation prompt for a portfolio card background.
 
-RENDERING STYLE — always photorealistic, never illustrated or flat design:
-- Photo or studio shot quality: real materials, real textures, real light
-- Shallow depth of field, natural or studio lighting, material authenticity
-- The brand's visual identity is expressed through the SUBJECT MATTER and COLOR, not through graphic style
+CORE PRINCIPLE: This image is seen by the brand's CLIENTS. It must show the outcome or experience they gain from this service — their world after engaging with this brand. The aspiration must be specific and honest: rooted in what this brand concretely delivers. A homeowner in a beautifully landscaped garden, a business owner confidently navigating their autonomous digital tool — authentic, not generic.
+
+RENDERING STYLE:
+- Photorealistic editorial photography — real materials, real light, real textures
+- Shallow depth of field, natural or studio lighting
+- The brand's identity is expressed through the CLIENT'S transformed environment and COLOR
 
 CRITICAL RULES:
-- Brand color ${themeSource} must appear as the natural color of the photographed materials/environment (60–70% of frame)
-- ${isDark ? "Dark field: moody, deep tones, dramatic lighting" : "Soft natural light, airy atmosphere — depth comes from texture and composition, not whiteness"}
-- Left third: minimal, uncluttered — space for title/logo overlay
-- NO text, labels, signs, or readable writing anywhere
-- NO storefronts, shop fronts, or building facades
-- NO people, faces, or hands
-- English only, comma-separated descriptors, max 180 words
+- Brand color ${themeSource} dominates (60–70% of frame) as the natural color of the client's environment
+- ${isDark ? "Dark, moody, dramatic lighting — cinematic depth" : "Soft natural light, airy and warm — depth from texture and composition"}
+- Left third: relatively open for title overlay
+- The device is the PRIMARY visual element — it must occupy at least 20–25% of the image and be in sharp focus
+- Human presence is welcome (hands, partial arm, relaxed posture); avoid clichéd success props (luxury watch, yacht, tropical beach, generic marble desk)
+- The scene must be unmistakably specific to THIS brand's value — not interchangeable with any other service
+- NO readable text, labels, or signs
+- NO storefronts or building facades
+- English only, natural prose, max 180 words
 - Start with: "${title} — "
 - Output the prompt ONLY`,
         },
         {
           role: "user",
-          content: `Brand data for "${title}":
+          content: `Brand: "${title}"
 
-Physical world (concrete objects/materials to photograph): ${JSON.stringify(analysis.brandPhysicalMaterials)}
-Atmosphere: ${analysis.brandAtmosphere}
-Emotional keywords: ${analysis.emotionalKeywords.join(", ")}
-Photographic translations: ${analysis.emotionVisualTranslations.join(", ")}
+Client aspiration / outcome: ${analysis.brandAtmosphere}
+Aspirational environment (what the client's world looks like): ${JSON.stringify(analysis.brandPhysicalMaterials)}
+Emotional register (client perspective): ${analysis.emotionalKeywords.join(", ")}
+Photographic mood translations: ${analysis.emotionVisualTranslations.join(", ")}
 Composition: ${analysis.foregroundDescriptor} / ${analysis.midgroundDescriptor} / ${analysis.backgroundDescriptor}
-Color in materials: ${analysis.colorDominanceApproach}
+Color strategy: ${analysis.colorDominanceApproach}
 Complementary tones: ${analysis.complementaryTones.join(", ")}
 
-Write the FLUX photorealistic background prompt now.`,
+Write the FLUX photorealistic aspirational background prompt now.`,
         },
       ],
       temperature: 0.8,
@@ -405,32 +414,35 @@ async function craftBackgroundWithAssetsPrompt(
 
 The model sees the provided images and plans the full composition from the start — assets are NOT added afterwards.
 
+CORE PRINCIPLE: This image is seen by the brand's CLIENTS. It must show the experience or outcome they gain — their world transformed by this service. The aspiration must be specific and honest: rooted in what this brand concretely delivers, not generic lifestyle imagery.
+
 RULES:
-- Photorealistic scene, never illustrated or flat design
-- Brand color ${themeSource} dominates (60–70% of frame) as natural material/environment color
+- Photorealistic, editorial lifestyle photography — never illustrated or flat design
+- Brand color ${themeSource} dominates (60–70% of frame) as the natural color of the CLIENT's environment
 - ${isDark ? "Dark, moody, dramatic lighting" : "Natural soft light — depth from texture and composition, never pure white"}
-- Left third: minimal, space for title overlay
-- Assets appear as physical objects naturally belonging to the scene (correct perspective, lighting, shadows)
-- The device rests on a surface that belongs to the CLIENT's world, not a trade workspace — think lifestyle editorial photography
-- The screen must be clearly legible and occupy a significant portion of the frame (roughly 40–50% of image width), slightly angled for depth — never small or tucked away
-- NO text, labels, signs, readable writing, people, faces, or hands
+- Left third: relatively open, space for title overlay
+- Assets appear as physical objects naturally part of the scene (correct perspective, lighting, shadows)
+- The device is the PRIMARY visual element — screen clearly legible, occupying at least 20–25% of the image surface, slightly angled for depth
+- Human presence is welcome (hands, partial arm, relaxed posture); avoid clichéd success props (luxury watch, yacht, tropical beach, generic marble desk)
+- The scene must be unmistakably tied to THIS brand's specific value — not interchangeable with any other service
+- NO readable text/signs, NO faces shown directly
 - 150 words max, natural prose, English only
 - Output the instruction ONLY`,
         },
         {
           role: "user",
           content: `Brand: "${title}"
-Physical world: ${JSON.stringify(analysis.brandPhysicalMaterials)}
-Atmosphere: ${analysis.brandAtmosphere}
-Emotional keywords: ${analysis.emotionalKeywords.join(", ")}
-Photographic translations: ${analysis.emotionVisualTranslations.join(", ")}
+Client aspiration / outcome: ${analysis.brandAtmosphere}
+Aspirational world (materials, environments): ${JSON.stringify(analysis.brandPhysicalMaterials)}
+Emotional register (client perspective): ${analysis.emotionalKeywords.join(", ")}
+Photographic mood translations: ${analysis.emotionVisualTranslations.join(", ")}
+Editorial scene: ${analysis.assetIntegrationNote}
 Composition: ${analysis.foregroundDescriptor} / ${analysis.midgroundDescriptor} / ${analysis.backgroundDescriptor}
 Color strategy: ${analysis.colorDominanceApproach}
-Asset placement: ${analysis.assetIntegrationNote}
 
 Provided images: ${assetList}
 
-Write the complete scene instruction, describing the full composition including how the assets appear in it.`,
+Write the complete scene instruction, embodying the aspirational story described above and integrating the provided assets naturally.`,
         },
       ],
       temperature: 0.8,
@@ -583,7 +595,10 @@ async function integrateAssets(
  * les moins chargés visuellement — ceux où placer la décoration sans couvrir
  * le sujet principal.
  */
-async function findAvailableCorners(buffer: Buffer): Promise<string[]> {
+async function findAvailableCorners(
+  buffer: Buffer,
+  devicePosition: BrandAnalysis["devicePosition"] = "none",
+): Promise<string[]> {
   const { width = 1920, height = 1080 } = await sharp(buffer).metadata();
   const zw = Math.round(width  * 0.28);
   const zh = Math.round(height * 0.28);
@@ -595,6 +610,17 @@ async function findAvailableCorners(buffer: Buffer): Promise<string[]> {
     { name: "bottom-right", left: width  - zw,  top: height - zh },
   ] as const;
 
+  // Coins préférés selon la position du device (calque à l'opposé)
+  const preferredByDevice: Record<BrandAnalysis["devicePosition"], string[]> = {
+    "left":         ["top-right", "bottom-right"],
+    "center-left":  ["top-right", "bottom-right"],
+    "center":       ["top-left",  "bottom-right"],
+    "center-right": ["top-left",  "bottom-left"],
+    "right":        ["top-left",  "bottom-left"],
+    "none":         [],
+  };
+  const preferred = new Set(preferredByDevice[devicePosition]);
+
   const scores = await Promise.all(
     zones.map(async ({ name, left, top }) => {
       const { data } = await sharp(buffer)
@@ -602,65 +628,82 @@ async function findAvailableCorners(buffer: Buffer): Promise<string[]> {
         .greyscale()
         .raw()
         .toBuffer({ resolveWithObject: true });
-      // Score = luminosité moyenne × variance (zones très sombres ET uniformes = plus disponibles)
       const vals = Array.from(data as Uint8Array);
       const avg  = vals.reduce((s, v) => s + v, 0) / vals.length;
       const variance = vals.reduce((s, v) => s + (v - avg) ** 2, 0) / vals.length;
-      // score bas = zone sombre et peu détaillée → idéale pour le calque
-      return { name, score: avg * 0.6 + Math.sqrt(variance) * 0.4 };
+      // Score luminance+variance (bas = disponible), avec bonus pour coins préférés
+      const raw = avg * 0.6 + Math.sqrt(variance) * 0.4;
+      return { name, score: preferred.has(name) ? raw * 0.6 : raw };
     }),
   );
 
   scores.sort((a, b) => a.score - b.score);
-  // 2 coins toujours, parfois 3 (quand le 3e est proche du 2e)
   const picked = scores.slice(0, 2);
   if (scores[2].score < scores[1].score * 1.35) picked.push(scores[2]);
   return picked.map(s => s.name);
 }
 
+/**
+ * Génère le calque de cadre en img2img : Gemini voit le fond existant et place
+ * les formes décoratives dans les zones visuellement libres, sans couvrir
+ * le device ni le sujet principal.
+ *
+ * Sortie : image fond noir + formes colorées → composite par blackToAlpha + "over".
+ */
 async function generateFrameOverlay(
   apiKey: string,
-  w: number,
-  h: number,
+  backgroundBuffer: Buffer,
   color: string,
   frameMotif: BrandAnalysis["frameMotif"],
   analysis: BrandAnalysis,
-  placementCorners: string[],
 ): Promise<Buffer> {
-  // Caractère visuel selon le registre graphique — qualité, pas exemple de forme
   const registerCharacter: Record<BrandAnalysis["logoGraphicRegister"], string> = {
-    flat:          "precise, clean",
-    geometric:     "structured, balanced",
-    handdrawn:     "loose, organic",
-    illustrated:   "expressive, varied",
-    minimal:       "restrained, simple",
-    abstract:      "non-representational, free",
-    stencil:       "bold, high-contrast",
-    photographic:  "natural, grounded",
+    flat:          "precise and clean — solid blobs with smooth contours",
+    geometric:     "structured and balanced — bold filled masses",
+    handdrawn:     "loose and organic — irregular filled blobs like ink puddles",
+    illustrated:   "expressive and varied — large filled paint-like forms",
+    minimal:       "calm and airy — a few large solid blobs with generous white space between them",
+    abstract:      "free and non-representational — fluid filled forms",
+    stencil:       "bold and high-contrast — large solid filled masses",
+    photographic:  "natural and grounded — smooth filled organic forms",
   };
 
-  const cornersLabel = placementCorners.join(" and ");
+  // Fond converti en niveaux de gris : Gemini lit la composition spatiale
+  // sans être influencé par les couleurs du fond (ex. orange lhdemenageur → traits orange)
+  const bgGrey = await sharp(backgroundBuffer).greyscale().jpeg({ quality: 80 }).toBuffer();
+  const bgBase64 = bgGrey.toString("base64");
 
-  const prompt = `${w}×${h}px image. Pure black (#000000) background. Single color: ${color}.
+  const content: ContentItem[] = [
+    {
+      type: "text",
+      text: `You are creating a DECORATION LAYER — a completely independent image with NO visual relationship to the reference image below.
 
-Abstract ${color} shapes placed ONLY at these specific corners: ${cornersLabel}. Shapes bleed off the canvas edges at those corners. All other corners and the center remain empty black — black must be clearly dominant.
+IGNORE the colors, style, textures, lines, and shapes you see in the reference image entirely. The reference image is provided for ONE purpose only: read which corners and edges have no focal subject (no device, no hands, no objects of interest) — those empty zones are where your blobs will go. It is fine — even preferable — to leave 1 or 2 sides of the canvas completely free.
 
-Shape character: ${registerCharacter[analysis.logoGraphicRegister]}.
-Personality: ${analysis.emotionalKeywords.join(", ")}.
-Brand essence to abstractly evoke through form and rhythm (do not illustrate literally): ${analysis.brandAtmosphere}.
-Abstract formal inspiration (translate into pure shape, not symbol): ${analysis.logoVisualSymbol}.
+YOUR OUTPUT — a flat graphic poster:
+- Solid white (#FFFFFF) background
+- 4 to 7 FILLED SOLID BLOBS in exactly this color: ${color}
+- Blobs placed at the empty corners/edges you identified, bleeding off the canvas borders
+- Each blob = a solid paint puddle or cut paper piece — completely filled inside, zero holes
 
-Composition:
-- 5 to 10 distinct shapes, each substantial — no fragmented small details
-- Total colored area: at most 15–20% of the canvas
-- Shapes may carry a vague impression or mood but must not depict any recognizable specific object
+Shape rules:
+- FILLED: the interior of every blob is 100% opaque ${color} — like a sticker
+- All edges curved — zero straight lines, zero right angles
+- Each blob visibly large — no thin lines, no hair strokes, no small dots
+- Total colored area: 15–20% of canvas
+- Style: ${registerCharacter[analysis.logoGraphicRegister]}
 
-Strict visual rules — no exceptions:
-- All shape edges must be curved — no straight lines, no right angles, no sharp corners.
-- Flat solid ${color} only. No texture, no grain, no paper or fabric effect.
-- No shadow, no outline, no stroke.
-- No gradient, no glow, no blur, no 3D or depth effect.`;
-
+FORBIDDEN — any of these makes the output unusable:
+- Outlines, strokes, contour lines, wire drawings of any kind
+- Text, letters, numbers, symbols, logos, icons
+- Gradients, textures, shadows, glows
+- Reproducing anything visible in the reference image`,
+    },
+    {
+      type: "image_url",
+      image_url: { url: `data:image/jpeg;base64,${bgBase64}` },
+    },
+  ];
 
   const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
     method: "POST",
@@ -669,10 +712,9 @@ Strict visual rules — no exceptions:
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model: "black-forest-labs/flux.2-pro",
-      messages: [{ role: "user", content: prompt }],
+      model: "google/gemini-3-pro-image-preview",
+      messages: [{ role: "user", content }],
       modalities: ["image"],
-      image_config: { aspect_ratio: "16:9", image_size: "1K" },
     }),
   });
 
@@ -683,7 +725,7 @@ Strict visual rules — no exceptions:
 }
 
 async function loadLayerDebug(slug: string): Promise<Buffer | null> {
-  const p = join(DEBUG_DIR, `${slug}-2-frame-layer.webp`);
+  const p = join(DEBUG_DIR, `${slug}-2-frame-layer.png`);
   try {
     await fs.access(p);
     console.log(`🐛 Reusing frame layer: ${p}`);
@@ -695,9 +737,52 @@ async function loadLayerDebug(slug: string): Promise<Buffer | null> {
 
 async function saveLayerDebug(buffer: Buffer, slug: string): Promise<void> {
   await ensureDebugDir();
-  const p = join(DEBUG_DIR, `${slug}-2-frame-layer.webp`);
-  await sharp(buffer).webp({ quality: 90 }).toFile(p);
+  const p = join(DEBUG_DIR, `${slug}-2-frame-layer.png`);
+  await fs.writeFile(p, new Uint8Array(buffer));
   console.log(`🐛 Frame layer saved: ${p}`);
+}
+
+/**
+ * Extrait la transparence d'un calque fond noir + formes colorées.
+ *
+ * Algorithme :
+ * - Pixels noirs (luma < 15)          → alpha 0 (transparent)
+ * - Formes colorées (luma ≥ 80)       → alpha 255 (opaque) + couleur dé-prémultipliée
+ * - Bords anti-aliasés (luma 15–80)   → alpha progressif + couleur corrigée
+ *
+ * La dé-prémultiplication récupère la vraie teinte : un pixel bord sombre
+ * (ex. 10,25,60 = bleu mélangé à du noir) redevient (42,106,255) semi-transparent.
+ */
+async function blackToAlpha(buffer: Buffer): Promise<Buffer> {
+  const { data, info } = await sharp(buffer)
+    .ensureAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+
+  const w = info.width;
+  const stride = w * 4;
+  // Détecte la couleur de fond en échantillonnant les 4 coins
+  const corners = [0, (w - 1) * 4, (info.height - 1) * stride, (info.height - 1) * stride + (w - 1) * 4];
+  const avgCornerLuma = corners.reduce((s, i) => s + Math.max(data[i], data[i + 1], data[i + 2]), 0) / 4;
+  const isLightBg = avgCornerLuma > 128;
+
+  for (let i = 0; i < data.length; i += 4) {
+    if (isLightBg) {
+      // Fond blanc : blanc/gris = les 3 canaux sont proches et élevés → transparent
+      // Couleur vive (ex. orange R:255 G:96 B:29) → min = 29 < 200 → opaque
+      const minChannel = Math.min(data[i], data[i + 1], data[i + 2]);
+      data[i + 3] = minChannel > 200 ? 0 : 255;
+    } else {
+      // Fond noir : pixels sombres → transparent
+      data[i + 3] = Math.max(data[i], data[i + 1], data[i + 2]) < 30 ? 0 : 255;
+    }
+  }
+
+  return sharp(Buffer.from(data), {
+    raw: { width: info.width, height: info.height, channels: 4 },
+  })
+    .png()
+    .toBuffer();
 }
 
 async function applyFrame(
@@ -710,43 +795,23 @@ async function applyFrame(
 ): Promise<Buffer> {
   const { width = 1920, height = 1080 } = await sharp(buffer).metadata();
 
-  // Analyse les coins du fond pour trouver les zones disponibles
-  const placementCorners = await findAvailableCorners(buffer);
-  console.log(`🎨 Frame placement corners for ${slug}: ${placementCorners.join(", ")}`);
-
-  // Charge ou génère le calque (supprimable indépendamment dans debug)
-  const rawFrame =
+  // Charge ou génère le calque transparent (PNG, supprimable indépendamment dans debug)
+  const frameWithAlpha =
     (await loadLayerDebug(slug)) ??
     (await (async () => {
-      const overlay = await generateFrameOverlay(apiKey, width, height, themeSource, frameMotif, analysis, placementCorners);
+      const overlay = await generateFrameOverlay(apiKey, buffer, themeSource, frameMotif, analysis);
       const resized = await sharp(overlay)
         .resize(width, height, { fit: "fill" })
         .toBuffer();
-      await saveLayerDebug(resized, slug);
-      return resized;
+      // Extrait la transparence dès la génération : PNG transparent sauvegardé en cache
+      const transparent = await blackToAlpha(resized);
+      await saveLayerDebug(transparent, slug);
+      return transparent;
     })());
 
-  // Convertit le fond noir en alpha transparent.
-  // Seuil dur (< 35 → transparent) pour éliminer le halo noir aux bords des formes.
-  const { data, info } = await sharp(rawFrame)
-    .ensureAlpha()
-    .raw()
-    .toBuffer({ resolveWithObject: true });
-
-  for (let i = 0; i < data.length; i += 4) {
-    const brightness = Math.max(data[i], data[i + 1], data[i + 2]);
-    data[i + 3] = brightness < 35 ? 0 : 255;
-  }
-
-  const frameWithAlpha = await sharp(Buffer.from(data), {
-    raw: { width: info.width, height: info.height, channels: 4 },
-  })
-    .png()
-    .toBuffer();
-
-  // "over" blend : les formes colorées s'appliquent à pleine opacité sur le fond
+  // Superposition PNG transparent standard — aucun blend mode
   return sharp(buffer)
-    .composite([{ input: frameWithAlpha, blend: "over" }])
+    .composite([{ input: frameWithAlpha }])
     .toBuffer();
 }
 

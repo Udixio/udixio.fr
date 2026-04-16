@@ -5,54 +5,7 @@ import { Hero } from "@components/Hero.tsx";
 import Realisations from "@components/Realisations.astro";
 import { getCollection } from "astro:content";
 import { getImage } from "astro:assets";
-import {
-  StickyScroll,
-  type StickyScrollItem,
-} from "@components/sticky-scroll-reveal";
-
-import imgContract from "@assets/images/project estimate contract signing desk pen.avif";
-import imgTeam from "@assets/images/team collaboration laptop kanban board progress.avif";
-import imgPerformance from "@assets/images/web analytics dashboard speed performance charts laptop  .avif";
-import imgIndependence from "@assets/images/person hands laptop keyboard ownership freedom workspace.avif";
-
-const [optContract, optTeam, optPerformance, optIndependence] =
-  await Promise.all([
-    getImage({ src: imgContract, format: "avif", width: 800 }),
-    getImage({ src: imgTeam, format: "avif", width: 800 }),
-    getImage({ src: imgPerformance, format: "avif", width: 800 }),
-    getImage({ src: imgIndependence, format: "avif", width: 800 }),
-  ]);
-
-const stickyScrollItems: StickyScrollItem[] = [
-  {
-    title: "Périmètre défini, devis précis",
-    description:
-      "Un atelier initial permet de cadrer le projet et fixer un devis ferme avant tout développement. Pas de mauvaise surprise sur la facture finale.",
-    imageSrc: optContract.src,
-    imageAlt: "Périmètre et devis",
-  },
-  {
-    title: "Suivi clair à chaque étape",
-    description:
-      "Vous suivez l'avancement en temps réel, validez chaque étape et comprenez les décisions prises — sans jargon, sans zone d'ombre.",
-    imageSrc: optTeam.src,
-    imageAlt: "Suivi de projet",
-  },
-  {
-    title: "Performance et SEO solides",
-    description:
-      "Chaque choix technique vise un site rapide, bien référencé et durable — Lighthouse 100/100 comme objectif de base, pas comme exception.",
-    imageSrc: optPerformance.src,
-    imageAlt: "Performance et SEO",
-  },
-  {
-    title: "Contrôle total sur votre site",
-    description:
-      "Accès complet, code source livré, hébergement à votre main : vous restez indépendant après la livraison, sans abonnement imposé.",
-    imageSrc: optIndependence.src,
-    imageAlt: "Indépendance et contrôle",
-  },
-];
+import { StickyScrollSection } from "@/components/home/modern/StickyScrollSection";
 import FaqSection from "@components/sections/FaqSection.astro";
 import CtaSection from "@components/sections/CtaSection.astro";
 import { Card } from "@/components/Card";
@@ -73,21 +26,10 @@ import { iGroups } from "@udixio/icons-rounded-400/groups";
 import { iRocketLaunch } from "@udixio/icons-rounded-400/rocket_launch";
 import { iArrowRight } from "@udixio/icons-rounded-400/arrow_right";
 
-const realisations = await getCollection("realisation");
-realisations.sort(
-  (a, b) => (a.data.order ?? Infinity) - (b.data.order ?? Infinity),
-);
-const firstProjectSourceColor =
-  realisations[0]?.data?.images?.background?.sourceColor;
+import { getProjects } from "@/utils/getProjects";
 
-const showcaseProjects: ProjectProps[] = realisations.slice(0, 10).map((r) => ({
-  slug: r.id,
-  ...r.data,
-  images: {
-    ...r.data.images,
-    background: r.data.images.background!,
-  },
-}));
+const showcaseProjects = await getProjects(10);
+const firstProjectSourceColor = showcaseProjects[0]?.images?.background?.sourceColor;
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -286,14 +228,22 @@ const faqItems = [
         </div>
       </div>
 
-      <div class="relative flex pr-12 mt-48">
-        <Card className="flex group      justify-evenly gap-8 p-12">
-          <div class="flex-1 flex flex-col gap-8 justify-between">
+      <div class="relative mt-32 anim-in anim-fade anim-slide-from-bottom">
+        <Card
+          className="flex flex-col lg:flex-row gap-12 lg:gap-16 p-8 md:p-14 overflow-hidden relative border-0 bg-secondary-container text-on-secondary-container shadow-2xl"
+        >
+          {/* Forme abstraite en fond pour l'esthétique */}
+          <div
+            class="absolute top-0 right-0 w-[500px] h-[500px] bg-secondary opacity-10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/3 pointer-events-none"
+          >
+          </div>
+
+          <div class="flex-1 flex flex-col gap-8 justify-center relative z-10">
             <div>
-              <p class="text-headline-medium">
-                Et si le prochain projet, était le vôtre ?
-              </p>
-              <p class="mt-4">
+              <h3 class="text-display-small font-bold mb-4">
+                Et si le prochain projet,<br />était le vôtre ?
+              </h3>
+              <p class="text-body-large opacity-90 max-w-md leading-relaxed">
                 Un site web de qualité transforme votre visibilité en
                 opportunités, attire des clients et soutient durablement votre
                 croissance.
@@ -305,11 +255,12 @@ const faqItems = [
               label="Lancer mon projet"
               icon={iArrowRight}
               iconPosition="right"
+              className="w-fit"
             />
           </div>
 
           <div
-            class="grid flex-1 border-t-2 border-dashed border-outline-variant md:border-t-0 md:border-l-2"
+            class="flex-1 flex flex-col sm:grid sm:grid-cols-2 gap-4 relative z-10"
           >
             {
               [
@@ -318,133 +269,117 @@ const faqItems = [
                   description: "Acquisition continue de nouveaux clients",
                 },
                 {
-                  value: "×5%",
+                  value: "×5",
                   description: "Accélération de la croissance commerciale",
                 },
-                {
-                  value: "+14,2%",
-                  description: "Gain de productivité au quotidien",
-                },
               ].map(({ value, description }) => (
-                <div class="border-b-2 border-dashed border-outline-variant p-6 last:border-0">
-                  <>
-                    <p class="text-headline-medium fi text-primary">{value}</p>
-                    <p class="">{description}</p>
-                  </>
-                </div>
+                <Card className="bg-surface-container-lowest rounded-4xl   flex flex-col gap-2  ">
+                  <span class="text-headline-large text-secondary fi">
+                    {value}
+                  </span>
+                  <span class="text-body-medium font-medium text-on-surface-variant leading-snug">
+                    {description}
+                  </span>
+                </Card>
               ))
             }
+
+            <Card
+              className="bg-surface-container-lowest rounded-4xl  sm:col-span-2   flex flex-col gap-2  "
+            >
+              <div>
+                <span class="text-headline-large text-secondary fi">+14,2%</span
+                >
+                <p
+                  class="text-body-medium font-medium text-on-surface-variant leading-snug mt-1"
+                >
+                  Gain de productivité au quotidien
+                </p>
+              </div>
+              <a
+                href="https://www.intracen.org/file/itcsmeco2025pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Rapport mondial sur la compétitivité des PME (ITC - Nations Unies)"
+                class="flex shrink-0 items-center justify-end sm:justify-start gap-2 text-label-small uppercase tracking-wider text-outline hover:text-secondary transition-colors text-right sm:text-left pt-4 sm:pt-0 sm:border-l border-outline-variant/30 sm:pl-6"
+              >
+                <span>Données locales<br />ITC (ONU / OMC)</span>
+              </a>
+            </Card>
           </div>
         </Card>
-        <div
-          style="transform: translateX(100%)"
-          class="absolute bottom-0 right-0 -rotate-90 origin-bottom-right"
-        >
-          <a
-            href="https://www.intracen.org/file/itcsmeco2025pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            title="Rapport mondial sur la compétitivité des PME (ITC - Nations Unies)"
-            class="text-body-small whitespace-nowrap text-outline translate-y-full"
-          >
-            DONNÉES : ITC (ONU / OMC)
-          </a>
-        </div>
       </div>
     </div>
 
     <div class="section pt-0"></div>
   </section>
-  <section class="py-28">
-    <div class="section">
-      <span class="sub-title anim-in anim-fade">Situations courantes</span>
+  <section class="py-28 relative overflow-hidden">
+    <div class="absolute inset-0 bg-surface-container-lowest/50 pointer-events-none"></div>
+    <div class="section relative z-10">
+      <span class="sub-title anim-in anim-fade">Les obstacles fréquents</span>
       <h2
         class="text-headline-large text-on-surface mb-16 max-w-2xl anim-in anim-fade anim-slide-from-left anim-duration-700 anim-delay-150"
       >
-        Ce qui bloque<br /><span class="text-gradient">votre projet web</span>
+        Ce qui vous freine<br /><span class="text-gradient">aujourd'hui</span>
       </h2>
 
-      <div class="grid grid-cols-1 md:grid-cols-5 md:grid-rows-2 gap-6">
-        {/* Card 1 — Large, spans 2 rows */}
-        <Card
-          className="relative md:col-span-2 md:row-span-2 p-10 md:p-12 flex flex-col gap-8  anim-in anim-fade anim-slide-from-bottom"
-        >
-          <div class="relative z-10 flex flex-col gap-6 h-full">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16 mt-12 md:mt-20">
+        {[
+          {
+            icon: iVisibility,
+            title: "Votre site actuel ne rapporte aucun client",
+            desc: "On vous cherche sur internet, mais ce sont vos concurrents qui raflent la mise. Votre site ressemble à une vitrine vide qui vous a coûté cher mais ne convertit pas.",
+            href: "/services/site-vitrine-ou-refonte",
+            label: "Notre approche site web",
+            colorClass: "text-primary",
+            bgClass: "bg-primary/10",
+          },
+          {
+            icon: iTune,
+            title: "L'administratif bride votre croissance",
+            desc: "Fichiers Excel à rallonge, ressaisies et plannings croisés... Vous passez plus de temps à gérer avec des outils inadaptés qu'à faire votre vrai métier.",
+            href: "/services/developpement-sur-mesure",
+            label: "Créer un outil sur-mesure",
+            colorClass: "text-tertiary",
+            bgClass: "bg-tertiary/10",
+          },
+          {
+            icon: iChecklist,
+            title: "La peur des devis obscurs vous paralyse",
+            desc: "Se lancer dans le numérique fait peur : coûts cachés et crainte de se tromper prestataire. Résultat, votre projet de digitalisation est sans cesse repoussé.",
+            href: "/contact",
+            label: "Demander un diagnostic",
+            colorClass: "text-secondary",
+            bgClass: "bg-secondary/10",
+          },
+        ].map((item, index) => (
+          <div
+            class="flex flex-col items-start anim-in anim-fade anim-slide-from-bottom"
+            style={`--anim-delay: ${index * 150}ms;`}
+          >
             <div
-              class="w-14 h-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center"
+              class={`w-12 h-12 rounded-xl ${item.bgClass} flex items-center justify-center mb-6 shadow-sm`}
             >
-              <Icon icon={iVisibility} className="w-7 h-7 fill-current" />
+              <Icon icon={item.icon} className={`w-6 h-6 ${item.colorClass} fill-current`} />
             </div>
-            <div class="flex-1">
-              <h3 class="text-headline-medium text-on-surface mb-4">
-                Votre site existe mais ne génère aucun contact
-              </h3>
-              <p class="text-body-large text-on-surface-variant max-w-lg">
-                Vous perdez des prospects chaque jour au profit de concurrents
-                mieux positionnés. Un site qui ne convertit pas est un coût, pas
-                un investissement.
-              </p>
-            </div>
-            <Button
-              href="/services/site-vitrine-ou-refonte"
-              label="Voir le service site web"
-              variant="outlined"
-              className="w-fit"
-            />
-          </div>
-        </Card>
-
-        {/* Card 2 */}
-        <Card
-          className="relative  md:col-span-3 p-8 flex flex-col gap-6   anim-in anim-fade anim-slide-from-bottom anim-delay-150"
-        >
-          <div class="relative z-10 flex flex-col gap-4 h-full">
-            <div
-              class="w-12 h-12 rounded-xl bg-tertiary/10 text-tertiary flex items-center justify-center"
-            >
-              <Icon icon={iTune} className="w-6 h-6 fill-current" />
-            </div>
-            <h3 class="text-headline-small text-on-surface">
-              Vos process reposent sur des outils manuels
+            
+            <h3 class="text-title-large font-bold text-on-surface leading-tight mb-4 pr-4">
+              {item.title}
             </h3>
-            <p class="text-body-medium text-on-surface-variant">
-              Tableurs, copier-coller, emails : votre croissance est bridée par
-              vos outils.
+            
+            <p class="text-body-large text-on-surface-variant leading-relaxed flex-1 mb-8">
+              {item.desc}
             </p>
-            <Button
-              href="/services/developpement-sur-mesure"
-              label="Développement sur-mesure"
-              variant="outlined"
-              className="w-fit mt-auto"
-            />
-          </div>
-        </Card>
 
-        {/* Card 3 */}
-        <Card
-          className="relative md:col-span-3 p-8 flex flex-col gap-6 duration-500 anim-in anim-fade anim-slide-from-bottom anim-delay-300"
-        >
-          <div class="relative z-10 flex flex-col gap-4 h-full">
-            <div
-              class="w-12 h-12 rounded-xl bg-secondary/10 text-secondary flex items-center justify-center"
+            <a
+              href={item.href}
+              class={`group flex items-center gap-2 mt-auto font-medium ${item.colorClass} hover:opacity-80 transition-opacity`}
             >
-              <Icon icon={iChecklist} className="w-6 h-6 fill-current" />
-            </div>
-            <h3 class="text-headline-small text-on-surface">
-              Vous avez un projet mais pas de cadre clair
-            </h3>
-            <p class="text-body-medium text-on-surface-variant">
-              Sans périmètre défini, les dérives de budget et de délais sont la
-              règle.
-            </p>
-            <Button
-              href="/contact"
-              label="Demander un diagnostic"
-              variant="outlined"
-              className="w-fit mt-auto"
-            />
+              <span class="border-b border-transparent group-hover:border-current transition-colors pb-0.5">{item.label}</span>
+              <Icon icon={iArrowRight} className="w-5 h-5 fill-current group-hover:translate-x-1 transition-transform" />
+            </a>
           </div>
-        </Card>
+        ))}
       </div>
     </div>
   </section>
@@ -461,23 +396,24 @@ const faqItems = [
       <div class="section">
         <div class="text-center mb-24 mt-8">
           <span class="sub-title text-center anim-in anim-fade"
-            >Ce que ça change</span
+            >Engagements de résultat</span
           >
           <h2
             class="text-display-small anim-in anim-fade anim-slide-from-bottom anim-duration-700 anim-delay-150"
           >
-            Concrètement,<br /><span class="text-gradient"
-              >ce que vous obtenez</span
+            Le partenaire technique de<br /><span class="text-gradient"
+              >votre croissance web</span
             >
           </h2>
           <p
             class="text-title-medium text-on-surface-variant mt-6 max-w-xl mx-auto anim-in anim-fade anim-delay-300"
           >
-            Quatre questions que vous vous posez — et ce qu'on fait pour y
-            répondre.
+            Rentabilité de l'investissement, sécurité de vos données et
+            indépendance totale : nous répondons aux exigences de votre
+            activité.
           </p>
         </div>
-        <StickyScroll items={stickyScrollItems} client:visible />
+        <StickyScrollSection client:visible />
       </div>
     </Card>
   </SectionPadding>

@@ -1,0 +1,40 @@
+{
+  "logoGraphicRegister": "flat",
+  "logoKeyShapes": "rounded rectangle with cursor arrow, clean sans-serif typography",
+  "logoVisualSymbol": "cursor pointer integrated into brand name, suggesting digital interaction and simplicity",
+  "logoStyleNotes": "modern flat design with bold blue background, white text, cursor arrow as visual anchor - emphasizes digital tool nature",
+  "brandPhysicalMaterials": [
+    "laptop on clean desk surface",
+    "organized workspace with natural light",
+    "smartphone showing analytics",
+    "modern office furniture",
+    "minimal desk accessories"
+  ],
+  "brandAtmosphere": "A small business owner's workspace where digital presence is being actively managed - bright, organized, focused, with the confidence of having professional tools at hand",
+  "emotionalKeywords": [
+    "autonomie",
+    "confiance",
+    "clarté"
+  ],
+  "emotionVisualTranslations": [
+    "soft natural window light creating clean shadows, f/2.8 depth of field with device in sharp focus",
+    "matte desk surface with subtle texture, crisp screen display, organized spatial arrangement",
+    "bright ambient lighting, clear foreground focus on device, slightly blurred background suggesting calm workspace"
+  ],
+  "includeScreenshot": true,
+  "includeLogo": false,
+  "assetIntegrationNote": "Laptop positioned on clean modern desk showing NetSimpler dashboard with website builder interface visible on screen - the device is the hero occupying 25% of frame, angled slightly toward viewer",
+  "devicePosition": "center-left",
+  "colorDominanceApproach": "The #0A65EC blue dominates through the laptop screen displaying the NetSimpler interface, reflected ambient light on desk surface, and a blue accent wall or large monitor in soft-focus background - creating natural color dominance from the digital workspace itself",
+  "complementaryTones": [
+    "warm white desk surface",
+    "soft grey office wall",
+    "natural wood accent",
+    "pale blue ambient glow"
+  ],
+  "foregroundDescriptor": "Laptop at 35-degree angle on matte white desk, screen showing NetSimpler dashboard in sharp focus, partial view of entrepreneur's hand on trackpad, wireless mouse nearby",
+  "midgroundDescriptor": "Clean organized desk space with smartphone displaying mobile analytics, minimal stationery holder, soft shadows from window light, blue glow from screen illuminating workspace",
+  "backgroundDescriptor": "Soft-focus modern office wall with large secondary monitor showing website metrics, natural window light from left creating gentle gradient, hint of organized shelving with business books",
+  "frameMotif": "flowing_wave",
+  "backgroundAlt": "Entrepreneur gérant sa présence en ligne sur NetSimpler"
+}
