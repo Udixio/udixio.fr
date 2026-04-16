@@ -29,7 +29,8 @@ import { iArrowRight } from "@udixio/icons-rounded-400/arrow_right";
 import { getProjects } from "@/utils/getProjects";
 
 const showcaseProjects = await getProjects(10);
-const firstProjectSourceColor = showcaseProjects[0]?.images?.background?.sourceColor;
+const firstProjectSourceColor =
+  showcaseProjects[0]?.images?.background?.sourceColor;
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -240,7 +241,7 @@ const faqItems = [
 
           <div class="flex-1 flex flex-col gap-8 justify-center relative z-10">
             <div>
-              <h3 class="text-display-small font-bold mb-4">
+              <h3 class="text-headline-large mb-4">
                 Et si le prochain projet,<br />était le vôtre ?
               </h3>
               <p class="text-body-large opacity-90 max-w-md leading-relaxed">
@@ -273,7 +274,7 @@ const faqItems = [
                   description: "Accélération de la croissance commerciale",
                 },
               ].map(({ value, description }) => (
-                <Card className="bg-surface-container-lowest rounded-4xl   flex flex-col gap-2  ">
+                <Card className="bg-surface-container-low rounded-4xl   flex flex-col gap-2  ">
                   <span class="text-headline-large text-secondary fi">
                     {value}
                   </span>
@@ -285,7 +286,7 @@ const faqItems = [
             }
 
             <Card
-              className="bg-surface-container-lowest rounded-4xl  sm:col-span-2   flex flex-col gap-2  "
+              className="bg-surface-container-low rounded-4xl  sm:col-span-2   flex flex-col gap-2  "
             >
               <div>
                 <span class="text-headline-large text-secondary fi">+14,2%</span
@@ -314,7 +315,10 @@ const faqItems = [
     <div class="section pt-0"></div>
   </section>
   <section class="py-28 relative overflow-hidden">
-    <div class="absolute inset-0 bg-surface-container-lowest/50 pointer-events-none"></div>
+    <div
+      class="absolute inset-0 bg-surface-container-lowest/50 pointer-events-none"
+    >
+    </div>
     <div class="section relative z-10">
       <span class="sub-title anim-in anim-fade">Les obstacles fréquents</span>
       <h2
@@ -323,63 +327,75 @@ const faqItems = [
         Ce qui vous freine<br /><span class="text-gradient">aujourd'hui</span>
       </h2>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16 mt-12 md:mt-20">
-        {[
-          {
-            icon: iVisibility,
-            title: "Votre site actuel ne rapporte aucun client",
-            desc: "On vous cherche sur internet, mais ce sont vos concurrents qui raflent la mise. Votre site ressemble à une vitrine vide qui vous a coûté cher mais ne convertit pas.",
-            href: "/services/site-vitrine-ou-refonte",
-            label: "Notre approche site web",
-            colorClass: "text-primary",
-            bgClass: "bg-primary/10",
-          },
-          {
-            icon: iTune,
-            title: "L'administratif bride votre croissance",
-            desc: "Fichiers Excel à rallonge, ressaisies et plannings croisés... Vous passez plus de temps à gérer avec des outils inadaptés qu'à faire votre vrai métier.",
-            href: "/services/developpement-sur-mesure",
-            label: "Créer un outil sur-mesure",
-            colorClass: "text-tertiary",
-            bgClass: "bg-tertiary/10",
-          },
-          {
-            icon: iChecklist,
-            title: "La peur des devis obscurs vous paralyse",
-            desc: "Se lancer dans le numérique fait peur : coûts cachés et crainte de se tromper prestataire. Résultat, votre projet de digitalisation est sans cesse repoussé.",
-            href: "/contact",
-            label: "Demander un diagnostic",
-            colorClass: "text-secondary",
-            bgClass: "bg-secondary/10",
-          },
-        ].map((item, index) => (
-          <div
-            class="flex flex-col items-start anim-in anim-fade anim-slide-from-bottom"
-            style={`--anim-delay: ${index * 150}ms;`}
-          >
+      <div
+        class="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16 mt-12 md:mt-20"
+      >
+        {
+          [
+            {
+              icon: iVisibility,
+              title: "Votre site actuel ne rapporte aucun client",
+              desc: "On vous cherche sur internet, mais ce sont vos concurrents qui raflent la mise. Votre site ressemble à une vitrine vide qui vous a coûté cher mais ne convertit pas.",
+              href: "/services/site-vitrine-ou-refonte",
+              label: "Notre approche site web",
+              colorClass: "text-primary",
+              bgClass: "bg-primary/10",
+            },
+            {
+              icon: iTune,
+              title: "L'administratif bride votre croissance",
+              desc: "Fichiers Excel à rallonge, ressaisies et plannings croisés... Vous passez plus de temps à gérer avec des outils inadaptés qu'à faire votre vrai métier.",
+              href: "/services/developpement-sur-mesure",
+              label: "Créer un outil sur-mesure",
+              colorClass: "text-tertiary",
+              bgClass: "bg-tertiary/10",
+            },
+            {
+              icon: iChecklist,
+              title: "La peur des devis obscurs vous paralyse",
+              desc: "Se lancer dans le numérique fait peur : coûts cachés et crainte de se tromper prestataire. Résultat, votre projet de digitalisation est sans cesse repoussé.",
+              href: "/contact",
+              label: "Demander un diagnostic",
+              colorClass: "text-secondary",
+              bgClass: "bg-secondary/10",
+            },
+          ].map((item, index) => (
             <div
-              class={`w-12 h-12 rounded-xl ${item.bgClass} flex items-center justify-center mb-6 shadow-sm`}
+              class="flex flex-col items-start anim-in anim-fade anim-slide-from-bottom"
+              style={`--anim-delay: ${index * 150}ms;`}
             >
-              <Icon icon={item.icon} className={`w-6 h-6 ${item.colorClass} fill-current`} />
-            </div>
-            
-            <h3 class="text-title-large font-bold text-on-surface leading-tight mb-4 pr-4">
-              {item.title}
-            </h3>
-            
-            <p class="text-body-large text-on-surface-variant leading-relaxed flex-1 mb-8">
-              {item.desc}
-            </p>
+              <div
+                class={`w-12 h-12 rounded-xl ${item.bgClass} flex items-center justify-center mb-6 shadow-sm`}
+              >
+                <Icon
+                  icon={item.icon}
+                  className={`w-6 h-6 ${item.colorClass} fill-current`}
+                />
+              </div>
 
-            <a
-              href={item.href}
-              class={`group flex items-center gap-2 mt-auto font-medium ${item.colorClass} hover:opacity-80 transition-opacity`}
-            >
-              <span class="border-b border-transparent group-hover:border-current transition-colors pb-0.5">{item.label}</span>
-              <Icon icon={iArrowRight} className="w-5 h-5 fill-current group-hover:translate-x-1 transition-transform" />
-            </a>
-          </div>
-        ))}
+              <h3 class="text-title-large font-bold text-on-surface leading-tight mb-4 pr-4">
+                {item.title}
+              </h3>
+
+              <p class="text-body-large text-on-surface-variant leading-relaxed flex-1 mb-8">
+                {item.desc}
+              </p>
+
+              <a
+                href={item.href}
+                class={`group flex items-center gap-2 mt-auto font-medium ${item.colorClass} hover:opacity-80 transition-opacity`}
+              >
+                <span class="border-b border-transparent group-hover:border-current transition-colors pb-0.5">
+                  {item.label}
+                </span>
+                <Icon
+                  icon={iArrowRight}
+                  className="w-5 h-5 fill-current group-hover:translate-x-1 transition-transform"
+                />
+              </a>
+            </div>
+          ))
+        }
       </div>
     </div>
   </section>

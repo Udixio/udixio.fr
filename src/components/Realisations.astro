@@ -6,6 +6,7 @@ import { BackgroundColor } from "@components/BackgroundColor";
 
 import type { ProjectProps } from "./project/Project";
 import { ProjectsShowcase } from "./home/modern/ProjectsShowcase";
+import { ShowcaseItem } from "./home/modern/ShowcaseItem";
 import ShowcaseManager from "./home/modern/ShowcaseManager.astro";
 import { getImage } from "astro:assets";
 import { Project } from "./project/Project.tsx";
@@ -38,17 +39,16 @@ const visibleProjects = await getProjects(max);
         const isTrue = [0, 3, 4, 7].includes(index % 8); // Détermine "true" ou "false"
 
         return (
-          <a
-            class={classNames("col-span-1 row-span-1", {
+          <ShowcaseItem
+            client:load
+            className={classNames("col-span-1 row-span-1", {
               "sm:col-span-11 sm:aspect-10/7 ": isTrue,
               "sm:col-span-9 sm:aspect-8/9": !isTrue,
               "self-end": index % 4 == 0,
               "sm:-mt-[25%] ": index % 4 === 1 && index != 0 && index != 1,
             })}
-            href={"/realisations/" + realisation.slug}
-          >
-            <Project client:load view="mini" {...realisation} />
-          </a>
+            project={realisation}
+          />
         );
       })}
     </div>

@@ -12,6 +12,7 @@ export type ProjectProps = CollectionEntry<"realisation">["data"] & {
   images: {
     background: {
       src: string;
+      frameSrc?: string;
     };
   };
   technologies?: ReactNode;
@@ -85,6 +86,13 @@ export const ProjectMini = ({
           width="1080"
           alt={"Illustration d'un projet"}
         />
+        {images.background.frameSrc && (
+          <img
+            src={images.background.frameSrc}
+            aria-hidden="true"
+            className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+          />
+        )}
       </div>
       <div
         className={classNames(

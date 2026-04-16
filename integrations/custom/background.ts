@@ -1,6 +1,7 @@
 import { promises as fs } from "fs";
 import path from "node:path";
 import { join } from "path";
+import { trace as potraceTrace } from "potrace";
 import sharp from "sharp";
 import { z } from "zod";
 
@@ -33,6 +34,7 @@ export interface BackgroundMockupOptions {
 export interface BackgroundMockupResult {
   src: string;
   alt: string;
+  frameSrc?: string; // chemin vers le SVG du calque décoratif (responsive)
 }
 
 export async function generateBackgroundMockup(
@@ -118,16 +120,16 @@ export async function generateBackgroundMockup(
       return b;
     })());
 
-  // ── Étape 2 : Cadre abstrait généré par LLM ──────────────────────────────
-  // debug/${slug}-2-frame-layer.svg  → SVG brut (supprimable → force regen LLM)
-  // debug/${slug}-2-frame-layer.png  → PNG rendu  (supprimable → force re-render)
-  // debug/${slug}-3-composite.webp   → résultat final avant export
-  buffer = await applyFrame(apiKey, buffer, themeSource, analysis.frameMotif, analysis, slug);
-  await saveDebugStep(buffer, slug, "3-composite");
+  // ── Étape 2 : Calque décoratif SVG (pas de composite raster) ─────────────
+  // debug/${slug}-2-frame-layer.png  → PNG transparent (supprimable → force regen Gemini)
+  // debug/${slug}-2-frame-layer.svg  → copie debug du SVG
+  // src/assets/backgrounds/${slug}-frame-layer.svg → SVG overlay responsive
+  // Le fond est sauvegardé pur — le calque est superposé en CSS dans le composant
+  const frameSrc = await generateFrameLayer(apiKey, buffer, themeSource, analysis.frameMotif, analysis, slug);
 
   const src = await saveAsWebP(buffer, slug);
   const alt = `${title} — ${analysis.backgroundAlt}`;
-  return { src, alt };
+  return { src, alt, frameSrc };
 }
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -724,6 +726,45 @@ FORBIDDEN — any of these makes the output unusable:
   return extractImageBuffer(await res.json());
 }
 
+/**
+ * Vectorise un PNG transparent (blobs colorés sur fond transparent) en SVG.
+ * Potrace trace les contours des formes opaques → chemins SVG scalables.
+ * Le SVG résultant est utilisable directement en overlay CSS responsive.
+ */
+async function vectorizeLayer(transparentPng: Buffer, color: string): Promise<string> {
+  const { data, info } = await sharp(transparentPng)
+    .ensureAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+
+  // Converti alpha → greyscale pour potrace : opaque → noir (0), transparent → blanc (255)
+  const greyscale = Buffer.alloc(info.width * info.height);
+  for (let i = 0; i < greyscale.length; i++) {
+    greyscale[i] = data[i * 4 + 3] > 128 ? 0 : 255;
+  }
+
+  const bitmapPng = await sharp(greyscale, {
+    raw: { width: info.width, height: info.height, channels: 1 },
+  }).png().toBuffer();
+
+  return new Promise((resolve, reject) => {
+    potraceTrace(bitmapPng, { color, background: "transparent" }, (err, svg) => {
+      if (err) reject(err);
+      else resolve(svg);
+    });
+  });
+}
+
+async function saveLayerSvg(svg: string, slug: string): Promise<string> {
+  const assetPath = join("src", "assets", "backgrounds", `${slug}-frame-layer.svg`);
+  await fs.writeFile(assetPath, svg, "utf-8");
+  // Copie debug aussi
+  await ensureDebugDir();
+  await fs.writeFile(join(DEBUG_DIR, `${slug}-2-frame-layer.svg`), svg, "utf-8");
+  console.log(`🎨 Frame SVG saved: ${assetPath}`);
+  return `../../assets/backgrounds/${slug}-frame-layer.svg`;
+}
+
 async function loadLayerDebug(slug: string): Promise<Buffer | null> {
   const p = join(DEBUG_DIR, `${slug}-2-frame-layer.png`);
   try {
@@ -785,17 +826,17 @@ async function blackToAlpha(buffer: Buffer): Promise<Buffer> {
     .toBuffer();
 }
 
-async function applyFrame(
+async function generateFrameLayer(
   apiKey: string,
   buffer: Buffer,
   themeSource: string,
   frameMotif: BrandAnalysis["frameMotif"],
   analysis: BrandAnalysis,
   slug: string,
-): Promise<Buffer> {
+): Promise<string | undefined> {
   const { width = 1920, height = 1080 } = await sharp(buffer).metadata();
 
-  // Charge ou génère le calque transparent (PNG, supprimable indépendamment dans debug)
+  // Charge ou génère le PNG transparent (cache indépendant du fond)
   const frameWithAlpha =
     (await loadLayerDebug(slug)) ??
     (await (async () => {
@@ -803,16 +844,28 @@ async function applyFrame(
       const resized = await sharp(overlay)
         .resize(width, height, { fit: "fill" })
         .toBuffer();
-      // Extrait la transparence dès la génération : PNG transparent sauvegardé en cache
       const transparent = await blackToAlpha(resized);
       await saveLayerDebug(transparent, slug);
       return transparent;
     })());
 
-  // Superposition PNG transparent standard — aucun blend mode
-  return sharp(buffer)
-    .composite([{ input: frameWithAlpha }])
-    .toBuffer();
+  // Vectorisation SVG (cache indépendant — supprimable seul pour re-vectoriser)
+  const svgAssetPath = join("src", "assets", "backgrounds", `${slug}-frame-layer.svg`);
+  try {
+    await fs.access(svgAssetPath);
+    console.log(`🐛 Reusing frame SVG: ${svgAssetPath}`);
+    return `../../assets/backgrounds/${slug}-frame-layer.svg`;
+  } catch {
+    // pas de cache SVG → vectoriser
+  }
+
+  try {
+    const svg = await vectorizeLayer(frameWithAlpha, themeSource);
+    return await saveLayerSvg(svg, slug);
+  } catch (err) {
+    console.warn(`⚠️  SVG vectorization failed for ${slug}:`, err);
+    return undefined;
+  }
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────

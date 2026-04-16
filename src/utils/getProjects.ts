@@ -10,6 +10,7 @@ export const getProjects = async (max?: number): Promise<ProjectProps[]> => {
 
   const renders = import.meta.glob("@assets/renders/*.webp", { eager: true });
   const backgrounds = import.meta.glob("@assets/backgrounds/*.webp", { eager: true });
+  const frameLayers = import.meta.glob("@assets/backgrounds/*-frame-layer.svg", { eager: true, query: "?url" });
 
   const projectsProps: ProjectProps[] = await Promise.all(
     realisations.map(async (realisation) => {
@@ -38,6 +39,12 @@ export const getProjects = async (max?: number): Promise<ProjectProps[]> => {
           ).src
         : (bg?.src ?? "");
 
+      const frameSrc = (
+        Object.entries(frameLayers).find(([path]) =>
+          path.endsWith(`${slug}-frame-layer.svg`)
+        )?.[1] as any
+      )?.default as string | undefined;
+
       const p: ProjectProps = {
         slug,
         ...realisation.data,
@@ -47,6 +54,7 @@ export const getProjects = async (max?: number): Promise<ProjectProps[]> => {
             ...bg,
             src: resolvedSrc,
             alt: bg?.alt ?? "",
+            frameSrc,
           },
         },
       };
