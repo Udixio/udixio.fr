@@ -90,7 +90,7 @@ export const ProjectMini = ({
           <img
             src={images.background.frameSrc}
             aria-hidden="true"
-            className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+            className="absolute inset-0 w-full h-full object-fill pointer-events-none"
           />
         )}
       </div>

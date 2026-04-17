@@ -106,7 +106,7 @@ export default defineConfig({
       assetsInlineLimit: 0,
     },
     optimizeDeps: {
-      exclude: ["@udixio/ui-react", "@udixio/ui-react/theme-worker"],
+      exclude: ["@udixio/ui-react", "@udixio/ui-react/theme-worker", "puppeteer", "puppeteer-screen-recorder"],
     },
     server: {
       host: true,

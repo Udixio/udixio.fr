@@ -109,7 +109,7 @@ const faqItems = [
   {
     question: "Suis-je propriétaire du site ?",
     answer:
-      "Oui. Code source, hébergement et accès CMS sont remis à la livraison — sans condition et sans dépendance à notre infrastructure.",
+      "Oui. Code source, hébergement et accès CMS sont remis à la livraison, sans condition et sans dépendance à notre infrastructure.",
   },
   {
     question: "En combien de temps ?",
@@ -231,7 +231,7 @@ const faqItems = [
 
       <div class="relative mt-32 anim-in anim-fade anim-slide-from-bottom">
         <Card
-          className="flex flex-col lg:flex-row gap-12 lg:gap-16 p-8 md:p-14 overflow-hidden relative border-0 bg-secondary-container text-on-secondary-container shadow-2xl"
+          className="flex flex-col lg:flex-row gap-12 lg:gap-16 p-8 md:p-14 overflow-hidden relative border-0 bg-secondary-container text-on-secondary-container "
         >
           {/* Forme abstraite en fond pour l'esthétique */}
           <div
@@ -529,7 +529,7 @@ const faqItems = [
             Git, hébergement et CMS remis à la livraison
           </h3>
           <p class="text-body-large text-on-surface-variant max-w-lg">
-            Dépôt Git, accès admin, hébergement documenté — tout vous appartient
+            Dépôt Git, accès admin, hébergement documenté : tout vous appartient
             sans condition dès la mise en ligne. Zéro dépendance.
           </p>
         </Card>
@@ -663,7 +663,7 @@ const faqItems = [
 
   {
     /* ═══════════════════════════════════════════
-      07 · TARIFS — Résumé
+      07 · SERVICES — Liens
   ═══════════════════════════════════════════ */
   }
   <section class="py-12">
@@ -671,38 +671,27 @@ const faqItems = [
       <Card
         className="flex flex-col md:flex-row items-center justify-between gap-6 p-8 md:p-10"
       >
-        <div
-          class="flex flex-wrap items-center gap-8 font-mono text-body-large"
-        >
-          <div class="flex flex-col">
-            <span class="text-headline-medium text-primary font-bold"
-              >2 500€</span
-            >
-            <span class="text-label-medium text-on-surface-variant"
-              >Site vitrine, dès</span
-            >
-          </div>
-          <div class="hidden md:block w-px h-10 bg-outline-variant/40"></div>
-          <div class="flex flex-col">
-            <span class="text-headline-medium font-bold">5 000€</span>
-            <span class="text-label-medium text-on-surface-variant"
-              >Application, dès</span
-            >
-          </div>
-          <div class="hidden md:block w-px h-10 bg-outline-variant/40"></div>
-          <div class="flex flex-col">
-            <span class="text-headline-medium text-primary font-bold">0€</span>
-            <span class="text-label-medium text-on-surface-variant"
-              >Frais cachés</span
-            >
-          </div>
+        <div class="flex flex-col gap-2">
+          <p class="text-headline-small text-on-surface">
+            Une prestation adaptée à votre projet
+          </p>
+          <p class="text-body-large text-on-surface-variant max-w-lg">
+            Site vitrine ou application sur-mesure : chaque projet démarre par
+            une estimation gratuite, sans engagement.
+          </p>
         </div>
-        <Button
-          href="/services"
-          label="Détail des tarifs"
-          variant="outlined"
-          className="shrink-0"
-        />
+        <div class="flex flex-wrap gap-4 shrink-0">
+          <Button
+            href="/services/site-vitrine-ou-refonte"
+            label="Site vitrine"
+            variant="outlined"
+          />
+          <Button
+            href="/services/developpement-sur-mesure"
+            label="Application"
+            variant="outlined"
+          />
+        </div>
       </Card>
     </div>
   </section>
@@ -714,7 +703,7 @@ const faqItems = [
   }
   <FaqSection
     title="Les points à clarifier avant de démarrer"
-    description="Trois questions fréquentes — avec des réponses directes."
+    description="Trois questions fréquentes, avec des réponses directes."
     items={faqItems}
   />
 
@@ -725,7 +714,7 @@ const faqItems = [
   }
   <CtaSection
     title="On cadre votre projet en 30 minutes"
-    description="Décrivez-nous votre besoin, on vous répond avec un premier retour concret — et un périmètre clair dès le départ."
+    description="Décrivez-nous votre besoin, on vous répond avec un premier retour concret et un périmètre clair dès le départ."
     primaryLabel="Demander un diagnostic"
     primaryHref="/contact"
     secondaryLabel="Voir nos services"

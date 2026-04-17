@@ -6,6 +6,7 @@ import { Hero } from "@components/Hero";
 import { SectionPadding } from "@components/SectionPadding";
 import FaqSection from "@components/sections/FaqSection.astro";
 import CtaSection from "@components/sections/CtaSection.astro";
+import Compare from "@/components/Compare";
 import { iCheckCircleFilled } from "@udixio/icons-rounded-400/filled/check_circle";
 import { iVisibility } from "@udixio/icons-rounded-400/visibility";
 import { iHandshake } from "@udixio/icons-rounded-400/handshake";
@@ -16,6 +17,11 @@ import { iVerifiedUser } from "@udixio/icons-rounded-400/verified_user";
 import { iStorefront } from "@udixio/icons-rounded-400/storefront";
 import { iGroups } from "@udixio/icons-rounded-400/groups";
 import { iRocketLaunch } from "@udixio/icons-rounded-400/rocket_launch";
+import { iSearch } from "@udixio/icons-rounded-400/search";
+import { iPerson } from "@udixio/icons-rounded-400/person";
+import { iMoneyBag } from "@udixio/icons-rounded-400/money_bag";
+import { iTvDisplays } from "@udixio/icons-rounded-400/tv_displays";
+import { iAttachMoney } from "@udixio/icons-rounded-400/attach_money";
 
 const faqItems = [
   {
@@ -121,7 +127,7 @@ const faqItems = [
                   number: 3,
                   title: "Livraison & passation",
                   description:
-                    "Mise en ligne maîtrisée. Dépôt Git, accès admin, hébergement documenté — tout vous est remis.",
+                    "Mise en ligne maîtrisée. Dépôt Git, accès admin, hébergement documenté : tout vous est remis.",
                 },
               ].map((step) => (
                 <div class="group relative pl-8 border-l-2 border-outline-variant transition-colors duration-500 anim-fade-up delay-200">
@@ -168,13 +174,13 @@ const faqItems = [
                 icon: iVisibility,
                 title: "Design aligné avec votre identité",
                 description:
-                  "Interface conçue à partir de votre image — pas un template générique. Vos prospects vous identifient immédiatement.",
+                  "Interface conçue à partir de votre image, pas un template générique. Vos prospects vous identifient immédiatement.",
               },
               {
                 icon: iTrendingUp,
                 title: "Architecture SEO + pages qui convertissent",
                 description:
-                  "Structure de pages pensée pour le référencement et le parcours utilisateur — pour transformer vos visiteurs en contacts.",
+                  "Structure de pages pensée pour le référencement et le parcours utilisateur, pour transformer vos visiteurs en contacts.",
               },
               {
                 icon: iHandshake,
@@ -186,7 +192,7 @@ const faqItems = [
                 icon: iKey,
                 title: "Git, hébergement et CMS : tout vous appartient",
                 description:
-                  "Dépôt Git, accès admin et hébergement documentés — remis à la livraison, sans condition.",
+                  "Dépôt Git, accès admin et hébergement documentés, remis à la livraison, sans condition.",
               },
               {
                 icon: iVerifiedUser,
@@ -274,6 +280,107 @@ const faqItems = [
     </div>
   </section>
 
+  {/* POURQUOI AVOIR UN SITE INTERNET */}
+  <section class="py-24 bg-surface">
+    <div class="section">
+      <div class="max-w-4xl mb-12">
+        <span class="sub-title">Pourquoi</span>
+        <h2 class="text-headline-large">
+          Pourquoi est-il important d'avoir un site internet ?
+        </h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {
+          [
+            {
+              icon: iSearch,
+              title: "Visibilité",
+              body: "Exister sur internet pour être trouvé à tout instant quand quelqu'un a besoin de vos services.",
+              stat: "97% des consommateurs utilisent internet pour trouver un professionnel",
+            },
+            {
+              icon: iPerson,
+              title: "Crédibilité",
+              body: "Votre vitrine témoigne de votre sérieux. Un site optimisé, beau et adapté sur mobile vous permet de ne pas faire peur aux visiteurs.",
+              stat: "75% des consommateurs jugent la crédibilité d'une entreprise sur le design de son site web",
+            },
+            {
+              icon: iMoneyBag,
+              title: "Vente 24/7",
+              body: "Votre site ne dort pas, ne prend pas de congés et travaille 24h/24 7j/7. Il génère des appels et des demandes de devis.",
+              stat: "81% des dirigeants considèrent le numérique comme un bénéfice réel pour leur entreprise",
+            },
+          ].map((item) => (
+            <Card variant="outlined" className="group p-6 md:p-8">
+              <div class="flex gap-4 items-center mb-6">
+                <div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+                  <Icon icon={item.icon} className="w-6 h-6" />
+                </div>
+                <h3 class="text-headline-medium">{item.title}</h3>
+              </div>
+              <p class="text-body-large text-on-surface-variant">{item.body}</p>
+              <p class="text-body-medium mt-4 text-on-surface">{item.stat}</p>
+            </Card>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  {/* PLUS DE VISIBILITÉ, PLUS DE CLIENTS */}
+  <section class="py-24 bg-surface-container-low">
+    <div class="section">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <Card className="p-8 md:p-12 flex flex-col justify-between gap-8">
+          <div class="flex gap-6 items-center">
+            <img loading="lazy" class="size-16" alt="Logo de Udixio" src="/favicon.svg" />
+            <div>
+              <p class="text-display-small font-bold">UDIXIO</p>
+              <p class="text-title-small text-on-surface-variant">Votre levier digital</p>
+            </div>
+          </div>
+          <div>
+            <h2 class="text-headline-large mb-6">PLUS DE VISIBILITÉ, PLUS DE CLIENTS</h2>
+            <p class="text-body-large text-on-surface-variant mb-4">Nous comprenons vos problématiques et les transformons en opportunité.</p>
+            <p class="text-body-large text-on-surface-variant mb-4">Vous en avez assez d'être invisible ? Désactivons le mode fantôme et faisons connaître vos services.</p>
+          </div>
+          <Button href="/contact" label="Demander un diagnostic" className="w-fit" />
+        </Card>
+        <div class="flex flex-col gap-6">
+          {
+            [
+              {
+                icon: iTvDisplays,
+                title: "WEB HAUT DE GAMME",
+                description: "Création de vitrine web professionnelle qui met en valeur votre expertise",
+              },
+              {
+                icon: iAttachMoney,
+                title: "RENTABILITÉ",
+                description: "Votre solution fonctionne sans relâche, 24h/24, 7j/7, attirant un flux d'appels et de prospects",
+              },
+              {
+                icon: iHandshake,
+                title: "ÉCOUTE ET PROXIMITÉ",
+                description: "Bénéficiez d'une proximité d'écoute et de solutions adaptées à vos besoins.",
+              },
+            ].map((item) => (
+              <Card className="p-6 md:p-8 flex gap-6 items-start">
+                <div class="p-4 flex items-center justify-center bg-secondary-container rounded-full shrink-0">
+                  <Icon className="size-8 text-on-secondary-container" icon={item.icon} />
+                </div>
+                <div>
+                  <h3 class="text-headline-small mb-2">{item.title}</h3>
+                  <p class="text-body-large text-on-surface-variant">{item.description}</p>
+                </div>
+              </Card>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
   {/* INVESTISSEMENT */}
   <section class="py-24 bg-surface-container-low">
       <div class="section">
@@ -340,6 +447,269 @@ const faqItems = [
           </div>
         </div>
       </div>
+    </div>
+  </section>
+
+  {/* COMPAREZ NOS OFFRES */}
+  <section class="py-24 bg-surface">
+    <div class="section">
+      <div class="max-w-4xl mb-12">
+        <span class="sub-title">Tarifs</span>
+        <h2 class="text-headline-large">
+          Comparez nos offres <span class="text-on-surface-variant">(24 mois)</span>
+        </h2>
+      </div>
+      <Compare
+        client:load
+        groups={[
+          {
+            id: "site",
+            label: "Sites vitrines",
+            plans: [
+              {
+                id: "Starter",
+                name: "Starter",
+                price: {
+                  setup: 750,
+                  monthly: 169,
+                },
+                badge: "Populaire",
+              },
+              {
+                id: "croissance",
+                name: "Croissance",
+                price: {
+                  setup: 1500,
+                  monthly: 189,
+                },
+              },
+              {
+                id: "performance",
+                name: "Performance",
+                price: {
+                  setup: 2500,
+                  monthly: 244,
+                },
+              },
+              {
+                id: "ultimate",
+                name: "Ultimate",
+                price: {
+                  setup: 3700,
+                  monthly: 298,
+                },
+              },
+            ],
+            categories: [
+              {
+                id: "design",
+                label: "Design & contenu",
+                features: [
+                  {
+                    label: "Design personnalisé dynamique",
+                    value: {
+                      Starter: true,
+                      croissance: true,
+                      performance: true,
+                      ultimate: true,
+                    },
+                  },
+                  {
+                    label: "Responsive design : PC, Tablette & Smartphone",
+                    value: {
+                      Starter: true,
+                      croissance: true,
+                      performance: true,
+                      ultimate: true,
+                    },
+                  },
+                  {
+                    label: "Nombre de pages avec rédaction de contenu",
+                    value: {
+                      Starter: "One Page Performance",
+                      croissance: "Jusqu'à 10 pages",
+                      performance: "Jusqu'à 15 pages",
+                      ultimate: "Sur Mesure",
+                    },
+                  },
+                  {
+                    label: "Nom de domaine privé et email professionnel",
+                    value: {
+                      Starter: true,
+                      croissance: true,
+                      performance: true,
+                      ultimate: true,
+                    },
+                  },
+                  {
+                    label: "Protocoles de sécurité avancés",
+                    value: {
+                      Starter: "SSL / Protection contre les attaques / Sauvegardes régulières",
+                      croissance: "SSL / Protection contre les attaques / Sauvegardes régulières",
+                      performance: "SSL / Protection contre les attaques / Sauvegardes régulières",
+                      ultimate: "SSL / Protection contre les attaques / Sauvegardes régulières",
+                    },
+                  },
+                  {
+                    label: "Branding publicitaire unique : Logo, Carte de visite digitale, fond d'écran de téléphone, QR codes",
+                    value: {
+                      Starter: true,
+                      croissance: true,
+                      performance: true,
+                      ultimate: true,
+                    },
+                  },
+                ],
+              },
+              {
+                id: "seo",
+                label: "Référencement et visibilité",
+                features: [
+                  {
+                    label: "Conformité technique SEO, stratégie & optimisation",
+                    value: {
+                      Starter: true,
+                      croissance: true,
+                      performance: "Expert SEO",
+                      ultimate: "Expert SEO",
+                    },
+                  },
+                  {
+                    label: "Nombre de mots clés SEO",
+                    value: {
+                      Starter: "10 mots clés",
+                      croissance: "15 mots clés",
+                      performance: "30 mots clés",
+                      ultimate: "Plus de 40 mots clés",
+                    },
+                  },
+                  {
+                    label: "Localité(s) référencée(s)",
+                    value: {
+                      Starter: "1 Localité",
+                      croissance: "10 Localités",
+                      performance: "30 Localités",
+                      ultimate: "40 Localités",
+                    },
+                  },
+                  {
+                    label: "Paramétrage & Setup des annonces Google Ads",
+                    value: {
+                      Starter: true,
+                      croissance: true,
+                      performance: true,
+                      ultimate: true,
+                    },
+                  },
+                  {
+                    label: "Optimisation google my business",
+                    note: "budget Ads non inclus",
+                    value: {
+                      Starter: false,
+                      croissance: "Bonus : 2 mois de gestion",
+                      performance: "Bonus : 4 mois de gestion",
+                      ultimate: "Bonus : 6 mois de gestion",
+                    },
+                  },
+                  {
+                    label: "Page d'acquisition de prospect SEA",
+                    value: {
+                      Starter: false,
+                      croissance: false,
+                      performance: true,
+                      ultimate: true,
+                    },
+                  },
+                ],
+              },
+              {
+                id: "accompagnement",
+                label: "Accompagnement",
+                features: [
+                  {
+                    label: "Intervenant création",
+                    value: {
+                      Starter: "Webmaster dédié",
+                      croissance: "Webmaster dédié",
+                      performance: "Webmaster dédié + Expert SEO",
+                      ultimate: "Webmaster dédié + Expert SEO",
+                    },
+                  },
+                  {
+                    label: "Suivi post livraison",
+                    value: {
+                      Starter: "Support + 1 bilan /an",
+                      croissance: "Support + 2 bilan /an",
+                      performance: "Support + 4 bilans / an",
+                      ultimate: "Support + 6 bilans / an",
+                    },
+                  },
+                ],
+              },
+              {
+                id: "fonctionnalités",
+                label: "Fonctionnalités",
+                features: [
+                  {
+                    label: "Formulaire contact",
+                    value: {
+                      Starter: true,
+                      croissance: true,
+                      performance: true,
+                      ultimate: true,
+                    },
+                  },
+                  {
+                    label: "Growth Marketing : popup capture de données",
+                    value: {
+                      Starter: true,
+                      croissance: true,
+                      performance: true,
+                      ultimate: true,
+                    },
+                  },
+                  {
+                    label: "Connection avis Google en temps réel",
+                    value: {
+                      Starter: true,
+                      croissance: true,
+                      performance: true,
+                      ultimate: true,
+                    },
+                  },
+                  {
+                    label: "Growth Marketing : exit overlay",
+                    value: {
+                      Starter: false,
+                      croissance: true,
+                      performance: true,
+                      ultimate: true,
+                    },
+                  },
+                  {
+                    label: "Optimisation Fiche Google My Business",
+                    value: {
+                      Starter: false,
+                      croissance: false,
+                      performance: true,
+                      ultimate: true,
+                    },
+                  },
+                  {
+                    label: "Social Wall",
+                    value: {
+                      Starter: false,
+                      croissance: false,
+                      performance: true,
+                      ultimate: true,
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+        ]}
+      />
     </div>
   </section>
 
