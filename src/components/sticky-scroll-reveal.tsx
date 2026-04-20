@@ -76,9 +76,28 @@ export const StickyScroll = ({ items }: { items: StickyScrollItem[] }) => {
   const [displayText, setDisplayText] = useState(false);
   const [isOverlay, setIsOverlay] = useState(false);
 
+  useEffect(() => {
+    updateThemeFromHex(null);
+    return () => {
+      updateThemeFromHex(null);
+    };
+  }, []);
+
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    setIsOverlay(latest > 0 && latest < 1);
+    const isVisible = latest > 0 && latest < 1;
+    setIsOverlay(isVisible);
+    setDisplayText(latest > 0);
+
     if (!isLg) return;
+
+    if (!isVisible) {
+      if (activeCard !== null) {
+        setActiveCard(null);
+        updateThemeFromHex(null);
+      }
+      return;
+    }
+
     const cardsBreakpoints = content.map((_, index) => index / cardLength);
     let closestBreakpointIndex = 0;
     for (let i = 0; i < cardsBreakpoints.length; i += 1) {
@@ -87,13 +106,14 @@ export const StickyScroll = ({ items }: { items: StickyScrollItem[] }) => {
       }
       closestBreakpointIndex = i;
     }
-    setDisplayText(latest > 0);
 
     if (activeCard !== closestBreakpointIndex) {
       setActiveCard(closestBreakpointIndex);
       const newColor = items[closestBreakpointIndex]?.themeColorHex;
       if (newColor !== undefined) {
         updateThemeFromHex(newColor);
+      } else {
+        updateThemeFromHex(null);
       }
     }
   });
