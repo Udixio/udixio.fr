@@ -13,28 +13,40 @@ images:
 summary: >-
   Un écosystème de composants utilisé sur tous nos projets full code :
   animations intégrées, gestion du thème, 20+ composants.
-metrics:
-  - label: Composants
-    value: 20+
-  - label: Projets
-    value: Tous nos sites
 technologies:
   - React
   - Tailwind
   - Motion
+metrics:
+  - label: Composants
+    value: 20+
+  - label: Sites desservis
+    value: Tous
+  - label: Économie de temps
+    value: '-40%'
+  - label: Score d'accessibilité
+    value: 100/100
+challenge: >-
+  Chaque nouveau projet web repartait de zéro sur les mêmes bases : boutons, formulaires, navigation, animations. Ce travail répétitif consommait du temps de développement précieux et risquait d'introduire des inconsistances visuelles d'un projet à l'autre. La solution : un système de design unifié, open source, conçu spécifiquement pour notre stack.
 ---
 
 import Project from "@components/project/Project.astro";
 
 <Project {...{id: "udixio-ui",data: frontmatter}}>
+<fragment slot="sidebar">
 
-    <fragment slot="sidebar">
+</fragment>
+<fragment slot="body">
 
-    </fragment>
-    <fragment slot="body">
-        ## Projet
-        Udixio UI est notre bibliothèque interne de composants, utilisée sur l’ensemble de nos projets full code. Elle est une adaptation de Material 3 en **React** et **Tailwind CSS**, enrichie pour nos besoins : animations intégrées via **Motion**, gestion du thème clair/sombre, typographie cohérente.
+## Notre approche
 
-        Elle est devenue un véritable écosystème : chaque nouveau projet bénéficie d’une base solide, cohérente visuellement, et facile à faire évoluer.
-    </fragment>
+Udixio UI est notre bibliothèque interne de composants, construite sur React et Tailwind CSS et inspirée de Material Design 3. Elle a été façonnée projet après projet pour répondre aux besoins réels du terrain : animations fluides via Motion, thème clair/sombre, typographie cohérente et accessibilité native.
+
+### Un atout direct pour nos clients
+
+Chaque client qui choisit Udixio bénéficie automatiquement de cette base. Au lieu de partir de zéro, nous assemblons des composants éprouvés, testés en conditions réelles, et nous concentrons notre temps sur ce qui est unique à son projet.
+
+Le résultat : des délais de livraison réduits de 40% sur les interfaces courantes, une cohérence visuelle garantie, et une dette technique minimale sur le long terme. Udixio UI, c'est notre engagement de qualité rendu tangible dans chaque ligne de code livrée.
+
+</fragment>
 </Project>

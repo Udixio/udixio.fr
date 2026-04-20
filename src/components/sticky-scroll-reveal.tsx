@@ -39,7 +39,9 @@ export const StickyScroll = ({ items }: { items: StickyScrollItem[] }) => {
       <img
         className="w-full md:h-[320px] h-[200px] lg:h-full object-cover"
         src={item.imageSrc}
-        alt={item.imageAlt ?? (typeof item.title === "string" ? item.title : "")}
+        alt={
+          item.imageAlt ?? (typeof item.title === "string" ? item.title : "")
+        }
         loading="lazy"
       />
     ),
@@ -86,7 +88,7 @@ export const StickyScroll = ({ items }: { items: StickyScrollItem[] }) => {
       closestBreakpointIndex = i;
     }
     setDisplayText(latest > 0);
-    
+
     if (activeCard !== closestBreakpointIndex) {
       setActiveCard(closestBreakpointIndex);
       const newColor = items[closestBreakpointIndex]?.themeColorHex;
@@ -98,10 +100,7 @@ export const StickyScroll = ({ items }: { items: StickyScrollItem[] }) => {
 
   return (
     <>
-      <motion.div
-        className={"flex relative padding-x rounded-md z-20 "}
-        ref={ref}
-      >
+      <motion.div className={"flex relative  rounded-md z-20 "} ref={ref}>
         <motion.div
           variants={{
             hidden: { opacity: 0, marginLeft: "-400px", filter: "blur(10px)" },

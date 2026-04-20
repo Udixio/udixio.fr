@@ -140,7 +140,7 @@ const faqItems = [
   <div class="relative">
     <Hero client:idle className="self-stretch flex flex-col min-h-[65vh]">
       {/* Headline - full width, massive */}
-      <h1 class="mb-6 md:mb-12 text-display-large">
+      <h1 class="mb-6 md:mb-12 text-display-medium md:text-display-large">
         <span class="text-gradient">Agence web</span><br />
         au
         <span class=""> Havre </span>et <span class=""> Amiens </span>
@@ -407,15 +407,15 @@ const faqItems = [
   }
   <SectionPadding as="section" start client:idle>
     <Card
-      className="dark bg-surface-container-low rounded-b-none text-on-surface shadow-xl/30"
+      className="dark bg-surface-container-low rounded-b-none text-on-surface shadow-xl/30 p-0"
     >
       <div class="section">
-        <div class="text-center mb-24 mt-8">
+        <div class="md:text-center mb-24 mt-8">
           <span class="sub-title text-center anim-in anim-fade"
             >Engagements de résultat</span
           >
           <h2
-            class="text-display-small anim-in anim-fade anim-slide-from-bottom anim-duration-700 anim-delay-150"
+            class="text-headline-large md:text-display-small anim-in anim-fade anim-slide-from-bottom anim-duration-700 anim-delay-150"
           >
             Le partenaire technique de<br /><span class="text-gradient"
               >votre croissance web</span

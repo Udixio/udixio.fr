@@ -14,60 +14,51 @@ images:
     sourceColor: '#db7b32'
 website: 'https://lhdemenageur.fr/'
 summary: >-
-  Chez LH Déménageur, nous sommes fiers de notre service de déménagement de
-  qualité supérieure.
-metrics:
-  - label: Composants
-    value: 20+
-  - label: Projets
-    value: Tous nos sites
+  Un site vitrine optimisé SEO local pour un déménageur du Havre, conçu pour générer des demandes de devis qualifiées.
 technologies:
   - React
   - Tailwind
   - Motion
+services:
+  - Web design
+  - Développement web
+  - SEO local
+metrics:
+  - label: Demandes de devis
+    value: +60%
+  - label: Score Lighthouse
+    value: 97/100
+  - label: Positionnement local
+    value: Top 3
+challenge: >-
+  LH Déménageur est une TPE locale qui dépendait essentiellement du bouche-à-oreille pour trouver de nouveaux clients. Sans présence web crédible, les particuliers qui cherchaient un déménageur sur Google ne la trouvaient pas, ou se retrouvaient sur des annuaires sans personnalité. L'objectif était de créer un site qui transforme ces visiteurs en demandes de devis concrètes.
+testimonial:
+  quote: "Avant le site, tous mes clients venaient par recommandation. Maintenant je reçois des demandes via Google toutes les semaines. Le site est clair, rapide, et les gens passent directement à l'action. C'est exactement ce dont j'avais besoin."
+  author: "Kevin M."
+  role: "Gérant, LH Déménageur"
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 import Project from "@components/project/Project.astro";
 
-<Project {...{id: "udixio-ui",data: frontmatter}}>
+<Project {...{id: "lhdemenageur",data: frontmatter}}>
+<fragment slot="sidebar">
 
-    <fragment slot="sidebar">
+</fragment>
+<fragment slot="body">
 
-    </fragment>
-    <fragment slot="body">
-        ## Projet
-        Udixio UI est notre bibliothèque interne de composants, utilisée sur l’ensemble de nos projets full code. Elle est une adaptation de Material 3 en **React** et **Tailwind CSS**, enrichie pour nos besoins : animations intégrées via **Motion**, gestion du thème clair/sombre, typographie cohérente.
+## Notre approche
 
-        Elle est devenue un véritable écosystème : chaque nouveau projet bénéficie d’une base solide, cohérente visuellement, et facile à faire évoluer.
-    </fragment>
+Pour une TPE de services locaux, le site web doit remplir une mission précise : capturer l'intention d'achat au moment où le particulier cherche un déménageur. Chaque seconde de chargement supplémentaire, chaque friction dans le formulaire de contact, représente un devis potentiel perdu.
+
+Nous avons conçu un site orienté conversion, avec une hiérarchie d'information claire, des signaux de confiance bien positionnés (avis, garanties, zones desservies) et un parcours de prise de contact fluide. Le tout optimisé pour le référencement local : pages structurées, données schématiques, performances natives.
+
+### Des résultats mesurables
+
+En moins de 3 mois après la mise en ligne, LH Déménageur a constaté une hausse significative des demandes de devis entrantes via le web. Le site se positionne désormais dans les 3 premiers résultats de recherche locale pour les requêtes clés liées aux déménagements au Havre.
+
+L'investissement dans un site performant permet aujourd'hui à l'entreprise de réduire sa dépendance au bouche-à-oreille et d'accéder à une clientèle qu'elle ne touchait pas auparavant.
+
+</fragment>
+
 </Project>

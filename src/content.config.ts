@@ -30,6 +30,12 @@ const realisation = defineCollection({
             label: z.string(),
             value: z.string()
         })).optional(),
+        challenge: z.string().optional(),
+        testimonial: z.object({
+            quote: z.string(),
+            author: z.string(),
+            role: z.string(),
+        }).optional(),
     }),
 });
 
