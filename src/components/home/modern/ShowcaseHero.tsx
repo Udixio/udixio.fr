@@ -27,7 +27,7 @@ export const ShowcaseHero = ({ projects }: { projects: ProjectProps[] }) => {
         >
           <Card
             variant="elevated"
-            className="w-full h-full p-0 relative overflow-hidden"
+            className="w-full h-full p-0 relative overflow-hidden backdrop-blur-none"
           >
             <AnimatePresence mode="popLayout" initial={false}>
               <motion.div

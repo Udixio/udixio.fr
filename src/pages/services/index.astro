@@ -11,6 +11,8 @@ import { iVisibility } from "@udixio/icons-rounded-400/visibility";
 import { iKey } from "@udixio/icons-rounded-400/key";
 import { iTune } from "@udixio/icons-rounded-400/tune";
 import { iChecklist } from "@udixio/icons-rounded-400/checklist";
+import { icon } from "@fortawesome/fontawesome-svg-core";
+import { iShoppingCart } from "@udixio/icons-rounded-400/shopping_cart";
 
 const faqItems = [
   {
@@ -44,14 +46,15 @@ const faqItems = [
       <div>
         <span class="sub-title">Nos services</span>
         <h1
-          class="max-w-2xl text-display-medium text-on-surface-variant anim-fade anim-slide-from-left anim-duration-1000 ease-out anim-delay-100"
+          class="text-display-medium text-on-surface-variant anim-fade anim-slide-from-left anim-duration-1000 ease-out anim-delay-100"
         >
-          Services web, <span class="text-gradient">clairs et maîtrisés</span>
+          Services web,<br />
+          <span class="text-gradient">clairs et maîtrisés</span>
         </h1>
       </div>
       <div>
         <p
-          class="text-body-large max-w-96 mb-12 anim-fade anim-slide-from-left anim-duration-1000 ease-out anim-delay-200"
+          class="text-body-large max-w-xl mb-12 anim-fade anim-slide-from-left anim-duration-1000 ease-out anim-delay-200"
         >
           Chaque service est cadré pour éviter les dérives et garder le
           contrôle. Nous faisons un diagnostic rapide et vous orientons vers la
@@ -67,298 +70,270 @@ const faqItems = [
   </Hero>
 
   {/* SERVICES GRID */}
-  <SectionPadding client:visible start end as="section">
-    <div class="py-32 bg-surface-container-low">
-      <div class="section">
-        <span class="sub-title">Nos prestations</span>
-        <h2 class="text-headline-large mb-12">
-          Choisir la bonne prestation <span class="text-gradient">sans flou</span
-          >
-        </h2>
+  <section>
+    <div class="section">
+      <span class="sub-title">Nos prestations</span>
+      <h2 class="text-headline-large mb-12">
+        Choisir la bonne prestation <span class="text-gradient">sans flou</span>
+      </h2>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Site vitrine */}
-          <Card className="p-8 md:p-10 flex flex-col gap-6">
-            <div
-              class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center"
-            >
-              <Icon icon={iVisibility} className="w-6 h-6 fill-current" />
-            </div>
-            <div>
-              <h3 class="text-headline-small text-on-surface mb-3">
-                Création & refonte de sites web
-              </h3>
-              <p class="text-body-large text-on-surface-variant mb-6">
-                Pour un site clair, crédible et simple à faire évoluer.
-              </p>
-              <ul class="space-y-2 mb-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {
+          [
+            {
+              icon: iVisibility,
+              iconBg: "bg-primary/10",
+              iconColor: "text-primary",
+              title: "Site vitrine",
+              description:
+                "Présentez votre activité avec clarté et crédibilité.",
+              features: [
+                "Design moderne et responsive",
+                "Optimisation SEO",
+                "Performance et rapidité",
+                "Formulaire de contact",
+              ],
+              buttons: [
                 {
-                  [
-                    "Cadrage des besoins et priorités",
-                    "Architecture de pages et parcours",
-                    "Design et intégration front-end",
-                    "Développement technique",
-                    "Tests et mise en ligne",
-                  ].map((item) => (
+                  href: "/services/site-vitrine",
+                  label: "Voir l'offre",
+                },
+              ],
+              checkIconColor: "text-primary",
+            },
+            {
+              icon: iShoppingCart,
+              iconBg: "bg-secondary/10",
+              iconColor: "text-secondary",
+              title: "Site e-commerce",
+              description: "Vendez en ligne simplement et efficacement.",
+              features: [
+                "Gestion produits et stocks",
+                "Paiement sécurisé",
+                "Parcours d'achat optimisé",
+                "Suivi des commandes",
+              ],
+              buttons: [
+                {
+                  href: "/services/site-e-commerce",
+                  label: "Voir l'offre",
+                },
+              ],
+              checkIconColor: "text-secondary",
+            },
+            {
+              icon: iTune,
+              iconBg: "bg-tertiary/10",
+              iconColor: "text-tertiary",
+              title: "Développement sur-mesure",
+              description: "Des fonctionnalités adaptées à vos besoins métier.",
+              features: [
+                "Fonctionnalités spécifiques",
+                "Intégrations API tierces",
+                "Back-office personnalisé",
+                "Évolutivité garantie",
+              ],
+              buttons: [
+                {
+                  href: "/services/developpement-sur-mesure",
+                  label: "Voir l'offre",
+                },
+              ],
+              checkIconColor: "text-tertiary",
+            },
+          ].map((service) => (
+            <Card className={"p-8 md:p-10 flex flex-col justify-between gap-6"}>
+              <div>
+                <div
+                  class={`w-12 h-12 rounded-xl ${service.iconBg} ${service.iconColor} flex items-center justify-center`}
+                >
+                  <Icon icon={service.icon} className="w-6 h-6 fill-current" />
+                </div>
+                <h3 class="text-headline-small text-on-surface my-3">
+                  {service.title}
+                </h3>
+                <p class="text-body-large text-on-surface-variant mb-6">
+                  {service.description}
+                </p>
+              </div>
+              <div>
+                <ul class="space-y-2">
+                  {service.features.map((item) => (
                     <li class="flex items-center gap-2 text-body-medium text-on-surface-variant">
                       <Icon
-                        className="size-5 text-primary shrink-0"
+                        className={`size-5 ${service.checkIconColor} shrink-0`}
                         icon={iCheckCircleFilled}
                       />
                       {item}
                     </li>
-                  ))
-                }
-              </ul>
-            </div>
-            <div class="mt-auto flex flex-wrap gap-3">
-              <Button
-                href="/services/site-vitrine-ou-refonte"
-                label="Voir l'offre"
-                variant="tonal"
-              />
-              <Button href="/contact" label="Diagnostic" variant="outlined" />
-            </div>
-          </Card>
-
-          {/* Développement sur-mesure */}
-          <Card
-            className="p-8 md:p-10 flex flex-col gap-6 bg-primary-container text-on-primary-container"
-          >
-            <div
-              class="w-12 h-12 rounded-xl bg-primary/20 text-primary flex items-center justify-center"
-            >
-              <Icon icon={iTune} className="w-6 h-6 fill-current" />
-            </div>
-            <div>
-              <h3 class="text-headline-small text-on-surface mb-3">
-                Développement web sur‑mesure
-              </h3>
-              <p class="text-body-large text-on-surface-variant mb-6">
-                Quand un site standard ne suffit pas : fonctionnalités ou outils
-                métier dédiés.
-              </p>
-              <ul class="space-y-2 mb-8">
-                {
-                  [
-                    "Fonctionnalités personnalisées",
-                    "Intégrations techniques",
-                    "Interfaces métier / back-office",
-                    "Évolutions et amélioration continue",
-                  ].map((item) => (
-                    <li class="flex items-center gap-2 text-body-medium text-on-surface-variant">
-                      <Icon
-                        className="size-5 text-primary shrink-0"
-                        icon={iCheckCircleFilled}
-                      />
-                      {item}
-                    </li>
-                  ))
-                }
-              </ul>
-            </div>
-            <div class="mt-auto flex flex-wrap gap-3">
-              <Button
-                href="/services/developpement-sur-mesure"
-                label="Voir l'offre"
-                variant="tonal"
-              />
-              <Button href="/contact" label="Diagnostic" variant="outlined" />
-            </div>
-          </Card>
-
-          {/* Cadrage & audit */}
-          <Card className="p-8 md:p-10 flex flex-col gap-6">
-            <div
-              class="w-12 h-12 rounded-xl bg-tertiary/10 text-tertiary flex items-center justify-center"
-            >
-              <Icon icon={iChecklist} className="w-6 h-6 fill-current" />
-            </div>
-            <div>
-              <h3 class="text-headline-small text-on-surface mb-3">
-                Cadrage, audit & accompagnement
-              </h3>
-              <p class="text-body-large text-on-surface-variant mb-6">
-                Intervention en amont pour clarifier, prioriser et sécuriser les
-                décisions.
-              </p>
-              <ul class="space-y-2 mb-8">
-                {
-                  [
-                    "Analyse de l'existant",
-                    "Clarification des objectifs",
-                    "Recommandations actionnables",
-                    "Plan d'action et estimation",
-                  ].map((item) => (
-                    <li class="flex items-center gap-2 text-body-medium text-on-surface-variant">
-                      <Icon
-                        className="size-5 text-tertiary shrink-0"
-                        icon={iCheckCircleFilled}
-                      />
-                      {item}
-                    </li>
-                  ))
-                }
-              </ul>
-            </div>
-            <div class="mt-auto">
-              <Button href="/contact" label="Parlons de votre projet" />
-            </div>
-          </Card>
-        </div>
+                  ))}
+                </ul>
+                <div
+                  class={`mt-8 ${service.buttons.length > 1 ? "flex flex-wrap gap-3" : ""}`}
+                >
+                  {service.buttons.map((button) => (
+                    <Button
+                      href={button.href}
+                      label={button.label}
+                      variant={"outlined"}
+                    />
+                  ))}
+                </div>
+              </div>
+            </Card>
+          ))
+        }
       </div>
     </div>
-  </SectionPadding>
+  </section>
 
   {/* DANS TOUTES NOS MISSIONS */}
   <section class="py-24 bg-surface">
-      <div class="section">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          <div>
-            <span class="sub-title">Nos garanties</span>
-            <h2 class="text-headline-large text-on-surface">
-              Dans toutes nos missions
-            </h2>
-            <p class="text-title-medium text-on-surface-variant mt-6">
-              Quel que soit le service choisi, vous bénéficiez du même cadre de
-              travail clair et transparent.
-            </p>
-            <div class="mt-8 flex flex-wrap gap-4">
-              <Button href="/methode" label="Voir notre méthode" />
-              <Button
-                href="/contact"
-                label="Demander un diagnostic"
-                variant="outlined"
-              />
-            </div>
+    <div class="section">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div>
+          <span class="sub-title">Nos garanties</span>
+          <h2 class="text-headline-large text-on-surface">
+            Dans toutes nos missions
+          </h2>
+          <p class="text-title-medium text-on-surface-variant mt-6">
+            Quel que soit le service choisi, vous bénéficiez du même cadre de
+            travail clair et transparent.
+          </p>
+          <div class="mt-8 flex flex-wrap gap-4">
+            <Button href="/methode" label="Voir notre méthode" />
+            <Button
+              href="/contact"
+              label="Demander un diagnostic"
+              variant="outlined"
+            />
           </div>
+        </div>
 
-          <Card
-            className="bg-secondary-container text-on-secondary-container p-8"
+        <Card
+          className="bg-secondary-container text-on-secondary-container p-8"
+        >
+          <div
+            class="absolute top-4 right-4 bg-primary/10 text-primary px-3 py-1 rounded-full text-label-small uppercase"
           >
-            <div
-              class="absolute top-4 right-4 bg-primary/10 text-primary px-3 py-1 rounded-full text-label-small uppercase"
-            >
-              Inclus
-            </div>
-            <ul class="space-y-4 mt-2">
-              {
-                [
-                  "Périmètre et objectifs clarifiés avant démarrage",
-                  "Points de validation réguliers",
-                  "Transparence sur les choix et arbitrages",
-                  "Propriété des livrables",
-                  "Documentation à la livraison",
-                ].map((item) => (
-                  <li class="flex items-center gap-3">
-                    <Icon
-                      className="size-6 rounded-full text-secondary"
-                      icon={iCheckCircleFilled}
-                    />
-                    <span class="text-title-medium">{item}</span>
-                  </li>
-                ))
-              }
-            </ul>
-          </Card>
-        </div>
+            Inclus
+          </div>
+          <ul class="space-y-4 mt-2">
+            {
+              [
+                "Périmètre et objectifs clarifiés avant démarrage",
+                "Points de validation réguliers",
+                "Transparence sur les choix et arbitrages",
+                "Propriété des livrables",
+                "Documentation à la livraison",
+              ].map((item) => (
+                <li class="flex items-center gap-3">
+                  <Icon
+                    className="size-6 rounded-full text-secondary"
+                    icon={iCheckCircleFilled}
+                  />
+                  <span class="text-title-medium">{item}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </Card>
       </div>
     </div>
   </section>
+</Layout>
 
-  {/* INVESTISSEMENT */}
-  <section class="py-24 bg-surface-container-low">
-      <div class="section">
-        <div class="bg-surface-container p-8 md:p-12 rounded-4xl">
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <span class="sub-title">Investissement</span>
-              <h2
-                class="text-headline-medium md:text-headline-large text-on-surface mb-6"
+{/* INVESTISSEMENT */}
+<section class="py-24 bg-surface-container-low">
+  <div class="section">
+    <div class="bg-surface-container p-8 md:p-12 rounded-4xl">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <span class="sub-title">Investissement</span>
+          <h2
+            class="text-headline-medium md:text-headline-large text-on-surface mb-6"
+          >
+            Transparence sur les prix, dès le départ.
+          </h2>
+          <p class="text-title-medium text-on-surface-variant mb-8">
+            Un prix dépend du périmètre, du contenu et des intégrations. Pas de
+            frais de dossier, pas d'abonnement imposé.
+          </p>
+          <Button
+            href="/contact"
+            label="Demander une estimation"
+            variant="outlined"
+            className="w-fit"
+          />
+        </div>
+
+        <div
+          class="bg-surface rounded-2xl p-6 border border-outline-variant/30 font-mono text-body-medium"
+        >
+          <div class="space-y-4">
+            <div class="flex justify-between items-center">
+              <span class="text-on-surface">Site vitrine performant</span>
+              <span
+                class="bg-tertiary-container text-on-tertiary-container px-2 py-1 rounded text-label-small whitespace-nowrap"
+                >Dès 2 500€</span
               >
-                Transparence sur les prix, dès le départ.
-              </h2>
-              <p class="text-title-medium text-on-surface-variant mb-8">
-                Un prix dépend du périmètre, du contenu et des intégrations. Pas
-                de frais de dossier, pas d'abonnement imposé.
-              </p>
-              <Button
-                href="/contact"
-                label="Demander une estimation"
-                variant="outlined"
-                className="w-fit"
-              />
             </div>
-
-            <div
-              class="bg-surface rounded-2xl p-6 border border-outline-variant/30 font-mono text-body-medium"
+            <p
+              class="text-body-small text-on-surface-variant pb-4 border-b border-outline-variant/30"
             >
-              <div class="space-y-4">
-                <div class="flex justify-between items-center">
-                  <span class="text-on-surface">Site vitrine performant</span>
-                  <span
-                    class="bg-tertiary-container text-on-tertiary-container px-2 py-1 rounded text-label-small whitespace-nowrap"
-                    >Dès 2 500€</span
-                  >
-                </div>
-                <p
-                  class="text-body-small text-on-surface-variant pb-4 border-b border-outline-variant/30"
-                >
-                  Pour TPE/PME : audit, SEO technique, design sur-mesure et
-                  formation inclus.
-                </p>
+              Pour TPE/PME : audit, SEO technique, design sur-mesure et
+              formation inclus.
+            </p>
 
-                <div class="flex justify-between items-center">
-                  <span class="text-on-surface">Application / sur‑mesure</span>
-                  <span
-                    class="bg-surface-container text-on-surface-variant px-2 py-1 rounded text-label-small whitespace-nowrap border border-outline-variant/40"
-                    >À partir de 5 000€</span
-                  >
-                </div>
-                <p
-                  class="text-body-small text-on-surface-variant pb-4 border-b border-outline-variant/30"
-                >
-                  Plateforme métier, espace client ou tunnel d'achat sur-mesure.
-                </p>
-
-                <div class="flex justify-between items-center">
-                  <span class="text-on-surface">Maintenance & évolutions</span>
-                  <span
-                    class="bg-surface-container text-on-surface-variant px-2 py-1 rounded text-label-small whitespace-nowrap border border-outline-variant/40"
-                    >Sur devis</span
-                  >
-                </div>
-                <p class="text-body-small text-on-surface-variant">
-                  Support, mises à jour et évolutions selon vos besoins.
-                </p>
-              </div>
-              <div
-                class="mt-6 pt-4 border-t border-outline-variant/30 flex justify-between items-center"
+            <div class="flex justify-between items-center">
+              <span class="text-on-surface">Application / sur‑mesure</span>
+              <span
+                class="bg-surface-container text-on-surface-variant px-2 py-1 rounded text-label-small whitespace-nowrap border border-outline-variant/40"
+                >À partir de 5 000€</span
               >
-                <span class="text-on-surface-variant text-body-medium"
-                  >Frais cachés</span
-                >
-                <span class="text-headline-small text-primary">0€</span>
-              </div>
             </div>
+            <p
+              class="text-body-small text-on-surface-variant pb-4 border-b border-outline-variant/30"
+            >
+              Plateforme métier, espace client ou tunnel d'achat sur-mesure.
+            </p>
+
+            <div class="flex justify-between items-center">
+              <span class="text-on-surface">Maintenance & évolutions</span>
+              <span
+                class="bg-surface-container text-on-surface-variant px-2 py-1 rounded text-label-small whitespace-nowrap border border-outline-variant/40"
+                >Sur devis</span
+              >
+            </div>
+            <p class="text-body-small text-on-surface-variant">
+              Support, mises à jour et évolutions selon vos besoins.
+            </p>
+          </div>
+          <div
+            class="mt-6 pt-4 border-t border-outline-variant/30 flex justify-between items-center"
+          >
+            <span class="text-on-surface-variant text-body-medium"
+              >Frais cachés</span
+            >
+            <span class="text-headline-small text-primary">0€</span>
           </div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <FaqSection
-    title="Questions sur nos prestations"
-    description="Voici des réponses concrètes avant d'aller plus loin."
-    items={faqItems}
-  />
+<FaqSection
+  title="Questions sur nos prestations"
+  description="Voici des réponses concrètes avant d'aller plus loin."
+  items={faqItems}
+/>
 
-  <CtaSection
-    title="Prêt à échanger sur votre projet ?"
-    description="Décrivez-nous votre besoin, on vous répond rapidement avec un premier retour concret."
-    primaryLabel="Demander un diagnostic"
-    primaryHref="/contact"
-    secondaryLabel="Voir nos réalisations"
-    secondaryHref="/realisations"
-  />
-</Layout>
+<CtaSection
+  title="Prêt à échanger sur votre projet ?"
+  description="Décrivez-nous votre besoin, on vous répond rapidement avec un premier retour concret."
+  primaryLabel="Demander un diagnostic"
+  primaryHref="/contact"
+  secondaryLabel="Voir nos réalisations"
+  secondaryHref="/realisations"
+/>

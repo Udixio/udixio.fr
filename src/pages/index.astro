@@ -137,7 +137,7 @@ const faqItems = [
     total={showcaseProjects.length}
     colors={showcaseProjects.map((p) => p.images?.background?.sourceColor)}
   />
-  <div class="relative">
+  <div class="relative z-10">
     <Hero client:idle className="self-stretch flex flex-col min-h-[65vh]">
       {/* Headline - full width, massive */}
       <h1 class="mb-6 md:mb-12 text-display-medium md:text-display-large">
@@ -211,7 +211,7 @@ const faqItems = [
         <div>
           <span class="sub-title anim-in anim-fade">Nos réalisations</span>
           <h2
-            class="text-headline-large max-w-xl anim-in anim-fade anim-slide-from-left anim-duration-700 anim-delay-150"
+            class="text-headline-large anim-in anim-fade anim-slide-from-left anim-duration-700 anim-delay-150"
           >
             Des projets réels,<br /><span class="text-gradient"
               >des résultats mesurables</span

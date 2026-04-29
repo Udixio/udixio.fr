@@ -14,10 +14,12 @@ export const ShowcaseItem = ({
   return (
     <a
       href={`/realisations/${project.slug}`}
-      className={classNames("group/showcase relative block w-full h-full rounded-4xl overflow-hidden", className)}
+      className={classNames(
+        "group/showcase relative block w-full h-full rounded-4xl overflow-hidden",
+        className,
+      )}
       style={{ viewTransitionName: `realisation-${project.slug}` }}
     >
-      <div className="absolute inset-0 bg-surface-container-low animate-pulse" />
       <img
         loading={eager ? "eager" : "lazy"}
         fetchPriority={eager ? "high" : "auto"}
