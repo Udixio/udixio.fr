@@ -1,52 +1,65 @@
-import {defineCollection, z} from 'astro:content';
-import {glob} from 'astro/loaders'
+import { defineCollection, z } from "astro:content";
+import { glob } from "astro/loaders";
 
 const realisation = defineCollection({
-    loader: glob({pattern: '**/[^_]*.{md,mdx}', base: "./src/data/realisation"}),
-    schema: z.object({
-        title: z.string(),
-        description: z.string(),
-        order: z.number().optional(),
-        theme: z.object({
-            isDark: z.boolean(),
-            source: z.string(),
-        }),
-        images: z.object({
-            background: z.object({
-                src: z.string().optional(),
-                alt: z.string(),
-                sourceColor: z.string().optional(),
-            }).optional(),
-            logo: z.object({
-                src: z.string(),
-                alt: z.string(),
-            }).optional(),
-        }),
-        website: z.string().url().optional(),
-        summary: z.string(),
-        technologies: z.array(z.string()).optional(),
-        services: z.array(z.string()).optional(),
-        metrics: z.array(z.object({
-            label: z.string(),
-            value: z.string()
-        })).optional(),
-        challenge: z.string().optional(),
-        testimonial: z.object({
-            quote: z.string(),
-            author: z.string(),
-            role: z.string(),
-        }).optional(),
+  loader: glob({
+    pattern: "**/[^_]*.{md,mdx}",
+    base: "./src/data/realisation",
+  }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    order: z.number().optional(),
+    theme: z.object({
+      isDark: z.boolean(),
+      source: z.string(),
     }),
+    images: z.object({
+      background: z
+        .object({
+          src: z.string().optional(),
+          alt: z.string(),
+          sourceColor: z.string().optional(),
+        })
+        .optional(),
+      logo: z
+        .object({
+          src: z.string(),
+          alt: z.string(),
+        })
+        .optional(),
+    }),
+    website: z.string().url().optional(),
+    summary: z.string(),
+    technologies: z.array(z.string()).optional(),
+    services: z.array(z.string()).optional(),
+    metrics: z
+      .array(
+        z.object({
+          label: z.string(),
+          value: z.string(),
+        }),
+      )
+      .optional(),
+    challenge: z.string().optional(),
+    testimonial: z
+      .object({
+        quote: z.string(),
+        author: z.string(),
+        role: z.string(),
+      })
+      .optional(),
+  }),
 });
 
 const technology = defineCollection({
-    loader: glob({pattern: '**/[^_]*.{md,mdx}', base: "./src/data/technology"}),
-    schema: z.object({
-        name: z.string(), // Nom unique de la technologie
-        tags: z.string().optional(), // Ex. : framework, CMS, CSS, etc.
-        description: z.string().optional(), // Brève description
-        logo: z.string().optional(), // URL ou chemin vers le logo
-    }),
-})
+  loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: "./src/data/technology" }),
+  schema: z.object({
+    name: z.string(), // Nom unique de la technologie
+    tags: z.string().optional(), // Ex. : framework, CMS, CSS, etc.
+    description: z.string().optional(), // Brève description
+    logo: z.string().optional(), // URL ou chemin vers le logo
+  }),
+});
 
-export const collections = {technology, realisation};
+export const collections = { technology, realisation };

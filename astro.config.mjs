@@ -1,4 +1,4 @@
-import { defineConfig, fontProviders } from "astro/config";
+import { defineConfig, fontProviders, memoryCache } from "astro/config";
 import { visualizer } from "rollup-plugin-visualizer";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
@@ -6,7 +6,6 @@ import robotsTxt from "astro-robots-txt";
 import compressor from "astro-compressor";
 import vercel from "@astrojs/vercel";
 import tailwindcss from "@tailwindcss/vite";
-
 import compress from "astro-compress";
 
 import mdx from "@astrojs/mdx";
@@ -20,63 +19,62 @@ export default defineConfig({
   site: "https://www.udixio.fr/",
   compressHTML: true,
   experimental: {
-    fonts: [
-      {
-        provider: fontProviders.google(),
-        name: "Inter",
-        cssVariable: "--font-inter",
-      },
-      {
-        provider: fontProviders.local(),
-        name: "Clash Grotesk",
-        cssVariable: "--font-clash-grotesk",
-        options: {
-          variants: [
-            {
-              weight: 200,
-              style: "normal",
-              src: [
-                "./src/assets/fonts/clash-grotesk/ClashGrotesk-Extralight.woff2",
-              ],
-            },
-            {
-              weight: 300,
-              style: "normal",
-              src: [
-                "./src/assets/fonts/clash-grotesk/ClashGrotesk-Light.woff2",
-              ],
-            },
-            {
-              weight: 400,
-              style: "normal",
-              src: [
-                "./src/assets/fonts/clash-grotesk/ClashGrotesk-Regular.woff2",
-              ],
-            },
-            {
-              weight: 500,
-              style: "normal",
-              src: [
-                "./src/assets/fonts/clash-grotesk/ClashGrotesk-Medium.woff2",
-              ],
-            },
-            {
-              weight: 600,
-              style: "normal",
-              src: [
-                "./src/assets/fonts/clash-grotesk/ClashGrotesk-Semibold.woff2",
-              ],
-            },
-            {
-              weight: 700,
-              style: "normal",
-              src: ["./src/assets/fonts/clash-grotesk/ClashGrotesk-Bold.woff2"],
-            },
-          ],
-        },
-      },
-    ],
+    cache: {
+      provider: memoryCache(),
+    },
   },
+  fonts: [
+    {
+      provider: fontProviders.google(),
+      name: "Inter",
+      cssVariable: "--font-inter",
+    },
+    {
+      provider: fontProviders.local(),
+      name: "Clash Grotesk",
+      cssVariable: "--font-clash-grotesk",
+      options: {
+        variants: [
+          {
+            weight: 200,
+            style: "normal",
+            src: [
+              "./src/assets/fonts/clash-grotesk/ClashGrotesk-Extralight.woff2",
+            ],
+          },
+          {
+            weight: 300,
+            style: "normal",
+            src: ["./src/assets/fonts/clash-grotesk/ClashGrotesk-Light.woff2"],
+          },
+          {
+            weight: 400,
+            style: "normal",
+            src: [
+              "./src/assets/fonts/clash-grotesk/ClashGrotesk-Regular.woff2",
+            ],
+          },
+          {
+            weight: 500,
+            style: "normal",
+            src: ["./src/assets/fonts/clash-grotesk/ClashGrotesk-Medium.woff2"],
+          },
+          {
+            weight: 600,
+            style: "normal",
+            src: [
+              "./src/assets/fonts/clash-grotesk/ClashGrotesk-Semibold.woff2",
+            ],
+          },
+          {
+            weight: 700,
+            style: "normal",
+            src: ["./src/assets/fonts/clash-grotesk/ClashGrotesk-Bold.woff2"],
+          },
+        ],
+      },
+    },
+  ],
   output: "static",
   integrations: [
     react(),
@@ -106,7 +104,12 @@ export default defineConfig({
       assetsInlineLimit: 0,
     },
     optimizeDeps: {
-      exclude: ["@udixio/ui-react", "@udixio/ui-react/theme-worker", "puppeteer", "puppeteer-screen-recorder"],
+      exclude: [
+        "@udixio/ui-react",
+        "@udixio/ui-react/theme-worker",
+        "puppeteer",
+        "puppeteer-screen-recorder",
+      ],
     },
     server: {
       host: true,

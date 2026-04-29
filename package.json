@@ -10,12 +10,13 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.6",
-    "@astrojs/mdx": "4.3.13",
-    "@astrojs/react": "^4.4.2",
-    "@astrojs/sitemap": "3.7.0",
-    "@astrojs/ts-plugin": "^1.10.6",
-    "@astrojs/vercel": "9.0.4",
+    "@astrojs/check": "^0.9.9",
+    "@astrojs/mdx": "5.0.4",
+    "@astrojs/react": "^5.0.4",
+    "@astrojs/rss": "^4.0.18",
+    "@astrojs/sitemap": "3.7.2",
+    "@astrojs/ts-plugin": "^1.10.7",
+    "@astrojs/vercel": "10.0.6",
     "@critters-rs/astro": "^1.2.0",
     "@fontsource/montserrat": "^5.0.18",
     "@fontsource/roboto": "^5.0.15",
@@ -39,7 +40,7 @@
     "@udixio/theme": "^2.1.22",
     "@udixio/ui-react": "^2.11.0",
     "aos": "^2.3.4",
-    "astro": "5.16.15",
+    "astro": "6.1.10",
     "astro-compress": "^2.3.6",
     "astro-compressor": "^1.0.0",
     "astro-critters": "^2.2.1",
@@ -85,10 +86,10 @@
     "prettier": "^3.8.1",
     "prettier-plugin-astro": "0.14.1",
     "prisma": "^6.19.0",
+    "puppeteer": "^24.22.3",
+    "puppeteer-screen-recorder": "^3.0.6",
     "rollup-plugin-visualizer": "^7.0.1",
     "sass": "^1.72.0",
-    "tsx": "^4.20.6",
-    "puppeteer": "^24.22.3",
-    "puppeteer-screen-recorder": "^3.0.6"
+    "tsx": "^4.20.6"
   }
 }

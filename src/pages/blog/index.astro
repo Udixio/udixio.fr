@@ -1,0 +1,69 @@
+---
+export const prerender = false;
+
+import { getLiveCollection } from 'astro:content';
+import Layout from '@layouts/Layout.astro';
+
+const { entries, error, cacheHint } = await getLiveCollection('blog', {
+  status: 'PUBLISHED',
+});
+
+if (cacheHint) {
+  Astro.cache.set(cacheHint);
+}
+Astro.cache.set({ maxAge: 300 });
+
+if (error) {
+  console.error('Failed to load blog articles:', error);
+}
+
+const articles = entries ?? [];
+---
+
+<Layout
+  seo={{
+    title: 'Blog • Udixio',
+    description: 'Actualités, conseils et ressources en développement web par l\'agence Udixio.',
+    openGraph: {
+      basic: {
+        title: 'Blog • Udixio',
+        type: 'website',
+        image: '',
+      },
+    },
+  }}
+  background={false}
+>
+  <section class="section">
+    <div class="max-width padding-x">
+      <span class="sub-title">Blog</span>
+      <h1>Articles</h1>
+      {error && (
+        <p>Impossible de charger les articles pour le moment.</p>
+      )}
+      <ul>
+        {articles.map((entry) => (
+          <li>
+            <a href={`/blog/${entry.data.slug}`}>
+              <h2>{entry.data.title}</h2>
+            </a>
+            {entry.data.description && <p>{entry.data.description}</p>}
+            {entry.data.tags.length > 0 && (
+              <p>Tags : {entry.data.tags.map(t => t.name).join(', ')}</p>
+            )}
+            {entry.data.author && <p>Par {entry.data.author.name}</p>}
+            <p>
+              <time datetime={entry.data.createdAt}>
+                {new Date(entry.data.createdAt).toLocaleDateString('fr-FR', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}
+              </time>
+            </p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</Layout>

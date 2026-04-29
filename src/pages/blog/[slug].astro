@@ -1,0 +1,92 @@
+---
+export const prerender = false;
+
+import { getLiveEntry } from 'astro:content';
+import Layout from '@layouts/Layout.astro';
+
+const { slug } = Astro.params;
+
+const { entry, error, cacheHint } = await getLiveEntry('blog', slug);
+
+if (error || !entry) {
+  return Astro.redirect('/404');
+}
+
+if (cacheHint) {
+  Astro.cache.set(cacheHint);
+}
+Astro.cache.set({ maxAge: 600 });
+
+const article = entry.data;
+const html = entry.rendered?.html ?? '';
+---
+
+<Layout
+  seo={{
+    title: article.metaTitle ?? `${article.title} • Udixio`,
+    description: article.metaDescription ?? article.description,
+    openGraph: {
+      basic: {
+        title: article.metaTitle ?? article.title,
+        type: 'article',
+        image: article.coverImageUrl ?? '',
+        url: `/blog/${article.slug}`,
+      },
+      optional: {
+        description: article.metaDescription ?? article.description,
+      },
+      article: {
+        publishedTime: article.createdAt,
+        modifiedTime: article.updatedAt,
+        authors: article.author ? [article.author.name] : [],
+        tags: article.tags.map(t => t.name),
+      },
+    },
+  }}
+  background={false}
+>
+  <article class="section">
+    <div class="max-width padding-x">
+
+      {/* Header */}
+      <header>
+        {article.tags.length > 0 && (
+          <p>{article.tags.map(t => t.name).join(', ')}</p>
+        )}
+        <h1>{article.title}</h1>
+        {article.description && <p>{article.description}</p>}
+
+        <p>
+          {article.author && <span>Par {article.author.name} — </span>}
+          <time datetime={article.createdAt}>
+            {new Date(article.createdAt).toLocaleDateString('fr-FR', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })}
+          </time>
+        </p>
+      </header>
+
+      {/* Cover image */}
+      {article.coverImageUrl && (
+        <img
+          src={article.coverImageUrl}
+          alt={article.title}
+          loading="eager"
+        />
+      )}
+
+      {/* Content */}
+      {html
+        ? <div set:html={html} />
+        : <p>Contenu non disponible.</p>
+      }
+
+      {/* Back link */}
+      <p>
+        <a href="/blog">← Retour au blog</a>
+      </p>
+    </div>
+  </article>
+</Layout>
